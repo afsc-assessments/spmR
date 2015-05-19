@@ -1780,7 +1780,7 @@ FUNCTION void write_spp(const int& ispp)
    }
   
 GLOBALS_SECTION
-  #include <lpcode.cpp>
+  // #include <lpcode.cpp>
   #include <admodel.h>
   adstring xspname;
   adstring_array targsppname(1,30);
@@ -1791,7 +1791,7 @@ GLOBALS_SECTION
   adstring       run_name;
  
   // A routine to get transpose, sort and return a matrix ---- 
-  dmatrix TranSort (BOR_CONST dmatrix m1)
+  dmatrix TranSort (const dmatrix m1)
   {
   RETURN_ARRAYS_INCREMENT();
     dmatrix vtmp=trans(m1);
@@ -1805,7 +1805,7 @@ GLOBALS_SECTION
   }
   // #include <lpcode.cpp>
 
-FUNCTION dvariable SRecruit(_CONST dvariable& Stmp,const int& ispp)
+FUNCTION dvariable SRecruit(const dvariable& Stmp,const int& ispp)
   RETURN_ARRAYS_INCREMENT();
   dvariable RecTmp;
   switch (SrType)
@@ -1828,7 +1828,7 @@ FUNCTION dvariable SRecruit(_CONST dvariable& Stmp,const int& ispp)
   return RecTmp;
 
 
-FUNCTION dvar_vector SRecruit(_CONST dvar_vector& Stmp,const int& ispp)
+FUNCTION dvar_vector SRecruit(const dvar_vector& Stmp,const int& ispp)
   RETURN_ARRAYS_INCREMENT();
   dvar_vector RecTmp(Stmp.indexmin(),Stmp.indexmax());
   switch (SrType)
@@ -1851,7 +1851,7 @@ FUNCTION dvar_vector SRecruit(_CONST dvar_vector& Stmp,const int& ispp)
   return RecTmp;
 
  
-FUNCTION dvariable Requil(_CONST dvariable& phi,const int& ispp)
+FUNCTION dvariable Requil(const dvariable& phi,const int& ispp)
   dvariable RecTmp;
   switch (SrType)
   {
@@ -1871,7 +1871,7 @@ FUNCTION dvariable Requil(_CONST dvariable& phi,const int& ispp)
   return RecTmp;
 
  //=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=
-FUNCTION void Get_Bzero(_CONST int& ispp) 
+FUNCTION void Get_Bzero(const int& ispp) 
   Bzero(ispp).initialize();
   Rzero(ispp)    =  mfexp(log_Rzero(ispp)); 
   dvar_vector Ntmp(1,nages(ispp));
