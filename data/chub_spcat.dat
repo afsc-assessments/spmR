@@ -10,7 +10,7 @@
 #	data	files	for	each	species																																
 #	Pollock	Pacific	cod	sablefish	Yellowfin	Greenland	turbot	arrowtooth	flounder	Rock	sole	Flathead	sole	AK	Plaice	Pacific	ocean	perch	Nrthrn	RF	Atka	mackerel															
 #	1	2	3	4	5	6	7	8	9	10	11	12																									
-data\test.dat																																					
+data\chubM0.dat																																					
 #	ABC	Multipliers																																			
 1																																					
 #	Population	scalars																																			
