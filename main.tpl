@@ -694,15 +694,12 @@ FUNCTION void Mainloop(int& isim)
        else 
          ABCs_by_yr(ipro,ispp)=ABC(ispp);  // Cumulate ABCs here for printout later...
      }
-       // if (ipro<3) cout<<isim<<" "<<ipro<<" "<<OFL<<" "<<ABC<<endl;
      // Now get actual catch...  
      if (ipro <= nyrs_catch && !(alt == 66 || alt == 77 || alt == 6 || alt == 7)) // use observed catches from setup file for the first year(s)
      {
        for (int ispp=1;ispp<=nspp;ispp++) 
        {
          Actual_Catch(ispp) = Obs_Catch(ipro,ispp); 
-         // Actual_Catch(ispp) = min(ABC(ispp),Obs_Catch(ipro,ispp)); // NOTA BUENO: May 06 change
-         // cout<< alt<<" "<<spname(ispp)<<" "<< ABC(ispp)<<" "<<Obs_Catch(ipro,ispp)<<" "<<Actual_Catch(ispp)<<endl; // NOTA BUENO: May 06 change
        }
      }
      else  // Build in condition to get TAC different than ABC...
@@ -1992,7 +1989,7 @@ FUNCTION void get_msy(const int& ispp)
 
 //+==+==+==+==+==+==+==+==+==+==+==+==+==+==+==+==+==+==+==+==+==+==+==+==+ 
  // FUNCTION dvariable yield(dvariable& Ftmp, dvariable& Stmp,dvariable& Rtmp,int& ispp)
-FUNCTION dvariable yield(const dvariable& Ftmp, const dvariable& Stmp,const dvariable& Rtmp,const int& ispp)
+FUNCTION dvariable yield(const dvariable& Ftmp, dvariable& Stmp,dvariable& Rtmp,const int& ispp)
 
   // cout<<spname(ispp)<<" "<<Ftmp<<" "<<Stmp<<" "<<Rtmp<<endl;
   dvariable yldtmp;
