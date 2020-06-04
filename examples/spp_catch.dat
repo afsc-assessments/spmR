@@ -1,6 +1,6 @@
   #_SETUP_FILE_FOR_THE_BERING_SEA/AI_FISHERIES                      
   #_Number_of_years with specified catch (if begin-yr = 2005, and this number is "3", then subsequent values represent catches in 2005, 06, and 07 (to evaluate alts for 2008)                      
-  1                     
+  2                     
   # Number of species                                               
   1                      
   # OY Minimum                      
@@ -10,7 +10,7 @@
   # data files for each species                     
   # Pollock Pacific cod sablefish Yellowfin Greenland turbot  arrowtooth flounder   Rock sole Flathead sole AK Plaice Pacific ocean perch   Nrthrn RF Atka mackerel 
   # 1 2 3 4 5 6 7 8 9 10  11  12
-  data/mystock.dat
+  data/bsai_atka.dat
   # ABC Multipliers                                               
   1
   # Population scalars                      
@@ -22,5 +22,6 @@
   # TAC model indices (for aggregating)                     
   1 
   # Catch in each future year                     
-2015  74000.
-2016  74000.     																			
+2016  55000.   
+2017  55000.
+2018  55000.
