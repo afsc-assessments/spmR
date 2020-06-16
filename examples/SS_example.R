@@ -65,16 +65,17 @@ write_proj<-function(data_file="Model19.14.48c_T_Proj.dat",
 ## writing projection file
 ## mean 5 year F
 Y5<-LY-5
-M1<-as.numeric(subset(data$M_at_age,data$M_at_age$Yr==(LY-10)&data$M_at_age$Sex==1)[,4:(NAGES+3)]) ## This will likely need to be changed for someone else... Pulls the vector of Ms by age from 10 years prior to LY
-
 F_5<-mean(data$sprseries$Tot_Exploit[data$sprseries$Yr>Y5&data$sprseries$Yr<=LY])
 ## population weight at age for females
 WGT<-vector("list",length=sexes)
 Nage_LY<-vector("list",length=sexes)
+M1<-vector("list",length=sexes)
 for(i in 1:sexes){
   WGT[[i]]<-(data.table(data$endgrowth)[Sex==i]$Wt_Beg*data.table(data$endgrowth)[Sex==i]$Mat_F_Natage)[2:(NAGES+1)]
   Nage_LY[[i]]<-subset(data$natage,data$natage[,11]=="B"&data$natage$Yr==LY&data$natage$Sex==i)
+  M1[[i]]<-as.numeric(subset(data$M_at_age,data$M_at_age$Yr==(LY-10)&data$M_at_age$Sex==i)[,4:(NAGES+3)]) ## pulling array of Ms at age by sex for LY-10
 }
+
 ## selectivity at age for fishery
 sel_LY<-vector("list",length=fleets)
 wt_LY<-vector("list",length=fleets)
@@ -115,7 +116,9 @@ T1<-noquote(paste0(FRATIO," # Fratio"))
   write(T1,paste(data_file),append = T)
 T1<-noquote("# natural mortality")
   write(T1,paste(data_file),append = T)
-  write(M1,paste(data_file),append = T,ncolumns =  45)
+  for (i in 1:sexes){
+    write(M1[[i]],paste(data_file),append = T,ncolumns =  45)
+  }
 T1<-noquote("# Maturity ")
   write(T1,paste(data_file),append = T)
   write(rep(1,NAGES),paste(data_file),append = T,ncolumns = 45) ## Female maturity??
