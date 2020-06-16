@@ -49,7 +49,7 @@ config<-list(
 write_proj<-function(data_file="Model19.14.48c_T_Proj.dat",
                     data = mod1,
                     FY=1977,
-                    LY=2020,
+                    LY=2019,
                     RY=2,
                     fleets=3,
                     sexes=1,
