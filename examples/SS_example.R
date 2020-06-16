@@ -65,7 +65,7 @@ write_proj<-function(data_file="Model19.14.48c_T_Proj.dat",
 ## writing projection file
 ## mean 5 year F
 Y5<-LY-5
-M1<-as.numeric(subset(data$M_at_age,data$M_at_age$Yr==(LY-10)&data$M_at_age$Sex==1)[,4:(NAGES+3)])
+M1<-as.numeric(subset(data$M_at_age,data$M_at_age$Yr==(LY-10)&data$M_at_age$Sex==1)[,4:(NAGES+3)]) ## This will likely need to be changed for someone else... Pulls the vector of Ms by age from 10 years prior to LY
 
 F_5<-mean(data$sprseries$Tot_Exploit[data$sprseries$Yr>Y5&data$sprseries$Yr<=LY])
 ## population weight at age for females
