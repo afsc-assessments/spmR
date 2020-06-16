@@ -5,6 +5,9 @@ library(tidyverse)
 library(ggplot2)
 library(ggthemes)
 library(gtable)
+dir = "C:/WORKING_FOLDER/Model19.14.48c_T"
+Model_Name = "Model19.14.48c_T"
+
 source("../R/readData.R")
 
 #' ## Set initial "setup" parameters
@@ -31,7 +34,7 @@ config<-list(
   nSpecies     = 1,
   OYMin        = .1343248,
   OYMax        = 1943248,
-  dataFiles    = noquote("data/Model19.14.48c_T.dat"),
+  dataFiles    = noquote(paste0("data/",Model_Name,".dat")),
   ABCMult      = 1,
   PoplnScalar  = 1000,
   AltFabcSPR   = 0.75,
@@ -43,8 +46,8 @@ config<-list(
 
 ##
 
-write_proj<-function(data_file="Model18.10.44AGE_Proj.dat",
-                    data=mods1[[2]],
+write_proj<-function(data_file="Model19.14.48c_T_Proj.dat",
+                    data = mod1,
                     FY=1977,
                     LY=2020,
                     RY=2,
@@ -149,60 +152,37 @@ T1<-noquote(paste("# SSB ", FY,"-",LY,sep=""))
 }
   
 
-mod1<-SS_output("C:/WORKING_FOLDER/Model19.14.48c_T")  
-write_proj(data_file="data/Model19.14.48c_T2.dat",data=mod1,NAGES=10,FY=1977,LY=2020)
+mod1<-SS_output(dir)  
 
+write_proj(data_file=paste0("data/",Model_Name,".dat"),data=mod1,
+                    FY=1977,
+                    LY=2020,
+                    RY=2,
+                    fleets=3,
+                    sexes=1,
+                    NAGES=10,
+                    SSL=0, 
+                    Dorn = 0, 
+                    AUTHOR_F = 1, 
+                    SPR_ABC = 0.4,
+                    SPR_MSY = 0.35,
+                    SPAWN_M = 1,
+                    FRATIO=noquote("0.3 0.2 0.5"))
 
-# #' ##  Make list of main file w/ assessment model results
-# #' E.g., "data/bsai_atka.dat"
-# datfile <- list(
-#   runname     = noquote("M19.14.48c_T"), 
-#   ssl_spp     = 0,         # SSL_spp
-#   Dorn_buffer = 0,         # Dorn_buffer
-#   nfsh        = 3,         # N_fsh
-#   nsex        = 1,         # N_sexes
-#   avgF5yr     = 0.0661399, # avg_5yr_F
-#   F40_mult    = 1,         # F_40_multiplier
-#   spr_abc     = 0.4,       # SPR_abc
-#   spr_msy     = 0.35,      # SPR_msy
-#   sp_mo       = 8,         # spawn_month
-#   nages       = 11,        # N_ages
-#   Frat        = 1,         # F_ratio
-# 	# M
-# 	M    = c(0.3,0.3,0.3,0.3,0.3,0.3,0.3,0.3,0.3,0.3,0.3), 
-# 	#  Maturity
-# 	pmat = c(0.005,0.037,0.224,0.688,0.944,0.992,0.999,1,1,1,1),
-# 	#  Wt_at_age_spawners  
-# 	wtage_sp  = c(44.8,161.377,398.272,557.695,652.113,719.573,863.744,948.744,921.397,885.912,1069.87),
-# 	#  Wt_at_age_fsh
-# 	wtage_fsh = c(69.3778,253.522,408.211,614.731,668.483,718.137,803.017,798.707,788.117,842.468,960.006), 
-# 	# select
-# 	sel = c(0.002576427,0.040030753,0.651104228,0.768404263,0.794886081,1,0.889293108,0.604815671,0.451169778,0.403195516,0.403195516),
-# 	# N
-# 	N   = c(511.179,378.528,278.443,194.385,183.423,45.5404,61.1188,19.8073,39.6285,33.6501,51.7806),
-# 	# Nyrs
-# 	nyrs = 37,
-# 	# recruits
-# 	R    = c(1578.51,479.509,357.919,443.588,318.981,413.125,514.351,600.987,536.301,692.34,452.279,1618.73,702.801,372.811,597.812,1136.19,402.862,424.179,1025.36,207.05,383.695,1054.64,2224.52,1379.34,1545.81,345.556,454.884,617.194,404.876,993.497,727.754,236.795,505.948,258.653,726.627,524.198,473.54),
-# 	# SSB 
-# 	SSB  = c(206.391,194.569,187.097,183.296,195.289,240.774,252.143,238.163,223.199,200.776,182.378,179.671,189.193,198.242,212.123,233.484,277.891,282.004,250.709,231.816,218.403,195.275,181.628,189.976,175.912,168.624,220.206,315.124,376.621,397.171,365.476,317.159,277.777,242.719,233.415,223.636,198.117,183.537,177.91)
-# 	)
 
 #' ## Save lists for running model to files expected by projection model
 library(gbm)
 # Setup.dat
 list2dat(setup,"setup.dat")
 # spp_catch.dat
-list2dat(config,"data/Model19.14.48c_T_spcat.dat")
-runfn<-"Model19.14.48c_T"
-file.copy(paste0("data/",runfn,"_spcat.dat"),"spp_catch.dat",overwrite=TRUE)
+list2dat(config,paste0("data/",Model_Name,"_spcat.dat"))
 
-#list2dat(datfile,"data/Model19.14.48c_T.dat")
+file.copy(paste0("data/",Model_Name,"_spcat.dat"),"spp_catch.dat",overwrite=TRUE)
 
 #' ## Run projection model
 system("../src/main")
 #' ## Read in projection model mainfiles
-  .projdir="Model19.14.48c_T/"
+  .projdir= paste0(Model_Name,"/")
   dir.create(.projdir)
   file.copy(list.files(getwd(), pattern="out$"), .projdir,overwrite=TRUE)      
   file.remove(list.files(getwd(), pattern="out$"))
