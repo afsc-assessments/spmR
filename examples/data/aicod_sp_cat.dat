@@ -1,0 +1,26 @@
+  #_Number_of_years with specified catch (if begin-yr = 2004, and this number is "3", then subsequent values represent catches in 2004, 05, and 06 (to evaluate alts for 2007)  
+  2 
+  # Number of species                           
+  1 
+# OY Minimum                      
+  1.0  # Note that this is for age-structured species                   
+  # OY Maximum                      
+  10000000.0  # Note that this is for age-structured species                  
+  # data files for each species 
+    aicod.dat
+  # ABC Multipliers                           
+    1
+  # Population scalars  
+    1000
+    # Alt4 SPR
+    0.6
+  # Number of TAC model categories  
+  1 
+  # TAC model indices (for aggregating) 
+    1
+  # Catch in each future year mean of last five years catch- use two years here to get ABC
+  # two years ahead with fishing at average F.  Use one year (the current assessment year) 
+  # to get ABC for next year 
+2019 19191 #last years catch
+2020 21763
+ 

@@ -37,8 +37,8 @@ dat2list <- function(fn)
 }
 
 print_Tier3_tables <- function(bf, modname="base",stock="BSAI Atka mackerel") {
-	#modname="base"
-	#modname="base";stock="BSAI Atka mackerel"
+	modname="base"
+	modname="base";stock="BSAI Atka mackerel"
   
 tabcap<-tablab <- c("tier3_C","tier3_ABC","tier3_F","tier3_SSB")
 tabcap[1]=paste0("Tier 3 projections of ",stock," catch for the 7 scenarios.")

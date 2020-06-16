@@ -14,12 +14,12 @@ setup<-list(
   Tier         = 3    ,
   nalts        = 7    ,
   alts         = c(1,2,3,4,5,6,7),
-  tac_abc      = 1,    #' Flag to set TAC equal to ABC (1 means true, otherwise false)
-  srr          = 1 ,   #' Stock-recruitment type (1=Ricker, 2=Bholt)
-  rec_proj     = 1,    #' projection rec form (default: 1 = use observed mean and std, option 2 = use estimated SRR and estimated sigma R)
-  srr_cond     = 0 ,   #' SR-Conditioning (0 means no, 1 means use Fmsy == F35%?, 2 means Fmsy == F35% and Bmsy=B35%  condition (affects SRR fits)
+  tac_abc      = 1,    #' Flag to set TAC equal to ABC 1 means true, otherwise false
+  srr          = 1 ,   #' Stock-recruitment type 1=Ricker, 2=Bholt
+  rec_proj     = 1,    #' projection rec form default: 1 = use observed mean and std, option 2 = use estimated SRR and estimated sigma R
+  srr_cond     = 0 ,   #' SR-Conditioning 0 means no, 1 means use Fmsy == F35%?, 2 means Fmsy == F35% and Bmsy=B35%  condition affects SRR fits
   srr_prior    = 0.0,  #' Condition that there is a prior that mean historical recruitment is similar to expected recruitment at half mean SSB and double mean SSB 0 means don't use, otherwise specify CV
-  write_big    = 1,    #' Flag to write big file (of all simulations rather than a summary, 0 means don't do it, otherwise do it) Write_Big
+  write_big    = 1,    #' Flag to write big file of all simulations rather than a summary, 0 means don't do it, otherwise do it Write_Big
   nyrs_proj    = 14,   #' Number of projection years
   nsims        = 100, #' Number of simulations
   beg_yr_label = thisyr  #' Begin Year
