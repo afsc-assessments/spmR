@@ -213,18 +213,30 @@ DATA_SECTION
      *(ad_comm::global_datafile) >> spawnmo(i);              // 11
      *(ad_comm::global_datafile) >> nages(i);                // 12
          cout<<"nages: "<<nages(i)<<endl;
-
+     write_log( SSL_spp(i));              // 2
+     write_log( Const_Buffer(i));         // 3
+     write_log( ngear(i));                // 4
+     write_log( nsexes(i));               // 6 
+     write_log( avg_5yrF(i));             // 7
+     write_log( FABC_Adj(i));             // 8
+     write_log( SPR_abc(i));              // 9
+     write_log( SPR_ofl(i));              // 10
+     write_log( spawnmo(i));              // 11
+     write_log( nages(i));               
      for (int j=1;j<=ngear(i);j++)                    
        *(ad_comm::global_datafile) >> Fratiotmp(i,j);        // 13
+     write_log( Fratiotmp(i,j));               
 
      for (int k=1;k<=nages(i);k++)
        *(ad_comm::global_datafile) >> M_Ftmp(i,k);           // 14
      if (nsexes(i)==2)
        for (int k=1;k<=nages(i);k++)
          *(ad_comm::global_datafile) >> M_Mtmp(i,k);         // 15
+     write_log( M_Ftmp(i));               
 
      for (int k=1;k<=nages(i);k++)
        *(ad_comm::global_datafile) >> pmaturetmp_F(i,k);       // 16
+     write_log( pmaturetmp_F(i));               
 
      if (nsexes(i)==2)
        for (int k=1;k<=nages(i);k++)
@@ -269,6 +281,7 @@ DATA_SECTION
        *(ad_comm::global_datafile) >> SSBtmp(i,j);          // 26
       cout<<"SSB: "<<SSBtmp(i)(1,nrec(i))<<endl;
   }
+	  write_log(Rtmp);
   // cout <<FABC_Adj<<" "<<ABC_Multiplier<<endl;exit(1);
  END_CALCS
   matrix M_F(1,nspp,1,nages);
