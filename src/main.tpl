@@ -951,19 +951,6 @@ FUNCTION Alt4_TAC
      // Ftmp = SolveF2(N_F(ispp),N_M(ispp),Actual_Catch(ispp),ispp);
      // for (int ispp=1;ispp<=nspp;ispp++) Actual_Catch(ispp) = Obs_Catch(ipro,ispp); dd=   ABC_Multiplier(ispp) * Get_Catch(alt,ispp); // ABC_multiplier is from setup.dat
 
- // Get F and catch givent ALT==============================================================================
-FUNCTION double Get_ABCs(const int& ispp)
-  // This is to simply get the unconstrained catch levels...
-  //   called from main_loop from Do_sims                                     
-  // cout<<spname(ispp)<<Get_Catch(alt,ispp)<<endl;;
-  cout<<spname(2)<<" Ftotabc 1 "<<Ftotabc(2)(1,3)<<endl;
-  ABC(ispp)       =   ABC_Multiplier(ispp) * Get_Catch(alt,ispp); // ABC_multiplier is from setup.dat
-  cout<<spname(2)<<" Ftotabc 2 "<<Ftotabc(2)(1,3)<<endl;
-  // cout<<spname(ispp)<<ABC(ispp)<<endl;
-  OFL(ispp)       =    Get_Catch(6,ispp); 
-  cout<<spname(2)<<" Ftotabc 3 "<<Ftotabc(2)(1,3)<<endl;
-  // cout<<spname(ispp)<<OFL(ispp)<<endl;
-
  // Get_Catch ==============================================================================------------------
 FUNCTION double Get_Catch(const int& thisalt, const int& ispp)
   double Ftmp;

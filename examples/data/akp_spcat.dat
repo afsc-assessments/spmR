@@ -14,7 +14,7 @@ data/akp.dat
 # ABC Multipliers                                               
   1 
   # Population scalars                      
-  1000  
+  1000
   # Alt 4 Fabc SPRs 
  0.6
   # Number of TAC model categories                      
