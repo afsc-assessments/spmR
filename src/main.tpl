@@ -225,7 +225,7 @@ DATA_SECTION
      write_log( nages(i));               
      for (int j=1;j<=ngear(i);j++)                    
        *(ad_comm::global_datafile) >> Fratiotmp(i,j);        // 13
-     write_log( Fratiotmp(i,j));               
+     write_log( Fratiotmp(i));               
 
      for (int k=1;k<=nages(i);k++)
        *(ad_comm::global_datafile) >> M_Ftmp(i,k);           // 14
@@ -281,7 +281,9 @@ DATA_SECTION
        *(ad_comm::global_datafile) >> SSBtmp(i,j);          // 26
       cout<<"SSB: "<<SSBtmp(i)(1,nrec(i))<<endl;
   }
+	  write_log(nrec);
 	  write_log(Rtmp);
+	  write_log(SSBtmp);
   // cout <<FABC_Adj<<" "<<ABC_Multiplier<<endl;exit(1);
  END_CALCS
   matrix M_F(1,nspp,1,nages);
@@ -375,12 +377,6 @@ DATA_SECTION
   wtd_div.initialize(); 
   double sumtmp;
   for (int ispp=1;ispp<=nspp;ispp++) { 
-    for (int i=1;i<=nages(ispp);i++) { 
-      sumtmp=0.;
-      for (int j=1;j<i;j++) 
-        sumtmp -= M_F(ispp,j);
-      wtd_div(i) +=  pmature_F(ispp,i)*wt_F(ispp,i)*exp(sumtmp);
-    }
     for (int i=nages(ispp)+1;i<=25;i++) { 
       sumtmp=0.;
       for (int j=1;j<i;j++) 
@@ -612,6 +608,7 @@ PARAMETER_SECTION
   for (int ispp=1;ispp<=nspp;ispp++)
   {
    // Get parameter values for InvGauss
+
     if (nsexes(ispp)==1) 
       AMeanRec(ispp) = mean(R(ispp));  // Arithmetic mean
     else
@@ -692,9 +689,8 @@ PRELIMINARY_CALCS_SECTION
     targ_SPR(ispp) = SPR_ofl(ispp);
   }
   compute_spr_rates();
-  if (Rec_Gen==1||Rec_Gen==4) 
-	{
-    Run_Sim();  cout<< "Finished simulations using standard (avg, var) stochastic approach"<<endl;exit(1);
+  if (Rec_Gen==1||Rec_Gen==4) {
+   Run_Sim();  cout<< "Finished simulations using standard (avg, var) stochastic approach"<<endl;exit(1);
   }
 
 PROCEDURE_SECTION
@@ -950,7 +946,6 @@ FUNCTION Alt4_TAC
   // Then given new "catches" solve for Fabc for that species
      // Ftmp = SolveF2(N_F(ispp),N_M(ispp),Actual_Catch(ispp),ispp);
      // for (int ispp=1;ispp<=nspp;ispp++) Actual_Catch(ispp) = Obs_Catch(ipro,ispp); dd=   ABC_Multiplier(ispp) * Get_Catch(alt,ispp); // ABC_multiplier is from setup.dat
-
 
  // Get_Catch ==============================================================================------------------
 FUNCTION double Get_Catch(const int& thisalt, const int& ispp)
