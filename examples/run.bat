@@ -13,11 +13,8 @@ echo ---------------
 exit /B
 )
 copy data\%1_spcat.dat   spp_catch.dat
-main -nox -nohess
+..\src\main -nox -nohess
 if NOT exist %1_out mkdir %1_out
 copy *.out %1_out\
 copy main.rep %1_out\report.out
 copy alt2_proj.rep %1_out\alt2_proj.out
-
-call cleanad
-call bin\awk1    %1
