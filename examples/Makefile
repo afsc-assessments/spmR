@@ -8,7 +8,7 @@ all:
 ifneq "$(wildcard $(data) )" ""
 	cp $(data) spp_catch.dat
 	@echo $(outdir)
-	ls #$(run)
+	$(run)
 ifneq "$(wildcard $(outdir) )" ""
 else
 	mkdir $(outdir)

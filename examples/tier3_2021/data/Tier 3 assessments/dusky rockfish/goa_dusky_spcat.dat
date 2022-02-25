@@ -1,0 +1,19 @@
+#_Number_of_years with specified catch
+4
+# Number of species
+1
+# data files for each species
+data/goa_dusky.dat
+# ABC Multipliers
+1
+# Population scalars
+1000
+# Number of TAC model categories
+1
+# TAC model indices (for aggregating)
+1
+# Catch in each future year
+2020	2197.5016 # Finalized previous year catch
+2021	2997.4932 # Estimated from catch thru 2021-10-16 with expansion factor = 1.03293397616377
+2022	4724.5734 # Estimated as Max F scenario catch*yieldratio = 0.668361418950723
+2023	4336.75 # Estimated as Max F scenario catch*yieldratio 0.668361418950723

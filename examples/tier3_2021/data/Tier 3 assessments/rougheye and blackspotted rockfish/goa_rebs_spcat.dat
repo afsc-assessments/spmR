@@ -1,0 +1,18 @@
+#_Number_of_years with specified catch
+3
+# Number of species
+1
+# data files for each species
+data/goa_rebs.dat
+# ABC Multipliers
+1
+# Population scalars
+1000
+# Number of TAC model categories
+1
+# TAC model indices (for aggregating)
+1
+# Catch in each future year
+2021	384.6187 # Estimated from catch thru 2021-10-23 with expansion factor = 1.03354794342637
+2022	355.7854 # Estimated as Max F scenario catch*yieldratio 0.451350230576067
+2023	345.2653 # Estimated as Max F scenario catch*yieldratio 0.451350230576067

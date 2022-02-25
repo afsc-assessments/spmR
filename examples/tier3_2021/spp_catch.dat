@@ -1,0 +1,27 @@
+#_Number_of_years	with	specified	catch	(if	begin-yr	=	2004,	and	this	number	is	3,	then	subsequent	values	represent	catches
+3																	
+#	Number	of	species														
+4																	
+#OYMax
+800
+#OYMin
+0
+#	data	files	for	each	species												
+#	Sable																
+data/goa_atf.dat	data/goa_dover.dat	data/goa_dusky.dat	data/goa_fhs.dat													
+#	ABC	Multipliers	#	ABC	Multipliers												
+	1	1	1	1													
+#	Population	scalars	#	scalars													
+	1000	1000	1000	1000													
+# Alt4 SPR
+0.45 0.45 0.45 0.45
+#	Number	of	TAC	model	categories	#	Number	of	TAC	model	categories						
+	7																
+#	TAC	model	indices	(for	aggregating)	#	TAC	model	indices	(for	aggregating)						
+	1	1 1 1															 
+#	Catch	in	each	future	year	#	Catch	in	each	future	year						
+2021	10052	150	3000	2000													
+2022	16991	150	3000	2000													
+2023	14819	150	3000	2000													
+																	
+																	
