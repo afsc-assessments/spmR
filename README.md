@@ -1,7 +1,7 @@
 AK-projection-simulation
 ========================
 
-Projection model for evaluating outcomes of catch control rules for Alaska groundfish
+Standard Projection model (SPM) for evaluating outcomes of catch control rules for Alaska groundfish
 
   1. make directory "data"
   2. edit files within data subdirectory
