@@ -253,29 +253,37 @@ model_data::model_data(int argc,char * argv[]) : ad_comm(argc,argv)
      if (nsexes(i)==2)
        for (int k=1;k<=nages(i);k++)
          *(ad_comm::global_datafile) >> pmaturetmp_M(i,k);         // 15
+     write_log( pmaturetmp_M(i));               
       cout << "Mature:  "<< pmaturetmp_F(i)(1,nages(i)) <<endl;
      for (int k=1;k<=nages(i);k++)
        *(ad_comm::global_datafile) >> wt_Ftmp(i,k);          // 17
+     write_log( wt_Ftmp(i));               
      for (int j=1;j<=ngear(i);j++)
        for (int k=1;k<=nages(i);k++)
          *(ad_comm::global_datafile) >> wt_gear_Ftmp(i,j,k); // 18
+     write_log( wt_gear_Ftmp(i));               
      if (nsexes(i)==2)
        for (int j=1;j<=ngear(i);j++)
          for (int k=1;k<=nages(i);k++)
            *(ad_comm::global_datafile) >> wt_gear_Mtmp(i,j,k);// 19
+     write_log( wt_gear_Mtmp(i));               
       
      for (int j=1;j<=ngear(i);j++)
        for (int k=1;k<=nages(i);k++)
          *(ad_comm::global_datafile) >> sel_Ftmp(i,j,k);    // 20
+     write_log( sel_Ftmp(i));               
      if (nsexes(i)==2)
        for (int j=1;j<=ngear(i);j++)
          for (int k=1;k<=nages(i);k++)
            *(ad_comm::global_datafile) >> sel_Mtmp(i,j,k);  // 21
+     write_log( sel_Mtmp(i));               
      for (int k=1;k<=nages(i);k++)
        *(ad_comm::global_datafile) >> n0_Ftmp(i,k);         // 22
+     write_log(  n0_Ftmp(i));               
      if (nsexes(i)==2)
        for (int k=1;k<=nages(i);k++)
          *(ad_comm::global_datafile) >> n0_Mtmp(i,k);       // 23
+     write_log(  n0_Mtmp(i));               
          cout<<"N: "<<n0_Ftmp(i)(1,nages(i))<<endl;
      *(ad_comm::global_datafile) >> nrec(i);                // 24
          cout<<"nrec: "<<nrec(i)<<endl;
