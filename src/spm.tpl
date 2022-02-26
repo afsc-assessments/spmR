@@ -21,6 +21,7 @@ DATA_SECTION
   !!CLASS ofstream Alt3bstuff("alt3b.out")
   !!CLASS ofstream detail_out("bigfile.out")
   !!CLASS ofstream prof_F("F_profile.out");
+  !!CLASS ofstream elasticity("elasticity.csv");
   int condition_SR
   int ipro
   int isim
@@ -678,6 +679,7 @@ PARAMETER_SECTION
 
 
 PRELIMINARY_CALCS_SECTION
+  double tmp1;
   write_alts_hdr();
   get_SB100();
   cout<<"SSB, Biomass at unfished: "<<endl<<SB100<<endl<<B100<<endl;
@@ -695,10 +697,16 @@ PRELIMINARY_CALCS_SECTION
     Ftarg(ispp)= Fofl(ispp); 
     targ_SPR(ispp) = SPR_ofl(ispp);
   }
+  cout << "Cole 3 F35=" << tmp1 << endl;
   compute_spr_rates();
+  cout << "Cole 4 F35=" << tmp1 << endl;
+  
   if (Rec_Gen==1||Rec_Gen==4) {
-   Run_Sim();  cout<< "Finished simulations using standard (avg, var) stochastic approach"<<endl;exit(1);
+   Run_Sim();  cout<< "Finished simulations using standard (avg, var) stochastic approach"<<endl;
   }
+
+  do_elasticity();
+  exit(1);
 
 PROCEDURE_SECTION
   compute_obj_fun();
@@ -1473,7 +1481,7 @@ FUNCTION get_SB100
     SB100(ispp)  *= AMeanRec(ispp) ;
 
     // SB100(ispp)  *= .5 * AMeanRec(ispp) ;
-    cout<<"SB100  " <<SB100(ispp)<<endl;
+    //cout<<"SB100  " <<SB100(ispp)<<endl;
     B100(ispp)   = (NsprF0(ispp)*wt_F(ispp) + NsprM0(ispp)*wt_M(ispp)) * AMeanRec(ispp);
   }
   // cout << setprecision(2) <<Fabc<<endl
@@ -2422,6 +2430,36 @@ FUNCTION double spr_ratio(double& trial_F,dmatrix& sel_tmp_F, int& ispp)
   SBtmp *=  AMeanRec(ispp) ;
   // cout<<"Trial= "<<trial_F<<endl<<SBtmp/SB100(ispp)<<endl<<Ntmp(1,5)<<endl<<srvtmp_F(6,nages(ispp))<<endl;
   return(SBtmp/SB100(ispp));
+
+FUNCTION void do_elasticity()
+  cout << "starting elasticities" << endl;
+
+  elasticity << "species,sex,age,parameter,value,elasticity" << endl;
+  int ispp=1;
+  double eps=0.000001;
+  for(int a=1;a<=nages(ispp);a++){
+    double x0=M_F(ispp,a);
+    M_F(ispp,a)+=eps;	  
+    double xminus  = (get_spr_rates(.35,ispp));
+    M_F(ispp,a)-=2*eps;
+    double xplus  = (get_spr_rates(.35,ispp));
+    double elas= (log(xplus)-log(xminus))/(2*eps);
+    // Reset parameter
+    M_F(ispp,a)=x0;
+    elasticity << ispp << "," << "female," << a << "," << "M_F,"<< x0<< "," << elas << endl;
+ }
+  int igear=1;
+  for(int a=1;a<=nages(ispp);a++){
+    double x0=sel_F(ispp,igear,a);
+    sel_F(ispp,igear,a)+=eps;	  
+    double xminus  = (get_spr_rates(.35,ispp));
+    sel_F(ispp,igear,a)-=2*eps;
+    double xplus  = (get_spr_rates(.35,ispp));
+    double elas= (log(xplus)-log(xminus))/(2*eps);
+    // Reset parameter
+    sel_F(ispp,igear,a)=x0;
+    elasticity << ispp << "," << "female," << a << "," << "sel_F,"<< x0<< "," << elas << endl;
+ }
 
   // */ 
 RUNTIME_SECTION
