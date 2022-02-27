@@ -697,10 +697,10 @@ PRELIMINARY_CALCS_SECTION
     Ftarg(ispp)= Fofl(ispp); 
     targ_SPR(ispp) = SPR_ofl(ispp);
   }
+  do_elasticity();
   if (Rec_Gen==1||Rec_Gen==4) {
    Run_Sim();  cout<< "Finished simulations using standard (avg, var) stochastic approach"<<endl;
   }
-  do_elasticity();
   exit(1);
 
 PROCEDURE_SECTION
