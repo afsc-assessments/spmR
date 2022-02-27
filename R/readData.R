@@ -1,3 +1,10 @@
+#' list2dat
+#'
+#' write list object to projection model data file
+#'
+#' @param D objection to be written to
+#' @return  written data file for spm model
+#' @export
 list2dat <- function(D,fn,hdr="a new file") {
     # The following writes a data file
     cat(file=fn,paste0("# ",hdr,"\n"))
@@ -8,6 +15,11 @@ list2dat <- function(D,fn,hdr="a new file") {
     }
 }
 
+#' dat2list
+#' Read list object to projection model data file
+#'
+#' @return  update from last year's files
+#' @export
 dat2list <- function(fn)
 {
 	options(warn=-1)  #Suppress the NA message in the coercion to double
@@ -36,7 +48,12 @@ dat2list <- function(fn)
 	return(A)
 }
 
-print_Tier3_tables <- function(bf, modname="base",stock="BSAI Atka mackerel") {
+#'print_Tier3_tables
+#'
+#' @param Dataframe (spm_detail.csv)
+#' @return formatted table
+#' @export
+print_Tier3_tables <- function(df, modname="base",stock="BSAI Atka mackerel") {
 	modname="base"
 	modname="base";stock="BSAI Atka mackerel"
   
@@ -47,7 +64,7 @@ tabcap[3]=paste0("Tier 3 projections of ",stock," fishing mortality for the 7 sc
 tabcap[4]=paste0("Tier 3 projections of ",stock," spawning biomass for the 7 scenarios.")
 
   # Stock Alt Sim Yr  SSB Rec Tot_biom SPR_Implied F Ntot Catch ABC OFL AvgAge AvgAgeTot SexRatio FABC FOFL
-  bfsum <- bf %>% select(Alt,Yr,SSB,F,ABC ,Catch) %>% group_by(Alt,Yr) %>% summarise(Catch=mean(Catch),SSB=mean(SSB),F=mean(F),ABC=mean(ABC))
+  bfsum <- df %>% select(Alt,Yr,SSB,F,ABC ,Catch) %>% group_by(Alt,Yr) %>% summarise(Catch=mean(Catch),SSB=mean(SSB),F=mean(F),ABC=mean(ABC))
 
   tC <- bfsum %>% select(Alt,Yr,Catch) %>% spread(Alt,Catch) 
   names(tC) <- c("Catch","Scenario 1","Scenario 2","Scenario 3","Scenario 4","Scenario 5","Scenario 6","Scenario 7")

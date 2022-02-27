@@ -1,0 +1,17 @@
+Package: spmR
+Type: Package
+Title: This is a package for the AFSC Groundfish stock assessment standard projection model
+Version: 1.0
+Date: 2022-02-18
+Depends: tidyverse
+Suggests: 
+    rmarkdown,knitr, 
+Authors@R: person("Ianelli", "Jim", , "Jim.Ianelli@noaa.gov", role = c("aut", "cre"))
+URL: https://github.com/afsc-assessments/Standard-Projection-Model
+BugReports: https://github.com/afsc-assessments/Standard-Projection-Model/issues
+Maintainer: Jim Ianelli- NOAA Federal <jim.ianelli@noaa.gov>
+License: GPL-2
+LazyData: false
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.1.2
+VignetteBuilder: knitr
