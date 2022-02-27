@@ -9,10 +9,11 @@ else
 endif
 
 all: mpd $(DIST)$(EXEC).tpl
+
 $(EXEC): $(DIST)$(EXEC).tpl
-	$(MAKE) --directory=../../src
 	ln -sf $(DIST)$(EXEC) $@
 	ln -sf $(DIST)$(EXEC).tpl $@.tpl
+	$(MAKE) --directory=../../src
 
 $(DIST)$(EXEC).tpl:
 	$(MAKE) --directory=../../src
