@@ -697,11 +697,9 @@ PRELIMINARY_CALCS_SECTION
     Ftarg(ispp)= Fofl(ispp); 
     targ_SPR(ispp) = SPR_ofl(ispp);
   }
-  
   if (Rec_Gen==1||Rec_Gen==4) {
    Run_Sim();  cout<< "Finished simulations using standard (avg, var) stochastic approach"<<endl;
   }
-
   do_elasticity();
   exit(1);
 
@@ -2434,44 +2432,44 @@ FUNCTION void do_elasticity()
   elasticity << "species,sex,age,parameter,value,elasticity" << endl;
   int ispp=1;
   int igear=1;
-  double eps=0.000001;
+  double lambda=exp(0.000001);
   double x0, xminus, xplus, elas;
   for(int ispp=1; ispp<=nspp; ispp++){
     for(int a=1;a<=nages(ispp);a++){
       // mortality
       x0=M_F(ispp,a);
-      M_F(ispp,a)+=eps;	  
+      M_F(ispp,a)*=lambda;	  
       xminus  = (get_spr_rates(.35,ispp));
-      M_F(ispp,a)-=2*eps;
+      M_F(ispp,a)/=lambda*lambda;
       xplus  = (get_spr_rates(.35,ispp));
-      elas= (log(xplus)-log(xminus))/(2*eps);
+      elas= (log(xplus)-log(xminus))/(2*log(lambda));
       M_F(ispp,a)=x0;		// Reset parameter
       elasticity << spname(ispp) << "," << "female," << a << "," << "M_F,"<< x0<< "," << elas << endl;
       // Selectivity
       x0=sel_F(ispp,igear,a);
-      sel_F(ispp,igear,a)+=eps;	  
+      sel_F(ispp,igear,a)*=lambda;	  
       xminus  = (get_spr_rates(.35,ispp));
-      sel_F(ispp,igear,a)-=2*eps;
+      sel_F(ispp,igear,a)/=lambda*lambda;
       xplus  = (get_spr_rates(.35,ispp));
-      elas= (log(xplus)-log(xminus))/(2*eps);
+      elas= (log(xplus)-log(xminus))/(2*log(lambda));
       sel_F(ispp,igear,a)=x0;     // Reset parameter
       elasticity << spname(ispp) << "," << "female," << a << "," << "sel_F,"<< x0<< "," << elas << endl;
       // // maturity
       // x0=pmature_F(ispp,a);
-      // pmature_F(ispp,a)+=eps;	  
+      // pmature_F(ispp,a)*=lambda;	  
       // xminus  = (get_spr_rates(.35,ispp));
-      // pmature_F(ispp,a)-=2*eps;
+      // pmature_F(ispp,a)/=lambda*lambda;
       // xplus  = (get_spr_rates(.35,ispp));
-      // elas= (log(xplus)-log(xminus))/(2*eps);
+      // elas= (log(xplus)-log(xminus))/(2*log(lambda));
       // pmature_F(ispp,a)=x0;     // Reset parameter
       // elasticity << spname(ispp) << "," << "female," << a << "," << "pmature_F,"<< x0<< "," << elas << endl;
       // spawning WAA
       x0=wt_mature_F(ispp,a);
-      wt_mature_F(ispp,a)+=eps;	  
+      wt_mature_F(ispp,a)*=lambda;	  
       xminus  = (get_spr_rates(.35,ispp));
-      wt_mature_F(ispp,a)-=2*eps;
+      wt_mature_F(ispp,a)/=lambda*lambda;
       xplus  = (get_spr_rates(.35,ispp));
-      elas= (log(xplus)-log(xminus))/(2*eps);
+      elas= (log(xplus)-log(xminus))/(2*log(lambda));
       wt_mature_F(ispp,a)=x0;     // Reset parameter
       elasticity << spname(ispp) << "," << "female," << a << "," << "wt_mature_F,"<< x0<< "," << elas << endl;
     }
