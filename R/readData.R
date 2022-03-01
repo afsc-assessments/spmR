@@ -51,14 +51,12 @@ dat2list <- function(fn)
 #'print_Tier3_tables
 #'
 #' @param Dataframe (spm_detail.csv)
-#' @return formatted table
+#' @return formatted table in html
 #' @export
 #' @example 
 #' 
 print_Tier3_tables <- function(df, modname="base",stock="BSAI Atka mackerel") {
-  modname="base"
-  modname="base";stock="BSAI Atka mackerel"
-  
+  library(xtable)
   tabcap<-tablab <- c("tier3_C","tier3_ABC","tier3_F","tier3_SSB")
   tabcap[1]=paste0("Tier 3 projections of ",stock," catch for the 7 scenarios.")
   tabcap[2]=paste0("Tier 3 projections of ",stock," ABC for the 7 scenarios.")
@@ -109,4 +107,5 @@ print_Tier3_tables <- function(df, modname="base",stock="BSAI Atka mackerel") {
     tab[,i] <- formatC(as.numeric(tab[,i]), format="d", big.mark=",") 
   tab <- xtable(tab, caption = cap, label=paste0("tab:",tablab[4]),digits=0, auto=TRUE, align=rep("r",(length(tab[1,])+1)) )
   print(tab, "html", caption.placement = "top",include.rownames = FALSE, sanitize.text.function = function(x){x}, scalebox=.85)
+  return(tab)
 }
