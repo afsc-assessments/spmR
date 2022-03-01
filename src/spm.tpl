@@ -18,8 +18,8 @@ DATA_SECTION
   !!CLASS ofstream alts_proj("alt_proj.out")
   !!CLASS ofstream percent_out("percentiles.out")
   !!CLASS ofstream percent_db("percentdb.out")
-  !!CLASS ofstream Alt3bstuff("alt3b.out")
-  !!CLASS ofstream detail_out("bigfile.out")
+  // !!CLASS ofstream Alt3bstuff("alt3b.out")
+  !!CLASS ofstream detail_out("spm_detail.csv")
   !!CLASS ofstream prof_F("F_profile.out");
   !!CLASS ofstream elasticity("elasticity.csv");
   int condition_SR
@@ -708,7 +708,7 @@ PROCEDURE_SECTION
   if (mceval_phase()) cout<<log_Rzero<<" "<<steepness<<" "<<sigr<<" "<<endl;
 
 FUNCTION Run_Sim
-  detail_out<<"Stock Alt Sim Yr  SSB Rec Tot_biom SPR_Implied F Ntot Catch ABC OFL AvgAge AvgAgeTot SexRatio"<<endl;
+  detail_out<<"Stock,Alt,Sim,Yr,SSB,Rec,Tot_biom,SPR_Implied,F,Ntot,Catch,ABC,OFL,AvgAge,AvgAgeTot,SexRatio"<<endl;
     for (int ispp=1;ispp<=nspp;ispp++)
     {
       Get_SPR_Catches(ispp);
@@ -890,21 +890,21 @@ FUNCTION Do_Sims
 
      for (int ispp=1;ispp<=nspp;ispp++) 
        detail_out     <<      spname(ispp) 
-                      <<" "<< alt        
-                      <<" "<< isim        
-                      <<" "<< styr+ipro-1
-                      <<" "<<SBsim(ispp,isim,ipro)
-                      <<" "<< Rsim(ispp,isim,ipro)
-                      <<" "<<Bsim(ispp,isim,ipro)
-                      <<" "<<SPRsim(ispp,isim,ipro)
-                      <<" "<<Fsim(ispp,isim,ipro)  
-                      <<" "<<Nsim(ispp,isim,ipro) 
-                      <<" "<<Actual_Catch(ispp)
-                      <<" "<<ABC(ispp)
-                      <<" "<<OFL(ispp)
-                      <<" "<<Avg_Age_Mat(ispp)
-                      <<" "<<Avg_Age_End(ispp)
-                      <<" "<<SRsim(ispp,isim,ipro)<< endl;
+                      <<","<< alt        
+                      <<","<< isim        
+                      <<","<< styr+ipro-1
+                      <<","<<SBsim(ispp,isim,ipro)
+                      <<","<< Rsim(ispp,isim,ipro)
+                      <<","<<Bsim(ispp,isim,ipro)
+                      <<","<<SPRsim(ispp,isim,ipro)
+                      <<","<<Fsim(ispp,isim,ipro)  
+                      <<","<<Nsim(ispp,isim,ipro) 
+                      <<","<<Actual_Catch(ispp)
+                      <<","<<ABC(ispp)
+                      <<","<<OFL(ispp)
+                      <<","<<Avg_Age_Mat(ispp)
+                      <<","<<Avg_Age_End(ispp)
+                      <<","<<SRsim(ispp,isim,ipro)<< endl;
    } // Loop over projection years
 
   }  // Loop over Sims
@@ -2431,6 +2431,7 @@ FUNCTION void do_elasticity()
 
   elasticity << "species,sex,age,parameter,value,elasticity" << endl;
   int ispp=1;
+
   int igear=1;
   double lambda=exp(0.000001);
   double x0, xminus, xplus, elas;

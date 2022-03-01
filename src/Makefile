@@ -6,14 +6,14 @@ else
     COPY=cp
 endif
 
-all: main 
+all: spm 
 
-main: main.tpl 
-	@admb -f main.tpl 
+spm: spm.tpl 
+	@admb -f spm.tpl 
 
 
 clean:
-	@$(RM) main.cpp
-	@$(RM) main.htp
-	@$(RM) main.obj
+	@$(RM) spm.cpp
+	@$(RM) spm.htp
+	@$(RM) spm.obj
 
