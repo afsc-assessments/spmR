@@ -3,7 +3,7 @@ Type: Package
 Title: This is a package for the AFSC Groundfish stock assessment standard projection model
 Version: 1.0
 Date: 2022-02-18
-Depends: tidyverse
+Depends: tidyverse, here
 Suggests: 
     rmarkdown,knitr, 
 Authors@R: person("Ianelli", "Jim", , "Jim.Ianelli@noaa.gov", role = c("aut", "cre"))
