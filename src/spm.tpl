@@ -2439,36 +2439,36 @@ FUNCTION void do_elasticity()
       // mortality
       x0=M_F(ispp,a);
       M_F(ispp,a)*=lambda;	  
-      xminus  = (get_spr_rates(.35,ispp));
-      M_F(ispp,a)/=lambda*lambda;
       xplus  = (get_spr_rates(.35,ispp));
+      M_F(ispp,a)/=lambda*lambda;
+      xminus  = (get_spr_rates(.35,ispp));
       elas= (log(xplus)-log(xminus))/(2*log(lambda));
       M_F(ispp,a)=x0;		// Reset parameter
       elasticity << spname(ispp) << "," << "female," << a << "," << "M_F,"<< x0<< "," << elas << endl;
       // Selectivity
       x0=sel_F(ispp,igear,a);
       sel_F(ispp,igear,a)*=lambda;	  
-      xminus  = (get_spr_rates(.35,ispp));
-      sel_F(ispp,igear,a)/=lambda*lambda;
       xplus  = (get_spr_rates(.35,ispp));
+      sel_F(ispp,igear,a)/=lambda*lambda;
+      xminus  = (get_spr_rates(.35,ispp));
       elas= (log(xplus)-log(xminus))/(2*log(lambda));
       sel_F(ispp,igear,a)=x0;     // Reset parameter
       elasticity << spname(ispp) << "," << "female," << a << "," << "sel_F,"<< x0<< "," << elas << endl;
       // // maturity
       // x0=pmature_F(ispp,a);
       // pmature_F(ispp,a)*=lambda;	  
-      // xminus  = (get_spr_rates(.35,ispp));
-      // pmature_F(ispp,a)/=lambda*lambda;
       // xplus  = (get_spr_rates(.35,ispp));
+      // pmature_F(ispp,a)/=lambda*lambda;
+      // xminus  = (get_spr_rates(.35,ispp));
       // elas= (log(xplus)-log(xminus))/(2*log(lambda));
       // pmature_F(ispp,a)=x0;     // Reset parameter
       // elasticity << spname(ispp) << "," << "female," << a << "," << "pmature_F,"<< x0<< "," << elas << endl;
       // spawning WAA
       x0=wt_mature_F(ispp,a);
       wt_mature_F(ispp,a)*=lambda;	  
-      xminus  = (get_spr_rates(.35,ispp));
-      wt_mature_F(ispp,a)/=lambda*lambda;
       xplus  = (get_spr_rates(.35,ispp));
+      wt_mature_F(ispp,a)/=lambda*lambda;
+      xminus  = (get_spr_rates(.35,ispp));
       elas= (log(xplus)-log(xminus))/(2*log(lambda));
       wt_mature_F(ispp,a)=x0;     // Reset parameter
       elasticity << spname(ispp) << "," << "female," << a << "," << "wt_mature_F,"<< x0<< "," << elas << endl;
