@@ -7,10 +7,7 @@
 print_Tier3_tables(df, modname = "base", stock = "BSAI Atka mackerel")
 }
 \arguments{
-\item{Dataframe}{(spm_detail.csv)}
-}
-\value{
-formatted table
+\item{df}{}
 }
 \description{
 print_Tier3_tables

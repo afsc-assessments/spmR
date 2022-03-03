@@ -2,7 +2,8 @@
 % Please edit documentation in R/readData.R
 \name{dat2list}
 \alias{dat2list}
-\title{Read list object to projection model data file}
+\title{dat2list
+Read list object to projection model data file}
 \usage{
 dat2list(fn)
 }
@@ -10,5 +11,6 @@ dat2list(fn)
 update from last year's files
 }
 \description{
+dat2list
 Read list object to projection model data file
 }

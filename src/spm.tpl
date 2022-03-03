@@ -30,7 +30,7 @@ DATA_SECTION
   int rnseed           // Random number seed
   !! rnseed = 123;
  ////////////////////////////////////////////////////////////////////////////
-  !! ad_comm::change_datafile_name("setup.dat");
+  // !! ad_comm::change_datafile_name("setup.dat"); Jim changed to spm.dat file
   !!    *(ad_comm::global_datafile) >>  run_name; // Read in the name of this run
   init_int Tier
   int alt ;            // Alternative specfications (relic of PSEIS)
@@ -63,17 +63,6 @@ DATA_SECTION
   matrix unifs(1,nsims,1,npro+1);
   vector sst(1,npro);
  LOCAL_CALCS
-    if (Rec_Gen==3)
-    {
-      ad_comm::change_datafile_name("srecpar.dat");
-      //  Bzero,  PhiZero,  Alpha,
-      *(ad_comm::global_datafile) >>  bzero_in;
-      *(ad_comm::global_datafile) >>  phizero_in;
-      *(ad_comm::global_datafile) >>  alpha_in;
-      *(ad_comm::global_datafile) >>  sigmar_in;
-      *(ad_comm::global_datafile) >>  rho_in;
-      // rho_in=0.82;
-    }
   write_log(run_name); 
   write_log(Tier); 
   write_log(nalts); 
@@ -93,7 +82,7 @@ DATA_SECTION
   write_log(sigmar_in); 
   write_log(rho_in); 
  END_CALCS
-  !! ad_comm::change_datafile_name("spp_catch.dat");
+  // !! ad_comm::change_datafile_name("spp_catch.dat"); Jim moved to spm.dat
   int      nyrs_catch    // Number of years that catch is specified (starting at first year: styr) 
   init_int nyrs_catch_in // Number of years that catch is specified (starting at first year: styr) 
   !! cout<<"First year, and number of years catch is pre-specified. "<<styr<<" "<<nyrs_catch_in<<endl;
@@ -123,8 +112,22 @@ DATA_SECTION
   vector model_tacs(1,ntacspp)
   // !! for (int i=1;i<=nspp;i++) 
   init_matrix Obs_Catch(1,nyrs_catch_in,0,nspp) // Pre-specified catch values (year is in column 0)
+
+ LOCAL_CALCS
+  if (Rec_Gen==3)
+  {
+    ad_comm::change_datafile_name("srecpar.dat");
+    //  Bzero,  PhiZero,  Alpha,
+    *(ad_comm::global_datafile) >>  bzero_in;
+    *(ad_comm::global_datafile) >>  phizero_in;
+    *(ad_comm::global_datafile) >>  alpha_in;
+    *(ad_comm::global_datafile) >>  sigmar_in;
+    *(ad_comm::global_datafile) >>  rho_in;
+    // rho_in=0.82;
+  }
   // Open up tac-model parameters
-  !! ad_comm::change_datafile_name("tacpar.dat");
+  ad_comm::change_datafile_name("tacpar.dat");
+ END_CALCS
   init_int nntmp
   init_int nnodes
   init_vector maxabc(1,ntacspp)
@@ -697,11 +700,6 @@ PRELIMINARY_CALCS_SECTION
     Ftarg(ispp)= Fofl(ispp); 
     targ_SPR(ispp) = SPR_ofl(ispp);
   }
-  do_elasticity();
-  if (Rec_Gen==1||Rec_Gen==4) {
-   Run_Sim();  cout<< "Finished simulations using standard (avg, var) stochastic approach"<<endl;
-  }
-  exit(1);
 
 PROCEDURE_SECTION
   compute_obj_fun();
@@ -1645,7 +1643,24 @@ FUNCTION void Get_SPR_Catches(const int& ispp)
                   M_M(ispp) + Ftotofl(ispp)),elem_prod(1.- mfexp(-(M_M(ispp)+Ftotofl(ispp))),NsprMofl(ispp))));
   }
 
+FINAL_SECTION
+    write_srec();
+    do_elasticity();
+    Run_Sim();
+    cout<< "---- Finished simulations using stochastic stock-recruitment relationship -----"<<endl;
+
 REPORT_SECTION
+ /*
+  if (last_phase())
+	{
+    do_elasticity();
+    if (Rec_Gen==1||Rec_Gen==4) {
+     Run_Sim();  cout<< "Finished simulations using standard (avg, var) stochastic approach"<<endl;
+    }
+   }
+ */
+
+
   cout <<endl<< "Report section, phase: "<<current_phase()<<endl;
   cout <<"===========================================  "<<endl;
 
@@ -1689,8 +1704,8 @@ REPORT_SECTION
 
   if (last_phase())
   {
-    write_srec();
-    Run_Sim();
+    // do_elasticity();
+    // Run_Sim();
     cout<< "---- Finished simulations using stochastic stock-recruitment relationship -----"<<endl;
     report<<endl<<endl;
     report << "Stock B100 B40 B35 F40 F35  F_"<<styr<<endl;

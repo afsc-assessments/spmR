@@ -2,9 +2,12 @@
 % Please edit documentation in R/readData.R
 \name{list2dat}
 \alias{list2dat}
-\title{write list object to projection model data file}
+\title{list2dat}
 \usage{
 list2dat(D, fn, hdr = "a new file")
+}
+\arguments{
+\item{D}{objection to be written to}
 }
 \value{
 written data file for spm model
