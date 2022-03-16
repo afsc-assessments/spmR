@@ -1,10 +1,10 @@
 Package: spmR
 Type: Package
-Title:  Standard Projection model
+Title: Standard Projection model
 Version: 0.1.0
 Author: Jim Ianelli
 Maintainer: Jim Ianelli <jim.ianelli@noaa.gov>
-Description:  Standard Projection model (SPM) for evaluating outcomes of 
+Description: Standard Projection model (SPM) for evaluating outcomes of 
    catch control rules for Alaska groundfish
 License: What license is it under?
 Encoding: UTF-8
@@ -14,3 +14,4 @@ Suggests:
     rmarkdown
 VignetteBuilder: knitr
 RoxygenNote: 7.1.2
+URL: http://afsc-assessments.github.io/spmR/
