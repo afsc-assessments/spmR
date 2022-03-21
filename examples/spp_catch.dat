@@ -1,25 +1,26 @@
-#_SETUP_FILE_FOR_THE_BERING_SEA/AI_FISHERIES
-#_Number_of_yearswithspecifiedcatch(ifbegin-yr=2005,andthisnumberis3,thensubsequentvaluesrepresentcatchesin2005,06,and7(toevaluatealtsfor2008
+# a new file
+#nFixCatchYrs
 2
-#Numberofruns
+#nSpecies
 1
-#OYMinimum
-43.248 #Notethatthisisforage-structuredspecies1330.148
-#OYMaximum
-1943.248 #Notethatthisisforage-structuredspecies1930.148
-#datafilesforeachspecies
-#datafilesforeachspecies
-data/gturb.dat
-#ABCMultipliers
+#OYMin
+0.1343248
+#OYMax
+1943248
+#dataFiles
+data/t1.dat
+#ABCMult
 1
-#Populationscalars
-1
-#NewAlt4FabcSPRs(Rockfish=0.75,other0.6),StellersealionpreyspeciesbetweenF40andF60(tomeetOYMin)
+#PoplnScalar
+1000
+#AltFabcSPR
 0.75
-#NumberofTACmodelcategories
+#nTAC
 1
-#TACmodelindices(foraggregating)
+#TACIndices
 1
-#Catchineachfutureyear
-2020 2325.9240011
-2021 3309.23663833209
+#Catch
+2016
+55000
+2017
+55000

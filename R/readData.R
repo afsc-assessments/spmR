@@ -24,15 +24,18 @@ dat2list <- function(fn)
 {
 	options(warn=-1)  #Suppress the NA message in the coercion to double
 	ifile=scan(fn,what="character",flush=TRUE,blank.lines.skip=FALSE,quiet=TRUE)
-	idx=sapply(as.double(ifile),is.na)
+	#idx=sapply(as.double(ifile),is.na)
+	idx=substr(ifile,1,1)=="#"
 	vnam=ifile[idx] #list names
+	#vnam
 	nv=length(vnam) #number of objects
 	A=list()
 	ir=0
 	for(i in 1:nv)
 	{
 		ir=match(vnam[i],ifile)
-		print(ir)
+		##print(ir)
+		#print(vnam[i])
 		if(i!=nv) irr=match(vnam[i+1],ifile) else irr=length(ifile)+1 #next row
 		dum=NA
 		if(irr-ir==2) dum=as.double(scan(fn,skip=ir,nlines=1,quiet=TRUE,what=""))
@@ -42,18 +45,20 @@ dat2list <- function(fn)
 		{
 			A[[substr(vnam[i],2,10)]]=dum
 		}
+		if(is.na(dum))#Logical test to ensure dealing with numbers
+		{
+			A[[substr(vnam[i],2,10)]]=scan(fn,skip=ir,nlines=1,quiet=TRUE,what="")
+		}
 	}
 	options(warn=0)
 	
 	return(A)
 }
 
-#'print_Tier3_tables
+#' print_Tier3_tables
 #'
-#' @param Dataframe (spm_detail.csv)
-#' @return formatted table in html
+#' @param df 
 #' @export
-#' @example 
 #' 
 print_Tier3_tables <- function(df, modname="base",stock="BSAI Atka mackerel") {
   library(xtable)
