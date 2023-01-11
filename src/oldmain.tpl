@@ -1635,6 +1635,10 @@ FUNCTION void Get_SPR_Catches(const int& ispp)
                   M_M(ispp) + Ftotofl(ispp)),elem_prod(1.- mfexp(-(M_M(ispp)+Ftotofl(ispp))),NsprMofl(ispp))));
   }
 
+FINAL_SECTION
+    // write_srec();
+    // do_elasticity();
+    Run_Sim();
 REPORT_SECTION
   cout <<endl<< "Report section, phase: "<<current_phase()<<endl;
   cout <<"===========================================  "<<endl;

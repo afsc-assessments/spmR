@@ -623,10 +623,10 @@ PARAMETER_SECTION
     if (nsexes(ispp)==1) 
       AMeanRec(ispp) = mean(R(ispp));  // Arithmetic mean
     else
-      AMeanRec(ispp) = 2.*mean(R(ispp));  // Arithmetic mean
+      AMeanRec(ispp) = 2.*mean(R(ispp));  // Arithmetic mean, converted to females (half) later
 
     AMeanSSB(ispp) = mean(SSB(ispp));  // Arithmetic mean
-    AMaxSSB(ispp) = max(SSB(ispp));  // Arithmetic mean
+    AMaxSSB(ispp)  = max(SSB(ispp));    // Maximum
     HMeanRec(ispp) = 1./ mean(1./R(ispp));   // Harmonic mean
 
    // Given Amean and Hmean, solve for parameters of inv gaussian
@@ -658,8 +658,8 @@ PARAMETER_SECTION
       }
     }
     envin.close();
-    AMeanRec(ispp) *= .5;  // Arithmetic mean
-    cout <<"recruits"<<endl;
+    AMeanRec(ispp) *= .5;  // Goes to females only
+    cout <<"Mean recruits "<< AMeanRec(ispp) <<endl;
     // cout<< " Solving spp "<<ispp<<" "<<spname(ispp)<<" "<<yr_one_catch(ispp)<<" "; // <<N_F*wt_mature(ispp)<<" "<<N_F*wt_F(ispp)+N_M(ispp)*wt_F(ispp)<<" ";
     for (int k=1;k<=nyrs_catch_in;k++)
     {
@@ -700,13 +700,15 @@ PRELIMINARY_CALCS_SECTION
     Ftarg(ispp)= Fofl(ispp); 
     targ_SPR(ispp) = SPR_ofl(ispp);
   }
+  compute_spr_rates();
+  if (Rec_Gen==1) {Run_Sim();  cout<< "Finished simulations using standard (avg, var) stochastic approach"<<endl;exit(1);}
 
 PROCEDURE_SECTION
   compute_obj_fun();
   if (mceval_phase()) cout<<log_Rzero<<" "<<steepness<<" "<<sigr<<" "<<endl;
 
 FUNCTION Run_Sim
-  detail_out<<"Stock,Alt,Sim,Yr,SSB,Rec,Tot_biom,SPR_Implied,F,Ntot,Catch,ABC,OFL,AvgAge,AvgAgeTot,SexRatio"<<endl;
+  detail_out<<"Stock,Alternative,Sim,Yr,SSB,Rec,Tot_biom,SPR_Implied,F,Ntot,Catch,ABC,OFL,AvgAge,AvgAgeTot,SexRatio,B100,B40,B35"<<endl;
     for (int ispp=1;ispp<=nspp;ispp++)
     {
       Get_SPR_Catches(ispp);
@@ -717,10 +719,10 @@ FUNCTION Run_Sim
   {
     alt = alt_list(ialt);
 
-    if (alt==2 && nyrs_catch_in >1) 
+    //if (alt==2 && nyrs_catch_in >1) 
       nyrs_catch = nyrs_catch_in;
-    else 
-      nyrs_catch = 1;// NOTA BUENO: this is changed under the new EIS Alternatives (May 06)
+    //else 
+     // nyrs_catch = 1;// NOTA BUENO: this is changed under the new EIS Alternatives (May 06)
     Do_Sims();
     // if (alt==2) write_alts();
     write_alts();
@@ -790,7 +792,7 @@ FUNCTION  compute_obj_fun
   }
   obj_fun += dummy*dummy;
 
-FUNCTION Do_Sims
+FUNCTION opt_sim
   /* Have to do in steps: 1) find TAC value for catch 2) compute constraint vector 3) optimize given those constraints 4) get realized catches based on optimization 5) project population to next year, restart from step 3) */
   Avg_Age_End.initialize();
   Avg_Age_sum.initialize();
@@ -806,6 +808,15 @@ FUNCTION Do_Sims
   {
     N_F = n0_F       ;  // Initialize N's only once per simulation
     N_M = n0_M       ;
+    Mainloop(isim);
+
+   // OjO, looping for long term projections...need to compute the average coefficients from past
+    // Mainloop(npro+1,npro+15,isim);
+    Avg_Age();
+
+  }  // Loop over Sims
+
+FUNCTION void Mainloop(int& isim)
    // Loop over projection years
    for (ipro=1;ipro<=npro;ipro++) 
    { // call and get TAC's fo this species in this year...
@@ -902,18 +913,12 @@ FUNCTION Do_Sims
                       <<","<<OFL(ispp)
                       <<","<<Avg_Age_Mat(ispp)
                       <<","<<Avg_Age_End(ispp)
-                      <<","<<SRsim(ispp,isim,ipro)<< endl;
+                      <<","<<SRsim(ispp,isim,ipro)
+                      <<","<<SB100(ispp)
+                      <<","<<SB100(ispp)*.4
+                      <<","<<SB100(ispp)*.35
+											<< endl;
    } // Loop over projection years
-
-  }  // Loop over Sims
-  for (int ispp=1;ispp<=nspp;ispp++)
-  {
-      // Get_SPR_Catches(ispp);
-    if (nsims>2)
-       write_sim("Alternative ",ispp);
-  }
-  write_by_time();
-
 
 FUNCTION Alt4_TAC
   // Return vector of Alt4 TACs (given Alt4_Fabc, and the SSL prey condition to be at least up to SSL MaxPerm)
@@ -1071,6 +1076,7 @@ FUNCTION double Get_F(const int& thisalt,const int& ispp)
       case 6:  //  Threshold Determination Note: uses TAC=ABC 
         ftmp = Get_Fofl_t( F_age_tmp, N_F(ispp), ispp); 
         break;
+
       case 66:  //  Threshold Determination Note: uses TAC=ABC 
         ftmp = Get_Fofl_t2( F_age_tmp, N_F(ispp), ispp); 
         break;
@@ -1305,7 +1311,7 @@ FUNCTION void Project_Pops(const int& isim, const int& i)
       }
       else // use the curve...
       {
-        // cout<<sigr(ispp)<<endl<<Bzero(ispp)<<endl<<SBtmp<<endl<<rnorms(isim,i)<<endl;
+        cout<<sigr(ispp)<<endl<<Bzero(ispp)<<endl<<SBtmp<<endl<<rnorms(isim,i)<<endl;
         // Nnext_F(ispp)(1) = value(exp(rnorms(isim,i)*sigr(ispp)) *SRecruit( SBtmp, ispp))/2.;
         chi = value(rho_in*chi_prev + sqrt(1.-rho_in*rho_in)*rnorms(isim,i)*sigr(ispp));
         Rsim(ispp,isim,i) = value(exp(chi) * SRecruit(SBtmp, ispp));
@@ -1359,9 +1365,23 @@ FUNCTION Status_Determ
   if (alt == 6)
     for (int ispp=1;ispp<=nspp;ispp++) 
       Actual_Catch   = Get_Catch(alt,ispp);
+  if (alt == 66)
+    for (int ispp=1;ispp<=nspp;ispp++) 
+      Actual_Catch   = Get_Catch(alt,ispp);
   if (alt == 7)
   {
     if (ipro<=3)
+    {
+      for (int ispp=1;ispp<=nspp;ispp++) 
+        Actual_Catch = Get_Catch(1,ispp); // Fish 2 years at max permissible rate 
+    }
+    else 
+      for (int ispp=1;ispp<=nspp;ispp++) 
+        Actual_Catch = Get_Catch(7,ispp);
+  }
+  if (alt == 77)
+  {
+    if (ipro<=2)
     {
       for (int ispp=1;ispp<=nspp;ispp++) 
         Actual_Catch = Get_Catch(1,ispp); // Fish 2 years at max permissible rate 
@@ -1538,8 +1558,6 @@ FUNCTION compute_spr_rates
       SBF40(ispp)  +=  NsprF40(ispp,j)*pmature_F(ispp,j)*wt_F(ispp,j)* mfexp(-yrfrac(ispp) *( M_F(ispp,j) + Ftot40(ispp,j) ));
       SBFofl(ispp) += NsprFofl(ispp,j)*pmature_F(ispp,j)*wt_F(ispp,j)* mfexp(-yrfrac(ispp) *( M_F(ispp,j) + Ftotofl(ispp,j) ));
     }
-    // 
-    double sexratio_tmp=1.0;
     SBFabc(ispp) = AMeanRec(ispp) * SBFabc(ispp);
     SBF40(ispp)  = AMeanRec(ispp) *  SBF40(ispp);
     SBFofl(ispp) = AMeanRec(ispp) * SBFofl(ispp);
@@ -1645,22 +1663,11 @@ FUNCTION void Get_SPR_Catches(const int& ispp)
 
 FINAL_SECTION
     write_srec();
-    do_elasticity();
+    // do_elasticity();
     Run_Sim();
     cout<< "---- Finished simulations using stochastic stock-recruitment relationship -----"<<endl;
 
 REPORT_SECTION
- /*
-  if (last_phase())
-	{
-    do_elasticity();
-    if (Rec_Gen==1||Rec_Gen==4) {
-     Run_Sim();  cout<< "Finished simulations using standard (avg, var) stochastic approach"<<endl;
-    }
-   }
- */
-
-
   cout <<endl<< "Report section, phase: "<<current_phase()<<endl;
   cout <<"===========================================  "<<endl;
 
@@ -1755,10 +1762,21 @@ FUNCTION write_srec
   // srec_out << "Bzero "<<Bzero << endl;
   // srec_out << "B100 "<<SB100 << endl;
   srec_out.close();
+FUNCTION Do_Sims
+  // Main optimization simulation here...
+    opt_sim();
+    for (int ispp=1;ispp<=nspp;ispp++)
+    {
+      // Get_SPR_Catches(ispp);
+      if (nsims>2)
+        write_sim("Alternative ",ispp);
+    }
+    write_by_time();
 
     // Writing routines here ....
 FUNCTION write_by_time
   write_sim("Catch",            Csim,Cabc);  // Total Catch
+	cout<<Cabc<<endl;
   write_ABCs("ABCs"            );            // ABC Catch
   write_TACs("TACs"            );            // ABC Catch
   write_sim("Sp_Biomass",      SBsim,SBFabc);  // Spawn Biomass
