@@ -2425,6 +2425,7 @@ FUNCTION double get_spr_rates(double spr_percent,int& ispp)
     dyld   = (yld2 - yld3)/(2*df);                          // First derivative (to find the root of this)
     dyldp  = (yld3-(2*yld1)+yld2)/(df*df);  // Newton-Raphson approximation for second derivitive
     F1    -= dyld/dyldp;
+	  // cout<< "F1 "<<F1<<endl;
   }
   return(F1);
 
