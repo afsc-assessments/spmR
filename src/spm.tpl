@@ -126,11 +126,11 @@ DATA_SECTION
     // rho_in=0.82;
   }
   // Open up tac-model parameters
-  ad_comm::change_datafile_name("tacpar.dat");
+  // ad_comm::change_datafile_name("tacpar.dat");
  END_CALCS
   init_int nntmp
   init_int nnodes
-  init_vector maxabc(1,ntacspp)
+  // init_vector maxabc(1,ntacspp)
   init_matrix theta(0,nnodes,1,ntacspp)
   !! cout<<"read tacpar"<<endl;
 
@@ -140,7 +140,7 @@ DATA_SECTION
   !! write_log(ntacspp); 
   !! write_log(tac_ind); 
   !! write_log(Obs_Catch); 
-  !! write_log(maxabc); 
+  // !! write_log(maxabc); 
   !! write_log(theta); 
   vector agg_abc(1,ntacspp)
   vector agg_cat(1,ntacspp)
@@ -1394,6 +1394,7 @@ FUNCTION Status_Determ
 
 
 FUNCTION Fit_TAC
+  cout << "This option to fit TAC Is deprecated, please ensure TAC==ABC option"<<endl;
   int use_fit = 1; // Need to move this into the setup file...
   //option to use "fit" program results (requires obtaining theta coef)
   if (use_fit==1)
@@ -1409,7 +1410,8 @@ FUNCTION Fit_TAC
     // Compute aggregate TACs based on aggregate ABCs from model
     for (int itacspp=1;itacspp<=ntacspp;itacspp++) 
     {
-      double abctmp = agg_abc(itacspp) / maxabc(itacspp) ;
+      // Jim commented below because maxabc unavailable
+			double abctmp ; // = agg_abc(itacspp) / maxabc(itacspp) ;
       int ijunk = min(nnodes,int(abctmp * nnodes)) ;
       agg_tac(itacspp) = abctmp * mfexp(theta(ijunk,itacspp)) ;
     }
