@@ -6,12 +6,12 @@ Author: Jim Ianelli
 Maintainer: Jim Ianelli <jim.ianelli@noaa.gov>
 Description: Standard Projection model (SPM) for evaluating outcomes of 
    catch control rules for Alaska groundfish
-License: What license is it under?
+License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
 Suggests: 
     knitr, ggplot2,
     rmarkdown
 VignetteBuilder: knitr
-RoxygenNote: 7.1.2
+RoxygenNote: 7.2.3
 URL: http://afsc-assessments.github.io/spmR/

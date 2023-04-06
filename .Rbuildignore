@@ -1,0 +1,6 @@
+^.*\.Rproj$
+^\.Rproj\.user$
+^examples$
+^doc$
+^ShinyProj$
+^LICENSE\.md$
