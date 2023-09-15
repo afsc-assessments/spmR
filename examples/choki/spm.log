@@ -1,0 +1,54 @@
+
+Initial statistics: 2 variables; iteration 0; function evaluation 0; phase 1
+Function value 7.1415969e+02; maximum gradient component mag -2.0872e+04
+Var    Value     Gradient |Var    Value     Gradient |Var    Value     Gradient
+  1  0.00238 -2.08718e+04 |  2  0.00000  0.00000e+00 |
+
+ - final statistics:
+2 variables; iteration 9; function evaluation 13
+Function value 9.7548e+01; maximum gradient component mag -3.9478e-04
+Exit code = 1;  converg criter 1.0000e-01
+Var    Value     Gradient |Var    Value     Gradient |Var    Value     Gradient
+  1  0.09326 -3.94777e-04 |  2  0.00000  0.00000e+00 |
+
+Initial statistics: 3 variables; iteration 0; function evaluation 0; phase 2
+Function value 9.7547512e+01; maximum gradient component mag 3.2099e+02
+Var    Value     Gradient |Var    Value     Gradient |Var    Value     Gradient
+  1  0.09326 -3.94777e-04 |  2  0.29715  3.20990e+02 |  3  0.00000  0.00000e+00
+
+Intermediate statistics: 3 variables; iteration 20; function evaluation 25; phase 2
+Function value -1.4661279e+01; maximum gradient component mag -3.3314e-01
+Var    Value     Gradient |Var    Value     Gradient |Var    Value     Gradient
+  1  0.55709 -5.16171e-02 |  2 -0.61748 -3.33140e-01 |  3  0.00000  0.00000e+00
+
+ - final statistics:
+3 variables; iteration 27; function evaluation 32
+Function value -1.4667e+01; maximum gradient component mag 4.9676e-04
+Exit code = 1;  converg criter 1.0000e-02
+Var    Value     Gradient |Var    Value     Gradient |Var    Value     Gradient
+  1  0.99863  8.27051e-05 |  2 -0.61853  4.96762e-04 |  3  0.00000  0.00000e+00
+
+Initial statistics: 4 variables; iteration 0; function evaluation 0; phase 3
+Function value -1.4666591e+01; maximum gradient component mag 2.9885e+01
+Var    Value     Gradient |Var    Value     Gradient |Var    Value     Gradient
+  1  0.99863  8.27051e-05 |  2 -0.61853  4.96762e-04 |  3 -0.28197  2.98854e+01
+  4  0.00000  0.00000e+00 |
+Warning: the following parameters had issues
+  log_Rzero[1] is within 0.1% of upper bound: 0.00000e+00 < 1.30000e+01 < 1.30000e+01
+
+
+ - final statistics:
+4 variables; iteration 12; function evaluation 15
+Function value -1.6798e+01; maximum gradient component mag 5.9227e-06
+Exit code = 1;  converg criter 1.0000e-05
+Var    Value     Gradient |Var    Value     Gradient |Var    Value     Gradient
+  1  0.99781  8.38573e-08 |  2 -0.64747  1.65429e-06 |  3 -0.40379  5.92273e-06
+  4  0.00000  0.00000e+00 |
+Estimating row 1 out of 4 for hessian
+Estimating row 2 out of 4 for hessian
+Estimating row 3 out of 4 for hessian
+Estimating row 4 out of 4 for hessian
+size of file gradfil1.tmp = 0
+size of file gradfil2.tmp = 0
+size of file varssave.tmp = 0
+size of file cmpdiff.tmp = 0

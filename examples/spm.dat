@@ -1,55 +1,25 @@
-#rn
-YFS_test 
-#Tier
-3
-#nalts
-7    
-#alts
-1
+#_SETUP_FILE_FOR_THE_BERING_SEA/AI_FISHERIES
+#_Number_of_yearswithspecifiedcatch(ifbegin-yr=2005,andthisnumberis3,thensubsequentvaluesrepresentcatchesin2005,06,and7(toevaluatealtsfor2008
 2
-3
-4
-5
-6
-7
-#tac_flag
-1    
-#srr_type
-1    
-#srr_form
-1    
-#srr_conditioning
-0    
-#srr_reserved
-0  
-#spm_detail_flag
-1    
-#nprj_yrs
-14  
-#nsims
-1000 
-#beg_yr
-2021 
-#nyrs_fixed_catch
-2
-#nspp
-1 
-#OY_min
-10  
-#OY_max                      
-1943.248  
-#data_files for each species                 
-data/yfs.dat
-#ABC_mults                                           
+#Numberofruns
 1
-#scalars                   
+#OYMinimum
+43.248 #Notethatthisisforage-structuredspecies1330.148
+#OYMaximum
+1943.248 #Notethatthisisforage-structuredspecies1930.148
+#datafilesforeachspecies
+#datafilesforeachspecies
+data/gturb.dat
+#ABCMultipliers
 1
-#alt4_spr                   
-0.6
-#nTAC_cat
-1 
-#TACind
+#Populationscalars
 1
-#fixed_catch           
-2018 146.5
-2019 150
+#NewAlt4FabcSPRs(Rockfish=0.75,other0.6),StellersealionpreyspeciesbetweenF40andF60(tomeetOYMin)
+0.75
+#NumberofTACmodelcategories
+1
+#TACmodelindices(foraggregating)
+1
+#Catchineachfutureyear
+2020 2325.9240011
+2021 3309.23663833209

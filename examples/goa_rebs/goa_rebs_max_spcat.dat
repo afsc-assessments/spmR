@@ -1,0 +1,17 @@
+#_Number_of_years with specified catch
+2
+# Number of species
+1
+# data files for each species
+data/goa_rebs.dat
+# ABC Multipliers
+1
+# Population scalars
+1000
+# Number of TAC model categories
+1
+# TAC model indices (for aggregating)
+1
+# Catch in each future year
+2021	407.2037 # Finalized previous year catch
+2022	494.0634 # Estimated from catch thru 2022-10-15 with expansion factor = 1.04248209142187
