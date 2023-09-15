@@ -2,14 +2,14 @@
 title: "README"
 author: "Jim Ianelli"
 date: "2023-09-15"
-output: html_document
+output: github_document
 ---
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-## R Markdown
+## Standard Projection Model for Alaska Groundfish
 
 This is the standard projection code for federally managed Alaskan groundfish species in Tier 3.
 
