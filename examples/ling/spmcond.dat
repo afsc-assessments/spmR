@@ -1,0 +1,65 @@
+#rn
+Choki 
+#Tier
+3
+#nalts
+7    
+#alts
+1
+2
+3
+4
+5
+6
+7
+# init_int TAC_ABC       // Flag to set TAC equal to ABC (1 means true, otherwise false)
+# init_int SrType        // Type of recruitment curve (1=Ricker, 2 Bholt)
+# // Specify form of recruitment generator (1 = use observed mean and std 
+# //                                        2 = use estimated SRR and estimated sigma R
+# //                                        3 = use input parameters from srecpar.dat :  
+# //                                        4 = use input parameters from srecpar.dat :  
+# init_int Rec_Gen       
+# init_int Fmsy_F35      // Specify if conditioned so that Fmsy = F35 (affects SRR fitting) may need to be species specific...
+# init_number Rec_Cond   // Specify prior condition that recruitment at half and double average SSB is similar to average historical Rec
+#tac_flag
+1    
+#srr_type
+1    
+#srr_form
+2    
+#srr_conditioning
+0    
+#srr_reserved
+0  
+#spm_detail_flag
+1    
+#nprj_yrs
+14  
+#nsims
+1000 
+#beg_yr
+2022 
+#nyrs_fixed_catch
+2
+#nspp
+1 
+#OY_min
+10  
+#OY_max                      
+1943.248  
+#data_files for each species                 
+choki.dat
+#choki2.dat
+#ABC_mults                                           
+1
+#scalars                   
+1
+#alt4_spr                   
+0.6
+#nTAC_cat
+1 
+#TACind
+1
+#fixed_catch           
+2021 15.000
+2022 15.000
