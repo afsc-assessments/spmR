@@ -39,7 +39,7 @@ NRS_test
 #OY_max                      
 1943.248  
 #data_files for each species                 
-../fm.prj
+ForProjections.dat
 #ABC_mults                                           
 1
 #scalars                   
