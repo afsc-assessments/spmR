@@ -34,7 +34,7 @@ std # Run name 5 scenarios
 # OY Max
 2.00E+06
 # data files for each species
-../pm.prj
+pm.prj
 # ABC Multipliers                         
 1
 # scalars 

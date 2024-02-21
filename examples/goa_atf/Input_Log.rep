@@ -25,15 +25,15 @@ nsims
 styr
 2005
 bzero_in
-2.14093e-314
+2.16148e-314
 phizero_in
-3.03039e-314
+2.16149e-314
 alpha_in
-8.45509e-293
+3.0131e-314
 sigmar_in
-2.14093e-314
+4.27241e+266
 rho_in
-2.14093e-314
+0
 nyrs_catch_in
 2
 nspp
@@ -76,8 +76,16 @@ tac_ind
 Obs_Catch
  2005 18098
  2006 15770
+maxabc
+ 2.60197
 theta
- 0
+ 0.417
+ 0.372
+ 0.361
+ 0.296
+ 0.2733
+ 0.125
+ -0.300856
 SSL_spp(i)
 0
 Const_Buffer(i)
