@@ -13,5 +13,5 @@ Suggests:
     knitr, ggplot2,
     rmarkdown
 VignetteBuilder: knitr
-RoxygenNote: 7.1.2
+RoxygenNote: 7.3.0
 URL: http://afsc-assessments.github.io/spmR/
