@@ -1,0 +1,56 @@
+---
+title: "spm-example"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{spm-example}
+  %\VignetteEncoding{UTF-8}
+  %\VignetteEngine{knitr::rmarkdown}
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup}
+library(spmR)
+
+```
+# Working examples of the spmR package
+
+This vignette provides examples of how to use the spmR package to run the Standard Projection Model (SPM) for Alaska groundfish. The SPM is a stock assessment model used to project the future status of fish stocks. The spmR package provides an R interface to the SPM model, allowing users to run the model and analyze the results in R. There are three main functions in the spmR package: `runSPM`, `plotSPM`, and `dat2list` (and `list2dat`). The `runSPM` function runs the SPM model and returns the results as a data frame. The `plotSPM` function creates plots of the SPM results. 
+The `list2dat` and `dat2list` functions convert between local R lists and datafiles used by SPM externally.
+A draft function called `print_Tier3_tables` is set up to provide some capabilities to create
+tables for markdown documents.
+This vignette demonstrates how to use these functions to run the SPM model and analyze the results. 
+
+# Example sets
+
+The following case studies have been applied.
+
+## Atka mackerel
+```{r atka}
+
+
+```
+## BSAI northern rock sole
+```{r bsaiNRS}
+
+
+```
+## EBS pollock
+```{r ebswp}
+
+```
+## GOA Flathead sole
+```{r fathead}
+
+```
+## GOA Rougheye blackspotted
+```{r setup}
+
+```
