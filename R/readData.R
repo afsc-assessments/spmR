@@ -74,7 +74,6 @@ dat2list <- function(fn) {
 #' @param stock Name of the stock, defaults to "BSAI Atka mackerel".
 #' @return HTML tables for the specified Tier 3 data.
 #' @export
-#' @importFrom xtable
 #' @importFrom dplyr select, group_by, summarise, spread
 #' @examples
 #' # Example usage:

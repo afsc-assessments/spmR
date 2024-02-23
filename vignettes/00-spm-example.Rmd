@@ -16,8 +16,9 @@ knitr::opts_chunk$set(
 )
 ```
 
-```{r setup}
+```{r setupex}
 library(spmR)
+here::here()
 
 ```
 # Working examples of the spmR package
@@ -34,28 +35,29 @@ The following case studies have been applied.
 
 ## Atka mackerel
 ```{r atka}
-df <- runSPM("examples/atka")
+df <- runSPM(here::here("examples","atka"))
+setwd("spmR")
 plotSPM(df)
 ```
 ## BSAI northern rock sole
 ```{r bsaiNRS}
-df <- runSPM("examples/BSAI NRS")
+df <- runSPM(here::here("examples","BSAI NRS"))
 plotSPM(df)
 
 ```
 ## EBS pollock
 ```{r ebswp}
-df <- runSPM("examples/ebspollock")
+df <- runSPM(here::here("examples","ebspollock"))
 plotSPM(df)
 
 ```
 ## BSAI yellowfin sole
 ```{r fathead}
- df <- runSPM("examples/yfs")
+df <- runSPM(here::here("examples","yfs"))
  plotSPM(df)
 
 ```
 ## GOA Rougheye blackspotted
-```{r setup}
+```{r rougheye}
 
 ```

@@ -9,7 +9,7 @@ vignette: >
   %\VignetteEncoding{UTF-8}
 ---
 
-```{r setup, include = FALSE}
+```{r setup1, include = FALSE}
 knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>"
@@ -23,6 +23,11 @@ Seattle WA 98115
 
 Introduction
 ============
+## 2024 update
+
+
+
+## Earlier background and documentation
 https://archive.fisheries.noaa.gov/afsc/refm/stocks/projections.htm
 
 During the November 2004 groundfish Plan Team meetings the Teams
@@ -49,7 +54,7 @@ model" the developments of the SPM are provided to show compatibility
 with all types of assessment models used for N. Pacific groundfish.
 
 For the Programmatic Supplemental Environmental Impact Statement (PSEIS)
-an extension of the first version of SPM was developed (in 2002?). This
+an extension of the first version of SPM was developed (in 2002). This
 involved linking the stock assessment information with observed species
 compositions by fishery. The resulting multi-species technical
 interaction model (MSTIM) allowed for evaluation of alternative
