@@ -34,20 +34,25 @@ The following case studies have been applied.
 
 ## Atka mackerel
 ```{r atka}
-
-
+df <- runSPM("examples/atka")
+plotSPM(df)
 ```
 ## BSAI northern rock sole
 ```{r bsaiNRS}
-
+df <- runSPM("examples/BSAI NRS")
+plotSPM(df)
 
 ```
 ## EBS pollock
 ```{r ebswp}
+df <- runSPM("examples/ebspollock")
+plotSPM(df)
 
 ```
-## GOA Flathead sole
+## BSAI yellowfin sole
 ```{r fathead}
+ df <- runSPM("examples/yfs")
+ plotSPM(df)
 
 ```
 ## GOA Rougheye blackspotted
