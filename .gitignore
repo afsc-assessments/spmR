@@ -3,3 +3,4 @@ docs
 .Rproj.user
 *.swp
 *.r0.
+*tmp
