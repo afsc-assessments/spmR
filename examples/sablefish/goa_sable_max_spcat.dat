@@ -1,0 +1,29 @@
+#_Number_of_years with specified catch (if begin-yr = 2004, and this number is "3", then subsequent values represent catches in 2004, 05, and 06 (to evaluate alts for 2007)    
+1 
+# Number of species                             
+1   
+# data files for each species   
+# Sable 
+  data\goa_sable.dat 
+# ABC Multipliers                           # ABC Multipliers                           
+  1
+# Population scalars  # scalars   
+  1
+# Number of TAC model categories  # Number of TAC model categories  
+  7 
+# TAC model indices (for aggregating) # TAC model indices (for aggregating) 
+  1 
+# Catch in each future year # Catch in each future year 
+#  2006  16.2
+# 2007  16.2
+#  2008 14.247
+#  2009 12.143
+#  2010 10.5
+#  2011  12.1512
+#   2016  10.09045
+ # 2018    13.692
+ #  2019    15.068
+#  2020     17.734
+#2021 20.12
+#2022 28.63
+2023 27.16 # make sure to get total catch not just fixed gear

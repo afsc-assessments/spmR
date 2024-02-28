@@ -1,5 +1,5 @@
 run_name
-std
+atka_mackerel
 Tier
 3
 nalts
@@ -9,7 +9,7 @@ alt_list
 TAC_ABC
 1
 SrType
-2
+1
 Rec_Gen
 1
 Fmsy_F35
@@ -25,15 +25,15 @@ nsims
 styr
 2022
 bzero_in
-2.14289e-314
+2.14962e-314
 phizero_in
-1.97626e-323
+2.14962e-314
 alpha_in
-0
+3.02504e-314
 sigmar_in
-2.14609e-314
+1.50454e+108
 rho_in
-3.91012e-314
+0
 nyrs_catch_in
 3
 nspp

@@ -1,0 +1,56 @@
+#rn
+AK_plaice
+#Tier
+3
+#nalts
+7    
+#alts
+1
+2   
+3
+4
+5
+6
+7
+#tac_flag
+1    
+1
+#srr_form
+1    
+#srr_conditioning
+0    
+#srr_reserved
+0  
+#spm_detail_flag
+1    
+#nprj_yrs
+15 
+#nsims
+1000 
+#beg_yr
+2021 
+#nyrs_fixed_catch
+4
+#nspp
+1
+#OY_min
+0
+#OY_max
+2.00E+06
+#datafile
+bsai_akp.dat
+#ABC_mults                         
+1
+#scalars 
+1
+#alt4_spr
+0.75
+#nTAC_cat
+1
+#nTACind
+1
+#fixed_catch
+2021	15862
+2022	11253
+2023	18054
+2024	18054
