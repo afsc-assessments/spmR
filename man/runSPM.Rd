@@ -4,7 +4,7 @@
 \alias{runSPM}
 \title{Run SPM Analysis in a Specific Directory}
 \usage{
-runSPM(dirname, ctrl = NULL)
+runSPM(dirname, ctrl = NULL, run = FALSE)
 }
 \arguments{
 \item{dirname}{A string specifying the directory in which to run the SPM analysis.}
