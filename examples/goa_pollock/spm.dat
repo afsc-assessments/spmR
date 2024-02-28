@@ -1,25 +1,46 @@
-# proj input file written by write_proj_inputs on 2023-11-01 11:00:18.31912
- std # run name
- 3 # tier
-7 # number of alt scenarios
-1 2 3 4 5 6 7
-1 # flag to set TAC=ABC (1 is true)
-2 # SR type (1 ricker, 2 bholt
-1 # proj rec form (default: 1= use obs mean/SD
-0 # SR conditioning (0 means no)
-0.0 # turn off prior thing
-1 # flag to write bigfile
-14 # number of proj years
-1000 # number of simulations
-2023  # begin year
-1 # number of years with specified catch
-1 # numberof species
-0 # OY min
-2e6 # OY max
-goa_wp.txt # input file name for biology
-1 # ABC multipliers
-1 # pop scalars
-0.75 # new alt 4 Fabc SPRs (unused?)
-1 # num of TAC model categories
-1 # TAC model indices
-2023 145215 # Catch in each year starting w/ begining NAA
+#rn
+goa_pollock_2023
+#Tier
+3
+#nalts
+7    
+#alts
+1 2   3 4 5 6 7
+#tac_flag
+1    
+#srr_type
+2    
+#srr_form
+1    
+#srr_conditioning
+0    
+#srr_reserved
+0  
+#spm_detail_flag
+1    
+#nprj_yrs
+14 
+#nsims
+1000
+#beg_yr
+2023  
+#nyrs_fixed_catch
+1 
+#OY_min
+0
+#OY_max
+2.00E+06
+#datafile
+goa_wp.txt 
+#ABC_mults                         
+1
+#scalars 
+1
+#alt4_spr
+0.75
+#nTAC_cat
+1
+#nTACind
+1
+#fixed_catch
+2023 145215 
