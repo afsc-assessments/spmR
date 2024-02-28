@@ -1,0 +1,67 @@
+#rn
+AI_pollock
+#Tier
+3
+#nalts
+7    
+#alts
+1
+2   
+3
+4
+5
+6
+7
+#tac_flag
+1    
+1    
+#srr_form
+1    
+#srr_conditioning
+0    
+#srr_reserved
+0  
+#spm_detail_flag
+1    
+#nprj_yrs
+15 
+#nsims
+1000 
+#beg_yr
+2020 
+#nyrs_fixed_catch
+14
+#nspp
+1
+#OY_min
+0
+#OY_max
+2.00E+06
+#datafile
+AI20_m1.dat
+#ABC_mults                         
+1
+#scalars 
+1
+#alt4_spr
+0.75
+#nTAC_cat
+1
+#nTACind
+1
+#fixed_catch
+2020 3.205
+2021 1.656
+2022 2.243
+2023 2.243
+2024 19
+2025 19
+2026 19
+2027 19
+2028 19
+2029 19
+2030 19
+2031 19
+2032 19
+2033 19
+2033 19
