@@ -4,7 +4,14 @@ author: "Jim Ianelli"
 date: "2023-09-15"
 output: github_document
 ---
-
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  fig.path = "man/figures/README-",
+  out.width = "100%"
+)
+```
 
 ## Standard Projection Model for Alaska Groundfish
 
