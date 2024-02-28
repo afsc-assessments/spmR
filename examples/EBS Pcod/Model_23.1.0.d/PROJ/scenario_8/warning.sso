@@ -1,2 +1,0 @@
-Warning 1 : Input catches in 2024 can be overridden by caps or allocations
-Warning 2 : bias adjustment ramp extends into forecast; biasadj set to 0.0 internally for forecast years
