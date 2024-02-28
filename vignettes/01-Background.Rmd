@@ -411,84 +411,50 @@ Cambridge University Press. New York.
 
 ###### Figure . General layout of projection model input files.
 
-![](./media/image9.emf){width="5.642361111111111in"
-height="3.8534722222222224in"}![](./media/image10.emf){width="5.642361111111111in"
-height="3.8534722222222224in"}
 
 ###### Figure 3. Fit of stock-recruitment relationship with and without added condition that *F~msy~* = *F~35%~* . 
 
-![](./media/image11.emf){width="5.642361111111111in"
-height="3.8534722222222224in"}
 
-![](./media/image12.emf){width="5.642361111111111in"
-height="3.8534722222222224in"}
 
 ###### Figure 3. Continued.
 
-![](./media/image13.emf){width="5.642361111111111in"
-height="3.8534722222222224in"}
 
-![](./media/image14.emf){width="5.642361111111111in"
-height="3.8534722222222224in"}
 
 ###### Figure 3. Continued.
 
-![](./media/image15.emf){width="5.642361111111111in"
-height="3.8534722222222224in"}
 
-![](./media/image16.emf){width="5.642361111111111in"
-height="3.8534722222222224in"}
 
 ###### Figure 3. Continued.
 
-![](./media/image17.emf){width="5.642361111111111in"
-height="3.8534722222222224in"}
 
-![](./media/image18.emf){width="5.642361111111111in"
-height="3.8534722222222224in"}
 
 ###### Figure 3. Continued.
 
-![](./media/image19.emf){width="5.642361111111111in"
-height="3.8534722222222224in"}
 
 ###### Figure 3. Continued.
 
-![](./media/image20.emf){width="6.495833333333334in"
-height="4.154166666666667in"}
 
-![](./media/image21.emf){width="6.495833333333334in"
-height="4.154166666666667in"}
 
 ###### Figure . Equilibrium yield profiles over fishing mortality rates for unconditioned cases (stock-recruitment relationships fit only to output from stock assessments, top panel) and conditioned cases (where *F~msy~* = *F~35%~* , bottom panel). 
 
-![](./media/image22.emf){width="5.325in" height="8.122222222222222in"}
 
 ###### Figure . Mean trajectories for scenarios where the status-quo situation ABC multiplier is very large. This contrasts the behavior of the assumption about using mean recruitment (current projection system) versus a conditioned (*F~msy~* = *F~35%~*) assumption.. 
 
-![](./media/image23.emf){width="6.4875in" height="4.422916666666667in"}
 
 ###### Figure . Projections of spawning stock biomass (as a percentage of the 2004 level) for Pacific ocean perch in the Bering Sea/Aleutian Islands region under extreme constant levels of fishing mortality (F = 1.0). The projections represented by the circles are based on the assumption that recruitment will vary and have the same mean as in the recent path whereas the solid dashes are based on the assumption that a stock-recruitment relationship (i.e., conditioned such that the *F~35%~* = *F~msy~* ). 
 
-![](./media/image24.emf){width="6.495833333333334in" height="6.4875in"}
 
 ###### Figure . Correlations of TAC proportions among main species groups for the BSAI during 1989-2004. Values in boxes on upper right side represent correlations. 
 
-![](./media/image25.emf){width="7.154166666666667in"
-height="7.146527777777778in"}
 
 ###### Figure . Correlations of TAC proportions among main species groups for the BSAI during 1995-2004. Values in boxes on upper right side represent correlations. 
 
-![](./media/image26.emf){width="6.495833333333334in"
-height="4.861805555555556in"}
 
 ###### Figure . Observed versus predicted TAC levels given historical data presented in Table 1 (millions of tons). 
 
   -------------------------------------------------------------------------------------
   Pollock and Pacific cod (projected TACs in metric tons)
-  ![](./media/image27.emf){width="4.75625in" height="2.6993055555555556in"}
   Other species (projected TACs in metric tons)
-  ![](./media/image28.emf){width="5.236111111111111in" height="2.9270833333333335in"}
   -------------------------------------------------------------------------------------
 
 ###### Figure . Example 30-year multi-species projections of BSAI mean TACs using the regression model of historical TAC levels given ABC values.
