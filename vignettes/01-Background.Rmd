@@ -27,10 +27,13 @@ Introduction
 
 The following priorities have been updated in light of changes in requirements.
 Discussion about projection alternatives with NOAA General Counsel.
-### Proposal
+
+## Proposal
+
 In light of this, the group noted that the scenario that corresponds to the Author’s recommendation 
 based on the FMP amendment, which for Tier 3 is based on Fspr rates,
 form the main set of results to present.
+
 This may require consideration where years with pre-specified catches are needed for
 the two-year out projection or for doing a catch projection for an assessment that has lapsed
 for some years. In these cases, there might be a benefit (for accuracy’s sake) to do an
@@ -42,7 +45,10 @@ Updates to ensure the code works with a subset of example models has been comple
 
 
 ## Earlier background and documentation
-https://archive.fisheries.noaa.gov/afsc/refm/stocks/projections.htm
+
+This seems to be a dead link now...:
+
+<https://archive.fisheries.noaa.gov/afsc/refm/stocks/projections.htm>
 
 During the November 2004 groundfish Plan Team meetings the Teams
 requested that work on enhancing the standardized projection model (SPM)

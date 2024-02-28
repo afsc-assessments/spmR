@@ -34,13 +34,13 @@ This vignette demonstrates how to use these functions to run the SPM model and a
 The following case studies have been applied.
 
 ## Atka mackerel
-```{r atka,eval=TRUE}
+```{r atka,eval=FALSE}
 df <- runSPM(here::here("examples","atka"),run=FALSE)
 setwd("spmR")
 plotSPM(df)
 ```
 ## BSAI northern rock sole
-```{r bsaiNRS,eval=TRUE}
+```{r bsaiNRS,eval=FALSE}
 df <- runSPM(here::here("examples","BSAI NRS"),run=FALSE)
 plotSPM(df)
 ```
