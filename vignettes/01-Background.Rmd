@@ -25,6 +25,20 @@ Introduction
 ============
 ## 2024 update
 
+The following priorities have been updated in light of changes in requirements.
+Discussion about projection alternatives with NOAA General Counsel.
+### Proposal
+In light of this, the group noted that the scenario that corresponds to the Author’s recommendation 
+based on the FMP amendment, which for Tier 3 is based on Fspr rates,
+form the main set of results to present.
+This may require consideration where years with pre-specified catches are needed for
+the two-year out projection or for doing a catch projection for an assessment that has lapsed
+for some years. In these cases, there might be a benefit (for accuracy’s sake) to do an
+iteration where the next-year’s catch is likely to differ from say the authors recommended ABC.
+
+Additional optional projection scenarios might include setting fishing mortality to recent average (and maybe zero) for contrast.
+  
+Updates to ensure the code works with a subset of example models has been completed and are shown on the github site.
 
 
 ## Earlier background and documentation

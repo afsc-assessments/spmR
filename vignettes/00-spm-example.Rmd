@@ -34,30 +34,29 @@ This vignette demonstrates how to use these functions to run the SPM model and a
 The following case studies have been applied.
 
 ## Atka mackerel
-```{r atka}
-df <- runSPM(here::here("examples","atka"))
+```{r atka,eval=TRUE}
+df <- runSPM(here::here("examples","atka"),run=FALSE)
 setwd("spmR")
 plotSPM(df)
 ```
 ## BSAI northern rock sole
-```{r bsaiNRS}
-df <- runSPM(here::here("examples","BSAI NRS"))
+```{r bsaiNRS,eval=TRUE}
+df <- runSPM(here::here("examples","BSAI NRS"),run=FALSE)
 plotSPM(df)
-
 ```
 ## EBS pollock
-```{r ebswp}
-df <- runSPM(here::here("examples","ebspollock"))
+```{r ebswp,eval=FALSE}
+df <- runSPM(here::here("examples","ebspollock"),run=FALSE)
 plotSPM(df)
 
 ```
 ## BSAI yellowfin sole
-```{r fathead}
-df <- runSPM(here::here("examples","yfs"))
+```{r fathead,eval=FALSE}
+df <- runSPM(here::here("examples","yfs"),run=FALSE)
  plotSPM(df)
 
 ```
 ## GOA Rougheye blackspotted
-```{r rougheye}
+```{r rougheye,eval=FALSE}
 
 ```
