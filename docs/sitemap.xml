@@ -1,48 +1,48 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>/404.html</loc>
+    <loc>http://afsc-assessments.github.io/spmR/404.html</loc>
   </url>
   <url>
-    <loc>/articles/00-spm-example.html</loc>
+    <loc>http://afsc-assessments.github.io/spmR/articles/00-spm-example.html</loc>
   </url>
   <url>
-    <loc>/articles/01-Background.html</loc>
+    <loc>http://afsc-assessments.github.io/spmR/articles/01-Background.html</loc>
   </url>
   <url>
-    <loc>/articles/02-MoreDoc.html</loc>
+    <loc>http://afsc-assessments.github.io/spmR/articles/02-MoreDoc.html</loc>
   </url>
   <url>
-    <loc>/articles/index.html</loc>
+    <loc>http://afsc-assessments.github.io/spmR/articles/index.html</loc>
   </url>
   <url>
-    <loc>/articles/spm-example.html</loc>
+    <loc>http://afsc-assessments.github.io/spmR/articles/spm-example.html</loc>
   </url>
   <url>
-    <loc>/authors.html</loc>
+    <loc>http://afsc-assessments.github.io/spmR/authors.html</loc>
   </url>
   <url>
-    <loc>/index.html</loc>
+    <loc>http://afsc-assessments.github.io/spmR/index.html</loc>
   </url>
   <url>
-    <loc>/reference/dat2list.html</loc>
+    <loc>http://afsc-assessments.github.io/spmR/reference/dat2list.html</loc>
   </url>
   <url>
-    <loc>/reference/hello.html</loc>
+    <loc>http://afsc-assessments.github.io/spmR/reference/hello.html</loc>
   </url>
   <url>
-    <loc>/reference/index.html</loc>
+    <loc>http://afsc-assessments.github.io/spmR/reference/index.html</loc>
   </url>
   <url>
-    <loc>/reference/list2dat.html</loc>
+    <loc>http://afsc-assessments.github.io/spmR/reference/list2dat.html</loc>
   </url>
   <url>
-    <loc>/reference/plotSPM.html</loc>
+    <loc>http://afsc-assessments.github.io/spmR/reference/plotSPM.html</loc>
   </url>
   <url>
-    <loc>/reference/print_Tier3_tables.html</loc>
+    <loc>http://afsc-assessments.github.io/spmR/reference/print_Tier3_tables.html</loc>
   </url>
   <url>
-    <loc>/reference/runSPM.html</loc>
+    <loc>http://afsc-assessments.github.io/spmR/reference/runSPM.html</loc>
   </url>
 </urlset>
