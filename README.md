@@ -29,7 +29,7 @@ relative to the folder with spm.exe
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-# East Bering Sea pollock <img src="man/figures/logo.png" align="right" height=140/>
+# spmR
 
 The R package `spmR` was developed for doing stock projections for
 groundfish at the AFSC. The model was coded using the Autodif (`AD`)
