@@ -29,7 +29,7 @@
     
     <a class="navbar-brand me-2" href="index.html">spmR</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.1.0</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -46,6 +46,7 @@
   <div class="dropdown-menu" aria-labelledby="dropdown-articles">
     <a class="dropdown-item" href="articles/00-spm-example.html">spm-example</a>
     <a class="dropdown-item" href="articles/01-Background.html">Standard Projection Model</a>
+    <a class="dropdown-item" href="articles/02-MoreDoc.html">Draft additional documentation for spmR</a>
   </div>
 </li>
       </ul>
@@ -75,8 +76,91 @@
 1. Compile src/spm.tpl using admb and copy spm.exe to a a folder with spm.dat, tacpar.dat, and a file containing assessment outputs, such as ai_spm.dat<br>
 2. Within spm.dat specify the location of the assessment input file relative to the folder with spm.exe<br>
 3. From the command line pointed to the folder with these inputs, type “spm”</p>
+<!-- README.md is generated from README.Rmd. Please edit that file -->
 </div>
 </div>
+<div class="section level1">
+<h1 id="east-bering-sea-pollock-">East Bering Sea pollock <img src="reference/figures/logo.png" align="right" height="140/"><a class="anchor" aria-label="anchor" href="#east-bering-sea-pollock-"></a>
+</h1>
+<p>The R package <code>spmR</code> was developed for doing stock projections for groundfish at the AFSC. The model was coded using the Autodif (<code>AD</code>) Model Builder (<code>ADMB</code>) software.</p>
+<div class="section level2">
+<h2 id="cloning-the-repository-optional">Cloning the repository (optional)<a class="anchor" aria-label="anchor" href="#cloning-the-repository-optional"></a>
+</h2>
+<p>The R package <code>spmR</code> lives on a public GitHub repository. The repository can be cloned to your computer from the command line or using a user interface. From the command line using Linux the repository can be cloned using:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a>git clone https<span class="sc">:</span><span class="er">//</span>github.com<span class="sc">/</span>afsc<span class="sc">-</span>assessments<span class="sc">/</span>spmR</span></code></pre></div>
+</div>
+<div class="section level2">
+<h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
+</h2>
+<p>There are several options for installing the <code>spmR</code> R package.</p>
+<div class="section level3">
+<h3 id="option-1">Option 1<a class="anchor" aria-label="anchor" href="#option-1"></a>
+</h3>
+<p>The <code>spmR</code> package can be installed from within R using:</p>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu">devtools</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html" class="external-link">install_github</a></span><span class="op">(</span>repo <span class="op">=</span> <span class="st">"afsc-assessments/spmR"</span>, dependencies <span class="op">=</span> <span class="cn">TRUE</span>, </span>
+<span>                         build_vignettes <span class="op">=</span> <span class="cn">TRUE</span>, auth_token <span class="op">=</span> <span class="st">"your_PAT"</span><span class="op">)</span></span></code></pre></div>
+</div>
+<div class="section level3">
+<h3 id="option-2">Option 2<a class="anchor" aria-label="anchor" href="#option-2"></a>
+</h3>
+<p>The GitHub repository can be cloned to your computer and the package installed from the command line. From Linux this would involve:</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a>git clone https<span class="sc">:</span><span class="er">//</span>github.com<span class="sc">/</span>afsc<span class="sc">-</span>assessments<span class="sc">/</span>spmR</span>
+<span id="cb3-2"><a href="#cb3-2" tabindex="-1"></a>R CMD INSTALL spmR</span></code></pre></div>
+</div>
+<div class="section level3">
+<h3 id="option-3">Option 3<a class="anchor" aria-label="anchor" href="#option-3"></a>
+</h3>
+<p>This time from within R using:</p>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu">devtools</span><span class="fu">::</span><span class="fu"><a href="https://devtools.r-lib.org/reference/install.html" class="external-link">install</a></span><span class="op">(</span><span class="st">"spmR"</span><span class="op">)</span></span></code></pre></div>
+</div>
+</div>
+<div class="section level2">
+<h2 id="help">Help<a class="anchor" aria-label="anchor" href="#help"></a>
+</h2>
+<p>Help for all <code>spmR</code> functions and data sets can be found on the R help pages associated with each function and data set. Help for a specific function can be viewed using <code>?function_name</code>, for example:</p>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="op">?</span><span class="va">run_model</span></span>
+<span><span class="op">?</span><span class="va">tab_fit</span></span>
+<span><span class="op">?</span><span class="va">plot_sel</span></span></code></pre></div>
+<p>Alternatively, to see a list of all available functions and data sets use:</p>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/help.html" class="external-link">help</a></span><span class="op">(</span>package <span class="op">=</span> <span class="st">"spmR"</span><span class="op">)</span></span></code></pre></div>
+</div>
+<div class="section level2">
+<h2 id="examples">Examples<a class="anchor" aria-label="anchor" href="#examples"></a>
+</h2>
+<p>The package vignettes are a great place to see what <code>spmR</code> can do. You can view the package vignettes from within R using:</p>
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/browseVignettes.html" class="external-link">browseVignettes</a></span><span class="op">(</span>package <span class="op">=</span> <span class="st">"spmR"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/vignette.html" class="external-link">vignette</a></span><span class="op">(</span>topic <span class="op">=</span> <span class="st">"spmR"</span>, package <span class="op">=</span> <span class="st">"spmR"</span><span class="op">)</span></span></code></pre></div>
+</div>
+<div class="section level2">
+<h2 id="website">Website<a class="anchor" aria-label="anchor" href="#website"></a>
+</h2>
+<p>All of the vignettes and the help pages for each function are bundled together and published on the website <a href="https://afsc-assessments.github.io/spmR/" class="external-link uri">https://afsc-assessments.github.io/spmR/</a>.</p>
+</div>
+<div class="section level2">
+<h2 id="developers">Developers<a class="anchor" aria-label="anchor" href="#developers"></a>
+</h2>
+<p>Developers will want to do things slightly differently. See the <code>Model development</code> vignette.</p>
+</div>
+</div>
+<div class="section level1">
+<h1 id="acronymns">Acronymns<a class="anchor" aria-label="anchor" href="#acronymns"></a>
+</h1>
+<p>NOAA: National Oceanic and Atmospheric Administration<br>
+NMFS: National Marine Fisheries Service<br>
+AFSC: Alaska Fisheries Science Center<br>
+REFM: Resource and Ecology and Fisheries Management</p>
+</div>
+<div class="section level1">
+<h1 id="legal-disclaimer">Legal disclaimer<a class="anchor" aria-label="anchor" href="#legal-disclaimer"></a>
+</h1>
+<p>This repository is a software product and is not official communication of the National Oceanic and Atmospheric Administration (NOAA), or the United States Department of Commerce (DOC). All NOAA GitHub project code is provided on an ‘as is’ basis and the user assumes responsibility for its use. Any claims against the DOC or DOC bureaus stemming from the use of this GitHub project will be governed by all applicable Federal law. Any reference to specific commercial products, processes, or services by service mark, trademark, manufacturer, or otherwise, does not constitute or imply their endorsement, recommendation, or favoring by the DOC. The DOC seal and logo, or the seal and logo of a DOC bureau, shall not be used in any manner to imply endorsement of any commercial product or activity by the DOC or the United States Government.</p>
+</div>
+
   </main><aside class="col-md-3"><div class="license">
 <h2 data-toc-skip>License</h2>
 <ul class="list-unstyled">

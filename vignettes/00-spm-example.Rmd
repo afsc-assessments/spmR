@@ -1,8 +1,8 @@
 ---
-title: "spm-example"
+title: "spmR-examples"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{spm-example}
+  %\VignetteIndexEntry{spmR-examples}
   %\VignetteEncoding{UTF-8}
   %\VignetteEngine{knitr::rmarkdown}
 editor_options: 
