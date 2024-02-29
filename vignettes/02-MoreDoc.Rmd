@@ -1,0 +1,252 @@
+---
+title: Draft additional documentation for spmR
+author:  "Jim Ianelli, Cole Monnahan" 
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Draft additional documentation for spmR}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+format: 
+viewport: width=device-width, initial-scale=1.0, user-scalable=yes
+---
+
+# Projections for operational assessments
+
+The R package spmR provides a tool to project assessment results in a
+consistent way over all "Tier 3" groundfish stocks. This is to conform
+to the Fishery Management Plan (FMP) for the Gulf of Alaska (GOA) and
+the Bering Sea and Aleutian Islands (BSAI). Specifically, as outlined in
+Amendment 56 of the FMP, age-structured assessment results are linked to
+the projection based on specified input files. These inputs allow
+estimation of fishing mortality rates based on spawning biomass per
+recruits (e.g., *F~40%~* and *F~35%~*)*.* These rates (and variants) are
+applied to the estimated abundance at age from the most recent
+assessment model. The trend in spawning biomass is then contrasted with
+proxy reference points that align with the FMP. In summary, the model
+estimates proxy Fmsy values, applied to estimated population numbers at
+age, and compared against reference points to adjust the rates according
+to the control rule of the FMP.
+
+Catch from the model follows three main scenarios given a selected model
+(approved by the SSC):
+
+-   The maximum permissible ABC
+
+-   The status determination relative to overfishing
+
+-   The status determination to determine if the stock is overfished or
+    approaching an overfished condition.
+
+Additional "scenarios" are optionally included and were part of the
+historical requirement for an annual Environmental Assessment for
+ABC/OFL specifications by the Alaska Regional Office. They provide
+contrast and included scenarios based on the "author recommended" ABC,
+one with no fishing, one based on the recent 5-year average F, another
+with an alternative F-spr basis (varied between some stocks).
+
+Biological assumptions used in the projections should follow the
+assessment model and decisions about expected future selectivity,
+maturity, weight-at-age etc should be considered best estimates and may
+reflect means over different recent periods. It should be noted that
+their specification should be clearly documented within the assessment.
+
+Tier 3 stocks are based on expected trends and the extent to which these
+proxy estimates are determined with uncertainty is not explicitly part
+of the FMP ABC/OFL specification process. Nonetheless, the software runs
+simulations over the mean and variability of recruitment that is
+specified in the model input files. For FMP ABC/OFL specifications, the
+means are presented but longer-term trajectories accounting only for
+recruitment variability are presented figures as deemed useful.
+
+# Abbreviations
+
+​​
+
++------+------------------------+---------+-------------------------+
+| **A  | Acceptable Biological  | *       | Initial Regulatory      |
+| BC** | Catch                  | *IRFA** | Flexibility Analysis    |
++======+========================+=========+=========================+
+| **   | Aleutian Islands       | **LLP** | License Limitation      |
+| AI** |                        |         | Program                 |
++------+------------------------+---------+-------------------------+
+| **   | Advisory Panel         | **M     | Magnuson-Stevens        |
+| AP** |                        | SFCMA** | Fishery                 |
+|      |                        |         |                         |
+|      |                        |         | Conservation and        |
+|      |                        |         | Management Act          |
++------+------------------------+---------+-------------------------+
+| **AD | Alaska Dept. of Fish   | *       | Marine Mammal           |
+| FG** | and Game               | *MMPA** | Protection Act          |
++------+------------------------+---------+-------------------------+
+| **   | Bering Sea             | **MRA** | Maximum Retainable      |
+| BS** |                        |         | Amount                  |
++------+------------------------+---------+-------------------------+
+| **BS | Bering Sea and         | **MSY** | Maximum Sustainable     |
+| AI** | Aleutian Islands       |         | Yield                   |
++------+------------------------+---------+-------------------------+
+| **C  | Community Development  | **t**   | Metric tons             |
+| DQ** | Quota                  |         |                         |
++------+------------------------+---------+-------------------------+
+| **   | Environmental          | *       | National Marine         |
+| EA/R | Assessment/Regulatory  | *NMFS** | Fisheries Service       |
+| IR** |                        |         |                         |
+|      | Impact Review          |         |                         |
++------+------------------------+---------+-------------------------+
+| **E  | Eastern Bering Sea     | *       | National Oceanic &      |
+| BS** |                        | *NOAA** | Atmospheric Adm.        |
++------+------------------------+---------+-------------------------+
+| **E  | Exclusive Economic     | **      | North Pacific Fishery   |
+| EZ** | Zone                   | NPFMC** |                         |
+|      |                        |         | Management Council      |
++------+------------------------+---------+-------------------------+
+| **E  | Essential Fish Habitat | **OY**  | Optimum Yield           |
+| FH** |                        |         |                         |
++------+------------------------+---------+-------------------------+
+| **E  | Exempted Fishing       | *       | Preview of Economic and |
+| FP** | Permit                 | *PEEC** | Ecosystem               |
+|      |                        |         | Considerations          |
++------+------------------------+---------+-------------------------+
+| **E  | Endangered Species Act | **PSC** | Prohibited Species      |
+| SA** |                        |         | Catch                   |
++------+------------------------+---------+-------------------------+
+| **F  | Fishery Ecosystem Plan | *       | Stock Assessment and    |
+| EP** |                        | *SAFE** | Fishery Evaluation      |
++------+------------------------+---------+-------------------------+
+| **F  | Fishery Management     | **SSC** | Scientific and          |
+| MP** | Plan                   |         | Statistical Committee   |
++------+------------------------+---------+-------------------------+
+| **G  | Guideline Harvest      | **SSL** | Steller Sea Lion        |
+| HL** | Level                  |         |                         |
++------+------------------------+---------+-------------------------+
+| **G  | Gulf of Alaska         | **TAC** | Total Allowable Catch   |
+| OA** |                        |         |                         |
++------+------------------------+---------+-------------------------+
+| **HA | Habitat Areas of       | **      | United States Fish &    |
+| PC** | Particular Concern     | USFWS** | Wildlife Service        |
++------+------------------------+---------+-------------------------+
+| #    | Individual Fishing     |         |                         |
+|  **I | Quota                  |         |                         |
+| FQ** |                        |         |                         |
++------+------------------------+---------+-------------------------+
+| #    | International Pacific  |         |                         |
+| **IP | Halibut                |         |                         |
+| HC** |                        |         |                         |
+|      | Commission             |         |                         |
++------+------------------------+---------+-------------------------+
+
+# Recommended usage
+
+See readme on
+[[spmR]{.underline}](https://github.com/afsc-assessments/spmR/tree/main)
+package on github for installation options and vignettes (Articles
+[[here]{.underline}](https://afsc-assessments.github.io/spmR/)).
+
+# History of SPM
+
+\<links to the historical docs\>
+
+[[https://afsc-assessments.github.io/spmR/articles/01-Background.html]{.underline}](https://afsc-assessments.github.io/spmR/articles/01-Background.html)
+
+How spmr grew out of "proj" and what the differences are
+
+# Definitions
+
+Let
+
+TY= this year - the year in which SPM is run
+
+AY= the last year an assessment was done, AY\<=TY
+
+PY1= TY+1 = projection year 1 in the exec table
+
+PY2= TY+2 = projection year 2 in the exec table
+
+PYn=TY+n = projection year n in alternative scenarios
+
+C_TY=estimate/assumed catch for the entirety of TY using e.g., an
+assumption about catch=ABC or some calculation to extrapolate for the
+remainder of TY (Oct - Dec).
+
+N_AY= numbers at age on Jan-1 of AY
+
+N_PY1= numbers at age on Jan-1 of PY1
+
+N_PY2= numbers at age on Jan-1 of PY2
+
+# Summary of SPR calculations for Tier 3 stocks
+
+1.  SPM reads in the (average) biological input values: M, maturity,
+    spawning and fisheries WAA, and fisheries selectivity. Uses a
+    spawner per recruit (SPR) approach to calculate SPR at F=0, i.e.,
+    how much female spawning biomass (tons, kg, etc.) a single recruit
+    produces in its lifetime.
+
+2.  Uses vector of recruitments to calculate mean recruits (Rbar), which
+    is multiplied by spawning biomass per recruit at F=0 to get unfished
+    SSB (SSB0 or SSB100%). From that define SSB35=.35\*SB100 and
+    SB40=0.40\*SB100. These are equilibrium values given assumptions
+    about Rbar, biology, and selectivity.
+
+3.  Uses a numerical solver to find F35%=FMSY=FOFL and F40%=FmaxABC in
+    equilibrium by tuning F until SSB is SSB35 and SSB40, respectively.
+    These go in the executive table.
+
+4.  Proj next takes N_AY and inputted catches to get N_PY1. It then
+    applies F_ABC, as modified by the harvest control rule, to get ABC
+    in PY1. An assumption is made about catch taken in PY1, and so N_PY2
+    is calculated and F_ABC applied again to get ABC in PY2. A similar
+    approach is used for OFL. The assumption depends on the scenarios
+    (see below), but scenario X should be used which dictates that the
+    ABC is taken in PY1.
+
+# Summary of the alternative scenario simulations
+
+There are 7 projection "scenarios" built into spmR, along with some
+others that have been customized to address specific questions.
+
+## How to determine overfishing and overfished status.
+
+To do
+
+# How to specify catches in TY
+
+Years between AY and TY will have finalized total catches available. The
+total catches in TY are not complete and must be assumed. Several
+approaches are used:
+
+1.  The full ABC is taken in TY. This will be reasonable for fully
+    exploited stocks. It may be wise as a general rule to be
+    conservative. But for lightly exploited stocks it may not.
+
+2.  Extrapolate catches in TY from the end of the year using catches
+    through October and historical catch patterns in the fishery. E.g.,
+    if 80% of total catches are typically taken by October then they can
+    be scaled up by that number.
+
+# Known issues
+
+When using time-varying quantities in a model then the average values
+used by proj to construct N_PY1 will not match what is used in the
+assessment and thus not much. For instance if spawning WAA is different,
+the N_PY will match between the AM and SPM in TY, but spawning biomass
+in TY will not match. If fisheries selectivity is different, then N_PY1
+will differ as different fish are killed off between the beginning and
+end of TY. When there are no time-varying inputs then SPM will be able
+to recreate the AM through TY identically and there is no issue.
+
+Cases where SPM needs to be run more than once.
+
+Weird issues arising when there's a big gap between AY and TY.
+
+# Multispecies and other advanced features
+
+Jim this one is all you
+
+-   SRR conditioning
+
+-   Multispecies technical interactions
+
+-   Linear programming for total yield cap
+
+-   
