@@ -12,6 +12,7 @@ LazyData: true
 Suggests: 
     knitr, ggplot2,
     rmarkdown
-VignetteBuilder: knitr
+VignetteBuilder: 
+    quarto
 RoxygenNote: 7.3.1
 URL: http://afsc-assessments.github.io/spmR/

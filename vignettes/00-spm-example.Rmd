@@ -18,6 +18,8 @@ knitr::opts_chunk$set(
 
 ```{r setupex}
 library(spmR)
+library(tidyverse)
+library(patchwork)
 here::here()
 
 ```
@@ -34,11 +36,13 @@ This vignette demonstrates how to use these functions to run the SPM model and a
 The following case studies have been applied.
 
 ## Atka mackerel
-```{r atka,eval=FALSE}
+```{r atka,eval=TRUE}
 df <- runSPM(here::here("examples","atka"),run=FALSE)
-setwd("spmR")
+#setwd("spmR")
 plotSPM(df)
 ```
+
+
 ## BSAI northern rock sole
 ```{r bsaiNRS,eval=FALSE}
 df <- runSPM(here::here("examples","BSAI NRS"),run=FALSE)
