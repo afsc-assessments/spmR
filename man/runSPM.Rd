@@ -10,6 +10,8 @@ runSPM(dirname, ctrl = NULL, run = FALSE)
 \item{dirname}{A string specifying the directory in which to run the SPM analysis.}
 
 \item{ctrl}{Optional control settings for the SPM analysis. If NULL, default settings are used.}
+
+\item{run}{Logical. If TRUE, the SPM analysis is run. If FALSE, the function only reads the results from `spm_detail.csv`.}
 }
 \value{
 A data frame containing the results from `spm_detail.csv`.
