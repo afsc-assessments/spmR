@@ -42,28 +42,41 @@ list2dat <- function(D, fn, hdr="a new file") {
 #' # Example usage:
 #' # myDataList <- dat2list("datafile.dat")
 dat2list <- function(fn) {
-  options(warn = -1)  # Suppress warnings temporarily
-  on.exit(options(warn = 0))  # Reset warning options on exit
+  options(warn = -1) # Suppress warnings temporarily
+  on.exit(options(warn = 0)) # Reset warning options on exit
 
-  file_content = scan(fn, what = "character", flush = TRUE, blank.lines.skip = FALSE, quiet = TRUE)
-  header_indices = substr(file_content, 1, 1) == "#"
-  header_names = file_content[header_indices]
+  file_content <- scan(fn, what = "character", flush = TRUE, blank.lines.skip = FALSE, quiet = TRUE)
 
-  list_data = list()
+  # Identify lines starting with '#'
+  header_indices <- which(substr(file_content, 1, 1) == "#")
+  header_names <- substr(file_content[header_indices], 2, nchar(file_content[header_indices]))
+
+  # Initialize the list to store data
+  list_data <- list()
+
+  # Iterate over header names to extract and store data
   for (i in seq_along(header_names)) {
-    start_line = match(header_names[i], file_content)
-    end_line = if (i < length(header_names)) match(header_names[i + 1], file_content) - 1 else length(file_content)
+    # Get start and end line indices for the current section
+    start_line <- header_indices[i]
+    end_line <- if (i < length(header_names)) header_indices[i + 1] - 1 else length(file_content)
 
-    data_chunk = file_content[(start_line + 1):end_line]
-    if (length(data_chunk) == 1) {
-      list_data[[substr(header_names[i], 2)]] = as.numeric(data_chunk)
+    # Extract the data chunk between the header lines
+    data_chunk <- file_content[(start_line + 1):end_line]
+
+    # Check if the data chunk is a single line
+    if (length(data_chunk) == 1 && grepl("^[0-9]", data_chunk)) {
+      # Convert single line data to numeric
+      list_data[[header_names[i]]] <- as.numeric(data_chunk)
     } else {
-      list_data[[substr(header_names[i], 2)]] = read.table(text = data_chunk, fill = TRUE)
+      # Read the table from the data chunk
+      list_data[[header_names[i]]] <- read.table(text = data_chunk, fill = TRUE, header = FALSE)
     }
   }
 
+  # Print the resulting list to check the output
   return(list_data)
 }
+
 
 #' Print Tier 3 Tables
 #'

@@ -1,0 +1,19 @@
+#_Number_of_years with specified catch
+4
+# Number of species
+1
+# data files for each species
+data/dusky.dat
+# ABC Multipliers
+1
+# Population scalars
+1000
+# Number of TAC model categories
+1
+# TAC model indices (for aggregating)
+1
+# Catch in each future year
+2022	2586.012 # Finalized previous year catch
+2023	3580.41249721679 # Estimated from catch thru 2023-10-10 with expansion factor = 1.0403
+2024	4124 # Estimated as Max F scenario catch * yieldratio of 0.541
+2025	3752 # Estimated as Max F scenario catch * yieldratio of 0.541

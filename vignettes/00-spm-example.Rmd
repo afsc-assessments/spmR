@@ -60,6 +60,18 @@ df <- runSPM(here::here("examples","yfs"),run=FALSE)
  plotSPM(df)
 
 ```
+## GOA Flathead sole
+```{r goa_fhs,eval=FALSE}
+
+df <- runSPM(here::here("examples","goa_flathead/maia"),run=TRUE)
+plotSPM(df,thisyr=2024)
+plotSPM(df,thisyr=2025)
+p1<- plotSPM(df)
+?plotSPM
+p1$data
+
+
+```
 ## GOA Rougheye blackspotted
 ```{r rougheye,eval=FALSE}
 

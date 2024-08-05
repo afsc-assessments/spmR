@@ -624,6 +624,7 @@ PARAMETER_SECTION
       AMeanRec(ispp) = mean(R(ispp));  // Arithmetic mean
     else
       AMeanRec(ispp) = 2.*mean(R(ispp));  // Arithmetic mean, converted to females (half) later
+      // AMeanRec(ispp) = mean(R(ispp));  // Arithmetic mean, converted to females (half) later
 
     AMeanSSB(ispp) = mean(SSB(ispp));  // Arithmetic mean
     AMaxSSB(ispp)  = max(SSB(ispp));    // Maximum
@@ -659,6 +660,7 @@ PARAMETER_SECTION
     }
     envin.close();
     AMeanRec(ispp) *= .5;  // Goes to females only
+
     cout <<"Mean recruits "<< AMeanRec(ispp) <<endl;
     // cout<< " Solving spp "<<ispp<<" "<<spname(ispp)<<" "<<yr_one_catch(ispp)<<" "; // <<N_F*wt_mature(ispp)<<" "<<N_F*wt_F(ispp)+N_M(ispp)*wt_F(ispp)<<" ";
     for (int k=1;k<=nyrs_catch_in;k++)

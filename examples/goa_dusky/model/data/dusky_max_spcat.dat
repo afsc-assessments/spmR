@@ -1,0 +1,16 @@
+#_Number_of_years with specified catch
+2
+# Number of species
+1
+# dat file for each species
+data/dusky.dat
+# ABC multiplier
+1
+# Population scalar
+1000
+# Number of TAC model categories
+1
+# TAC model indices (for aggregating)
+1
+2022	2586.012 # Finalized previous year catch
+2023	3580.41249721679 # Catch for 2023 Estimated from catch thru 2023-10-10
