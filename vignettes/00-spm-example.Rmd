@@ -61,6 +61,7 @@ The following case studies have been applied.
 ## Atka mackerel
 ```{r atka,eval=TRUE}
 df <- runSPM(here::here("examples","atka"),run=FALSE)
+df <- readr::read_csv(here::here("examples","atka","spm_summary.csv"))
 #setwd("spmR")
 plotSPM(df)
 ```
@@ -68,8 +69,17 @@ plotSPM(df)
 
 ## BSAI northern rock sole
 ```{r bsaiNRS,eval=FALSE}
-df <- runSPM(here::here("examples","BSAI NRS"),run=FALSE)
-plotSPM(df)
+df <- runSPM(here::here("examples","BSAI NRS"),run=TRUE)
+df <- readr::read_csv(here::here("examples","BSAI NRS","spm_summary.csv"))
+df
+inp <- spmR::dat2list(here::here("examples","BSAI NRS","spm.dat"))
+fc <- tibble(Year=inp$fixed_catch[,1],mean=inp$fixed_catch[,2],'C')
+names(fc) <- c("Year", "mean", "type")
+fc <- fc |>  mutate(ub=mean,lb=mean, Alt=as.factor(1))
+
+p1<-plotSPM(df)
+p1 + geom_point(data=fc,aes(x=Year,y=mean))
+p1$data
 ```
 ## EBS pollock
 ```{r ebswp,eval=FALSE}
@@ -89,7 +99,9 @@ First we'll run this model with only 3-years fixed catch assumed
 
 ```{r goa_fhs,eval=TRUE,echo=FALSE}
 # df <- runSPM(here::here("examples","goa_flathead/maia"),run=TRUE)
-df <- runSPM(here::here("examples","goa_flathead"),run=FALSE)
+inp <- spmR::dat2list(here::here("examples","goa_flathead","spmorig.dat"))
+spmR::list2dat(inp,here::here("examples","goa_flathead","spm.dat"))
+df <- runSPM(here::here("examples","goa_flathead"),run=TRUE)
 plotSPM(df,thisyr=2025)
 # p1<- plotSPM(df)
 
@@ -98,7 +110,7 @@ plotSPM(df,thisyr=2025)
 Now let's use the utility to change the input files and re-run the model with 5-years fixed catch assumed.
 
 ```{r goa_fhs2,eval=TRUE,echo=FALSE}
-inp <- spmR::dat2list(here::here("examples","goa_flathead","spm.dat"))
+inp <- spmR::dat2list(here::here("examples","goa_flathead","spmorig.dat"))
 inp$nyrs_fixed_catch
 inp$nyrs_fixed_catch <- 5
 inp$fixed_catch <- rbind(inp$fixed_catch, c(2025, 1100), c(2026, 1100))

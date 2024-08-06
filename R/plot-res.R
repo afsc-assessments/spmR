@@ -12,18 +12,16 @@
 #' @importFrom patchwork
 #' @return A combined plot of the results from the SPM analysis.
 #' @export
-plotSPM <- function(df, alt=2,thisyr=2022,mytitle=NULL) {
-  dfs <- df %>% filter(Sim<=30, Alternative==alt) %>% select(Alternative,Yr,Catch,SSB,Sim)
+plotSPMx <- function(df, alt=2,thisyr=2022,mytitle=NULL) {
+  dfs <- df %>% filter(Sim<=30, Alt==alt) %>% select(Alt,Year,Catch,SSB,Sim)
   # create a tibble from df that has the quantiles over Sim
-  pf <-  df |> select(Sim,Alternative,Yr,Catch,SSB,ABC,OFL) |>
+  pf <-  df |> select(Sim,Alt,Yr,Catch,SSB,ABC,OFL) |>
                      pivot_longer(cols =  4:7,names_to = "variable", values_to = "value") |>
-      group_by(Yr,Alternative,variable) |> summarise(median=median(value),mean=mean(value),lb=quantile(value,.1),ub=quantile(value,.9))
+      group_by(Yr,Alt,variable) |> summarise(median=median(value),mean=mean(value),lb=quantile(value,.1),ub=quantile(value,.9))
 
   names(pf) <- c("Yr","Alt","variable","median","mean","lb","ub")
 
   #p1 <-
-  head(pf)
-  head(pf)
   Cofl <- as.numeric(pf |> ungroup() |> filter(Alt==alt,variable=="OFL") |> summarise(max(mean)))
   Cabc <- as.numeric(pf |> ungroup() |> filter(Alt==alt,variable=="ABC") |> summarise(max(mean)))
   p1 <- pf %>% filter(Alt==alt,variable=="Catch") |>
@@ -73,3 +71,45 @@ plotSPM <- function(df, alt=2,thisyr=2022,mytitle=NULL) {
 #   return(p1 / p2 / p3)
 # }
 # p1/p2/p3
+
+
+#' Plot SPM Data
+#'
+#' This function filters and processes a dataframe, then creates a plot
+#' of the SPM data with error bands and faceting by type and alternative.
+#'
+#' @param df A dataframe containing the SPM data with columns `Year`, `Alt`, `variable`, and `value`.
+#' @param alt A vector of alternatives to include in the plot. Default is `c(1, 4, 5, 7)`.
+#' @param mytitle An optional title for the plot. Default is `NULL`.
+#'
+#' @return A ggplot object.
+#' @import dplyr
+#' @import stringr
+#' @import tidyr
+#' @import ggplot2
+#' @export
+#'
+#' @examples
+#' # Example usage:
+#' df <- data.frame(Year = rep(2000:2020, 4),
+#'                  Alt = rep(1:4, each = 21),
+#'                  variable = rep(c("mean_ub", "mean_lb", "mean_mean"), times = 28),
+#'                  value = runif(84, 0, 1))
+#' plotSPM(df)
+plotSPM <- function(df, alt = c(1, 3, 5, 7), mytitle = NULL) {
+  df |>
+    filter(!is.na(Year),
+           Alt %in% alt,
+           str_ends(variable, "ub") |
+             str_ends(variable, "lb") |
+             str_ends(variable, "ean")) |>
+    mutate(
+      type = str_extract(variable, "^[^_]+"),
+      kind = str_extract(variable, "(?<=_).*"),
+      Alt  = as.factor(Alt)) |>
+    pivot_wider(id_cols = -variable, names_from = kind, values_from = value) |>
+    ggplot(aes(x = Year, y = mean, ymin = lb, ymax = ub, color = Alt, fill = Alt)) +
+    geom_line() + ylim(0, NA) + geom_ribbon(color = 0, alpha = .2) + theme_minimal() +
+    labs(title = mytitle, x = "Year", y = "Value") +
+    facet_grid(type ~ Alt, scales = "free")
+}
