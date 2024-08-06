@@ -32,7 +32,7 @@ flathead_sole_goa
 #beg_yr
 2022
 #nyrs_fixed_catch
-3
+5
 #nspp
 1
 #OY_min
@@ -55,3 +55,5 @@ projection_data.dat
 2022 687
 2023 1907.968
 2024 1907.968
+2025 1100
+2026 1100

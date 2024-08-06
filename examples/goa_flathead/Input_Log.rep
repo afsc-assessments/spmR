@@ -25,17 +25,17 @@ nsims
 styr
 2022
 bzero_in
-3.00808e-314
+3.00804e-314
 phizero_in
--2.89034e+203
+-2.62559e-306
 alpha_in
-2.164e-314
+2.16404e-314
 sigmar_in
 0
 rho_in
-3.00808e-314
+3.00804e-314
 nyrs_catch_in
-3
+5
 nspp
 1
 OY_min
@@ -77,6 +77,8 @@ Obs_Catch
  2022 687
  2023 1907.97
  2024 1907.97
+ 2025 1100
+ 2026 1100
 maxabc
  2.60197
 theta
