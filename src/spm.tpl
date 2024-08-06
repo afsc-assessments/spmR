@@ -1938,11 +1938,11 @@ FUNCTION void write_sim_hdr(const int& ispp)
   spm_summary << spname(ispp) <<",NA,NA,SSB_ofl, "<< SBFofl(ispp) <<endl;
   spm_summary << spname(ispp) <<",NA,NA,SSB_"<<styr<<","<< Bcurrent(ispp) <<endl;
   spm_summary << spname(ispp) <<",NA,NA,Mean_rec, "<< AMeanRec(ispp) <<endl;
-  spm_summary << spname(ispp)<<","<< alt<<","<< "NA"<<",C_abc," << Cabc(ispp)<<endl;
-  spm_summary << spname(ispp)<<","<< alt<<","<< "NA"<<",C_ofl," << Cofl(ispp)<<endl;
-  spm_summary << spname(ispp)<<","<< alt<<","<< "NA"<<",F_0,0 "<<endl; 
-  spm_summary << spname(ispp)<<","<< alt<<","<< "NA"<<",F_abc," << Fabc(ispp)<<endl;
-  spm_summary << spname(ispp)<<","<< alt<<","<< "NA"<<",F_ofl," << Fofl(ispp)<<endl;
+  spm_summary << spname(ispp)<<","<< "NA" <<","<< "NA"<<",C_abc," << Cabc(ispp)<<endl;
+  spm_summary << spname(ispp)<<","<< "NA" <<","<< "NA"<<",C_ofl," << Cofl(ispp)<<endl;
+  spm_summary << spname(ispp)<<","<< "NA" <<","<< "NA"<<",F_0,0 "<<endl; 
+  spm_summary << spname(ispp)<<","<< "NA" <<","<< "NA"<<",F_abc," << Fabc(ispp)<<endl;
+  spm_summary << spname(ispp)<<","<< "NA" <<","<< "NA"<<",F_ofl," << Fofl(ispp)<<endl;
 
 FUNCTION void write_spp(const int& ispp) 
   // Write out afsd objective function
