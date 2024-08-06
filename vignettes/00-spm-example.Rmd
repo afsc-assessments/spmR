@@ -8,7 +8,7 @@ vignette: >
 lightbox: true
 output: 
   # rmarkdown::html_vignette
-  bookdown::html_document2:
+  rmarkdown::html_document:
     code_folding: hide
     fig_caption: yes
     number_sections: yes
@@ -59,25 +59,50 @@ This vignette demonstrates how to use these functions to run the SPM model and a
 The following case studies have been applied.
 
 ## Atka mackerel
+
+
 ```{r atka,eval=TRUE}
-df <- runSPM(here::here("examples","atka"),run=FALSE)
+#|
+bdf <- runSPM(here::here("examples","atka"),run=FALSE)
+inp <- spmR::dat2list(here::here("examples","atka","spm.dat"))
+names(inp)
+(inp$alt4_spr)
+#Get the data file: 
+dat<-dat2list(here::here("examples","atka",inp$datafile)) 
+names(dat)
+dat$avgF5yr
 df <- readr::read_csv(here::here("examples","atka","spm_summary.csv"))
+names(df)
+df$variable
 #setwd("spmR")
 plotSPM(df)
 ```
 
+We'll start with a one-year fixed catch model for Atka mackerel, find the ABC for 
+The most recent assessment was in 2022, so in that year, the ABC for the Tier 3 model was `r df |> filter(Year==2022,variable=="C_mean",Alt==1) |> select(value) |> prettyNum(big.mark=",")` t.
+
 
 ## BSAI northern rock sole
-```{r bsaiNRS,eval=TRUE}
-df <- runSPM(here::here("examples","BSAI NRS"),run=FALSE)
+
+```{r bsaiNRS}
+#| echo: TRUE
+#| fig.width: 8 
+#| fig.height: 6
+bdf <- runSPM(here::here("examples","BSAI NRS"),run=FALSE)
 df <- readr::read_csv(here::here("examples","BSAI NRS","spm_summary.csv"))
 inp <- spmR::dat2list(here::here("examples","BSAI NRS","spm.dat"))
-fc <- tibble(Year=inp$fixed_catch[,1],mean=inp$fixed_catch[,2],'C')
+fc <- data.frame(Year=inp$fixed_catch[,1], mean=inp$fixed_catch[,2], type='C')# |> 
 names(fc) <- c("Year", "mean", "type")
-fc <- fc |>  mutate(ub=mean,lb=mean, Alt=as.factor(1))
-p1<-plotSPM(df)
+fc <- fc |>  expand_grid(Alt=c(1,3,5,7)) |> mutate(Alt=as.factor(Alt), ub=mean,lb=mean)
+fc
+p1$data
 p1 + geom_point(data=fc,aes(x=Year,y=mean))
 #p1$data
+```
+
+```{r}
+#| echo: TRUE
+
 ```
 
 ## EBS pollock
