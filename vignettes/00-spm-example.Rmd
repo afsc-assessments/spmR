@@ -1,19 +1,42 @@
 ---
 title: "spmR-examples"
-output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{spmR-examples}
   %\VignetteEncoding{UTF-8}
   %\VignetteEngine{knitr::rmarkdown}
+  
+lightbox: true
+output: 
+  # rmarkdown::html_vignette
+  bookdown::html_document2:
+    code_folding: hide
+    fig_caption: yes
+    number_sections: yes
+    theme: readable
+    highlight: tango
+    code-summary: "Show the code"
+    embed-resources: true
+    toc: true
+    toc-title: 'Contents'
+    toc_float: yes
+    number-sections: false
+    code-fold: true
+format:
+  html:
+        code-summary: "Show the code"
+        embed-resources: true
+        toc: true
+        toc-title: 'Contents'
+        number-sections: false
+        code-fold: true
 editor_options: 
   chunk_output_type: console
 ---
 
 ```{r, include = FALSE}
-knitr::opts_chunk$set(
-  collapse = TRUE,
-  comment = "#>"
-)
+knitr::opts_chunk$set( collapse = TRUE, comment = "#>" )
+knitr::opts_knit$set(root.dir = here::here())
+knitr::opts_chunk$set(warning = FALSE, message = FALSE, echo = FALSE, results = FALSE, fig.width = 6, fig.height = 5)
 ```
 
 ```{r setupex}
@@ -61,17 +84,32 @@ df <- runSPM(here::here("examples","yfs"),run=FALSE)
 
 ```
 ## GOA Flathead sole
-```{r goa_fhs,eval=FALSE}
 
-df <- runSPM(here::here("examples","goa_flathead/maia"),run=TRUE)
-plotSPM(df,thisyr=2024)
+First we'll run this model with only 3-years fixed catch assumed
+
+```{r goa_fhs,eval=TRUE,echo=FALSE}
+# df <- runSPM(here::here("examples","goa_flathead/maia"),run=TRUE)
+df <- runSPM(here::here("examples","goa_flathead"),run=FALSE)
 plotSPM(df,thisyr=2025)
-p1<- plotSPM(df)
-?plotSPM
-p1$data
-
+# p1<- plotSPM(df)
 
 ```
+
+Now let's use the utility to change the input files and re-run the model with 5-years fixed catch assumed.
+
+```{r goa_fhs2,eval=TRUE,echo=FALSE}
+inp <- spmR::dat2list(here::here("examples","goa_flathead","spm.dat"))
+inp$nyrs_fixed_catch
+inp$nyrs_fixed_catch <- 5
+inp$fixed_catch <- rbind(inp$fixed_catch, c(2025, 1100), c(2026, 1100))
+inp$fixed_catch
+spmR::list2dat(inp,here::here("examples","goa_flathead","spm.dat"))
+df <- runSPM(here::here("examples","goa_flathead"),run=TRUE)
+
+plotSPM(df,thisyr=2024)
+```
+
+
 ## GOA Rougheye blackspotted
 ```{r rougheye,eval=FALSE}
 

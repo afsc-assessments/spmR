@@ -17,8 +17,8 @@ DATA_SECTION
   !!CLASS ofstream means_out("means.out")
   !!CLASS ofstream alts_proj("alt_proj.out")
   !!CLASS ofstream percent_out("percentiles.out")
-  !!CLASS ofstream percent_db("percentdb.out")
   // !!CLASS ofstream Alt3bstuff("alt3b.out")
+  !!CLASS ofstream spm_summary("spm_summary.csv")
   !!CLASS ofstream detail_out("spm_detail.csv")
   !!CLASS ofstream prof_F("F_profile.out");
   !!CLASS ofstream elasticity("elasticity.csv");
@@ -710,7 +710,7 @@ PROCEDURE_SECTION
   if (mceval_phase()) cout<<log_Rzero<<" "<<steepness<<" "<<sigr<<" "<<endl;
 
 FUNCTION Run_Sim
-  detail_out<<"Stock,Alternative,Sim,Yr,SSB,Rec,Tot_biom,SPR_Implied,F,Ntot,Catch,ABC,OFL,AvgAge,AvgAgeTot,SexRatio,B100,B40,B35"<<endl;
+  detail_out<<"Stock,Alt,Sim,Year,SSB,Rec,Tot_biom,SPR_Implied,F,Ntot,Catch,ABC,OFL,AvgAge,AvgAgeTot,SexRatio,B100,B40,B35"<<endl;
     for (int ispp=1;ispp<=nspp;ispp++)
     {
       Get_SPR_Catches(ispp);
@@ -1931,6 +1931,13 @@ FUNCTION void write_sim_hdr(const int& ispp)
             endl;
   percent_out <<"CV Recruit" <<endl;
   percent_out << cvrec(ispp)  <<" "<<endl;
+  // spm_summary << spname(ispp)<<","<< alt<<","<< iyr<<",C_ofl," << Cofl(ispp)<<endl;
+  spm_summary << "spp_file,Alt,Year,variable,value"<<endl;
+  spm_summary << spname(ispp) <<",NA,NA,SSB_100, "<< SB100(ispp) <<endl;
+  spm_summary << spname(ispp) <<",NA,NA,SSB_40, "<< SBF40(ispp) <<endl;
+  spm_summary << spname(ispp) <<",NA,NA,SSB_ofl, "<< SBFofl(ispp) <<endl;
+  spm_summary << spname(ispp) <<",NA,NA,SSB_"<<styr<<","<< Bcurrent(ispp) <<endl;
+  spm_summary << spname(ispp) <<",NA,NA,Mean_rec, "<< AMeanRec(ispp) <<endl;
 
 FUNCTION void write_spp(const int& ispp) 
   // Write out afsd objective function
@@ -1945,13 +1952,13 @@ FUNCTION void write_spp(const int& ispp)
   {
     int iyr=i+styr-1;
     double sd_cat_tmp =      sqrt(norm2(mtmp(i)-mean(mtmp(i)))/nsims)          ;
-    percent_db << spname(ispp)<<" "<< alt<<" "<< iyr<<" Cabc " << Cabc(ispp)<<endl;
-    percent_db << spname(ispp)<<" "<< alt<<" "<< iyr<<" Cofl " << Cofl(ispp)<<endl;
-    percent_db << spname(ispp)<<" "<< alt<<" "<< iyr<<" CLCI " << mtmp(i,LCI)<<endl;
-    percent_db << spname(ispp)<<" "<< alt<<" "<< iyr<<" CUCI " << mtmp(i,UCI)<<endl;
-    percent_db << spname(ispp)<<" "<< alt<<" "<< iyr<<" CMedian " << mtmp(i,int((UCI+LCI)/2))<<endl;
-    percent_db << spname(ispp)<<" "<< alt<<" "<< iyr<<" CMean " << mean(mtmp(i))<<endl;
-    percent_db << spname(ispp)<<" "<< alt<<" "<< iyr<<" CStdn " << sd_cat_tmp <<endl;
+    spm_summary << spname(ispp)<<","<< alt<<","<< iyr<<",C_abc," << Cabc(ispp)<<endl;
+    spm_summary << spname(ispp)<<","<< alt<<","<< iyr<<",C_ofl," << Cofl(ispp)<<endl;
+    spm_summary << spname(ispp)<<","<< alt<<","<< iyr<<",C_lb," << mtmp(i,LCI)<<endl;
+    spm_summary << spname(ispp)<<","<< alt<<","<< iyr<<",C_ub," << mtmp(i,UCI)<<endl;
+    spm_summary << spname(ispp)<<","<< alt<<","<< iyr<<",C_median," << mtmp(i,int((UCI+LCI)/2))<<endl;
+    spm_summary << spname(ispp)<<","<< alt<<","<< iyr<<",C_mean," << mean(mtmp(i))<<endl;
+    spm_summary << spname(ispp)<<","<< alt<<","<< iyr<<",C_sd," << sd_cat_tmp <<endl;
 
    percent_out << i+styr-1                  <<" "
           << " 0"                       <<" "
@@ -1971,13 +1978,13 @@ FUNCTION void write_spp(const int& ispp)
   for (int i=1;i<=npro;i++)
    {
     int iyr=i+styr-1;
-    percent_db << spname(ispp)<<" "<< alt<<" "<< iyr<<" SSBF100 " << SB100(ispp)<<endl;
-    percent_db << spname(ispp)<<" "<< alt<<" "<< iyr<<" SSBFabc " << SBFabc(ispp)<<endl;
-    percent_db << spname(ispp)<<" "<< alt<<" "<< iyr<<" SSBFofl " << SBFofl(ispp)<<endl;
-    percent_db << spname(ispp)<<" "<< alt<<" "<< iyr<<" SSBLCI " << mtmp(i,LCI)<<endl;
-    percent_db << spname(ispp)<<" "<< alt<<" "<< iyr<<" SSBUCI " << mtmp(i,UCI)<<endl;
-    percent_db << spname(ispp)<<" "<< alt<<" "<< iyr<<" SSBMedian " << mtmp(i,int((UCI+LCI)/2))<<endl;
-    percent_db << spname(ispp)<<" "<< alt<<" "<< iyr<<" SSBMean " << mean(mtmp(i))<<endl;
+    spm_summary << spname(ispp)<<","<< alt<<","<< iyr<<",SSB_F100," << SB100(ispp)<<endl;
+    spm_summary << spname(ispp)<<","<< alt<<","<< iyr<<",SSB_Fabc," << SBFabc(ispp)<<endl;
+    spm_summary << spname(ispp)<<","<< alt<<","<< iyr<<",SSB_Fofl," << SBFofl(ispp)<<endl;
+    spm_summary << spname(ispp)<<","<< alt<<","<< iyr<<",SSB_lb," << mtmp(i,LCI)<<endl;
+    spm_summary << spname(ispp)<<","<< alt<<","<< iyr<<",SSB_ub," << mtmp(i,UCI)<<endl;
+    spm_summary << spname(ispp)<<","<< alt<<","<< iyr<<",SSB_median," << mtmp(i,int((UCI+LCI)/2))<<endl;
+    spm_summary << spname(ispp)<<","<< alt<<","<< iyr<<",SSB_mean," << mean(mtmp(i))<<endl;
 
    percent_out << i+styr-1                         <<" ";
      percent_out      << SB100(ispp)               <<" ";
@@ -1997,13 +2004,13 @@ FUNCTION void write_spp(const int& ispp)
   for (int i=1;i<=npro;i++)
    {
     int iyr=i+styr-1;
-    percent_db << spname(ispp)<<" "<< alt<<" "<< iyr<<" F0 0 "<<endl; 
-    percent_db << spname(ispp)<<" "<< alt<<" "<< iyr<<" Fabc " << Fabc(ispp)<<endl;
-    percent_db << spname(ispp)<<" "<< alt<<" "<< iyr<<" Fofl " << Fofl(ispp)<<endl;
-    percent_db << spname(ispp)<<" "<< alt<<" "<< iyr<<"  F_LCI " << mtmp(i,LCI)<<endl;
-    percent_db << spname(ispp)<<" "<< alt<<" "<< iyr<<"  F_UCI " << mtmp(i,UCI)<<endl;
-    percent_db << spname(ispp)<<" "<< alt<<" "<< iyr<<"  F_Median " << mtmp(i,int((UCI+LCI)/2))<<endl;
-    percent_db << spname(ispp)<<" "<< alt<<" "<< iyr<<"  F_Mean " << mean(mtmp(i))<<endl;
+    spm_summary << spname(ispp)<<","<< alt<<","<< iyr<<",F_0,0 "<<endl; 
+    spm_summary << spname(ispp)<<","<< alt<<","<< iyr<<",F_abc," << Fabc(ispp)<<endl;
+    spm_summary << spname(ispp)<<","<< alt<<","<< iyr<<",F_ofl," << Fofl(ispp)<<endl;
+    spm_summary << spname(ispp)<<","<< alt<<","<< iyr<<",F_lb," << mtmp(i,LCI)<<endl;
+    spm_summary << spname(ispp)<<","<< alt<<","<< iyr<<",F_ub," << mtmp(i,UCI)<<endl;
+    spm_summary << spname(ispp)<<","<< alt<<","<< iyr<<",F_median," << mtmp(i,int((UCI+LCI)/2))<<endl;
+    spm_summary << spname(ispp)<<","<< alt<<","<< iyr<<",F_mean," << mean(mtmp(i))<<endl;
    percent_out << i+styr-1                  <<" "
           << " 0"                       <<" "
           << Fabc(ispp)                 <<" "
