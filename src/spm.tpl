@@ -1938,6 +1938,11 @@ FUNCTION void write_sim_hdr(const int& ispp)
   spm_summary << spname(ispp) <<",NA,NA,SSB_ofl, "<< SBFofl(ispp) <<endl;
   spm_summary << spname(ispp) <<",NA,NA,SSB_"<<styr<<","<< Bcurrent(ispp) <<endl;
   spm_summary << spname(ispp) <<",NA,NA,Mean_rec, "<< AMeanRec(ispp) <<endl;
+  spm_summary << spname(ispp)<<","<< alt<<","<< "NA"<<",C_abc," << Cabc(ispp)<<endl;
+  spm_summary << spname(ispp)<<","<< alt<<","<< "NA"<<",C_ofl," << Cofl(ispp)<<endl;
+  spm_summary << spname(ispp)<<","<< alt<<","<< "NA"<<",F_0,0 "<<endl; 
+  spm_summary << spname(ispp)<<","<< alt<<","<< "NA"<<",F_abc," << Fabc(ispp)<<endl;
+  spm_summary << spname(ispp)<<","<< alt<<","<< "NA"<<",F_ofl," << Fofl(ispp)<<endl;
 
 FUNCTION void write_spp(const int& ispp) 
   // Write out afsd objective function
@@ -1952,8 +1957,6 @@ FUNCTION void write_spp(const int& ispp)
   {
     int iyr=i+styr-1;
     double sd_cat_tmp =      sqrt(norm2(mtmp(i)-mean(mtmp(i)))/nsims)          ;
-    spm_summary << spname(ispp)<<","<< alt<<","<< iyr<<",C_abc," << Cabc(ispp)<<endl;
-    spm_summary << spname(ispp)<<","<< alt<<","<< iyr<<",C_ofl," << Cofl(ispp)<<endl;
     spm_summary << spname(ispp)<<","<< alt<<","<< iyr<<",C_lb," << mtmp(i,LCI)<<endl;
     spm_summary << spname(ispp)<<","<< alt<<","<< iyr<<",C_ub," << mtmp(i,UCI)<<endl;
     spm_summary << spname(ispp)<<","<< alt<<","<< iyr<<",C_median," << mtmp(i,int((UCI+LCI)/2))<<endl;
@@ -1978,9 +1981,6 @@ FUNCTION void write_spp(const int& ispp)
   for (int i=1;i<=npro;i++)
    {
     int iyr=i+styr-1;
-    spm_summary << spname(ispp)<<","<< alt<<","<< iyr<<",SSB_F100," << SB100(ispp)<<endl;
-    spm_summary << spname(ispp)<<","<< alt<<","<< iyr<<",SSB_Fabc," << SBFabc(ispp)<<endl;
-    spm_summary << spname(ispp)<<","<< alt<<","<< iyr<<",SSB_Fofl," << SBFofl(ispp)<<endl;
     spm_summary << spname(ispp)<<","<< alt<<","<< iyr<<",SSB_lb," << mtmp(i,LCI)<<endl;
     spm_summary << spname(ispp)<<","<< alt<<","<< iyr<<",SSB_ub," << mtmp(i,UCI)<<endl;
     spm_summary << spname(ispp)<<","<< alt<<","<< iyr<<",SSB_median," << mtmp(i,int((UCI+LCI)/2))<<endl;
@@ -2004,9 +2004,6 @@ FUNCTION void write_spp(const int& ispp)
   for (int i=1;i<=npro;i++)
    {
     int iyr=i+styr-1;
-    spm_summary << spname(ispp)<<","<< alt<<","<< iyr<<",F_0,0 "<<endl; 
-    spm_summary << spname(ispp)<<","<< alt<<","<< iyr<<",F_abc," << Fabc(ispp)<<endl;
-    spm_summary << spname(ispp)<<","<< alt<<","<< iyr<<",F_ofl," << Fofl(ispp)<<endl;
     spm_summary << spname(ispp)<<","<< alt<<","<< iyr<<",F_lb," << mtmp(i,LCI)<<endl;
     spm_summary << spname(ispp)<<","<< alt<<","<< iyr<<",F_ub," << mtmp(i,UCI)<<endl;
     spm_summary << spname(ispp)<<","<< alt<<","<< iyr<<",F_median," << mtmp(i,int((UCI+LCI)/2))<<endl;
