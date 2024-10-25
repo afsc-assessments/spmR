@@ -2,21 +2,21 @@
 % Please edit documentation in R/readData.R
 \name{dat2list}
 \alias{dat2list}
-\title{Read Data File into List Object}
+\title{Convert Data to List}
 \usage{
 dat2list(fn)
 }
 \arguments{
-\item{fn}{Filename of the data file to be read.}
+\item{fn}{A character string representing the file name to be read.}
 }
 \value{
-A list object containing the data from the file.
+A list with numeric data or character strings based on the content of the file.
 }
 \description{
-Reads a data file formatted for a projection model and converts it into a list object.
-The function handles numeric and NA values appropriately.
+This function reads data from a file and converts it into a list.
+If the data are numeric, it maintains the numeric list. If the data are strings, it returns a character string.
 }
 \examples{
 # Example usage:
-# myDataList <- dat2list("datafile.dat")
+# result <- dat2list("datafile.txt")
 }
