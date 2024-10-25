@@ -382,7 +382,7 @@ DATA_SECTION
     for (int j=1;j<=ngear(i);j++)
       Frat(i,j) = Fratiotmp(i,j);
   }
-  for (int ispp=1;ispp<=nspp;ispp++) agg_cat(tac_ind(ispp))  += Obs_Catch(1,ispp);
+  for (int ispp=1;ispp<=nspp;ispp++) if(nyrs_catch_in > 0)  agg_cat(tac_ind(ispp))  += Obs_Catch(1,ispp);
   cout<<R<<endl;
 
   wtd_div.initialize(); 
@@ -563,9 +563,15 @@ DATA_SECTION
 
      btmp += wt_F(ispp) * ntmp;
      cout << "Mean Catch"<<endl;
-     ctmp += (Obs_Catch(1,ispp));
-     cout << ctmp <<endl;
-     R_guess = log((ctmp/.02 )/btmp) ;
+     if(nyrs_catch_in > 0) {
+			 ctmp += (Obs_Catch(1,ispp));
+       cout << ctmp <<endl;
+       R_guess = log((ctmp/.02 )/btmp) ;
+		 }
+		 else
+		 {
+       R_guess = 10.;
+		 }
      cout << "R_guess "<<endl;
      cout << R_guess <<endl;
    }
@@ -862,7 +868,7 @@ FUNCTION void Mainloop(int& isim)
      }
      else  // Build in condition to get TAC different than ABC...
      {
-       if (ipro==1)
+       if (ipro==1 && (nyrs_catch_in>0))
        {
          for (int ispp=1;ispp<=nspp;ispp++) 
            Actual_Catch(ispp) = Obs_Catch(ipro,ispp); 
@@ -1056,11 +1062,14 @@ FUNCTION double Get_F(const int& thisalt,const int& ispp)
       case 4 : // New Alt 4
         temp_F = Fabc(ispp);
         F1 = Alt4_Fabc(ispp);// SolveF2(N_F(ispp),N_M(ispp),TAC(ispp),ispp);
-        F2 = Get_F_t( F_age_tmp, N_F(ispp), ispp); 
+        ftmp = F1;
+        /* Want alternative 4 to be any SPR rate w/o FMP constraint
+				F2 = Get_F_t( F_age_tmp, N_F(ispp), ispp); 
         if (F1<F2)
           ftmp = F1;
         else
           ftmp = F2;
+				*/ 
          // cout <<ipro<<" "<<spname(ispp)<<" "<<ftmp<<" "<<F1<<" "<<TAC(ispp)<<" "<<Actual_Catch(ispp)<<" "<<F2<<" "<<SBF40(ispp)<<" "<<SBtmp<<endl;
         // Fabc(ispp) = Alt4_Fabc(ispp);
         // Need to get minimum for SSL species...
@@ -1262,7 +1271,7 @@ FUNCTION void Project_Pops(const int& isim, const int& i)
           else
             if (alt==77 && i<=2)
               Ftmp = Get_F(1,ispp); // Set to the F rather than solving every time...
-            else
+          else
           {
             // if (alt==2 && sum(TAC)>OY_max)
              if ((alt==2 ||alt==98||alt==97) && sum(TAC)>OY_max)

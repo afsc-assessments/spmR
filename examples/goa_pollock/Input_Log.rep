@@ -1,5 +1,5 @@
 run_name
-std
+goa_pollock_2023
 Tier
 3
 nalts
@@ -25,15 +25,15 @@ nsims
 styr
 2023
 bzero_in
-2.1632e-314
+0
 phizero_in
-2.1632e-314
+0
 alpha_in
-3.01146e-314
+0
 sigmar_in
--6.51331e+77
+0
 rho_in
-2.1632e-314
+0
 nyrs_catch_in
 1
 nspp

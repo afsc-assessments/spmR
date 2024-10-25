@@ -5,7 +5,13 @@ goa_pollock_2023
 #nalts
 7    
 #alts
-1 2   3 4 5 6 7
+1 
+2   
+3 
+4 
+5 
+6 
+7
 #tac_flag
 1    
 #srr_type
@@ -26,6 +32,8 @@ goa_pollock_2023
 2023  
 #nyrs_fixed_catch
 1 
+# Number of species                         
+1
 #OY_min
 0
 #OY_max
