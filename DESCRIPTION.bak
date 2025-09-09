@@ -13,10 +13,10 @@ Suggests:
     knitr,
     ggplot2,
     rmarkdown,
-    dplyr,
-    tidyr,
-    stringr
+    dplyr
 VignetteBuilder: 
     quarto
 RoxygenNote: 7.3.2
 URL: http://afsc-assessments.github.io/spmR/
+Imports: 
+    tidyr
