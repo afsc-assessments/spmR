@@ -170,7 +170,7 @@ ui <- dashboardPage(
       tabItem(tabName = "upload",
         fluidRow(
           box(title = "Data Upload", status = "primary", solidHeader = TRUE, width = 12,
-            fileInput("file", "Choose fisheries projection file",
+            fileInput("file", "Choose fisheries projection file (percentiles.out)",
                      accept = c(".txt", ".dat", ".csv", ".out")),
             
             conditionalPanel(
