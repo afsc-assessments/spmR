@@ -413,6 +413,7 @@ DATA_SECTION
   3darray   Csim(1,nspp,1,nsims,1,npro+1) 
   matrix  TACs_by_yr(1,npro,1,nspp) 
   matrix  ABCs_by_yr(1,npro,1,nspp) 
+  matrix  MaxABCs_by_yr(1,npro,1,nspp) 
   matrix  OFLs_by_yr(1,npro,1,nspp) 
   matrix  FABCs_by_yr(1,npro,1,nspp) 
   matrix  FOFLs_by_yr(1,npro,1,nspp) 
@@ -424,6 +425,7 @@ DATA_SECTION
   number delta
   vector TAC(1,nspp)
   vector ABC(1,nspp)
+  vector MaxABC(1,nspp)
   vector OFL(1,nspp)
 
   vector AMeanSSB(1,nspp)
@@ -716,7 +718,7 @@ PROCEDURE_SECTION
   if (mceval_phase()) cout<<log_Rzero<<" "<<steepness<<" "<<sigr<<" "<<endl;
 
 FUNCTION Run_Sim
-  detail_out<<"Stock,Alt,Sim,Year,SSB,Rec,Tot_biom,SPR_Implied,F,Ntot,Catch,ABC,OFL,AvgAge,AvgAgeTot,SexRatio,B100,B40,B35"<<endl;
+  detail_out<<"Stock,Alt,Sim,Year,SSB,Rec,Tot_biom,SPR_Implied,F,Ntot,Catch,ABC,OFL,AvgAge,AvgAgeTot,SexRatio,B100,B40,B35,MaxABC"<<endl;
     for (int ispp=1;ispp<=nspp;ispp++)
     {
       Get_SPR_Catches(ispp);
@@ -807,6 +809,7 @@ FUNCTION opt_sim
   OFLs_by_yr.initialize();
   TACs_by_yr.initialize();
   ABCs_by_yr.initialize();
+  MaxABCs_by_yr.initialize();
   for (int ispp=1;ispp<=nspp;ispp++) 
   {
     Get_Bzero(ispp);
@@ -852,7 +855,7 @@ FUNCTION void Mainloop(int& isim)
        ABC(ispp)       =   ABC_Multiplier(ispp) * Get_Catch(alt,ispp); // ABC_multiplier is from setup.dat
        OFL(ispp)       =    Get_Catch(6,ispp); 
        // if (alt!=2) 
-        ABCs_by_yr(ipro,ispp) += Get_Catch(1,ispp);
+        ABCs_by_yr(ipro,ispp) = Get_Catch(1,ispp);
        // else 
         // ABCs_by_yr(ipro,ispp) = ABC(ispp);  // Cumulate ABCs here for printout later...
      }
@@ -925,6 +928,7 @@ FUNCTION void Mainloop(int& isim)
                       <<","<<SB100(ispp)
                       <<","<<SB100(ispp)*.4
                       <<","<<SB100(ispp)*.35
+                      <<","<<ABCs_by_yr(ipro,ispp)
 											<< endl;
    } // Loop over projection years
 
