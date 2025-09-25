@@ -855,7 +855,7 @@ FUNCTION void Mainloop(int& isim)
        ABC(ispp)       =   ABC_Multiplier(ispp) * Get_Catch(alt,ispp); // ABC_multiplier is from setup.dat
        OFL(ispp)       =    Get_Catch(6,ispp); 
        // if (alt!=2) 
-        ABCs_by_yr(ipro,ispp) = Get_Catch(1,ispp);
+        MaxABC(ispp) = Get_Catch(1,ispp); 
        // else 
         // ABCs_by_yr(ipro,ispp) = ABC(ispp);  // Cumulate ABCs here for printout later...
      }
@@ -903,6 +903,7 @@ FUNCTION void Mainloop(int& isim)
 
      TACs_by_yr(ipro) += TAC; // Cumulate TACs here for printout later...
      OFLs_by_yr(ipro) += OFL; // Cumulate OFLs here for printout later...
+     MaxABCs_by_yr(ipro) += MaxABC; // Cumulate maxABCs here for printout later...
      Project_Pops(isim,ipro); //cout << "Done projection"<<endl; //cout <<"Csim: "<<isim<<" "<<i<<" "<<Csim(1,isim,i) <<" "<< endl; //cout << "Yr_"<<i+styr-1<<"_Expl "<< Expl_Biom<<endl;
    // OjO, looping for long term projections...need to compute the average coefficients from past
     // Mainloop(npro+1,npro+15,isim);
@@ -928,7 +929,7 @@ FUNCTION void Mainloop(int& isim)
                       <<","<<SB100(ispp)
                       <<","<<SB100(ispp)*.4
                       <<","<<SB100(ispp)*.35
-                      <<","<<ABCs_by_yr(ipro,ispp)
+                      <<","<<MaxABC(ispp)
 											<< endl;
    } // Loop over projection years
 
@@ -1792,8 +1793,9 @@ FUNCTION Do_Sims
 FUNCTION write_by_time
   write_sim("Catch",            Csim,Cabc);  // Total Catch
 	cout<<Cabc<<endl;
-  write_ABCs("ABCs"            );            // ABC Catch
-  write_TACs("TACs"            );            // ABC Catch
+  write_ABCs("maxABCs"            );            // maxABC 
+  write_OFLs("OFLs"            );            // OFL 
+  write_TACs("TACs"            );            // TAC, varies by alternative
   write_sim("Sp_Biomass",      SBsim,SBFabc);  // Spawn Biomass
   write_sim("Fishing Mortality",Fsim,Fabc);  // Total Fishing mortality
   write_sim("Biomass",          Bsim);       // Total Biomass
@@ -1822,12 +1824,12 @@ FUNCTION write_alts
     for (int i=2;i<=npro;i++)
     {
       alts_proj << spname(ispp)<<" "<<alt<<" "<< i+styr-1 <<" "<<mean(ccc(i))
-                <<" "<<(ABCs_by_yr(i,ispp))/nsims<<" "<<
+                <<" "<<(MaxABCs_by_yr(i,ispp))/nsims<<" "<<
                     OFLs_by_yr(i,ispp)/nsims<<" "<<mean(mtmp(i))<<" "<<mean(btmpx(i))<<endl;
     }
   }
 FUNCTION write_alts_hdr
-  alts_proj << "Stock Alt Year Catch ABC OFL SSB TotBiom"<<endl;
+  alts_proj << "Stock Alt Year Catch maxABC OFL SSB TotBiom"<<endl;
 
 FUNCTION void write_ABCs(const adstring& Title) 
   // This one prints out species over time (means only), but without headings
@@ -1840,7 +1842,7 @@ FUNCTION void write_ABCs(const adstring& Title)
     means_out << i+styr-1 <<" ";
     for (int ispp=1;ispp<=nspp;ispp++)
     {
-      double mean_value = (ABCs_by_yr(i,ispp))/nsims;
+      double mean_value = (MaxABCs_by_yr(i,ispp))/nsims;
       if (mean_value > 1e-6) 
         means_out << mean_value <<" "; 
       else
@@ -1849,6 +1851,28 @@ FUNCTION void write_ABCs(const adstring& Title)
     means_out << endl;
   }
   means_out << endl;
+
+FUNCTION void write_OFLs(const adstring& Title) 
+  // This one prints out species over time (means only), but without headings
+  means_out <<"Alternative "<<alt<<" "<<Title << endl; 
+  means_out << "     " ; for (int ispp=1;ispp<=nspp;ispp++) means_out << spname(ispp)<< " " ; means_out <<endl;
+  means_out << endl<< "Year " <<endl;
+
+  for (int i=1;i<=npro;i++)
+  {
+    means_out << i+styr-1 <<" ";
+    for (int ispp=1;ispp<=nspp;ispp++)
+    {
+      double mean_value = (OFLs_by_yr(i,ispp))/nsims;
+      if (mean_value > 1e-6) 
+        means_out << mean_value <<" "; 
+      else
+        means_out << " NA "; 
+    }
+    means_out << endl;
+  }
+  means_out << endl;
+
 
 FUNCTION void write_TACs(const adstring& Title) 
   // This one prints out species over time (means only), but without headings
