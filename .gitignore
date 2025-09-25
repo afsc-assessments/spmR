@@ -1,7 +1,12 @@
 inst/doc
 .Rproj.user
+*.swo
+*.swn
 *.swp
 *.exe
 *.r0.
 *tmp
 docs
+*.obj
+*.cpp
+*.htp
