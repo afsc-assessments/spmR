@@ -1791,6 +1791,7 @@ FUNCTION write_by_time
   write_sim("Catch",            Csim,Cabc);  // Total Catch
 	cout<<Cabc<<endl;
   write_ABCs("ABCs"            );            // ABC Catch
+  write_OFLs("OFLs"            );            // OFL Catch
   write_TACs("TACs"            );            // ABC Catch
   write_sim("Sp_Biomass",      SBsim,SBFabc);  // Spawn Biomass
   write_sim("Fishing Mortality",Fsim,Fabc);  // Total Fishing mortality
