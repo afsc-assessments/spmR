@@ -9,7 +9,7 @@
 #' @param mytitle  Title for the plot
 #' @importFrom ggplot2 ggplot aes geom_point geom_smooth
 #' @importFrom dplyr filter
-#' @importFrom patchwork
+#' @import patchwork
 #' @return A combined plot of the results from the SPM analysis.
 #' @export
 plotSPMx <- function(df, alt=2,thisyr=2022,mytitle=NULL) {
