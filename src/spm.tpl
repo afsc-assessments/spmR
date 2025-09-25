@@ -412,7 +412,6 @@ DATA_SECTION
   3darray SPRsim(1,nspp,1,nsims,1,npro+1) 
   3darray   Csim(1,nspp,1,nsims,1,npro+1) 
   matrix  TACs_by_yr(1,npro,1,nspp) 
-  matrix  ABCs_by_yr(1,npro,1,nspp) 
   matrix  MaxABCs_by_yr(1,npro,1,nspp) 
   matrix  OFLs_by_yr(1,npro,1,nspp) 
   matrix  FABCs_by_yr(1,npro,1,nspp) 
@@ -808,7 +807,6 @@ FUNCTION opt_sim
   Avg_Age_sum.initialize();
   OFLs_by_yr.initialize();
   TACs_by_yr.initialize();
-  ABCs_by_yr.initialize();
   MaxABCs_by_yr.initialize();
   for (int ispp=1;ispp<=nspp;ispp++) 
   {
@@ -855,7 +853,7 @@ FUNCTION void Mainloop(int& isim)
        ABC(ispp)       =   ABC_Multiplier(ispp) * Get_Catch(alt,ispp); // ABC_multiplier is from setup.dat
        OFL(ispp)       =    Get_Catch(6,ispp); 
        // if (alt!=2) 
-        ABCs_by_yr(ipro,ispp) = Get_Catch(1,ispp);
+        MaxABCs_by_yr(ipro,ispp) = Get_Catch(1,ispp);
        // else 
         // ABCs_by_yr(ipro,ispp) = ABC(ispp);  // Cumulate ABCs here for printout later...
      }
@@ -928,7 +926,7 @@ FUNCTION void Mainloop(int& isim)
                       <<","<<SB100(ispp)
                       <<","<<SB100(ispp)*.4
                       <<","<<SB100(ispp)*.35
-                      <<","<<ABCs_by_yr(ipro,ispp)
+                      <<","<<MaxABCs_by_yr(ipro,ispp)
 											<< endl;
    } // Loop over projection years
 
@@ -1822,7 +1820,7 @@ FUNCTION write_alts
     for (int i=2;i<=npro;i++)
     {
       alts_proj << spname(ispp)<<" "<<alt<<" "<< i+styr-1 <<" "<<mean(ccc(i))
-                <<" "<<(ABCs_by_yr(i,ispp))/nsims<<" "<<
+                <<" "<<(MaxABCs_by_yr(i,ispp))/nsims<<" "<<
                     OFLs_by_yr(i,ispp)/nsims<<" "<<mean(mtmp(i))<<" "<<mean(btmpx(i))<<endl;
     }
   }
@@ -1840,7 +1838,7 @@ FUNCTION void write_ABCs(const adstring& Title)
     means_out << i+styr-1 <<" ";
     for (int ispp=1;ispp<=nspp;ispp++)
     {
-      double mean_value = (ABCs_by_yr(i,ispp))/nsims;
+      double mean_value = (MaxABCs_by_yr(i,ispp))/nsims;
       if (mean_value > 1e-6) 
         means_out << mean_value <<" "; 
       else
@@ -1850,6 +1848,25 @@ FUNCTION void write_ABCs(const adstring& Title)
   }
   means_out << endl;
 
+FUNCTION void write_OFLs(const adstring& Title) 
+  // This one prints out species over time (means only), but without headings
+  means_out <<"Alternative "<<alt<<" "<<Title << endl; 
+  means_out << "     " ; for (int ispp=1;ispp<=nspp;ispp++) means_out << spname(ispp)<< " " ; means_out <<endl;
+  means_out << endl<< "Year " <<endl;
+  for (int i=1;i<=npro;i++)
+  {
+    means_out << i+styr-1 <<" ";
+    for (int ispp=1;ispp<=nspp;ispp++)
+    {
+      double mean_value = (OFLs_by_yr(i,ispp))/nsims;
+      if (mean_value > 1e-6) 
+        means_out << mean_value <<" "; 
+      else
+        means_out << " NA "; 
+    }
+    means_out << endl;
+  }
+  means_out << endl;
 FUNCTION void write_TACs(const adstring& Title) 
   // This one prints out species over time (means only), but without headings
   means_out <<"Alternative "<<alt<<" "<<Title << endl; 
