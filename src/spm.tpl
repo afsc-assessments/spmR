@@ -853,7 +853,7 @@ FUNCTION void Mainloop(int& isim)
        ABC(ispp)       =   ABC_Multiplier(ispp) * Get_Catch(alt,ispp); // ABC_multiplier is from setup.dat
        OFL(ispp)       =    Get_Catch(6,ispp); 
        // if (alt!=2) 
-        MaxABCs_by_yr(ipro,ispp) = Get_Catch(1,ispp);
+        MaxABCs_by_yr(ipro,ispp) += Get_Catch(1,ispp);
        // else 
         // ABCs_by_yr(ipro,ispp) = ABC(ispp);  // Cumulate ABCs here for printout later...
      }
@@ -1839,7 +1839,7 @@ FUNCTION void write_ABCs(const adstring& Title)
     means_out << i+styr-1 <<" ";
     for (int ispp=1;ispp<=nspp;ispp++)
     {
-      double mean_value = (MaxABCs_by_yr(i,ispp));
+      double mean_value = (MaxABCs_by_yr(i,ispp))/nsims;
       if (mean_value > 1e-6) 
         means_out << mean_value <<" "; 
       else
