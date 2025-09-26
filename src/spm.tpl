@@ -1790,7 +1790,7 @@ FUNCTION Do_Sims
 FUNCTION write_by_time
   write_sim("Catch",            Csim,Cabc);  // Total Catch
 	cout<<Cabc<<endl;
-  write_ABCs("ABCs"            );            // ABC Catch
+  write_ABCs("MaxABCs"            );            // ABC Catch
   write_OFLs("OFLs"            );            // OFL Catch
   write_TACs("TACs"            );            // ABC Catch
   write_sim("Sp_Biomass",      SBsim,SBFabc);  // Spawn Biomass
@@ -1839,7 +1839,7 @@ FUNCTION void write_ABCs(const adstring& Title)
     means_out << i+styr-1 <<" ";
     for (int ispp=1;ispp<=nspp;ispp++)
     {
-      double mean_value = (MaxABCs_by_yr(i,ispp))/nsims;
+      double mean_value = (MaxABCs_by_yr(i,ispp));
       if (mean_value > 1e-6) 
         means_out << mean_value <<" "; 
       else
