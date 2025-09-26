@@ -853,7 +853,7 @@ FUNCTION void Mainloop(int& isim)
        ABC(ispp)       =   ABC_Multiplier(ispp) * Get_Catch(alt,ispp); // ABC_multiplier is from setup.dat
        OFL(ispp)       =    Get_Catch(6,ispp); 
        // if (alt!=2) 
-        MaxABCs_by_yr(ipro,ispp) += Get_Catch(1,ispp);
+        MaxABC(ispp) = Get_Catch(1,ispp);
        // else 
         // ABCs_by_yr(ipro,ispp) = ABC(ispp);  // Cumulate ABCs here for printout later...
      }
@@ -901,6 +901,7 @@ FUNCTION void Mainloop(int& isim)
 
      TACs_by_yr(ipro) += TAC; // Cumulate TACs here for printout later...
      OFLs_by_yr(ipro) += OFL; // Cumulate OFLs here for printout later...
+     MaxABCs_by_yr(ipro) += MaxABC;
      Project_Pops(isim,ipro); //cout << "Done projection"<<endl; //cout <<"Csim: "<<isim<<" "<<i<<" "<<Csim(1,isim,i) <<" "<< endl; //cout << "Yr_"<<i+styr-1<<"_Expl "<< Expl_Biom<<endl;
    // OjO, looping for long term projections...need to compute the average coefficients from past
     // Mainloop(npro+1,npro+15,isim);
@@ -926,7 +927,7 @@ FUNCTION void Mainloop(int& isim)
                       <<","<<SB100(ispp)
                       <<","<<SB100(ispp)*.4
                       <<","<<SB100(ispp)*.35
-                      <<","<<MaxABCs_by_yr(ipro,ispp)
+                      <<","<<MaxABC(ispp)
 											<< endl;
    } // Loop over projection years
 
