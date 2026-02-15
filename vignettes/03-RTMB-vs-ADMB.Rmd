@@ -40,6 +40,17 @@ if (exists("admb_res")) {
 summary(rtmb_res$SSB)
 ```
 
+```{r}
+if (exists("admb_res")) {
+  library(ggplot2)
+  ggplot() +
+    geom_density(data = admb_res, aes(x = SSB, color = "ADMB")) +
+    geom_density(data = rtmb_res, aes(x = SSB, color = "RTMB")) +
+    labs(x = "SSB", y = "Density", color = "Engine") +
+    theme_minimal()
+}
+```
+
 ## Notes
 
 - RTMB output is written to `spm_detail_rtmb.csv`.

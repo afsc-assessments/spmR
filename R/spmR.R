@@ -68,6 +68,27 @@ runSPM_rtmb <- function(dirname, run = TRUE, seed = 123) {
   detail_rows <- list()
   row_id <- 1
 
+  invgauss_draws <- function(n, mean_val, cv) {
+    if (is.na(mean_val) || mean_val <= 0) {
+      return(rep(NA_real_, n))
+    }
+    if (is.na(cv) || cv <= 0) {
+      cv <- 0.2
+    }
+    gamma <- 1 + 1 / (cv^2)
+    delta <- 1 / (gamma - 1)
+    beta <- mean_val
+    draws <- numeric(n)
+    for (i in seq_len(n)) {
+      psi <- rnorm(1)^2
+      omega <- beta * (1 + (psi - sqrt(4 * delta * psi + psi^2)) / (2 * delta))
+      zeta <- beta * (1 + (psi + sqrt(4 * delta * psi + psi^2)) / (2 * delta))
+      gtheta <- beta / (beta + omega)
+      draws[i] <- if (runif(1) <= gtheta) omega else zeta
+    }
+    draws
+  }
+
   for (ispp in seq_len(nspp)) {
     spname <- as.character(spp[[ispp]]$spname)
     if (length(spname) == 0) spname <- paste0("spp", ispp)
@@ -77,6 +98,11 @@ runSPM_rtmb <- function(dirname, run = TRUE, seed = 123) {
 
     mean_rec <- mean(Rtmp, na.rm = TRUE)
     mean_ssb <- mean(SSBtmp, na.rm = TRUE)
+
+    hmean_rec <- 1 / mean(1 / Rtmp, na.rm = TRUE)
+    gamma <- mean_rec / hmean_rec
+    delta <- 1 / (gamma - 1)
+    cvrec <- sqrt(1 / delta)
 
     b100 <- mean_ssb
     b40 <- 0.4 * b100
@@ -90,12 +116,17 @@ runSPM_rtmb <- function(dirname, run = TRUE, seed = 123) {
       }
     }
 
+    rec_sim <- matrix(NA_real_, nrow = nsims, ncol = npro)
+    for (isim in seq_len(nsims)) {
+      rec_sim[isim, ] <- invgauss_draws(npro, mean_rec, cvrec)
+    }
+
     for (alt in alt_list) {
       for (isim in seq_len(nsims)) {
         for (ipro in seq_len(npro)) {
           year <- styr + ipro - 1
 
-          rec <- rlnorm(1, log(mean_rec + 1e-6), 0.2)
+          rec <- rec_sim[isim, ipro]
           ssb <- mean_ssb
           tot_biom <- mean_ssb * 2
           fval <- 0
