@@ -12,14 +12,20 @@
 #' @examples
 #' runSPM("examples/atka")
 #' @export
-runSPM <- function(dirname, ctrl=NULL,run=FALSE){
-  if(is.null(ctrl)) #ctrl=setup
+runSPM <- function(dirname, ctrl = NULL, run = FALSE, engine = c("admb", "rtmb")){
+  engine <- match.arg(engine)
+  if (is.null(ctrl)) #ctrl=setup
   #write.table(ctrl,file="spm.dat",quote=FALSE,col.names=FALSE,row.names=FALSE)
-  if(is.null(title)) title=dirname
+  if (is.null(title)) title=dirname
   args=""
-  if (run) system(paste0('cd ',dirname,'; spm',args))
 
-  res <- readr::read_csv(paste0(dirname,"/spm_detail.csv"))
+  if (engine == "admb") {
+    if (run) system(paste0('cd ',dirname,'; spm',args))
+    res <- readr::read_csv(paste0(dirname,"/spm_detail.csv"))
+  } else {
+    res <- runSPM_rtmb(dirname = dirname, run = run)
+  }
+
   return(res)
 }
 #runSPM("examples/atka")

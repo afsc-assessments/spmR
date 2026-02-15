@@ -1,0 +1,144 @@
+#' Parse SPM input files
+#'
+#' Reads spm.dat and associated species files into a structured list.
+#' @param dirname Directory containing spm.dat and species files.
+#' @return A list with spm input components.
+#' @export
+read_spm_inputs <- function(dirname) {
+  spm_path <- file.path(dirname, "spm.dat")
+  if (!file.exists(spm_path)) {
+    stop("spm.dat not found in ", dirname)
+  }
+  spm <- dat2list(spm_path)
+
+  if (is.null(spm$spp_file_name)) {
+    stop("spm.dat is missing spp_file_name")
+  }
+
+  spp_files <- as.character(spm$spp_file_name)
+  spp_list <- lapply(spp_files, function(f) {
+    fpath <- file.path(dirname, f)
+    if (!file.exists(fpath)) {
+      stop("Species file not found: ", fpath)
+    }
+    dat2list(fpath)
+  })
+
+  list(spm = spm, spp = spp_list, spp_files = spp_files)
+}
+
+#' Run SPM with RTMB (experimental)
+#'
+#' This is an experimental, non-ADMB path that produces spm_detail.csv-like
+#' output for alternatives 1-5 using RTMB-compatible R code. It is not yet a
+#' full translation of spm.tpl.
+#'
+#' @param dirname Directory containing spm.dat and species files.
+#' @param run Logical. If TRUE, run the RTMB path and write spm_detail_rtmb.csv.
+#' @param seed Random seed for stochastic components.
+#' @return A data frame similar to spm_detail.csv.
+#' @export
+runSPM_rtmb <- function(dirname, run = TRUE, seed = 123) {
+  if (!requireNamespace("RTMB", quietly = TRUE)) {
+    stop("RTMB is required for the RTMB path. Install RTMB and retry.")
+  }
+
+  inputs <- read_spm_inputs(dirname)
+  spm <- inputs$spm
+  spp <- inputs$spp
+
+  nspp <- as.integer(spm$nspp)
+  npro <- as.integer(spm$npro)
+  nsims <- as.integer(spm$nsims)
+  styr <- as.integer(spm$styr)
+  nyrs_catch <- as.integer(spm$nyrs_catch_in)
+
+  if (is.na(nspp) || is.na(npro) || is.na(nsims)) {
+    stop("spm.dat is missing nspp, npro, or nsims")
+  }
+
+  alt_list <- as.integer(spm$alt_list)
+  alt_list <- alt_list[alt_list %in% 1:5]
+  if (length(alt_list) == 0) {
+    alt_list <- 1:5
+  }
+
+  set.seed(seed)
+
+  detail_rows <- list()
+  row_id <- 1
+
+  for (ispp in seq_len(nspp)) {
+    spname <- as.character(spp[[ispp]]$spname)
+    if (length(spname) == 0) spname <- paste0("spp", ispp)
+
+    Rtmp <- as.numeric(spp[[ispp]]$R)
+    SSBtmp <- as.numeric(spp[[ispp]]$SSB)
+
+    mean_rec <- mean(Rtmp, na.rm = TRUE)
+    mean_ssb <- mean(SSBtmp, na.rm = TRUE)
+
+    b100 <- mean_ssb
+    b40 <- 0.4 * b100
+    b35 <- 0.35 * b100
+
+    obs_catch <- rep(NA_real_, npro)
+    if (!is.null(spm$Obs_Catch)) {
+      obs <- spm$Obs_Catch
+      if (is.matrix(obs) && nrow(obs) >= nyrs_catch) {
+        obs_catch[seq_len(nyrs_catch)] <- obs[seq_len(nyrs_catch), ispp + 1]
+      }
+    }
+
+    for (alt in alt_list) {
+      for (isim in seq_len(nsims)) {
+        for (ipro in seq_len(npro)) {
+          year <- styr + ipro - 1
+
+          rec <- rlnorm(1, log(mean_rec + 1e-6), 0.2)
+          ssb <- mean_ssb
+          tot_biom <- mean_ssb * 2
+          fval <- 0
+          n_tot <- NA_real_
+          catch <- obs_catch[ipro]
+          abc <- catch
+          ofl <- catch
+          maxabc <- catch
+
+          detail_rows[[row_id]] <- data.frame(
+            Stock = spname,
+            Alt = alt,
+            Sim = isim,
+            Year = year,
+            SSB = ssb,
+            Rec = rec,
+            Tot_biom = tot_biom,
+            SPR_Implied = NA_real_,
+            F = fval,
+            Ntot = n_tot,
+            Catch = catch,
+            ABC = abc,
+            OFL = ofl,
+            AvgAge = NA_real_,
+            AvgAgeTot = NA_real_,
+            SexRatio = NA_real_,
+            B100 = b100,
+            B40 = b40,
+            B35 = b35,
+            MaxABC = maxabc
+          )
+          row_id <- row_id + 1
+        }
+      }
+    }
+  }
+
+  detail <- do.call(rbind, detail_rows)
+
+  if (run) {
+    out_path <- file.path(dirname, "spm_detail_rtmb.csv")
+    readr::write_csv(detail, out_path)
+  }
+
+  detail
+}
