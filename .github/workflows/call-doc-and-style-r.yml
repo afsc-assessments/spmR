@@ -4,6 +4,7 @@ name: call-doc-and-style-r
 on:
   push:
     branches: [main]
+  workflow_dispatch:
 jobs:
   call-workflow:
     uses: nmfs-ost/ghactions4r/.github/workflows/doc-and-style-r.yml@main
