@@ -4,3 +4,11 @@ template:
 development:
   mode: auto
 
+articles:
+  - title: "Getting started"
+    contents:
+      - "00-spm-example"
+      - "01-Background"
+      - "02-MoreDoc"
+      - "03-RTMB-vs-ADMB"
+
