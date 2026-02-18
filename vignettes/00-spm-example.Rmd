@@ -60,10 +60,14 @@ The following case studies have been applied.
 
 ## Atka mackerel
 
+The `runSPM` function supports two engines via the `engine` argument:
+
+- `engine = "admb"` (default): calls the external ADMB `spm` executable and reads `spm_detail.csv`.
+- `engine = "rtmb"`: runs the experimental RTMB path and writes `spm_detail_rtmb.csv`.
 
 ```{r atka,eval=TRUE}
 #|
-bdf <- runSPM(here::here("examples","atka"),run=FALSE)
+bdf <- runSPM(here::here("examples","atka"), run=FALSE, engine = "admb")
 inp <- spmR::dat2list(here::here("examples","atka","spm.dat"))
 names(inp)
 (inp$alt4_spr)
@@ -76,6 +80,12 @@ names(df)
 df$variable
 #setwd("spmR")
 plotSPM(df)
+```
+
+```{r atka-rtmb,eval=FALSE}
+#| echo: TRUE
+# Requires RTMB installed
+bdf_rtmb <- runSPM(here::here("examples","atka"), run = TRUE, engine = "rtmb")
 ```
 
 We'll start with a one-year fixed catch model for Atka mackerel, find the ABC for 
