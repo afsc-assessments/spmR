@@ -12,7 +12,11 @@ read_spm_inputs <- function(dirname) {
   spm <- dat2list(spm_path)
 
   if (is.null(spm$spp_file_name)) {
-    stop("spm.dat is missing spp_file_name")
+    if (!is.null(spm$datafile)) {
+      spm$spp_file_name <- spm$datafile
+    } else {
+      stop("spm.dat is missing spp_file_name")
+    }
   }
 
   spp_files <- as.character(spm$spp_file_name)
@@ -49,15 +53,21 @@ runSPM_rtmb <- function(dirname, run = TRUE, seed = 123) {
 
   nspp <- as.integer(spm$nspp)
   npro <- as.integer(spm$npro)
+  if (length(npro) == 0 || is.na(npro)) npro <- as.integer(spm$nprj_yrs)
   nsims <- as.integer(spm$nsims)
   styr <- as.integer(spm$styr)
+  if (length(styr) == 0 || is.na(styr)) styr <- as.integer(spm$beg_yr)
   nyrs_catch <- as.integer(spm$nyrs_catch_in)
+  if (length(nyrs_catch) == 0 || is.na(nyrs_catch)) nyrs_catch <- as.integer(spm$nyrs_fixed_catch)
 
   if (is.na(nspp) || is.na(npro) || is.na(nsims)) {
     stop("spm.dat is missing nspp, npro, or nsims")
   }
 
   alt_list <- as.integer(spm$alt_list)
+  if (length(alt_list) == 0 || all(is.na(alt_list))) {
+    alt_list <- as.integer(spm$alts)
+  }
   alt_list <- alt_list[alt_list %in% 1:5]
   if (length(alt_list) == 0) {
     alt_list <- 1:5
@@ -109,10 +119,17 @@ runSPM_rtmb <- function(dirname, run = TRUE, seed = 123) {
     b35 <- 0.35 * b100
 
     obs_catch <- rep(NA_real_, npro)
+    obs <- NULL
     if (!is.null(spm$Obs_Catch)) {
       obs <- spm$Obs_Catch
-      if (is.matrix(obs) && nrow(obs) >= nyrs_catch) {
+    } else if (!is.null(spm$fixed_catch)) {
+      obs <- spm$fixed_catch
+    }
+    if (!is.null(obs) && is.matrix(obs) && nrow(obs) >= nyrs_catch) {
+      if (ncol(obs) >= (ispp + 1)) {
         obs_catch[seq_len(nyrs_catch)] <- obs[seq_len(nyrs_catch), ispp + 1]
+      } else if (ncol(obs) == 2) {
+        obs_catch[seq_len(nyrs_catch)] <- obs[seq_len(nyrs_catch), 2]
       }
     }
 

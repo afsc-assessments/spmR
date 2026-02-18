@@ -31,6 +31,8 @@ relative to the folder with spm.exe
 
 # spmR
 
+See `scripts/README.md` for helper scripts (e.g., RTMB smoke test).
+
 The R package `spmR` was developed for doing stock projections for
 groundfish at the AFSC. The model was coded using the Autodif (`AD`)
 Model Builder (`ADMB`) software.
