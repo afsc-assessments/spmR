@@ -1,0 +1,112 @@
+---
+title: "spmR Repository Review (Updated)"
+subtitle: "Current status after package-hardening pass"
+author: "Codex"
+date: last-modified
+format:
+  html:
+    theme: cosmo
+    toc: true
+    toc-depth: 2
+    number-sections: true
+    embed-resources: true
+---
+
+## Executive Summary
+
+`spmR` is in a better state than the previous review snapshot. The package now has:
+
+- explicit dependency declarations in `DESCRIPTION`
+- a narrowed, explicit public API and tighter `NAMESPACE`
+- a minimal `testthat` suite for core entry points
+- a curated vignette workflow based on two canonical example directories
+
+Current check outcome:
+
+- `R CMD check --no-manual .` completes with **0 ERROR**
+- remaining issues are largely repository hygiene and long-standing packaging conventions, not immediate functional breakage
+
+## What Changed Since The Prior Review
+
+### Completed items
+
+1. **Metadata and dependency fixes**
+   - `DESCRIPTION` now includes declared package dependencies needed by exported code and vignette tooling.
+2. **Safer execution path in `runSPM()`**
+   - `system()` shell string usage was replaced with a safer executable lookup/`system2()` flow.
+3. **README repair**
+   - stale help references were replaced with currently supported functions.
+4. **Public API definition and namespace tightening**
+   - broad `exportPattern()` was removed.
+   - exports are now explicit: `dat2list()`, `list2dat()`, `runSPM()`, `plotSPM()`, `plotSPMx()`.
+5. **Minimal tests added**
+   - `tests/testthat` now covers the requested core functions.
+6. **Canonical examples for docs**
+   - vignette workflow was curated around:
+     - `examples/atka` (detail workflow)
+     - `examples/BSRE_AI` (summary workflow)
+7. **Stability fixes discovered during testing**
+   - `plotSPMx()` now supports `Year`-based data consistently.
+   - `dat2list()` was hardened to skip header-only blocks safely.
+
+## Current Repository Snapshot
+
+- `tests/` now exists and runs with passing local tests (`testthat::test_local()`).
+- Canonical examples are documented in `examples/README.md`.
+- Main vignette (`vignettes/00-spm-example.Rmd`) is now constrained to reproducible canonical paths.
+
+## Remaining Findings
+
+### 1. Source package still contains heavy historical and generated artifacts
+
+`R CMD check` still reports:
+
+- committed executables (for example: `src/spm`, `examples/.../*.exe`)
+- hidden/editor residue (`.DS_Store`, swap/history files, etc.)
+- many non-portable filenames and long paths
+
+Impact:
+
+- avoidable check warnings
+- reduced portability
+- high maintenance overhead and noisy diffs
+
+### 2. Package metadata still has standards-related notes
+
+Open notes include:
+
+- `Description` field format quality
+- license representation and top-level license metadata consistency
+- missing explicit minimum `R` version despite use of `|>` syntax
+
+Impact:
+
+- package quality signal remains weaker than necessary
+
+### 3. Non-critical static-analysis notes remain in legacy/helper code
+
+There are still NOTES around unbound globals and partially-qualified symbols in helper code paths (notably in non-API functions such as tier-3 table helpers).
+
+Impact:
+
+- no immediate runtime blocker
+- still worth cleaning for a quieter, more robust check profile
+
+## Updated Priority Plan
+
+### Near-term (next pass)
+
+1. Remove or quarantine compiled binaries and check artifacts from the package source tree.
+2. Expand `.gitignore` and `.Rbuildignore` for editor/tmp/generated files.
+3. Add `Depends: R (>= 4.1.0)` and clean up description/license metadata notes.
+
+### Medium-term
+
+1. Move archival/legacy case-study material out of the package root path.
+2. Continue converting helper code to fully qualified namespace calls.
+3. Regenerate package docs/site from the now-curated canonical examples only.
+
+## Bottom Line
+
+The package has moved from "metadata and API fragility" to "mostly structure and hygiene debt."
+The core requested hardening work is now in place. The next gains come from repository cleanup and package portability discipline, not from reworking the core API again.

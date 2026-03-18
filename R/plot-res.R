@@ -13,37 +13,54 @@
 #' @return A combined plot of the results from the SPM analysis.
 #' @export
 plotSPMx <- function(df, alt=2,thisyr=2022,mytitle=NULL) {
-  dfs <- df %>% filter(Sim<=30, Alt==alt) %>% select(Alt,Year,Catch,SSB,Sim)
-  # create a tibble from df that has the quantiles over Sim
-  pf <-  df |> select(Sim,Alt,Yr,Catch,SSB,ABC,OFL) |>
-                     pivot_longer(cols =  4:7,names_to = "variable", values_to = "value") |>
-      group_by(Yr,Alt,variable) |> summarise(median=median(value),mean=mean(value),lb=quantile(value,.1),ub=quantile(value,.9))
+  if (!("Year" %in% names(df)) && ("Yr" %in% names(df))) {
+    df$Year <- df$Yr
+  }
+  required <- c("Sim", "Alt", "Year", "Catch", "SSB", "ABC", "OFL")
+  missing_cols <- setdiff(required, names(df))
+  if (length(missing_cols) > 0) {
+    stop("Missing required columns in `df`: ", paste(missing_cols, collapse = ", "))
+  }
 
-  names(pf) <- c("Yr","Alt","variable","median","mean","lb","ub")
+  dfs <- df %>% filter(Sim <= 30, Alt == alt) %>% select(Alt, Year, Catch, SSB, Sim)
+  # create a tibble from df that has the quantiles over Sim
+  pf <-  df |>
+    select(Sim, Alt, Year, Catch, SSB, ABC, OFL) |>
+    pivot_longer(cols = 4:7, names_to = "variable", values_to = "value") |>
+    group_by(Year, Alt, variable) |>
+    summarise(
+      median = stats::median(value),
+      mean = mean(value),
+      lb = stats::quantile(value, .1),
+      ub = stats::quantile(value, .9),
+      .groups = "drop"
+    )
+
+  names(pf) <- c("Year","Alt","variable","median","mean","lb","ub")
 
   #p1 <-
   Cofl <- as.numeric(pf |> ungroup() |> filter(Alt==alt,variable=="OFL") |> summarise(max(mean)))
   Cabc <- as.numeric(pf |> ungroup() |> filter(Alt==alt,variable=="ABC") |> summarise(max(mean)))
   p1 <- pf %>% filter(Alt==alt,variable=="Catch") |>
-    ggplot(aes(x=Yr,y=mean),width=1.2) + geom_ribbon(aes(ymax=ub,ymin=lb),fill="goldenrod",alpha=.5) +
+    ggplot(aes(x=Year,y=mean)) + geom_ribbon(aes(ymax=ub,ymin=lb),fill="goldenrod",alpha=.5) +
     ggthemes::theme_few() + geom_line() +
     scale_x_continuous(breaks=seq(thisyr,thisyr+14,2))  +  xlab("Year") +
     coord_cartesian(ylim=c(0,NA)) + ylab("Tier 3 ABC") + geom_point() +
-    geom_line(data=dfs,aes(x=Yr,y=Catch,col=as.factor(Sim)))+
+    geom_line(data=dfs,aes(x=Year,y=Catch,col=as.factor(Sim)))+
     geom_hline(yintercept=Cabc) +
     geom_hline(yintercept=Cofl, linetype="dashed") +
-    guides(size=FALSE,fill=FALSE,alpha=FALSE,col=FALSE)
+    guides(size="none",fill="none",alpha="none",col="none")
 
   p2 <- pf %>% filter(Alt==alt,variable=="SSB") |>
-    ggplot(aes(x=Yr,y=mean),width=1.2) + geom_ribbon(aes(ymax=ub,ymin=lb),fill="goldenrod",alpha=.5) +
+    ggplot(aes(x=Year,y=mean)) + geom_ribbon(aes(ymax=ub,ymin=lb),fill="goldenrod",alpha=.5) +
     ggthemes::theme_few() + geom_line() +
     scale_x_continuous(breaks=seq(thisyr,thisyr+14,2))  +  xlab("Year") +
     coord_cartesian(ylim=c(0,NA)) +
     ylab("Spawning biomass") + geom_point() +
-    geom_line(data=dfs,aes(x=Yr,y=SSB,col=as.factor(Sim)))+
+    geom_line(data=dfs,aes(x=Year,y=SSB,col=as.factor(Sim)))+
     #geom_hline(yintercept=Cabc) +
     #geom_hline(yintercept=Cofl, linetype="dashed") +
-    guides(size=FALSE,fill=FALSE,alpha=FALSE,col=FALSE)
+    guides(size="none",fill="none",alpha="none",col="none")
 
   t3 <- p1/ p2 + plot_annotation(title = mytitle )
   return(t3)

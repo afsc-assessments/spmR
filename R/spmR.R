@@ -3,7 +3,7 @@
 #' Reads spm.dat and associated species files into a structured list.
 #' @param dirname Directory containing spm.dat and species files.
 #' @return A list with spm input components.
-#' @export
+#' @keywords internal
 read_spm_inputs <- function(dirname) {
   spm_path <- file.path(dirname, "spm.dat")
   if (!file.exists(spm_path)) {
@@ -41,7 +41,7 @@ read_spm_inputs <- function(dirname) {
 #' @param run Logical. If TRUE, run the RTMB path and write spm_detail_rtmb.csv.
 #' @param seed Random seed for stochastic components.
 #' @return A data frame similar to spm_detail.csv.
-#' @export
+#' @keywords internal
 runSPM_rtmb <- function(dirname, run = TRUE, seed = 123) {
   if (!requireNamespace("RTMB", quietly = TRUE)) {
     stop("RTMB is required for the RTMB path. Install RTMB and retry.")

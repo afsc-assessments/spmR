@@ -9,14 +9,25 @@ Description: Standard Projection model (SPM) for evaluating outcomes of
 License: CC0-1.0
 Encoding: UTF-8
 LazyData: true
-Suggests: 
-    knitr,
-    ggplot2,
-    rmarkdown,
+Imports:
     dplyr,
-    tidyr,
-    stringr
+    ggplot2,
+    ggthemes,
+    magrittr,
+    patchwork,
+    readr,
+    stringr,
+    tibble,
+    tidyr
+Suggests: 
+    here,
+    knitr,
+    quarto,
+    RTMB,
+    rmarkdown,
+    testthat (>= 3.0.0)
 VignetteBuilder: 
     quarto
 RoxygenNote: 7.3.3
 URL: http://afsc-assessments.github.io/spmR/
+Config/testthat/edition: 3

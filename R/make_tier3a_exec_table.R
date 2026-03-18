@@ -5,7 +5,7 @@
 #' @param the_scalar the scalar used in spm.dat for outputting results
 #'
 #' @returns Values for Tier 3a executive summary table
-#' @export
+#' @keywords internal
 #' @import dplyr
 #' @import tidyr
 #' @import stringr

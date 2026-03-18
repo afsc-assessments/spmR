@@ -37,6 +37,16 @@ The R package `spmR` was developed for doing stock projections for
 groundfish at the AFSC. The model was coded using the Autodif (`AD`)
 Model Builder (`ADMB`) software.
 
+## Supported public API
+
+The supported exported functions are:
+
+- `dat2list()`
+- `list2dat()`
+- `runSPM()`
+- `plotSPM()`
+- `plotSPMx()`
+
 ## Cloning the repository (optional)
 
 The R package `spmR` lives on a public GitHub repository. The repository
@@ -86,9 +96,9 @@ pages associated with each function and data set. Help for a specific
 function can be viewed using `?function_name`, for example:
 
 ``` r
-?run_model
-?tab_fit
-?plot_sel
+?runSPM
+?plotSPM
+?dat2list
 ```
 
 Alternatively, to see a list of all available functions and data sets
@@ -105,7 +115,7 @@ can view the package vignettes from within R using:
 
 ``` r
 browseVignettes(package = "spmR")
-vignette(topic = "spmR", package = "spmR")
+vignette(topic = "00-spm-example", package = "spmR")
 ```
 
 ## Website

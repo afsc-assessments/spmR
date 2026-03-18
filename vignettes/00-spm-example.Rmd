@@ -1,182 +1,62 @@
 ---
-title: "spmR-examples"
+title: "spmR canonical examples"
 vignette: >
-  %\VignetteIndexEntry{spmR-examples}
+  %\VignetteIndexEntry{spmR canonical examples}
   %\VignetteEncoding{UTF-8}
   %\VignetteEngine{knitr::rmarkdown}
-  
-lightbox: true
-output: 
-  # rmarkdown::html_vignette
-  rmarkdown::html_document:
-    code_folding: hide
-    fig_caption: yes
-    number_sections: yes
-    theme: readable
-    highlight: tango
-    code-summary: "Show the code"
-    embed-resources: true
-    toc: true
-    toc-title: 'Contents'
-    toc_float: yes
-    number-sections: false
-    code-fold: true
-format:
-  html:
-        code-summary: "Show the code"
-        embed-resources: true
-        toc: true
-        toc-title: 'Contents'
-        number-sections: false
-        code-fold: true
-editor_options: 
-  chunk_output_type: console
+output: rmarkdown::html_vignette
 ---
 
 ```{r, include = FALSE}
-knitr::opts_chunk$set( collapse = TRUE, comment = "#>" )
-knitr::opts_knit$set(root.dir = here::here())
-knitr::opts_chunk$set(warning = FALSE, message = FALSE, echo = FALSE, results = FALSE, fig.width = 6, fig.height = 5)
+knitr::opts_chunk$set(collapse = TRUE, comment = "#>", warning = FALSE, message = FALSE)
 ```
 
-```{r setupex}
+```{r setup}
 library(spmR)
-library(tidyverse)
-library(patchwork)
-here::here()
-
-```
-# Working examples of the spmR package
-
-This vignette provides examples of how to use the spmR package to run the Standard Projection Model (SPM) for Alaska groundfish. The SPM is a stock assessment model used to project the future status of fish stocks. The spmR package provides an R interface to the SPM model, allowing users to run the model and analyze the results in R. There are three main functions in the spmR package: `runSPM`, `plotSPM`, and `dat2list` (and `list2dat`). The `runSPM` function runs the SPM model and returns the results as a data frame. The `plotSPM` function creates plots of the SPM results. 
-The `list2dat` and `dat2list` functions convert between local R lists and datafiles used by SPM externally.
-A draft function called `print_Tier3_tables` is set up to provide some capabilities to create
-tables for markdown documents.
-This vignette demonstrates how to use these functions to run the SPM model and analyze the results. 
-
-# Example sets
-
-The following case studies have been applied.
-
-## Atka mackerel
-
-The `runSPM` function supports two engines via the `engine` argument:
-
-- `engine = "admb"` (default): calls the external ADMB `spm` executable and reads `spm_detail.csv`.
-- `engine = "rtmb"`: runs the experimental RTMB path and writes `spm_detail_rtmb.csv`.
-
-```{r atka,eval=TRUE}
-#|
-bdf <- runSPM(here::here("examples","atka"), run=FALSE, engine = "admb")
-inp <- spmR::dat2list(here::here("examples","atka","spm.dat"))
-names(inp)
-(inp$alt4_spr)
-#Get the data file: 
-dat<-dat2list(here::here("examples","atka",inp$datafile)) 
-names(dat)
-dat$avgF5yr
-df <- readr::read_csv(here::here("examples","atka","spm_summary.csv"))
-names(df)
-df$variable
-#setwd("spmR")
-plotSPM(df)
+library(readr)
 ```
 
-```{r atka-rtmb,eval=FALSE}
-#| echo: TRUE
-# Requires RTMB installed
-bdf_rtmb <- runSPM(here::here("examples","atka"), run = TRUE, engine = "rtmb")
+This vignette is intentionally limited to two canonical example directories that are
+kept in sync with the package:
+
+- `examples/atka` for `runSPM()`, `dat2list()`, and `plotSPMx()`
+- `examples/BSRE_AI` for `plotSPM()` with `spm_summary.csv`
+
+## 1. Atka workflow (`examples/atka`)
+
+Use `runSPM()` to read existing ADMB output (`spm_detail.csv`) and inspect inputs
+using `dat2list()`.
+
+```{r atka-read}
+pkg_root <- if (file.exists("DESCRIPTION")) "." else ".."
+atka_dir <- file.path(pkg_root, "examples", "atka")
+
+atka_detail <- runSPM(atka_dir, run = FALSE, engine = "admb")
+str(atka_detail)
+
+atka_inputs <- dat2list(file.path(atka_dir, "spm.dat"))
+names(atka_inputs)
 ```
 
-We'll start with a one-year fixed catch model for Atka mackerel, find the ABC for 
-The most recent assessment was in 2022, so in that year, the ABC for the Tier 3 model was `r df |> filter(Year==2022,variable=="C_mean",Alt==1) |> select(value) |> prettyNum(big.mark=",")` t.
+Plot detailed simulation trajectories with `plotSPMx()`.
 
-
-## BSAI northern rock sole
-
-```{r bsaiNRS}
-#| echo: TRUE
-#| fig.width: 8 
-#| fig.height: 6
-bdf <- runSPM(here::here("examples","BSAI NRS"),run=FALSE)
-df <- readr::read_csv(here::here("examples","BSAI NRS","spm_summary.csv"))
-inp <- spmR::dat2list(here::here("examples","BSAI NRS","spm.dat"))
-fc <- data.frame(Year=inp$fixed_catch[,1], mean=inp$fixed_catch[,2], type='C')# |> 
-names(fc) <- c("Year", "mean", "type")
-fc <- fc |>  expand_grid(Alt=c(1,3,5,7)) |> mutate(Alt=as.factor(Alt), ub=mean,lb=mean)
-plotSPM(df) + geom_point(data=fc,aes(x=Year,y=mean))
-#p1$data
+```{r atka-plot}
+plotSPMx(atka_detail, alt = 2, thisyr = min(atka_detail$Year), mytitle = "Atka detail plot")
 ```
 
-```{r}
-#| echo: TRUE
+The experimental RTMB path can also be run from this directory when `RTMB` is
+installed.
 
+```{r atka-rtmb, eval = FALSE}
+runSPM(atka_dir, run = TRUE, engine = "rtmb")
 ```
 
-## EBS pollock
-```{r ebswp,eval=TRUE}
-bdf <- runSPM(here::here("examples","ebspollock"),run=FALSE)
-df <- readr::read_csv(here::here("examples","ebspollock","spm_summary.csv"))
-plotSPM(df)
+## 2. Summary workflow (`examples/BSRE_AI`)
 
-```
+`plotSPM()` expects summary-format data (`spm_summary.csv`).
 
-## BSAI yellowfin sole
-```{r yfs,eval=TRUE}
-bdf <- runSPM(here::here("examples","yfs"),run=FALSE)
-df <- readr::read_csv(here::here("examples","yfs","spm_summary.csv"))
-plotSPM(df)
-```
-
-## BSAI Alaska plaice
-```{r akplaice,eval=TRUE}
-bdf <- runSPM(here::here("examples","akplaice"),run=FALSE)
-df <- readr::read_csv(here::here("examples","akplaice","spm_summary.csv"))
-plotSPM(df)
-```
-
-## GOA Flathead sole
-
-First we'll run this model with only 3-years fixed catch assumed
-
-```{r goa_fhs,eval=TRUE,echo=TRUE}
-inp <- spmR::dat2list(here::here("examples","goa_flathead","spmorig.dat"))
-spmR::list2dat(inp,here::here("examples","goa_flathead","spm.dat"))
-bdf <- runSPM(here::here("examples","goa_flathead"),run=FALSE)
-df <- readr::read_csv(here::here("examples","goa_flathead","spm_summary.csv"))
-plotSPM(df)
-# p1<- plotSPM(df)
-
-```
-
-Now let's use the utility to change the input files and re-run the model with 5-years fixed catch assumed.
-
-```{r goa_fhs2,eval=TRUE,echo=FALSE}
-inp <- spmR::dat2list(here::here("examples","goa_flathead","spmorig.dat"))
-inp$nyrs_fixed_catch
-inp$nyrs_fixed_catch <- 5
-inp$fixed_catch <- rbind(inp$fixed_catch, c(2025, 1100), c(2026, 1100))
-inp$fixed_catch
-spmR::list2dat(inp,here::here("examples","goa_flathead","spm.dat"))
-bdf <- runSPM(here::here("examples","goa_flathead"),run=FALSE)
-
-df <- readr::read_csv(here::here("examples","goa_flathead","spm_summary.csv"))
-plotSPM(df)
-```
-
-
-## GOA dusky rockfish 
-```{r dusky,eval=TRUE}
-inp <- spmR::dat2list(here::here("examples","goa_dusky","spm.dat"))
-bdf <- runSPM(here::here("examples","goa_dusky"),run=FALSE)
-df <- readr::read_csv(here::here("examples","goa_dusky","spm_summary.csv"))
-plotSPM(df)
-```
-
-
-## GOA Rougheye blackspotted
-```{r rougheye,eval=FALSE}
-bdf <- runSPM(here::here("examples","goa_rebs"),run=FALSE)
-df <- readr::read_csv(here::here("examples","goa_rebs","spm_summary.csv"))
-plotSPM(df)
+```{r bsre-summary}
+bsre_dir <- file.path(pkg_root, "examples", "BSRE_AI")
+bsre_summary <- read_csv(file.path(bsre_dir, "spm_summary.csv"))
+plotSPM(bsre_summary, alt = c(1, 3, 5, 7), mytitle = "BSRE_AI summary plot")
 ```

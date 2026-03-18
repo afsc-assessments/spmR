@@ -4,7 +4,7 @@
 \alias{runSPM}
 \title{Run SPM Analysis in a Specific Directory}
 \usage{
-runSPM(dirname, ctrl = NULL, run = FALSE)
+runSPM(dirname, ctrl = NULL, run = FALSE, engine = c("admb", "rtmb"))
 }
 \arguments{
 \item{dirname}{A string specifying the directory in which to run the SPM analysis.}
@@ -12,6 +12,9 @@ runSPM(dirname, ctrl = NULL, run = FALSE)
 \item{ctrl}{Optional control settings for the SPM analysis. If NULL, default settings are used.}
 
 \item{run}{Logical. If TRUE, the SPM analysis is run. If FALSE, the function only reads the results from `spm_detail.csv`.}
+
+\item{engine}{Which execution path to use: legacy ADMB (`"admb"`) or the
+experimental RTMB path (`"rtmb"`).}
 }
 \value{
 A data frame containing the results from `spm_detail.csv`.
@@ -22,5 +25,7 @@ The function changes the working directory to `dirname`, runs the SPM analysis, 
 It returns to the original working directory after completing the analysis.
 }
 \examples{
+\dontrun{
 runSPM("examples/atka")
+}
 }

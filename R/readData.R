@@ -60,7 +60,11 @@ dat2list <- function(fn) {
   for (i in 1:nv) {
     ir <- match(vnam[i], datfile)
     if (i != nv) irr <- match(vnam[i + 1], datfile) else irr <- length(datfile) + 1 # next row
-    #dum <- NA
+    dum <- NULL
+
+    if (irr - ir <= 1) {
+      next
+    }
 
     if (irr - ir == 2) {
       content <- scan(fn, skip = ir, nlines = 1, quiet = TRUE, what = "")
@@ -78,6 +82,10 @@ dat2list <- function(fn) {
       }
     }
 
+    if (is.null(dum)) {
+      next
+    }
+
     # Ensure proper naming and storing in the list
     if (is.numeric(dum) && !any(is.na(dum))) {
       A[[vnam[i]]] <- dum
@@ -90,6 +98,5 @@ dat2list <- function(fn) {
 
   return(A)
 }
-
 
 
