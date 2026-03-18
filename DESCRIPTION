@@ -18,5 +18,5 @@ Suggests:
     stringr
 VignetteBuilder: 
     quarto
-RoxygenNote: 7.3.2
+RoxygenNote: 7.3.3
 URL: http://afsc-assessments.github.io/spmR/
