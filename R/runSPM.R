@@ -14,7 +14,7 @@
 #' runSPM("examples/atka")
 #' }
 #' @export
-runSPM <- function(dirname, ctrl = NULL, run = FALSE, engine = c("admb", "rtmb")){
+runSPM <- function(dirname, ctrl = NULL, run = FALSE, engine = c("admb", "rtmb")) {
   engine <- match.arg(engine)
   dirname <- normalizePath(dirname, winslash = "/", mustWork = TRUE)
   args <- character()
@@ -49,4 +49,4 @@ runSPM <- function(dirname, ctrl = NULL, run = FALSE, engine = c("admb", "rtmb")
 
   return(res)
 }
-#runSPM("examples/atka")
+# runSPM("examples/atka")

@@ -22,9 +22,11 @@ of the SPM data with error bands and faceting by type and alternative.
 }
 \examples{
 # Example usage:
-df <- data.frame(Year = rep(2000:2020, 4),
-                 Alt = rep(1:4, each = 21),
-                 variable = rep(c("mean_ub", "mean_lb", "mean_mean"), times = 28),
-                 value = runif(84, 0, 1))
+df <- data.frame(
+  Year = rep(2000:2020, 4),
+  Alt = rep(1:4, each = 21),
+  variable = rep(c("mean_ub", "mean_lb", "mean_mean"), times = 28),
+  value = runif(84, 0, 1)
+)
 plotSPM(df)
 }

@@ -12,9 +12,6 @@ runSPM(dirname, ctrl = NULL, run = FALSE, engine = c("admb", "rtmb"))
 \item{ctrl}{Optional control settings for the SPM analysis. If NULL, default settings are used.}
 
 \item{run}{Logical. If TRUE, the SPM analysis is run. If FALSE, the function only reads the results from `spm_detail.csv`.}
-
-\item{engine}{Which execution path to use: legacy ADMB (`"admb"`) or the
-experimental RTMB path (`"rtmb"`).}
 }
 \value{
 A data frame containing the results from `spm_detail.csv`.
