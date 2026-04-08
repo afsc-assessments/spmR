@@ -20,7 +20,10 @@ alternatives 1–5 only.
 
 ```{r}
 # Replace with your run directory that contains spm.dat
-run_dir <- "examples/atka"
+run_dir <- c("../examples/atka", "examples/atka")
+run_dir <- run_dir[file.exists(run_dir)][1]
+if (is.na(run_dir)) stop("Could not locate examples/atka")
+run_dir <- normalizePath(run_dir, winslash = "/", mustWork = TRUE)
 
 set.seed(123)
 
