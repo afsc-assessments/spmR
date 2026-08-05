@@ -1,3 +1,4 @@
+export(as_spm_result)
 export(dat2list)
 export(list2dat)
 export(plotSPM)
