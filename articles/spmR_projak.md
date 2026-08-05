@@ -39,11 +39,11 @@ parameterization paths:
 
 ## 5 Key Gap
 
-`runSPM_rtmb()` in `spmR` is currently a scaffold: recruitment draws are
-implemented, but age-structured population dynamics are not. In
-contrast, `projak::project_step()` performs full age-structured
-projection (survival, catch-at-age, plus-group dynamics, and SSB
-updates).
+[`runSPM_rtmb()`](http://afsc-assessments.github.io/spmR/reference/runSPM_rtmb.md)
+in `spmR` is currently a scaffold: recruitment draws are implemented,
+but age-structured population dynamics are not. In contrast,
+`projak::project_step()` performs full age-structured projection
+(survival, catch-at-age, plus-group dynamics, and SSB updates).
 
 ## 6 Dependencies
 

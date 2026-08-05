@@ -65,7 +65,7 @@ if (exists("admb_res")) {
 
   ggplot(plot_long, aes(x = value, color = engine)) +
     geom_density() +
-    facet_wrap(~ metric, scales = "free") +
+    facet_wrap(~metric, scales = "free") +
     labs(x = NULL, y = "Density", color = "Engine") +
     theme_minimal()
 }

@@ -28,11 +28,6 @@ runSPM(dirname, ctrl = NULL, run = FALSE, engine = c("admb", "rtmb"))
   Logical. If TRUE, the SPM analysis is run. If FALSE, the function only
   reads the results from \`spm_detail.csv\`.
 
-- engine:
-
-  Which execution path to use: legacy ADMB (\`"admb"\`) or the
-  experimental RTMB path (\`"rtmb"\`).
-
 ## Value
 
 A data frame containing the results from \`spm_detail.csv\`.
