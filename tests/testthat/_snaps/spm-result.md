@@ -29,3 +29,4 @@
     Condition
       Error:
       ! Result columns must be numeric: Year.
+
