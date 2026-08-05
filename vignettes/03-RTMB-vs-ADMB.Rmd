@@ -9,7 +9,6 @@ vignette: >
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE, message = FALSE, warning = FALSE)
-library(spmR)
 ```
 
 This vignette compares the legacy ADMB workflow (`spm.tpl`) with the new
@@ -31,7 +30,14 @@ set.seed(123)
 # admb_res <- runSPM(run_dir, run = TRUE, engine = "admb")
 
 # RTMB run
-rtmb_res <- spmR::runSPM(run_dir, run = TRUE, engine = "rtmb")
+rtmb_file <- file.path(run_dir, "spm_detail_rtmb.csv")
+if (file.exists(rtmb_file)) {
+  rtmb_res <- utils::read.csv(rtmb_file)
+} else if (requireNamespace("spmR", quietly = TRUE)) {
+  rtmb_res <- spmR::runSPM(run_dir, run = TRUE, engine = "rtmb")
+} else {
+  stop("Need either an existing spm_detail_rtmb.csv file or an installed spmR package.")
+}
 ```
 
 ## Compare outputs

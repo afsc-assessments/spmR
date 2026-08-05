@@ -1,8 +1,11 @@
 inst/doc
 .Rproj.user
+.vscode/
+..Rcheck/
 *.swo
 *.swn
 *.swp
+*.gaRbage
 *.exe
 *.r0.
 *tmp
@@ -10,3 +13,4 @@ docs
 *.obj
 *.cpp
 *.htp
+examples/atka/scenario3_5yr_projection_table.csv
