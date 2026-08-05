@@ -1,23 +1,48 @@
-<urlset xmlns = 'http://www.sitemaps.org/schemas/sitemap/0.9'>
-<url><loc>http://afsc-assessments.github.io/spmR/404.html</loc></url>
-<url><loc>http://afsc-assessments.github.io/spmR/LICENSE-text.html</loc></url>
-<url><loc>http://afsc-assessments.github.io/spmR/articles/00-spm-example.html</loc></url>
-<url><loc>http://afsc-assessments.github.io/spmR/articles/01-Background.html</loc></url>
-<url><loc>http://afsc-assessments.github.io/spmR/articles/02-MoreDoc.html</loc></url>
-<url><loc>http://afsc-assessments.github.io/spmR/articles/03-RTMB-vs-ADMB.html</loc></url>
-<url><loc>http://afsc-assessments.github.io/spmR/articles/index.html</loc></url>
-<url><loc>http://afsc-assessments.github.io/spmR/articles/spmR_projak.html</loc></url>
-<url><loc>http://afsc-assessments.github.io/spmR/authors.html</loc></url>
-<url><loc>http://afsc-assessments.github.io/spmR/index.html</loc></url>
-<url><loc>http://afsc-assessments.github.io/spmR/news/index.html</loc></url>
-<url><loc>http://afsc-assessments.github.io/spmR/reference/dat2list.html</loc></url>
-<url><loc>http://afsc-assessments.github.io/spmR/reference/index.html</loc></url>
-<url><loc>http://afsc-assessments.github.io/spmR/reference/list2dat.html</loc></url>
-<url><loc>http://afsc-assessments.github.io/spmR/reference/make_tier3a_exec_table.html</loc></url>
-<url><loc>http://afsc-assessments.github.io/spmR/reference/plotSPM.html</loc></url>
-<url><loc>http://afsc-assessments.github.io/spmR/reference/plotSPMx.html</loc></url>
-<url><loc>http://afsc-assessments.github.io/spmR/reference/read_spm_inputs.html</loc></url>
-<url><loc>http://afsc-assessments.github.io/spmR/reference/runSPM.html</loc></url>
-<url><loc>http://afsc-assessments.github.io/spmR/reference/runSPM_rtmb.html</loc></url>
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url>
+    <loc>http://afsc-assessments.github.io/spmR/404.html</loc>
+  </url>
+  <url>
+    <loc>http://afsc-assessments.github.io/spmR/articles/00-spm-example.html</loc>
+  </url>
+  <url>
+    <loc>http://afsc-assessments.github.io/spmR/articles/01-Background.html</loc>
+  </url>
+  <url>
+    <loc>http://afsc-assessments.github.io/spmR/articles/02-MoreDoc.html</loc>
+  </url>
+  <url>
+    <loc>http://afsc-assessments.github.io/spmR/articles/index.html</loc>
+  </url>
+  <url>
+    <loc>http://afsc-assessments.github.io/spmR/articles/spm-example.html</loc>
+  </url>
+  <url>
+    <loc>http://afsc-assessments.github.io/spmR/authors.html</loc>
+  </url>
+  <url>
+    <loc>http://afsc-assessments.github.io/spmR/index.html</loc>
+  </url>
+  <url>
+    <loc>http://afsc-assessments.github.io/spmR/reference/dat2list.html</loc>
+  </url>
+  <url>
+    <loc>http://afsc-assessments.github.io/spmR/reference/hello.html</loc>
+  </url>
+  <url>
+    <loc>http://afsc-assessments.github.io/spmR/reference/index.html</loc>
+  </url>
+  <url>
+    <loc>http://afsc-assessments.github.io/spmR/reference/list2dat.html</loc>
+  </url>
+  <url>
+    <loc>http://afsc-assessments.github.io/spmR/reference/plotSPM.html</loc>
+  </url>
+  <url>
+    <loc>http://afsc-assessments.github.io/spmR/reference/print_Tier3_tables.html</loc>
+  </url>
+  <url>
+    <loc>http://afsc-assessments.github.io/spmR/reference/runSPM.html</loc>
+  </url>
 </urlset>
-
