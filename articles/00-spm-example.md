@@ -74,7 +74,7 @@ str(atka_detail)
 #>   ..   B40 = col_double(),
 #>   ..   B35 = col_double()
 #>   .. )
-#>  - attr(*, "problems")=<pointer: 0x56090e671360>
+#>  - attr(*, "problems")=<pointer: 0x562c03be6770>
 
 atka_inputs <- dat2list(file.path(atka_dir, "spm.dat"))
 names(atka_inputs)
