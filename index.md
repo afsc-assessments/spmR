@@ -64,6 +64,7 @@ There are several options for installing the `spmR` R package.
 The `spmR` package can be installed from within R using:
 
 ``` r
+
 devtools::install_github(repo = "afsc-assessments/spmR", dependencies = TRUE, 
                          build_vignettes = TRUE, auth_token = "your_PAT")
 ```
@@ -83,6 +84,7 @@ R CMD INSTALL spmR
 This time from within R using:
 
 ``` r
+
 devtools::install("spmR")
 ```
 
@@ -93,6 +95,7 @@ pages associated with each function and data set. Help for a specific
 function can be viewed using `?function_name`, for example:
 
 ``` r
+
 ?runSPM
 ?plotSPM
 ?dat2list
@@ -102,6 +105,7 @@ Alternatively, to see a list of all available functions and data sets
 use:
 
 ``` r
+
 help(package = "spmR")
 ```
 
@@ -111,6 +115,7 @@ The package vignettes are a great place to see what `spmR` can do. You
 can view the package vignettes from within R using:
 
 ``` r
+
 browseVignettes(package = "spmR")
 vignette(topic = "00-spm-example", package = "spmR")
 ```

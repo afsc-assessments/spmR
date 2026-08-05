@@ -7,6 +7,7 @@ alternatives 1–5 only.
 ## Run both engines
 
 ``` r
+
 # Replace with your run directory that contains spm.dat
 run_dir <- c("../examples/atka", "examples/atka")
 run_dir <- run_dir[file.exists(run_dir)][1]
@@ -19,12 +20,20 @@ set.seed(123)
 # admb_res <- runSPM(run_dir, run = TRUE, engine = "admb")
 
 # RTMB run
-rtmb_res <- spmR::runSPM(run_dir, run = TRUE, engine = "rtmb")
+rtmb_file <- file.path(run_dir, "spm_detail_rtmb.csv")
+if (file.exists(rtmb_file)) {
+  rtmb_res <- utils::read.csv(rtmb_file)
+} else if (requireNamespace("spmR", quietly = TRUE)) {
+  rtmb_res <- spmR::runSPM(run_dir, run = TRUE, engine = "rtmb")
+} else {
+  stop("Need either an existing spm_detail_rtmb.csv file or an installed spmR package.")
+}
 ```
 
 ## Compare outputs
 
 ``` r
+
 # If ADMB results are available, compare the distributions
 # admb_res <- readr::read_csv(file.path(run_dir, "spm_detail.csv"))
 
@@ -38,6 +47,7 @@ summary(rtmb_res$SSB)
     ##  181439  181439  181439  181439  181439  181439
 
 ``` r
+
 if (exists("admb_res")) {
   library(ggplot2)
   metrics <- c("SSB", "ABC", "OFL", "Catch", "F")

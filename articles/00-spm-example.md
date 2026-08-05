@@ -1,6 +1,7 @@
 # spmR canonical examples
 
 ``` r
+
 library(spmR)
 library(readr)
 ```
@@ -25,6 +26,7 @@ to read existing ADMB output (`spm_detail.csv`) and inspect inputs using
 [`dat2list()`](http://afsc-assessments.github.io/spmR/reference/dat2list.md).
 
 ``` r
+
 pkg_root <- if (file.exists("DESCRIPTION")) "." else ".."
 atka_dir <- file.path(pkg_root, "examples", "atka")
 
@@ -72,7 +74,7 @@ str(atka_detail)
 #>   ..   B40 = col_double(),
 #>   ..   B35 = col_double()
 #>   .. )
-#>  - attr(*, "problems")=<externalptr>
+#>  - attr(*, "problems")=<pointer: 0x56090e671360>
 
 atka_inputs <- dat2list(file.path(atka_dir, "spm.dat"))
 names(atka_inputs)
@@ -88,6 +90,7 @@ Plot detailed simulation trajectories with
 [`plotSPMx()`](http://afsc-assessments.github.io/spmR/reference/plotSPMx.md).
 
 ``` r
+
 plotSPMx(atka_detail, alt = 2, thisyr = min(atka_detail$Year), mytitle = "Atka detail plot")
 ```
 
@@ -97,6 +100,7 @@ The experimental RTMB path can also be run from this directory when
 `RTMB` is installed.
 
 ``` r
+
 runSPM(atka_dir, run = TRUE, engine = "rtmb")
 ```
 
@@ -106,6 +110,7 @@ runSPM(atka_dir, run = TRUE, engine = "rtmb")
 expects summary-format data (`spm_summary.csv`).
 
 ``` r
+
 bsre_dir <- file.path(pkg_root, "examples", "BSRE_AI")
 bsre_summary <- read_csv(file.path(bsre_dir, "spm_summary.csv"))
 plotSPM(bsre_summary, alt = c(1, 3, 5, 7), mytitle = "BSRE_AI summary plot")

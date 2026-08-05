@@ -11,13 +11,13 @@
 
 ## 2 Architecture
 
-| Component             | `projak`                       | `spmR`                                    |
-|-----------------------|--------------------------------|-------------------------------------------|
-| Input                 | RTMB report object             | `spm.dat` plus species files              |
-| Compiled code         | None (pure R)                  | ADMB `spm.tpl` plus partial RTMB stub     |
-| Multi-species support | Single-species                 | Multi-species natively (`nspp`)           |
-| Scenario coverage     | 1-7 fully implemented          | Alternatives 1-5 (RTMB path is a stub)    |
-| Maturity              | Early development (0.0.0.9000) | More complete (tests, vignettes, pkgdown) |
+| Component | `projak` | `spmR` |
+|----|----|----|
+| Input | RTMB report object | `spm.dat` plus species files |
+| Compiled code | None (pure R) | ADMB `spm.tpl` plus partial RTMB stub |
+| Multi-species support | Single-species | Multi-species natively (`nspp`) |
+| Scenario coverage | 1-7 fully implemented | Alternatives 1-5 (RTMB path is a stub) |
+| Maturity | Early development (0.0.0.9000) | More complete (tests, vignettes, pkgdown) |
 
 ## 3 Recruitment
 
