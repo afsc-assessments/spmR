@@ -32,7 +32,7 @@ atka_dir <- file.path(pkg_root, "examples", "atka")
 
 atka_detail <- runSPM(atka_dir, run = FALSE, engine = "admb")
 str(atka_detail)
-#> spc_tbl_ [105,000 × 19] (S3: spec_tbl_df/tbl_df/tbl/data.frame)
+#> spm_rslt [105,000 × 20] (S3: spm_result/spec_tbl_df/tbl_df/tbl/data.frame)
 #>  $ Stock      : chr [1:105000] "Model_16.0b" "Model_16.0b" "Model_16.0b" "Model_16.0b" ...
 #>  $ Alt        : num [1:105000] 1 1 1 1 1 1 1 1 1 1 ...
 #>  $ Sim        : num [1:105000] 1 1 1 1 1 1 1 1 1 1 ...
@@ -52,6 +52,7 @@ str(atka_detail)
 #>  $ B100       : num [1:105000] 280456 280456 280456 280456 280456 ...
 #>  $ B40        : num [1:105000] 112182 112182 112182 112182 112182 ...
 #>  $ B35        : num [1:105000] 98160 98160 98160 98160 98160 ...
+#>  $ Scenario   : chr [1:105000] "1" "1" "1" "1" ...
 #>  - attr(*, "spec")=
 #>   .. cols(
 #>   ..   Stock = col_character(),
@@ -74,7 +75,7 @@ str(atka_detail)
 #>   ..   B40 = col_double(),
 #>   ..   B35 = col_double()
 #>   .. )
-#>  - attr(*, "problems")=<pointer: 0x561dea241ce0>
+#>  - attr(*, "problems")=<pointer: 0x55e804886bb0>
 
 atka_inputs <- dat2list(file.path(atka_dir, "spm.dat"))
 names(atka_inputs)
