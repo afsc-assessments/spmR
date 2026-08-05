@@ -11,23 +11,23 @@
 #' @examples
 #' # Example usage:
 #' # list2dat(myList, "datafile.dat", "Header for new file")
-list2dat <- function(D, fn, hdr="a new file") {
+list2dat <- function(D, fn, hdr = "a new file") {
   # Open file connection
   sink(fn)
-  on.exit(sink())  # Ensure the connection is closed when the function exits
+  on.exit(sink()) # Ensure the connection is closed when the function exits
   cat(paste0("# ", hdr, "\n"))
 
   for (i in seq_along(D)) {
     cat(paste0("#", names(D[i]), "\n"))
     write.table(D[[i]], append = TRUE, quote = FALSE, row.names = FALSE, col.names = FALSE)
   }
-    # The following writes a data file
-    # cat(file=fn,paste0("# ",hdr,"\n"))
-    # ol <-length(D)
-    # for (i in 1:ol){
-    #   cat(file=fn,paste0("#",names(D[i]),"\n"),append=TRUE)
-    #   write.table(D[[i]],file=fn,append=TRUE,quote=FALSE,row.names=FALSE,col.names=FALSE)
-    # }
+  # The following writes a data file
+  # cat(file=fn,paste0("# ",hdr,"\n"))
+  # ol <-length(D)
+  # for (i in 1:ol){
+  #   cat(file=fn,paste0("#",names(D[i]),"\n"),append=TRUE)
+  #   write.table(D[[i]],file=fn,append=TRUE,quote=FALSE,row.names=FALSE,col.names=FALSE)
+  # }
 }
 
 #' @title Convert Data to List
@@ -45,13 +45,13 @@ dat2list <- function(fn) {
 
   datfile
   # Identify potential list names by checking if they are not entirely numeric
-  #idx <- sapply(datfile, function(x) all(is.na(as.numeric(x))))
-  idx2 <- (grepl(datfile,pattern="#"))
-  #idx
-  #idx2
-  #length(idx)
+  # idx <- sapply(datfile, function(x) all(is.na(as.numeric(x))))
+  idx2 <- (grepl(datfile, pattern = "#"))
+  # idx
+  # idx2
+  # length(idx)
   vnam <- datfile[idx2] # list names
-  #vnam
+  # vnam
 
   nv <- length(vnam) # number of objects
   A <- list()
@@ -98,5 +98,3 @@ dat2list <- function(fn) {
 
   return(A)
 }
-
-
