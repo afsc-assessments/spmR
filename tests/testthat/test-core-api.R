@@ -44,9 +44,14 @@ testthat::test_that("runSPM reads canonical detail output", {
 
   res <- spmR::runSPM(td, run = FALSE, engine = "admb")
 
+  testthat::expect_s3_class(res, "spm_result")
   testthat::expect_s3_class(res, "data.frame")
   testthat::expect_equal(nrow(res), 4)
-  testthat::expect_true(all(c("Year", "Alt", "Sim", "SSB", "ABC", "OFL") %in% names(res)))
+  testthat::expect_equal(res$Scenario, as.character(res$Alt))
+  testthat::expect_setequal(
+    intersect(c("Year", "Alt", "Sim", "SSB", "ABC", "OFL"), names(res)),
+    c("Year", "Alt", "Sim", "SSB", "ABC", "OFL")
+  )
 })
 
 testthat::test_that("plotSPM returns a ggplot object on summary-format data", {

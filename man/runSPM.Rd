@@ -12,9 +12,13 @@ runSPM(dirname, ctrl = NULL, run = FALSE, engine = c("admb", "rtmb"))
 \item{ctrl}{Optional control settings for the SPM analysis. If NULL, default settings are used.}
 
 \item{run}{Logical. If TRUE, the SPM analysis is run. If FALSE, the function only reads the results from `spm_detail.csv`.}
+
+\item{engine}{Model backend to use. `"admb"` runs or reads the legacy SPM
+implementation; `"rtmb"` uses the experimental R implementation.}
 }
 \value{
-A data frame containing the results from `spm_detail.csv`.
+An `spm_result` data frame containing standardized projection
+  results. Existing model-specific columns are preserved.
 }
 \description{
 This function runs a Stock Production Model (SPM) analysis in the specified directory.

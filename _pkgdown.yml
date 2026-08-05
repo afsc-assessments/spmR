@@ -4,6 +4,20 @@ template:
 development:
   mode: auto
 
+reference:
+  - title: "Run models"
+    contents:
+      - runSPM
+      - as_spm_result
+  - title: "Read and write inputs"
+    contents:
+      - dat2list
+      - list2dat
+  - title: "Summarize and plot results"
+    contents:
+      - plotSPM
+      - plotSPMx
+
 articles:
   - title: "Getting started"
     contents:
