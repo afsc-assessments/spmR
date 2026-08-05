@@ -2,7 +2,7 @@ url: http://afsc-assessments.github.io/spmR/
 template:
   bootstrap: 5
 development:
-  mode: auto
+  mode: release
 
 reference:
   - title: "Run models"
