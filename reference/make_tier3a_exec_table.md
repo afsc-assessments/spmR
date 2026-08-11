@@ -26,10 +26,3 @@ make_tier3a_exec_table(run_dir, endyr, the_scalar)
 ## Value
 
 Values for Tier 3a executive summary table
-
-## Examples
-
-``` r
-make_tier3a_exec_table(run_dir = "C:/GitProjects/goa_deepwater/2025/harvest_projections", endyr = 2025, the_scalar = 1000)
-#> Error in make_tier3a_exec_table(run_dir = "C:/GitProjects/goa_deepwater/2025/harvest_projections",     endyr = 2025, the_scalar = 1000): could not find function "make_tier3a_exec_table"
-```

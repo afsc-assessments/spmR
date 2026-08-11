@@ -16,6 +16,8 @@
 
 ## Summarize and plot results
 
+- [`tier3_scenario_table()`](http://afsc-assessments.github.io/spmR/reference/tier3_scenario_table.md)
+  : Summarize the seven Tier 3 projection alternatives
 - [`plotSPM()`](http://afsc-assessments.github.io/spmR/reference/plotSPM.md)
   : Plot SPM Data
 - [`plotSPMx()`](http://afsc-assessments.github.io/spmR/reference/plotSPMx.md)

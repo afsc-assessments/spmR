@@ -1,38 +1,16 @@
-# README
-
-Jim Ianelli 2023-09-15
-
-## Standard Projection Model for Alaska Groundfish
-
-This is the standard projection code for federally managed Alaskan
-groundfish species in Tier 3.
-
-The file src/spm.tpl is the main code for running these projections.
-Required input files are spm.dat, tacpar.dat, and a species-specific
-data input file with key outputs from an assessment, such as
-examples/data/ai_spm.dat.
-
-Note: spm.dat combines information from two files used in previous
-versions of the projection code (setup.dat and spp_catch.dat)
-
-ADMB version 13.0 or higher is required to compile spm.tpl.
-
-These are the steps to run the projection code:  
-1. Compile src/spm.tpl using admb and copy spm.exe to a a folder with
-spm.dat, tacpar.dat, and a file containing assessment outputs, such as
-ai_spm.dat  
-2. Within spm.dat specify the location of the assessment input file
-relative to the folder with spm.exe  
-3. From the command line pointed to the folder with these inputs, type
-“spm”
-
 # spmR
 
-See `scripts/README.md` for helper scripts (e.g., RTMB smoke test).
-
 The R package `spmR` was developed for doing stock projections for
-groundfish at the AFSC. The model was coded using the Autodif (`AD`)
-Model Builder (`ADMB`) software.
+groundfish at the AFSC. The model was coded using Automatic
+Differentiation Model Builder (`ADMB`).
+
+The main projection model is
+[`inst/admb/spm.tpl`](http://afsc-assessments.github.io/spmR/inst/admb/spm.tpl).
+A model run requires `spm.dat`, `tacpar.dat`, and a species-specific
+file containing assessment outputs. The
+[`examples`](http://afsc-assessments.github.io/spmR/examples) directory
+contains complete example inputs and outputs. ADMB 13.0 or newer is
+required to compile the model.
 
 ## Supported public API
 
@@ -40,9 +18,11 @@ The supported exported functions are:
 
 - [`dat2list()`](http://afsc-assessments.github.io/spmR/reference/dat2list.md)
 - [`list2dat()`](http://afsc-assessments.github.io/spmR/reference/list2dat.md)
+- [`as_spm_result()`](http://afsc-assessments.github.io/spmR/reference/as_spm_result.md)
 - [`runSPM()`](http://afsc-assessments.github.io/spmR/reference/runSPM.md)
 - [`plotSPM()`](http://afsc-assessments.github.io/spmR/reference/plotSPM.md)
 - [`plotSPMx()`](http://afsc-assessments.github.io/spmR/reference/plotSPMx.md)
+- [`tier3_scenario_table()`](http://afsc-assessments.github.io/spmR/reference/tier3_scenario_table.md)
 
 ## Cloning the repository (optional)
 
@@ -117,7 +97,7 @@ can view the package vignettes from within R using:
 ``` r
 
 browseVignettes(package = "spmR")
-vignette(topic = "00-spm-example", package = "spmR")
+vignette(topic = "spm_example", package = "spmR")
 ```
 
 ## Website
@@ -131,7 +111,7 @@ together and published on the website
 Developers will want to do things slightly differently. See the
 `Model development` vignette.
 
-# Acronymns
+# Acronyms
 
 NOAA: National Oceanic and Atmospheric Administration  
 NMFS: National Marine Fisheries Service  

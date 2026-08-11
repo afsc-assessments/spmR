@@ -1,6 +1,6 @@
 # Changelog
 
-## spmR (development version)
+## spmR 0.3.0
 
 - [`as_spm_result()`](http://afsc-assessments.github.io/spmR/reference/as_spm_result.md)
   provides a validated common result format for projection model
@@ -9,6 +9,9 @@
   now dispatches through internal model adapters and returns an
   `spm_result` while remaining compatible with legacy ADMB and
   experimental RTMB calls.
+- [`tier3_scenario_table()`](http://afsc-assessments.github.io/spmR/reference/tier3_scenario_table.md)
+  summarizes simulation output into assessment-ready rows for the seven
+  Tier 3 projection alternatives.
 
 ## spmR 0.2.1
 

@@ -2,12 +2,12 @@ pandoc: 3.8.3
 pkgdown: 2.2.1
 pkgdown_sha: ~
 articles:
-  00-spm-example: 00-spm-example.html
-  01-Background: 01-Background.html
-  02-MoreDoc: 02-MoreDoc.html
-  03-RTMB-vs-ADMB: 03-RTMB-vs-ADMB.html
+  background: background.html
+  more_documentation: more_documentation.html
+  rtmb_vs_admb: rtmb_vs_admb.html
+  spm_example: spm_example.html
   spmR_projak: spmR_projak.html
-last_built: 2026-08-11T20:35Z
+last_built: 2026-08-11T20:52Z
 urls:
   reference: http://afsc-assessments.github.io/spmR/reference
   article: http://afsc-assessments.github.io/spmR/articles

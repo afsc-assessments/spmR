@@ -5,15 +5,15 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<title>Standard Projection model • spmR</title>
+<title>Standard Projection Model • spmR</title>
 <script src="deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link href="deps/bootstrap-5.3.8/bootstrap.min.css" rel="stylesheet">
 <script src="deps/bootstrap-5.3.8/bootstrap.bundle.min.js"></script><link href="deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
 <link href="deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
 <script src="deps/headroom-0.11.0/headroom.min.js"></script><script src="deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="deps/search-1.0.0/fuse.min.js"></script><script src="deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="pkgdown.js"></script><link href="extra.css" rel="stylesheet">
-<meta property="og:title" content="Standard Projection model">
-<meta name="description" content="Standard Projection model (SPM) for evaluating outcomes of catch control rules for Alaska groundfish">
-<meta property="og:description" content="Standard Projection model (SPM) for evaluating outcomes of catch control rules for Alaska groundfish">
+<meta property="og:title" content="Standard Projection Model">
+<meta name="description" content="Standard Projection model (SPM) for evaluating outcomes of catch control rules for Alaska groundfish.">
+<meta property="og:description" content="Standard Projection model (SPM) for evaluating outcomes of catch control rules for Alaska groundfish.">
 </head>
 <body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
@@ -23,7 +23,7 @@
 
     <a class="navbar-brand me-2" href="index.html">spmR</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.2.1.9000</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.3.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -48,28 +48,10 @@
 </nav><div class="container template-home">
 <div class="row">
   <main id="main" class="col-md-9"><div class="section level1">
-<div class="page-header"><h1 id="readme">README<a class="anchor" aria-label="anchor" href="#readme"></a>
+<div class="page-header"><h1 id="spmr">spmR<a class="anchor" aria-label="anchor" href="#spmr"></a>
 </h1></div>
-<p>Jim Ianelli 2023-09-15</p>
-<div class="section level2">
-<h2 id="standard-projection-model-for-alaska-groundfish">Standard Projection Model for Alaska Groundfish<a class="anchor" aria-label="anchor" href="#standard-projection-model-for-alaska-groundfish"></a>
-</h2>
-<p>This is the standard projection code for federally managed Alaskan groundfish species in Tier 3.</p>
-<p>The file src/spm.tpl is the main code for running these projections. Required input files are spm.dat, tacpar.dat, and a species-specific data input file with key outputs from an assessment, such as examples/data/ai_spm.dat.</p>
-<p>Note: spm.dat combines information from two files used in previous versions of the projection code (setup.dat and spp_catch.dat)</p>
-<p>ADMB version 13.0 or higher is required to compile spm.tpl.</p>
-<p>These are the steps to run the projection code:<br>
-1. Compile src/spm.tpl using admb and copy spm.exe to a a folder with spm.dat, tacpar.dat, and a file containing assessment outputs, such as ai_spm.dat<br>
-2. Within spm.dat specify the location of the assessment input file relative to the folder with spm.exe<br>
-3. From the command line pointed to the folder with these inputs, type “spm”</p>
-<!-- README.md is generated from README.Rmd. Please edit that file -->
-</div>
-</div>
-<div class="section level1">
-<h1 id="spmr">spmR<a class="anchor" aria-label="anchor" href="#spmr"></a>
-</h1>
-<p>See <code>scripts/README.md</code> for helper scripts (e.g., RTMB smoke test).</p>
-<p>The R package <code>spmR</code> was developed for doing stock projections for groundfish at the AFSC. The model was coded using the Autodif (<code>AD</code>) Model Builder (<code>ADMB</code>) software.</p>
+<p>The R package <code>spmR</code> was developed for doing stock projections for groundfish at the AFSC. The model was coded using Automatic Differentiation Model Builder (<code>ADMB</code>).</p>
+<p>The main projection model is <a href="inst/admb/spm.tpl"><code>inst/admb/spm.tpl</code></a>. A model run requires <code>spm.dat</code>, <code>tacpar.dat</code>, and a species-specific file containing assessment outputs. The <a href="examples"><code>examples</code></a> directory contains complete example inputs and outputs. ADMB 13.0 or newer is required to compile the model.</p>
 <div class="section level2">
 <h2 id="supported-public-api">Supported public API<a class="anchor" aria-label="anchor" href="#supported-public-api"></a>
 </h2>
@@ -77,9 +59,11 @@
 <ul>
 <li><code><a href="reference/dat2list.html">dat2list()</a></code></li>
 <li><code><a href="reference/list2dat.html">list2dat()</a></code></li>
+<li><code><a href="reference/as_spm_result.html">as_spm_result()</a></code></li>
 <li><code><a href="reference/runSPM.html">runSPM()</a></code></li>
 <li><code><a href="reference/plotSPM.html">plotSPM()</a></code></li>
 <li><code><a href="reference/plotSPMx.html">plotSPMx()</a></code></li>
+<li><code><a href="reference/tier3_scenario_table.html">tier3_scenario_table()</a></code></li>
 </ul>
 </div>
 <div class="section level2">
@@ -133,7 +117,7 @@
 <p>The package vignettes are a great place to see what <code>spmR</code> can do. You can view the package vignettes from within R using:</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/browseVignettes.html" class="external-link">browseVignettes</a></span><span class="op">(</span>package <span class="op">=</span> <span class="st">"spmR"</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/utils/vignette.html" class="external-link">vignette</a></span><span class="op">(</span>topic <span class="op">=</span> <span class="st">"00-spm-example"</span>, package <span class="op">=</span> <span class="st">"spmR"</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/vignette.html" class="external-link">vignette</a></span><span class="op">(</span>topic <span class="op">=</span> <span class="st">"spm_example"</span>, package <span class="op">=</span> <span class="st">"spmR"</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="website">Website<a class="anchor" aria-label="anchor" href="#website"></a>
@@ -147,7 +131,7 @@
 </div>
 </div>
 <div class="section level1">
-<h1 id="acronymns">Acronymns<a class="anchor" aria-label="anchor" href="#acronymns"></a>
+<h1 id="acronyms">Acronyms<a class="anchor" aria-label="anchor" href="#acronyms"></a>
 </h1>
 <p>NOAA: National Oceanic and Atmospheric Administration<br>
 NMFS: National Marine Fisheries Service<br>
@@ -163,7 +147,7 @@ REFM: Resource and Ecology and Fisheries Management</p>
   </main><aside class="col-md-3"><div class="license">
 <h2 data-toc-skip>License</h2>
 <ul class="list-unstyled">
-<li>CC0-1.0</li>
+<li>CC0</li>
 </ul>
 </div>
 

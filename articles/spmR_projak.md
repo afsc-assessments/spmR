@@ -5,7 +5,7 @@
 - `projak` (Ben Williams, v0.0.0.9000): pure-R package for NPFMC
   projection scenarios (1-7) downstream of an RTMB assessment; accepts a
   report object as input.
-- `spmR` (Jim Ianelli, v0.2.0): Standard Projection Model wrapper around
+- `spmR` (Jim Ianelli, v0.3.0): Standard Projection Model wrapper around
   the legacy ADMB `spm` executable with an experimental RTMB path; reads
   `.dat` inputs (ADMB-style).
 
