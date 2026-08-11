@@ -1,1 +1,1 @@
-../../src/fitabc.tpl
+../../inst/admb/fitabc.tpl

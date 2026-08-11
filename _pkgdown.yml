@@ -15,14 +15,15 @@ reference:
       - list2dat
   - title: "Summarize and plot results"
     contents:
+      - tier3_scenario_table
       - plotSPM
       - plotSPMx
 
 articles:
   - title: "Getting started"
     contents:
-      - "00-spm-example"
-      - "01-Background"
-      - "02-MoreDoc"
-      - "03-RTMB-vs-ADMB"
+      - "spm_example"
+      - "background"
+      - "more_documentation"
+      - "rtmb_vs_admb"
       - "spmR_projak"

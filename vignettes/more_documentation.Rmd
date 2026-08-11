@@ -146,7 +146,7 @@ package on github for installation options and vignettes (Articles
 
 \<links to the historical docs\>
 
-[[https://afsc-assessments.github.io/spmR/articles/01-Background.html]{.underline}](https://afsc-assessments.github.io/spmR/articles/01-Background.html)
+[[https://afsc-assessments.github.io/spmR/articles/background.html]{.underline}](https://afsc-assessments.github.io/spmR/articles/background.html)
 
 How spmr grew out of "proj" and what the differences are
 

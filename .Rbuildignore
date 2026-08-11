@@ -4,3 +4,28 @@
 ^docs$
 ^pkgdown$
 ^\.github$
+^\.vscode$
+^app1\.gaRbage$
+^Notes\.R$
+^old_doc$
+^ShinyProj$
+^repo-review\.(qmd|html)$
+^scripts$
+^README\.Rmd$
+^README\.html$
+^LICENSE$
+^R/to import$
+^vignettes/\.quarto$
+^src/Makefile$
+^src/fmin\.log$
+^examples/.+\.(exe|obj)$
+^examples/gt20/main$
+^examples/AI_pollock/Alaska Plaice Projection 2023-20240228T180512Z-001\.zip$
+^examples/AKplaice/23-09-06 Running Projection model from Alaska Plaice\.R$
+^examples/data/AK Plaice 2020\.xlsx$
+^examples/fitabc/~\$BSAI_TAC_ABClsx\.xlsx$
+^examples/goa_flathead/projection comparison\.xlsx$
+^examples/goa_rebs/Run Projections REBS 2022\.r$
+^examples/proj task lists 2023\.docx$
+^examples/BSAI NRS$
+^examples/(choki|goa_atf|goa_nrs_w|goa_rebs|ling|Misc|tier3_2021)/Makefile$

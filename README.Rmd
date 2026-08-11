@@ -1,27 +1,6 @@
 ---
-title: "README"
-author: "Jim Ianelli"
-date: "2023-09-15"
 output: github_document
 ---
-```{r setup, include = FALSE}
-```
-
-## Standard Projection Model for Alaska Groundfish
-
-This is the standard projection code for federally managed Alaskan groundfish species in Tier 3.
-
-The file src/spm.tpl is the main code for running these projections.
-Required input files are spm.dat, tacpar.dat, and a species-specific data input file with key outputs from an assessment, such as examples/data/ai_spm.dat.
-
-Note: spm.dat combines information from two files used in previous versions of the projection code (setup.dat and spp_catch.dat)
-
-ADMB version 13.0 or higher is required to compile spm.tpl.
-
-These are the steps to run the projection code:\
-1. Compile src/spm.tpl using admb and copy spm.exe to a a folder with spm.dat, tacpar.dat, and a file containing assessment outputs, such as ai_spm.dat\
-2. Within spm.dat specify the location of the assessment input file relative to the folder with spm.exe\
-3. From the command line pointed to the folder with these inputs, type "spm"\
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
@@ -38,8 +17,13 @@ knitr::opts_chunk$set(
 
 The R package `spmR` was developed for doing 
 stock projections for groundfish at the AFSC.
-The model was coded using the Autodif (`AD`) Model 
-Builder (`ADMB`) software.
+The model was coded using Automatic Differentiation Model Builder (`ADMB`).
+
+The main projection model is
+[`inst/admb/spm.tpl`](inst/admb/spm.tpl). A model run requires
+`spm.dat`, `tacpar.dat`, and a species-specific file containing assessment
+outputs. The [`examples`](examples) directory contains complete example inputs
+and outputs. ADMB 13.0 or newer is required to compile the model.
 
 ## Supported public API
 
@@ -47,9 +31,11 @@ The supported exported functions are:
 
 - `dat2list()`
 - `list2dat()`
+- `as_spm_result()`
 - `runSPM()`
 - `plotSPM()`
 - `plotSPMx()`
+- `tier3_scenario_table()`
 
 ## Cloning the repository (optional)
 
@@ -117,7 +103,7 @@ the package vignettes from within R using:
 
 ``` r
 browseVignettes(package = "spmR")
-vignette(topic = "00-spm-example", package = "spmR")
+vignette(topic = "spm_example", package = "spmR")
 ```
 
 ## Website
@@ -130,7 +116,7 @@ and published on the website https://afsc-assessments.github.io/spmR/.
 Developers will want to do things slightly differently. See the 
 `Model development` vignette.
 
-# Acronymns
+# Acronyms
 
 NOAA: National Oceanic and Atmospheric Administration     
 NMFS: National Marine Fisheries Service     
@@ -139,4 +125,3 @@ REFM: Resource and Ecology and Fisheries Management
 
 # Legal disclaimer
 This repository is a software product and is not official communication of the National Oceanic and Atmospheric Administration (NOAA), or the United States Department of Commerce (DOC). All NOAA GitHub project code is provided on an ‘as is’ basis and the user assumes responsibility for its use. Any claims against the DOC or DOC bureaus stemming from the use of this GitHub project will be governed by all applicable Federal law. Any reference to specific commercial products, processes, or services by service mark, trademark, manufacturer, or otherwise, does not constitute or imply their endorsement, recommendation, or favoring by the DOC. The DOC seal and logo, or the seal and logo of a DOC bureau, shall not be used in any manner to imply endorsement of any commercial product or activity by the DOC or the United States Government.
-

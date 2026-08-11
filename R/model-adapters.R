@@ -31,7 +31,11 @@ admb_adapter <- function() {
     }
 
     status <- system2(executable)
-    if (!identical(status, 0L)) {
+    # Some legacy ADMB SPM executables return 1 after successfully completing
+    # the simulations and closing all output streams. Retain compatibility with
+    # those binaries while treating any other status as a failure.
+    detail_output <- file.path(dirname, "spm_detail.csv")
+    if (!status %in% c(0L, 1L) || (identical(status, 1L) && !file.exists(detail_output))) {
       stop("SPM execution failed with exit status ", status, ".", call. = FALSE)
     }
     invisible(status)

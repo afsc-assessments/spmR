@@ -10,6 +10,9 @@ inst/doc
 *.r0.
 *tmp
 docs
+/README.html
+/.quarto/
+vignettes/.quarto/
 *.obj
 *.cpp
 *.htp

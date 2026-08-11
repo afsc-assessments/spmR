@@ -147,4 +147,3 @@ TOP_OF_MAIN_SECTION
   gradient_structure::set_GRADSTACK_BUFFER_SIZE(200000);
   gradient_structure::set_NUM_DEPENDENT_VARIABLES(800); 
   gradient_structure::set_CMPDIF_BUFFER_SIZE(2000000);
-

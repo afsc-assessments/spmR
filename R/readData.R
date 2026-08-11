@@ -74,7 +74,7 @@ dat2list <- function(fn) {
         dum <- as.numeric(content)
       }
     } else if (irr - ir > 2) {
-      content <- read.table(fn, skip = ir, nrow = irr - ir - 1, fill = TRUE, row.names = NULL)
+      content <- read.table(fn, skip = ir, nrows = irr - ir - 1, fill = TRUE, row.names = NULL)
       if (all(is.na(as.numeric(as.matrix(content))))) {
         dum <- as.character(as.matrix(content))
       } else {

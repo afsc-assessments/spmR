@@ -10,8 +10,6 @@
 #' @import tidyr
 #' @import stringr
 #'
-#' @examples
-#' make_tier3a_exec_table(run_dir = "C:/GitProjects/goa_deepwater/2025/harvest_projections", endyr = 2025, the_scalar = 1000)
 make_tier3a_exec_table <- function(run_dir, endyr, the_scalar) {
   bdf <- spmR::runSPM(run_dir, run = FALSE)
   df <- readr::read_csv(file.path(run_dir, "spm_summary.csv"))
@@ -21,8 +19,12 @@ make_tier3a_exec_table <- function(run_dir, endyr, the_scalar) {
   fc <- fc |>
     expand_grid(Alt = c(1, 3, 5, 7)) |>
     mutate(Alt = as.factor(Alt), ub = mean, lb = mean)
-  proj_plot <- plotSPM(df) + geom_point(data = fc, aes(x = Year, y = mean)) + theme_classic()
-  ggsave(proj_plot, file = file.path(run_dir, "spm_plot.png"), device = "png", height = 6, width = 8)
+  proj_plot <- plotSPM(df) + geom_point(data = fc, aes(x = Year, y = mean)) +
+    ggplot2::theme_classic()
+  ggplot2::ggsave(proj_plot,
+    file = file.path(run_dir, "spm_plot.png"),
+    device = "png", height = 6, width = 8
+  )
 
 
   # Build executive summary table:
@@ -30,7 +32,7 @@ make_tier3a_exec_table <- function(run_dir, endyr, the_scalar) {
     select(c(Year, Alt, Sim, SSB, F, Tot_biom, OFL, ABC)) %>%
     filter(Year == endyr + 1 | Year == endyr + 2, Alt == 2) %>%
     group_by(Year, Alt) %>%
-    summarize(meanTot_biom = mean(Tot_biom), meanSSB = mean(SSB), meanABC = mean(ABC), meanOFL = mean(OFL))
+    summarise(meanTot_biom = mean(Tot_biom), meanSSB = mean(SSB), meanABC = mean(ABC), meanOFL = mean(OFL))
 
   stuff2 <- as_tibble(cbind(variable = names(stuff), round(t(stuff) * the_scalar))) %>% filter(variable != "Year", variable != "Alt")
   names(stuff2) <- c("variable", endyr + 1, endyr + 2)

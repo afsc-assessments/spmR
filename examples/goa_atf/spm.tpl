@@ -1,1 +1,1 @@
-../../src/spm.tpl
+../../inst/admb/spm.tpl

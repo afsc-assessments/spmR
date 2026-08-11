@@ -1633,4 +1633,3 @@ gradient\_structure::set\_CMPDIF\_BUFFER\_SIZE(2000000);
     Ricker or Beverton-Holt forms with log-normal variability and are
     detailed as options a)-d) above.
 
-
