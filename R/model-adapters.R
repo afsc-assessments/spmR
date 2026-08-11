@@ -60,8 +60,7 @@ rtmb_adapter <- function() {
 }
 
 spm_adapter <- function(engine) {
-  switch(
-    engine,
+  switch(engine,
     admb = admb_adapter(),
     rtmb = rtmb_adapter(),
     stop("Unknown model engine: ", engine, ".", call. = FALSE)
