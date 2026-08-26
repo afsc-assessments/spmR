@@ -13,6 +13,22 @@ containing assessment outputs. The [`examples`](examples) directory
 contains complete example inputs and outputs. ADMB 13.0 or newer is
 required to compile the model.
 
+## Important note for use with sex-specific models
+
+spm.tpl was updated between 2021 and 2024 such that for sex-specific
+models, average recruitment is assumed to be input for a single sex, and
+is then multiplied by 2 within the code. Previous versions of spm.tpl
+(including main.tpl and proj.tpl) assume that recruitment is added
+across sexes for model inputs. Here is the change:
+
+if (nsexes(ispp)==1)  
+AMeanRec(ispp) = mean(R(ispp)); // Arithmetic mean  
+else  
+AMeanRec(ispp) = 2.\*mean(R(ispp)); // Arithmetic mean, converted to
+females (half) later  
+// AMeanRec(ispp) = mean(R(ispp)); // Arithmetic mean, converted to
+females (half) later
+
 ## Supported public API
 
 The supported exported functions are:
@@ -109,9 +125,9 @@ Developers will want to do things slightly differently. See the
 
 # Acronyms
 
-NOAA: National Oceanic and Atmospheric Administration\
-NMFS: National Marine Fisheries Service\
-AFSC: Alaska Fisheries Science Center\
+NOAA: National Oceanic and Atmospheric Administration  
+NMFS: National Marine Fisheries Service  
+AFSC: Alaska Fisheries Science Center  
 REFM: Resource and Ecology and Fisheries Management
 
 # Legal disclaimer
