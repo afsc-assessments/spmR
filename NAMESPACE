@@ -13,14 +13,20 @@ import(patchwork)
 import(stringr)
 import(tidyr)
 importFrom(dplyr,filter)
-importFrom(ggplot2,aes)
-importFrom(ggplot2,geom_point)
-importFrom(ggplot2,geom_smooth)
-importFrom(ggplot2,ggplot)
+importFrom(ggplot2,
+  aes,
+  geom_point,
+  geom_smooth,
+  ggplot
+)
 importFrom(magrittr,"%>%")
 importFrom(readr,read_csv)
-importFrom(stats,rnorm)
-importFrom(stats,runif)
-importFrom(utils,read.table)
-importFrom(utils,write.csv)
-importFrom(utils,write.table)
+importFrom(stats,
+  rnorm,
+  runif
+)
+importFrom(utils,
+  read.table,
+  write.csv,
+  write.table
+)
