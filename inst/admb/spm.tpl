@@ -1470,7 +1470,8 @@ FUNCTION Fit_TAC
      abc<<ABC<<endl;
      abc.close();
    //  Then run TAC job as function of ABC
-     system("write_tac.bat >NUL ");
+     const int tac_exit_status = std::system("write_tac.bat >NUL ");
+     if (tac_exit_status != 0) spmr_input_error("External TAC command failed.");
      ifstream tac("tac.dat");
      tac>>TAC;
      tac.close(); /* */
