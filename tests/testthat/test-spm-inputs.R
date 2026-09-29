@@ -522,3 +522,36 @@ testthat::test_that("species share abundance and biomass units for aggregate lim
   metadata[[2]]$units <- metadata[[1]]$units
   testthat::expect_no_condition(write_spm_metadata(folder, metadata))
 })
+
+
+testthat::test_that("case variants cannot overwrite reserved provenance or inputs", {
+  folder <- local_spm_input_fixture()
+  before <- spm_sha256(list.files(folder, full.names = TRUE))
+  testthat::expect_error(
+    write_spm_metadata(
+      folder,
+      spm_fixture_metadata(),
+      metadata = "SPM_run_provenance.json"
+    ),
+    "distinct .json filename",
+    fixed = TRUE
+  )
+  testthat::expect_identical(
+    before,
+    spm_sha256(list.files(folder, full.names = TRUE))
+  )
+  file.rename(file.path(folder, "pm.prj"), file.path(folder, "stock.json"))
+  spm_fixture_edit(folder, "spm.dat", "pm.prj", "stock.json")
+  metadata <- spm_fixture_metadata()
+  metadata[[1]]$file <- "stock.json"
+  before <- spm_sha256(list.files(folder, full.names = TRUE))
+  testthat::expect_error(
+    write_spm_metadata(folder, metadata, metadata = "STOCK.json"),
+    "differ from legacy input filenames",
+    fixed = TRUE
+  )
+  testthat::expect_identical(
+    before,
+    spm_sha256(list.files(folder, full.names = TRUE))
+  )
+})

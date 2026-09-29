@@ -33,7 +33,7 @@ write_spm_metadata <- function(
   metadata <- spm_metadata_filename(metadata)
   document <- list(format_version = 2L, species = species)
   validated <- spm_validate_document(dirname, document, strict)
-  if (metadata %in% validated$input_files) {
+  if (tolower(metadata) %in% tolower(validated$input_files)) {
     stop(
       "metadata filename must differ from legacy input filenames.",
       call. = FALSE
@@ -86,7 +86,7 @@ validate_spm_inputs <- function(
     }
   )
   result <- spm_validate_document(dirname, document, strict)
-  if (metadata %in% result$input_files) {
+  if (tolower(metadata) %in% tolower(result$input_files)) {
     stop(
       "metadata filename must differ from legacy input filenames.",
       call. = FALSE
@@ -101,7 +101,8 @@ spm_metadata_filename <- function(x) {
   x <- spm_input_filename(x, "metadata")
   if (
     !grepl("[.]json$", x) ||
-      x %in% c("spm_run_provenance.json", "spm_last_success_provenance.json")
+      tolower(x) %in%
+        c("spm_run_provenance.json", "spm_last_success_provenance.json")
   ) {
     stop(
       "metadata must use a distinct .json filename reserved for input metadata.",
@@ -275,7 +276,8 @@ spm_read_legacy <- function(dirname) {
     USE.NAMES = FALSE
   )
   if (
-    anyDuplicated(s$spp_files) || any(s$spp_files %in% spm_reserved_files())
+    anyDuplicated(tolower(s$spp_files)) ||
+      any(tolower(s$spp_files) %in% tolower(spm_reserved_files()))
   ) {
     stop(
       "spm.dat: species files must have distinct, unreserved filenames.",
