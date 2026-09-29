@@ -16,8 +16,7 @@
 ^LICENSE$
 ^R/to import$
 ^vignettes/\.quarto$
-^src/Makefile$
-^src/fmin\.log$
+^src$
 ^examples/.+\.(exe|obj)$
 ^examples/gt20/main$
 ^examples/AI_pollock/Alaska Plaice Projection 2023-20240228T180512Z-001\.zip$
