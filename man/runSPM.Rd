@@ -4,7 +4,14 @@
 \alias{runSPM}
 \title{Run SPM Analysis in a Specific Directory}
 \usage{
-runSPM(dirname, ctrl = NULL, run = FALSE, engine = c("admb", "rtmb"))
+runSPM(
+  dirname,
+  ctrl = NULL,
+  run = FALSE,
+  engine = c("admb", "rtmb"),
+  metadata = "spm_metadata.json",
+  strict = TRUE
+)
 }
 \arguments{
 \item{dirname}{A string specifying the directory in which to run the SPM analysis.}
@@ -14,7 +21,16 @@ runSPM(dirname, ctrl = NULL, run = FALSE, engine = c("admb", "rtmb"))
 \item{run}{Logical. If TRUE, the SPM analysis is run. If FALSE, the function only reads the results from `spm_detail.csv`.}
 
 \item{engine}{Model backend to use. `"admb"` runs or reads the legacy SPM
-implementation; `"rtmb"` uses the experimental R implementation.}
+implementation; `"rtmb"` can read experimental output but cannot run
+validated scientific projections. New ADMB runs require explicit version-2
+metadata and a compatible executable. Existing output can still be read
+with `run = FALSE` without metadata.}
+
+\item{metadata}{Filename of the version-2 metadata created by
+[write_spm_metadata()]. Used only for new ADMB runs.}
+
+\item{strict}{Reject unknown metadata fields when TRUE. Scientific input
+requirements always apply.}
 }
 \value{
 An `spm_result` data frame containing standardized projection

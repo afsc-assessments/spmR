@@ -14,6 +14,7 @@
  //
  ////////////////////////////////////////////////////////////////////////////
 DATA_SECTION
+  !! spmr_metadata = spmr_read_metadata();
   !!CLASS ofstream means_out("means.out")
   !!CLASS ofstream alts_proj("alt_proj.out")
   !!CLASS ofstream percent_out("percentiles.out")
@@ -40,12 +41,15 @@ DATA_SECTION
   init_int nalts
   init_ivector alt_list(1,nalts)
   init_int TAC_ABC       // Flag to set TAC equal to ABC (1 means true, otherwise false)
+  !! if (TAC_ABC != 1) spmr_input_error("TAC_ABC must equal 1; TAC fitting requires a separately validated interface.");
   init_int SrType        // Type of recruitment curve (1=Ricker, 2 Bholt)
   // Specify form of recruitment generator (1 = use observed mean and std 
   //                                        2 = use estimated SRR and estimated sigma R
   //                                        3 = use input parameters from srecpar.dat :  
   //                                        4 = use input parameters from srecpar.dat :  
   init_int Rec_Gen       
+  !! if (Rec_Gen != 1 && Rec_Gen != 2) spmr_input_error("Rec_Gen must be 1 or 2; modes 3 and 4 require auxiliary unit and recruitment-basis definitions.");
+  !! if (SrType != 1 && SrType != 2 && SrType != 4) spmr_input_error("SrType must be 1, 2 or 4.");
   init_int Fmsy_F35      // Specify if conditioned so that Fmsy = F35 (affects SRR fitting) may need to be species specific...
   init_number Rec_Cond   // Specify prior condition that recruitment at half and double average SSB is similar to average historical Rec
   init_int Write_Big     // Flag to write big file (of all simulations rather than a summary, 0 means don't do it, otherwise do it) 
@@ -59,6 +63,7 @@ DATA_SECTION
   number alpha_in;
   number sigmar_in;
   number rho_in;
+  !! rho_in = 0.0; // Rec_Gen 2 uses independent annual recruitment deviations. Modes 3/4 are rejected.
   matrix rnorms(1,nsims,1,npro+1);
   matrix unifs(1,nsims,1,npro+1);
   vector sst(1,npro);
@@ -87,6 +92,7 @@ DATA_SECTION
   init_int nyrs_catch_in // Number of years that catch is specified (starting at first year: styr) 
   !! cout<<"First year, and number of years catch is pre-specified. "<<styr<<" "<<nyrs_catch_in<<endl;
   init_int nspp          // Number of species
+  !! if (nspp != int(spmr_metadata.size())) spmr_input_error("stock count differs between spm.dat and spm_input_v2.dat.");
   init_number OY_min;    // !! OY_min = 1361.521;
   init_number OY_max;
  LOCAL_CALCS
@@ -103,6 +109,7 @@ DATA_SECTION
   !! cout <<"OYMax "<<OY_max<<endl;
   init_vector ABC_Multiplier(1,nspp) // ABC_Multiplier  
   init_vector N_scalar(1,nspp)       // population scalar                           
+  !! for (int spmr_i=1; spmr_i<=nspp; ++spmr_i) if (N_scalar(spmr_i) != 1.0) spmr_input_error("N_scalar must equal 1; convert abundance, catch and biomass units before creating v2 inputs.");
   init_vector Alt4_SPR(1,nspp)       // SPR values for Alt 4 (spp specific)         
   vector     Alt4_Fabc(1,nspp)       // ABC values for Alt 4 (spp specific)         
   int        Alt4_Fcalc              // Recalc F for Alt 4?  (spp specific)         
@@ -216,6 +223,11 @@ DATA_SECTION
      *(ad_comm::global_datafile) >> SPR_ofl(i);              // 10
      *(ad_comm::global_datafile) >> spawnmo(i);              // 11
      *(ad_comm::global_datafile) >> nages(i);                // 12
+     if (!(*(ad_comm::global_datafile)) ||
+         std::string((char*)spp_file_name(i)) != spmr_metadata[i-1].filename ||
+         nsexes(i) != spmr_metadata[i-1].nsexes || nages(i) != spmr_metadata[i-1].nages)
+       spmr_input_error("stock filename or sex/age dimensions differ from v2 metadata for stock " + std::to_string(i) + ".");
+     if (ngear(i) < 1 || ngear(i) > 5) spmr_input_error("gear count must be 1 through 5.");
          cout<<"nages: "<<nages(i)<<endl;
      write_log( SSL_spp(i));              // 2
      write_log( Const_Buffer(i));         // 3
@@ -284,6 +296,7 @@ DATA_SECTION
          cout<<"N: "<<n0_Ftmp(i)(1,nages(i))<<endl;
 
      *(ad_comm::global_datafile) >> nrec(i);                // 24
+     if (nrec(i)<2 || nrec(i)>69) spmr_input_error("historical recruitment requires 2 through 69 observations.");
          cout<<"nrec: "<<nrec(i)<<endl;
      for (int j=1;j<=nrec(i);j++)
        *(ad_comm::global_datafile) >> Rtmp(i,j);            // 25
@@ -302,7 +315,8 @@ DATA_SECTION
   matrix pmature_F(1,nspp,1,nages);
   matrix pmature_M(1,nspp,1,nages);
   matrix wt_F(1,nspp,1,nages); 
-  matrix wt_M(1,nspp,1,nages);
+  matrix population_wt_F(1,nspp,1,nages);
+  matrix population_wt_M(1,nspp,1,nages);
   matrix Frat(1,nspp,1,ngear);
   3darray wt_gear_F(1,nspp,1,ngear,1,nages);
   3darray wt_gear_M(1,nspp,1,ngear,1,nages);
@@ -318,7 +332,6 @@ DATA_SECTION
   pmature_F.initialize();
   pmature_M.initialize();
   wt_F.initialize();
-  wt_M.initialize();
   wt_gear_F.initialize();
   wt_gear_F.initialize();
   sel_F.initialize();
@@ -332,6 +345,8 @@ DATA_SECTION
     for (int k=1;k<=nages(i);k++) {
       M_F(i,k) = M_Ftmp(i,k); 
       pmature_F(i,k) = pmaturetmp_F(i,k); 
+      population_wt_F(i,k) = spmr_metadata[i-1].population_female[k-1];
+      population_wt_M(i,k) = spmr_metadata[i-1].population_male[k-1];
       wt_F(i,k) = wt_Ftmp(i,k);  
       for (int j=1;j<=ngear(i);j++) {
         wt_gear_F(i,j,k) = wt_gear_Ftmp(i,j,k); 
@@ -345,7 +360,6 @@ DATA_SECTION
           wt_gear_M(i,j,k) = wt_gear_Ftmp(i,j,k); 
           sel_M(i,j,k) = sel_Ftmp(i,j,k);
         }
-        wt_M(i,k) += wt_gear_M(i,j,k);  
       }
       if (nsexes(i)==2) {
         pmature_M(i,k)  = pmaturetmp_M(i,k); 
@@ -363,7 +377,6 @@ DATA_SECTION
     cout << "M_Female: "<< spname(i)<<" "<<M_F(i) <<endl;
     cout << "M_Male:   "<< spname(i)<<" "<<M_M(i) <<endl;
 
-    wt_M(i) /= ngear(i);
     n0_F(i) /= N_scalar(i);
     n0_M(i) /= N_scalar(i);
     for (int k=1;k<=nyrs_catch_in;k++)
@@ -373,7 +386,10 @@ DATA_SECTION
       cout <<k<<" "<<spname(i)<<" "<< Obs_Catch(k,i)<<endl;
 
     for (int k=1;k<=nrec(i);k++) {
-      R(i,k)    =  Rtmp(i,k);
+      if (!std::isfinite(Rtmp(i,k)) || Rtmp(i,k) <= 0. || !std::isfinite(SSBtmp(i,k)) || SSBtmp(i,k) <= 0.)
+        spmr_input_error("historical recruitment and SSB must be finite positive values.");
+      // Normalize the complete series before moments and stock-recruitment likelihoods.
+      R(i,k) = Rtmp(i,k) * (spmr_metadata[i-1].basis == 2 ? 2.0 : 1.0);
       SSB(i,k)  =  SSBtmp(i,k);
     }
     R(i) /= N_scalar(i);
@@ -472,8 +488,11 @@ DATA_SECTION
   vector F40(1,nspp)
   vector Fofl(1,nspp)
   matrix Ftotabc(1,nspp,1,nages);
+  matrix Ftotabc_M(1,nspp,1,nages);
   matrix Ftot40(1,nspp,1,nages);
+  matrix Ftot40_M(1,nspp,1,nages);
   matrix Ftotofl(1,nspp,1,nages);
+  matrix Ftotofl_M(1,nspp,1,nages);
   matrix N(1,nspp,1,nages) ;
   matrix NsprF0(1,nspp,1,nages)
   matrix NsprM0(1,nspp,1,nages)
@@ -525,8 +544,11 @@ DATA_SECTION
    F40.initialize();
    Fofl.initialize();
    Ftotabc.initialize();
+  Ftotabc_M.initialize();
    Ftot40.initialize();
+  Ftot40_M.initialize();
    Ftotofl.initialize();
+  Ftotofl_M.initialize();
    N.initialize(); ;
    BF40.initialize();
    NsprF0.initialize();
@@ -551,31 +573,21 @@ DATA_SECTION
    Alt4_Fabc.initialize();
  END_CALCS
    number R_guess
- // Compute an initial Rzero value based on exploitation 
+   number log_Rzero_lower
+   number log_Rzero_upper
+ // Initialize total unfished recruitment from the normalized historical series.
  LOCAL_CALCS
-   double btmp=0.;
-   double ctmp=0.;
+   double spmr_mean_rec = 0.;
+   log_Rzero_lower = log(mean(R(1))) - 10.;
+   log_Rzero_upper = log(mean(R(1))) + 10.;
    for (int ispp=1;ispp<=nspp;ispp++)
    {
-     dvector ntmp(1,nages(ispp));
-     ntmp(1) = 1.;
-     for (int a=2;a<=nages(ispp);a++)
-       ntmp(a) = ntmp(a-1)*exp(-M_F(ispp, a)-.05);
-
-     btmp += wt_F(ispp) * ntmp;
-     cout << "Mean Catch"<<endl;
-     if(nyrs_catch_in > 0) {
-			 ctmp += (Obs_Catch(1,ispp));
-       cout << ctmp <<endl;
-       R_guess = log((ctmp/.02 )/btmp) ;
-		 }
-		 else
-		 {
-       R_guess = 10.;
-		 }
-     cout << "R_guess "<<endl;
-     cout << R_guess <<endl;
+     const double mean_rec = mean(R(ispp));
+     spmr_mean_rec += mean_rec;
+     if (log(mean_rec)-10. < log_Rzero_lower) log_Rzero_lower = log(mean_rec)-10.;
+     if (log(mean_rec)+10. > log_Rzero_upper) log_Rzero_upper = log(mean_rec)+10.;
    }
+   R_guess = log(spmr_mean_rec/nspp);
  END_CALCS
   number phase_sr
   !! if (Rec_Gen==3||Rec_Gen==4) phase_sr = -3; else phase_sr=1;
@@ -592,7 +604,7 @@ PARAMETER_SECTION
   // init_bounded_vector Fabc(1,nspp,0.00001,5)
   // init_bounded_vector F40(1,nspp,0.00001,5)
   // init_bounded_vector Fofl(1,nspp,0.00001,5)
-  init_bounded_vector log_Rzero(1,nspp,0,13,phase_sr)
+  init_bounded_vector log_Rzero(1,nspp,log_Rzero_lower,log_Rzero_upper,phase_sr)
   init_bounded_vector steepness(1,nspp,0.2,1.0,phase_sr+1)
   init_bounded_vector sigr(1,nspp,0.1,1.5,phase_sr+2)
   init_number dummy(1)
@@ -619,6 +631,9 @@ PARAMETER_SECTION
 
  LOCAL_CALCS 
    // Fill out R matrix (dimensioned species, sims, proj_yr)
+  std::ofstream spmr_receipt("spm_input_receipt.tsv");
+  if (!spmr_receipt) spmr_input_error("could not write spm_input_receipt.tsv.");
+  spmr_receipt << "format_version\tstock_file\tnsexes\tnages\trecruitment_basis\tmean_recruitment_total\tmean_recruitment_female\trecruitment_cv\tabundance_unit\tweight_unit\tbiomass_unit\tmale_substitute" << std::endl;
   cout<<"finished random numbers"<<endl;
   rnorms.fill_randn(rnseed);
   unifs.fill_randu(rnseed);
@@ -627,11 +642,7 @@ PARAMETER_SECTION
   {
    // Get parameter values for InvGauss
 
-    if (nsexes(ispp)==1) 
-      AMeanRec(ispp) = mean(R(ispp));  // Arithmetic mean
-    else
-      AMeanRec(ispp) = 2.*mean(R(ispp));  // Arithmetic mean, converted to females (half) later
-      // AMeanRec(ispp) = mean(R(ispp));  // Arithmetic mean, converted to females (half) later
+    AMeanRec(ispp) = mean(R(ispp)); // Total recruitment, already normalized.
 
     AMeanSSB(ispp) = mean(SSB(ispp));  // Arithmetic mean
     AMaxSSB(ispp)  = max(SSB(ispp));    // Maximum
@@ -640,8 +651,10 @@ PARAMETER_SECTION
    // Given Amean and Hmean, solve for parameters of inv gaussian
     gamma = AMeanRec(ispp) / HMeanRec(ispp) ;
     gi_beta  = AMeanRec(ispp) ;
-    delta = 1./(gamma - 1.);
-    cvrec(ispp) = sqrt(1./delta);
+    double recruitment_cv_squared = gamma - 1.;
+    if (recruitment_cv_squared < 1.e-12) recruitment_cv_squared = 0.;
+    delta = recruitment_cv_squared > 0. ? 1./recruitment_cv_squared : 0.;
+    cvrec(ispp) = sqrt(recruitment_cv_squared);
 
   // Simulate inv-gaussian RV's
     ifstream envin("envmat.dat"); // note can't have comments in top
@@ -649,6 +662,11 @@ PARAMETER_SECTION
     {
       for (j=1;j<=npro;j++)
       {
+        if (nsims<=5 || recruitment_cv_squared == 0.)
+        {
+          Rsim(ispp,i,j) = AMeanRec(ispp);
+          continue;
+        }
         double psi   = (square( rnorms(i,j) ));
         double omega = gi_beta*(1.+(psi-sqrt(4.*delta*psi+square(psi)))/ (2.*delta));
         double zeta  = gi_beta*(1.+(psi+sqrt(4.*delta*psi+square(psi)))/ (2.*delta));
@@ -666,9 +684,14 @@ PARAMETER_SECTION
       }
     }
     envin.close();
-    AMeanRec(ispp) *= .5;  // Goes to females only
+    spmr_receipt << 2 << "\t" << spmr_metadata[ispp-1].filename << "\t"
+      << nsexes(ispp) << "\t" << nages(ispp) << "\t" << spmr_metadata[ispp-1].basis << "\t"
+      << std::setprecision(17) << AMeanRec(ispp) << "\t" << AMeanRec(ispp)/2. << "\t" << cvrec(ispp) << "\t"
+      << spmr_metadata[ispp-1].abundance_unit << "\t" << spmr_metadata[ispp-1].weight_unit << "\t"
+      << spmr_metadata[ispp-1].biomass_unit << "\t" << spmr_metadata[ispp-1].male_substitute << std::endl;
+    AMeanRec(ispp) *= .5;  // Female mean used in per-female spawning reference calculations.
 
-    cout <<"Mean recruits "<< AMeanRec(ispp) <<endl;
+    cout <<"Mean total recruits "<< 2.*AMeanRec(ispp) <<"; mean female recruits "<< AMeanRec(ispp) <<endl;
     // cout<< " Solving spp "<<ispp<<" "<<spname(ispp)<<" "<<yr_one_catch(ispp)<<" "; // <<N_F*wt_mature(ispp)<<" "<<N_F*wt_F(ispp)+N_M(ispp)*wt_F(ispp)<<" ";
     for (int k=1;k<=nyrs_catch_in;k++)
     {
@@ -710,7 +733,7 @@ PRELIMINARY_CALCS_SECTION
     targ_SPR(ispp) = SPR_ofl(ispp);
   }
   compute_spr_rates();
-  if (Rec_Gen==1) {Run_Sim();  cout<< "Finished simulations using standard (avg, var) stochastic approach"<<endl;exit(1);}
+  if (Rec_Gen==1) {Run_Sim();  cout<< "Finished simulations using standard (avg, var) stochastic approach"<<endl;exit(0);}
 
 PROCEDURE_SECTION
   compute_obj_fun();
@@ -738,6 +761,7 @@ FUNCTION Run_Sim
   }
 
 FUNCTION  compute_obj_fun
+  obj_fun = 0.;
   dvariable tmp1;
   dvariable tmp2;
   tmp1.initialize();
@@ -778,10 +802,10 @@ FUNCTION  compute_obj_fun
       double ssb3 = AMeanSSB(ispp) * 2.0;
       // double ssb4 = value(Bzero(ispp)) ;
       tmp2.initialize();
-      tmp2 +=      square(log(AMeanRec(ispp)) - log(SRecruit( ssb1, ispp)))/ vartmp;
-      tmp2 +=      square(log(AMeanRec(ispp)) - log(SRecruit( ssb2, ispp)))/ vartmp;
-      tmp2 +=      square(log(AMeanRec(ispp)) - log(SRecruit( ssb3, ispp)))/ vartmp;
-      // tmp2 += 24.* square(log(AMeanRec(ispp)) - log(SRecruit( ssb4, ispp)));
+      tmp2 +=      square(log(2.*AMeanRec(ispp)) - log(SRecruit( ssb1, ispp)))/ vartmp;
+      tmp2 +=      square(log(2.*AMeanRec(ispp)) - log(SRecruit( ssb2, ispp)))/ vartmp;
+      tmp2 +=      square(log(2.*AMeanRec(ispp)) - log(SRecruit( ssb3, ispp)))/ vartmp;
+      // tmp2 += 24.* square(log(2.*AMeanRec(ispp)) - log(SRecruit( ssb4, ispp)));
       // tmp2 += 24.* square(log(AMeanSSB(ispp)) - log( ssb4 ));
       */
       tmp2 =      square(log(Bzero(ispp)) - log(SB100(ispp)))/ vartmp;
@@ -1248,7 +1272,8 @@ FUNCTION double Get_F_t(const dvector& F_age, const dvector& N_females, const in
 
 FUNCTION void Project_Pops(const int& isim, const int& i)
   double ctmp;
-  if ( i == npro && isim%int(nsims/4)==0) cout << "Year "<<styr + i -1<<" Sim: "<< isim <<" Alternative "<<alt<<endl;
+  const int progress_interval = nsims >= 4 ? int(nsims/4) : 1;
+  if ( i == npro && isim%progress_interval==0) cout << "Year "<<styr + i -1<<" Sim: "<< isim <<" Alternative "<<alt<<endl;
   // This is where the populations get updated (after ACTUAL catches and F's have been figured out)
   for (int ispp=1;ispp<=nspp;ispp++) // ++++++++++++++Species
   {
@@ -1303,7 +1328,7 @@ FUNCTION void Project_Pops(const int& isim, const int& i)
         Ftottmp_M += Ftmp*Frat(ispp,m)*sel_M(ispp,m);
       }
       SBtmp = (N_F(ispp) * elem_prod( wt_mature_F(ispp), mfexp( -yrfrac(ispp)*(M_F(ispp) + Ftottmp_F)))); 
-      Btmp = (N_F(ispp) * wt_F(ispp) + N_M(ispp) * wt_M(ispp));
+      Btmp = (N_F(ispp) * population_wt_F(ispp) + N_M(ispp) * population_wt_M(ispp));
       
       Z_F(ispp) = Ftottmp_F  + M_F(ispp); 
       Z_M(ispp) = Ftottmp_M  + M_M(ispp); 
@@ -1328,7 +1353,7 @@ FUNCTION void Project_Pops(const int& isim, const int& i)
         cout<<sigr(ispp)<<endl<<Bzero(ispp)<<endl<<SBtmp<<endl<<rnorms(isim,i)<<endl;
         // Nnext_F(ispp)(1) = value(exp(rnorms(isim,i)*sigr(ispp)) *SRecruit( SBtmp, ispp))/2.;
         chi = value(rho_in*chi_prev + sqrt(1.-rho_in*rho_in)*rnorms(isim,i)*sigr(ispp));
-        Rsim(ispp,isim,i) = value(exp(chi) * SRecruit(SBtmp, ispp));
+        Rsim(ispp,isim,i) = value(exp(chi - 0.5*sigr(ispp)*sigr(ispp)) * SRecruit(SBtmp, ispp));
         // Rsim(ispp,isim,i) = value(exp(rnorms(isim,i)*sigr(ispp)) *SRecruit( SBtmp, ispp));
         // cout<<SRecruit(SBtmp,ispp)<<" "<<Rsim(ispp,isim,i)<<" "<<sigr<<" "<<chi<<" "<<chi_prev<<" "<<rho_in<<endl;
         Nnext_F(ispp)(1)  = Rsim(ispp,isim,i)/2;
@@ -1463,7 +1488,7 @@ FUNCTION Avg_Age
       {
         dvector age_seq(1,nages(ispp));
         age_seq.initialize();
-        age_seq.fill_seqadd(1,1);
+        age_seq.fill_seqadd(spmr_metadata[ispp-1].ages[0],1);
         dvector ntmp(1,nages(ispp));
         ntmp = N_F(ispp);
         Avg_Age_End(ispp) += age_seq * ntmp /sum(ntmp);
@@ -1495,7 +1520,7 @@ FUNCTION get_SB100
     {
       dvector age_seq(1,nages(ispp)); // Note: need to sequence this to reflect actual ages modeled (rather than convenience)
       age_seq.initialize();
-      age_seq.fill_seqadd(1,1);
+      age_seq.fill_seqadd(spmr_metadata[ispp-1].ages[0],1);
       Avg_Age_F0(ispp)  = age_seq * NsprF0(ispp)/sum(NsprF0(ispp)) ;
       Avg_Age_M0(ispp)  = age_seq * NsprM0(ispp)/sum(NsprM0(ispp)) ;
     }
@@ -1509,7 +1534,7 @@ FUNCTION get_SB100
 
     // SB100(ispp)  *= .5 * AMeanRec(ispp) ;
     //cout<<"SB100  " <<SB100(ispp)<<endl;
-    B100(ispp)   = (NsprF0(ispp)*wt_F(ispp) + NsprM0(ispp)*wt_M(ispp)) * AMeanRec(ispp);
+    B100(ispp)   = (NsprF0(ispp)*population_wt_F(ispp) + NsprM0(ispp)*population_wt_M(ispp)) * AMeanRec(ispp);
   }
   // cout << setprecision(2) <<Fabc<<endl
 
@@ -1522,8 +1547,11 @@ FUNCTION compute_spr_rates
   BF40.initialize();
   BFofl.initialize();
   Ftotabc.initialize();
+  Ftotabc_M.initialize();
   Ftot40.initialize();
+  Ftot40_M.initialize();
   Ftotofl.initialize();
+  Ftotofl_M.initialize();
   Avg_Age_Fabc.initialize();
   for (int ispp=1;ispp<=nspp;ispp++)
   {
@@ -1536,8 +1564,11 @@ FUNCTION compute_spr_rates
     for (m=1;m<=ngear(ispp);m++)
     {
       Ftotabc(ispp) += Fabc(ispp)*Frat(ispp,m)*sel_F(ispp,m);
+      Ftotabc_M(ispp) += Fabc(ispp)*Frat(ispp,m)*sel_M(ispp,m);
       Ftot40(ispp)  +=  F40(ispp)*Frat(ispp,m)*sel_F(ispp,m);
+      Ftot40_M(ispp) += F40(ispp)*Frat(ispp,m)*sel_M(ispp,m);
       Ftotofl(ispp) += Fofl(ispp)*Frat(ispp,m)*sel_F(ispp,m);
+      Ftotofl_M(ispp) += Fofl(ispp)*Frat(ispp,m)*sel_M(ispp,m);
     }
   
     for (j=2;j<nages(ispp);j++)
@@ -1545,22 +1576,22 @@ FUNCTION compute_spr_rates
       NsprFabc(ispp,j) = NsprFabc(ispp,j-1)* mfexp(-1.*(M_F(ispp,j-1) + Ftotabc(ispp,j-1) ));
       NsprF40(ispp,j)  = NsprF40(ispp,j-1) * mfexp(-1.*(M_F(ispp,j-1) +  Ftot40(ispp,j-1) ));
       NsprFofl(ispp,j) = NsprFofl(ispp,j-1)* mfexp(-1.*(M_F(ispp,j-1) + Ftotofl(ispp,j-1) ));
-      NsprMabc(ispp,j) = NsprMabc(ispp,j-1)* mfexp(-1.*(M_M(ispp,j-1) + Ftotabc(ispp,j-1) ));
-      NsprM40(ispp,j)  = NsprM40(ispp,j-1) * mfexp(-1.*(M_M(ispp,j-1) +  Ftot40(ispp,j-1) ));
-      NsprMofl(ispp,j) = NsprMofl(ispp,j-1)* mfexp(-1.*(M_M(ispp,j-1) + Ftotofl(ispp,j-1) ));
+      NsprMabc(ispp,j) = NsprMabc(ispp,j-1)* mfexp(-1.*(M_M(ispp,j-1) + Ftotabc_M(ispp,j-1) ));
+      NsprM40(ispp,j)  = NsprM40(ispp,j-1) * mfexp(-1.*(M_M(ispp,j-1) +  Ftot40_M(ispp,j-1) ));
+      NsprMofl(ispp,j) = NsprMofl(ispp,j-1)* mfexp(-1.*(M_M(ispp,j-1) + Ftotofl_M(ispp,j-1) ));
     }
     NsprFabc(ispp,nages(ispp)) = NsprFabc(ispp,nages(ispp)-1)* mfexp(-(M_F(ispp,nages(ispp)-1) + Ftotabc(ispp,nages(ispp)-1)))/ (1.- mfexp(-(M_F(ispp,nages(ispp)) + Ftotabc(ispp,nages(ispp)) )));
     NsprF40(ispp,nages(ispp))  = NsprF40(ispp,nages(ispp)-1) * mfexp(-(M_F(ispp,nages(ispp)-1) +  Ftot40(ispp,nages(ispp)-1)))/ (1.- mfexp(-(M_F(ispp,nages(ispp)) +  Ftot40(ispp,nages(ispp)) )));
     NsprFofl(ispp,nages(ispp)) = NsprFofl(ispp,nages(ispp)-1)* mfexp(-(M_F(ispp,nages(ispp)-1) + Ftotofl(ispp,nages(ispp)-1)))/ (1.- mfexp(-(M_F(ispp,nages(ispp)) + Ftotofl(ispp,nages(ispp)) )));
-    NsprMabc(ispp,nages(ispp)) = NsprMabc(ispp,nages(ispp)-1)* mfexp(-(M_M(ispp,nages(ispp)-1) + Ftotabc(ispp,nages(ispp)-1)))/ (1.- mfexp(-(M_M(ispp,nages(ispp)) + Ftotabc(ispp,nages(ispp)) )));
-    NsprM40(ispp,nages(ispp))  = NsprM40(ispp,nages(ispp)-1) * mfexp(-(M_M(ispp,nages(ispp)-1) +  Ftot40(ispp,nages(ispp)-1)))/ (1.- mfexp(-(M_M(ispp,nages(ispp)) +  Ftot40(ispp,nages(ispp)) )));
-    NsprMofl(ispp,nages(ispp)) = NsprMofl(ispp,nages(ispp)-1)* mfexp(-(M_M(ispp,nages(ispp)-1) + Ftotofl(ispp,nages(ispp)-1)))/ (1.- mfexp(-(M_M(ispp,nages(ispp)) + Ftotofl(ispp,nages(ispp)) )));
+    NsprMabc(ispp,nages(ispp)) = NsprMabc(ispp,nages(ispp)-1)* mfexp(-(M_M(ispp,nages(ispp)-1) + Ftotabc_M(ispp,nages(ispp)-1)))/ (1.- mfexp(-(M_M(ispp,nages(ispp)) + Ftotabc_M(ispp,nages(ispp)) )));
+    NsprM40(ispp,nages(ispp))  = NsprM40(ispp,nages(ispp)-1) * mfexp(-(M_M(ispp,nages(ispp)-1) +  Ftot40_M(ispp,nages(ispp)-1)))/ (1.- mfexp(-(M_M(ispp,nages(ispp)) +  Ftot40_M(ispp,nages(ispp)) )));
+    NsprMofl(ispp,nages(ispp)) = NsprMofl(ispp,nages(ispp)-1)* mfexp(-(M_M(ispp,nages(ispp)-1) + Ftotofl_M(ispp,nages(ispp)-1)))/ (1.- mfexp(-(M_M(ispp,nages(ispp)) + Ftotofl_M(ispp,nages(ispp)) )));
 
     // if(!isit_const(ispp) )
     {
       dvector age_seq(1,nages(ispp));
       age_seq.initialize();
-      age_seq.fill_seqadd(1,1);
+      age_seq.fill_seqadd(spmr_metadata[ispp-1].ages[0],1);
       Avg_Age_Fabc(ispp) = age_seq * NsprFabc(ispp)/sum(NsprFabc(ispp)) ;
       Avg_Age_Mabc(ispp) = age_seq * NsprMabc(ispp)/sum(NsprMabc(ispp)) ;
     }
@@ -1575,9 +1606,9 @@ FUNCTION compute_spr_rates
     SBFabc(ispp) = AMeanRec(ispp) * SBFabc(ispp);
     SBF40(ispp)  = AMeanRec(ispp) *  SBF40(ispp);
     SBFofl(ispp) = AMeanRec(ispp) * SBFofl(ispp);
-    BFabc(ispp)  = AMeanRec(ispp) * (NsprFabc(ispp)*wt_F(ispp) + NsprMabc(ispp)*wt_M(ispp) ) ;
-    BF40(ispp)   = AMeanRec(ispp) *  (NsprF40(ispp)*wt_F(ispp) +  NsprM40(ispp)*wt_M(ispp) ) ;
-    BFofl(ispp)  = AMeanRec(ispp) * (NsprFofl(ispp)*wt_F(ispp) + NsprMofl(ispp)*wt_M(ispp) ) ;
+    BFabc(ispp)  = AMeanRec(ispp) * (NsprFabc(ispp)*population_wt_F(ispp) + NsprMabc(ispp)*population_wt_M(ispp) ) ;
+    BF40(ispp)   = AMeanRec(ispp) *  (NsprF40(ispp)*population_wt_F(ispp) + NsprM40(ispp)*population_wt_M(ispp) ) ;
+    BFofl(ispp)  = AMeanRec(ispp) * (NsprFofl(ispp)*population_wt_F(ispp) + NsprMofl(ispp)*population_wt_M(ispp) ) ;
   }
   // cout << setprecision(2) <<Fabc<<endl
 
@@ -1625,7 +1656,10 @@ FUNCTION double SolveF2(const dvector& N_F, const dvector& N_M, const double&  T
   dvector Ftottmp_M(1,nages(ispp));
   //dvariable btmp =  n0_M(ispp) * wt_M(ispp) + n0_F(ispp) * wt_F(ispp);
   double btmp ;
-  btmp =  N_M * elem_prod(sel_M(ispp,1),wt_M(ispp)) + N_F * elem_prod(sel_M(ispp,1),wt_F(ispp));
+  btmp = 0.;
+  for (m=1;m<=ngear(ispp);m++)
+    btmp += Frat(ispp,m) * (N_M * elem_prod(sel_M(ispp,m),wt_gear_M(ispp,m)) +
+                            N_F * elem_prod(sel_F(ispp,m),wt_gear_F(ispp,m)));
   double ftmp;
   ftmp = TACin/btmp;
   int iter=0;
@@ -1667,12 +1701,12 @@ FUNCTION void Get_SPR_Catches(const int& ispp)
     Cabc(ispp) += ( wt_gear_F(ispp,m) * AMeanRec(ispp)*elem_prod(elem_div( Fabc(ispp)*Frat(ispp,m)*sel_F(ispp,m) ,
                   M_F(ispp) + Ftotabc(ispp)),elem_prod(1.- mfexp(-(M_F(ispp)+Ftotabc(ispp))),NsprFabc(ispp))));
     Cabc(ispp) += ( wt_gear_M(ispp,m) * AMeanRec(ispp)*elem_prod(elem_div( Fabc(ispp)*Frat(ispp,m)*sel_M(ispp,m) , 
-                  M_M(ispp) + Ftotabc(ispp)),elem_prod(1.- mfexp(-(M_M(ispp)+Ftotabc(ispp))),NsprMabc(ispp))));
+                  M_M(ispp) + Ftotabc_M(ispp)),elem_prod(1.- mfexp(-(M_M(ispp)+Ftotabc_M(ispp))),NsprMabc(ispp))));
 
     Cofl(ispp) += ( wt_gear_F(ispp,m) * AMeanRec(ispp)*elem_prod(elem_div( Fofl(ispp)*Frat(ispp,m)*sel_F(ispp,m) , 
                   M_F(ispp) + Ftotofl(ispp)),elem_prod(1.- mfexp(-(M_F(ispp)+Ftotofl(ispp))),NsprFofl(ispp))));
     Cofl(ispp) += ( wt_gear_M(ispp,m) * AMeanRec(ispp)*elem_prod(elem_div( Fofl(ispp)*Frat(ispp,m)*sel_M(ispp,m) , 
-                  M_M(ispp) + Ftotofl(ispp)),elem_prod(1.- mfexp(-(M_M(ispp)+Ftotofl(ispp))),NsprMofl(ispp))));
+                  M_M(ispp) + Ftotofl_M(ispp)),elem_prod(1.- mfexp(-(M_M(ispp)+Ftotofl_M(ispp))),NsprMofl(ispp))));
   }
 
 FINAL_SECTION
@@ -1953,11 +1987,11 @@ FUNCTION void write_sim(const adstring& Title,const int& ispp)
   write_spp(ispp);
 
 FUNCTION void write_sim_hdr(const int& ispp) 
-  percent_out <<"SB0 SB40 SB35 MeanRec HarMeanRec Bnow"<<endl;
+  percent_out <<"SB0 SB40 SB35 MeanRec_total HarMeanRec_total Bnow"<<endl;
   percent_out << SB100(ispp)       <<" "<<
             SBF40(ispp)      <<" "<<
             SBFofl(ispp)      <<" "<<
-            AMeanRec(ispp) <<" "<<
+            2.*AMeanRec(ispp) <<" "<<
             HMeanRec(ispp) <<" "<<
             Bcurrent(ispp) <<" "<<
             endl;
@@ -1969,7 +2003,12 @@ FUNCTION void write_sim_hdr(const int& ispp)
   spm_summary << spname(ispp) <<",NA,NA,SSB_40, "<< SBF40(ispp) <<endl;
   spm_summary << spname(ispp) <<",NA,NA,SSB_ofl, "<< SBFofl(ispp) <<endl;
   spm_summary << spname(ispp) <<",NA,NA,SSB_"<<styr<<","<< Bcurrent(ispp) <<endl;
-  spm_summary << spname(ispp) <<",NA,NA,Mean_rec, "<< AMeanRec(ispp) <<endl;
+  spm_summary << spname(ispp) <<",NA,NA,Mean_rec, "<< 2.*AMeanRec(ispp) <<endl;
+  spm_summary << spname(ispp) <<",NA,NA,Mean_rec_female, "<< AMeanRec(ispp) <<endl;
+  spm_summary << spname(ispp) <<",NA,NA,Total_biomass_100, "<< B100(ispp) <<endl;
+  spm_summary << spname(ispp) <<",NA,NA,Total_biomass_40, "<< BF40(ispp) <<endl;
+  spm_summary << spname(ispp) <<",NA,NA,Total_biomass_abc, "<< BFabc(ispp) <<endl;
+  spm_summary << spname(ispp) <<",NA,NA,Total_biomass_ofl, "<< BFofl(ispp) <<endl;
   spm_summary << spname(ispp)<<","<< "NA" <<","<< "NA"<<",C_abc," << Cabc(ispp)<<endl;
   spm_summary << spname(ispp)<<","<< "NA" <<","<< "NA"<<",C_ofl," << Cofl(ispp)<<endl;
   spm_summary << spname(ispp)<<","<< "NA" <<","<< "NA"<<",F_0,0 "<<endl; 
@@ -2071,6 +2110,8 @@ FUNCTION void write_spp(const int& ispp)
   
 GLOBALS_SECTION
   #include <admodel.h>
+  #include "spmr_input_v2.hpp"
+  std::vector<SpmrStockMetadata> spmr_metadata;
   adstring xspname;
   adstring_array targsppname(1,20);
   adstring_array spp_file_name(1,20);
@@ -2182,10 +2223,7 @@ FUNCTION void Get_Bzero(const int& ispp)
     Ntmp(j) *= pow(survtmp(j),yrfrac(ispp));
   // cout <<Ntmp(nages)<< endl;
 
-  if (nsexes(ispp)==1) 
-    Bzero(ispp) = 0.5* wt_mature_F(ispp)  * Ntmp ; // p_mature is of Females (half of adults)
-  else
-    Bzero(ispp) = wt_mature_F(ispp)  * Ntmp ; // p_mature 
+  Bzero(ispp) = 0.5 * wt_mature_F(ispp) * Ntmp; // Rzero is total recruits; only females contribute to SSB.
 
   switch (SrType)
   {
@@ -2225,10 +2263,10 @@ FUNCTION void Recruitment_Likelihood(const int& ispp)
   sigmaRsq(ispp) = sigr(ispp)*sigr(ispp);
   rec_like(ispp).initialize();
   // Tune recruits to spawners via functional form of Srec (to estimate srec params) RAM's exp. value form of -ln like
-    rec_like(ispp) = (norm2( log(R(ispp)+1.e-8) - 
-                             log(SRecruit(SSB(ispp),ispp) +1.e-8) + sigmaRsq(ispp)/2. ) / 
+    rec_like(ispp) = (norm2( log(R(ispp)) -
+                             log(SRecruit(SSB(ispp),ispp)) + sigmaRsq(ispp)/2. ) /
                              (2.*sigmaRsq(ispp))) + nrec(ispp) * log(sigr(ispp));
-  obj_fun += sum(rec_like);
+  obj_fun += rec_like(ispp);
 
 FUNCTION void Profile_F(const int& ispp)
   cout << "Profiling over F for " <<spname(ispp)<<endl;
@@ -2552,6 +2590,12 @@ RUNTIME_SECTION
    convergence_criteria .1,.01,1e-5
 
 TOP_OF_MAIN_SECTION
+  for (int spmr_arg=1; spmr_arg<argc; ++spmr_arg)
+    if (std::string(argv[spmr_arg]) == "-spmr-capabilities")
+    {
+      std::cout << "SPMR_INPUT_FORMAT=2" << std::endl;
+      return 0;
+    }
   /*
   gradient_structure::set_MAX_NVAR_OFFSET(1000);
   gradient_structure::set_GRADSTACK_BUFFER_SIZE(100000);

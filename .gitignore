@@ -17,3 +17,5 @@ vignettes/.quarto/
 *.cpp
 *.htp
 examples/atka/scenario3_5yr_projection_table.csv
+/.audit/
+/inst/admb/spm

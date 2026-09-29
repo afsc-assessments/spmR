@@ -44,11 +44,12 @@ Plot detailed simulation trajectories with `plotSPMx()`.
 plotSPMx(atka_detail, alt = 2, thisyr = min(atka_detail$Year), mytitle = "Atka detail plot")
 ```
 
-The experimental RTMB path can also be run from this directory when `RTMB` is
-installed.
+Archived experimental RTMB output can also be read from this directory. New
+RTMB projections are blocked because the prototype lacks population dynamics.
+New ADMB projections require `write_spm_metadata()` and a format-2 executable.
 
 ```{r atka-rtmb, eval = FALSE}
-runSPM(atka_dir, run = TRUE, engine = "rtmb")
+runSPM(atka_dir, run = FALSE, engine = "rtmb")
 ```
 
 ## 2. Summary workflow (`examples/BSRE_AI`)

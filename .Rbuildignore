@@ -29,3 +29,4 @@
 ^examples/proj task lists 2023\.docx$
 ^examples/BSAI NRS$
 ^examples/(choki|goa_atf|goa_nrs_w|goa_rebs|ling|Misc|tier3_2021)/Makefile$
+^\.audit$

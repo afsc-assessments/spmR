@@ -13,21 +13,86 @@ containing assessment outputs. The [`examples`](examples) directory
 contains complete example inputs and outputs. ADMB 13.0 or newer is
 required to compile the model.
 
-## Important note for use with sex-specific models
+## Input format 2
 
-spm.tpl was updated between 2021 and 2024 such that for sex-specific
-models, average recruitment is assumed to be input for a single sex, and
-is then multiplied by 2 within the code. Previous versions of spm.tpl
-(including main.tpl and proj.tpl) assume that recruitment is added
-across sexes for model inputs. Here is the change:
+Version 0.4.0 requires a `spm_metadata.json` file for new projections.
+Keep the legacy positional files unchanged. An extra vector in a
+positional file can shift subsequent fields or be ignored by an older
+program. The R runner validates the metadata and generates the native
+`spm_input_v2.dat` file. It checks the executable’s `-spmr-capabilities`
+response before running the projection. Recompile `inst/admb/spm.tpl`
+for this version.
 
-if (nsexes(ispp)==1)  
-AMeanRec(ispp) = mean(R(ispp)); // Arithmetic mean  
-else  
-AMeanRec(ispp) = 2.\*mean(R(ispp)); // Arithmetic mean, converted to
-females (half) later  
-// AMeanRec(ispp) = mean(R(ispp)); // Arithmetic mean, converted to
-females (half) later
+Each stock declares `recruitment_basis = "total"` or `"per_sex"`.
+Per-sex inputs represent either sex under a 50:50 recruitment ratio. The
+engine converts the **complete recruitment history** to total
+recruitment first, then calculates its mean, variability, harmonic mean,
+and stock–recruitment inputs. It allocates each projected total equally
+to females and males once. This choice must describe the input series;
+select it from the assessment’s definitions.
+
+Population weights determine total biomass. Supply separate female and
+male population weight-at-age vectors, with ages attached to each. The
+legacy female weight vector remains the spawning weight; fishery weights
+remain catch weights. A split-sex run with missing male population
+weights stops before execution. An explicit `male_population_substitute`
+can select `"female_population"` or `"mean_male_fishery"`; either choice
+produces a warning and is recorded. Review that scientific assumption
+before using a substitute. Strict mode never chooses one automatically.
+
+The supported units are weight in kg with abundance/biomass pairs
+`fish`/`kg`, `thousand_fish`/`t`, or `million_fish`/`thousand_t`. All
+values must already use those units; the metadata records and checks the
+declaration. Ages must be consecutive, ascending integers, and each
+weight vector must match their order. Format 2 requires `N_scalar = 1`.
+Convert scaled inputs before creating metadata. All stocks within one
+run must share abundance and biomass units because the engine adds their
+catches when applying overall limits.
+
+For an existing projection folder, provide a species entry such as:
+
+``` r
+ages <- 1:15
+species <- list(list(
+  file = "stock.prj",
+  recruitment_basis = "total",
+  ages = ages,
+  units = list(abundance = "million_fish", weight = "kg", biomass = "thousand_t"),
+  population_weights = list(
+    female = list(ages = ages, values = female_population_weight),
+    male = list(ages = ages, values = male_population_weight)
+  )
+))
+write_spm_metadata("projection", species = species)
+validate_spm_inputs("projection")
+result <- runSPM("projection", run = TRUE)
+```
+
+Stock–recruitment fits must have a maximum gradient below 1e-4 and a
+positive-definite Hessian before their outputs are accepted. Recruitment
+CV² below 1e-12 is treated as zero to handle nearly constant histories.
+
+The output provenance records the executable and input SHA-256 hashes,
+recruitment basis, unit declarations, substitutions, and run outcome.
+Each attempt has a manifest in `spm_run_history/`;
+`spm_last_success_provenance.json` retains the last successful result.
+Publication failures restore prior outputs. The runner uses a clean
+execution directory so an old output file cannot pass as a new run.
+Historical results remain readable with `runSPM(..., run = FALSE)`.
+
+Projection timing follows the legacy engine: `Year = t` biomass uses the
+beginning-of-year abundance supplied or advanced into year t. The
+detailed output `Rec` column is the draw assigned to the youngest age in
+**year t + 1**. Initial-year recruitment is already part of the supplied
+abundance vector. The `Ntot` column reports mature abundance under the
+supplied maturity vectors; calculate total biomass from all ages and the
+population weights.
+
+Format 2 currently supports `TAC_ABC = 1` and recruitment modes 1 and 2.
+Modes 3 and 4 need an explicit convention for their auxiliary inputs.
+New experimental RTMB projections also require further implementation;
+existing output can still be read. These boundaries are checked before
+execution.
 
 ## Supported public API
 
@@ -35,6 +100,8 @@ The supported exported functions are:
 
 - `dat2list()`
 - `list2dat()`
+- `write_spm_metadata()`
+- `validate_spm_inputs()`
 - `as_spm_result()`
 - `runSPM()`
 - `plotSPM()`
@@ -125,9 +192,9 @@ Developers will want to do things slightly differently. See the
 
 # Acronyms
 
-NOAA: National Oceanic and Atmospheric Administration  
-NMFS: National Marine Fisheries Service  
-AFSC: Alaska Fisheries Science Center  
+NOAA: National Oceanic and Atmospheric Administration\
+NMFS: National Marine Fisheries Service\
+AFSC: Alaska Fisheries Science Center\
 REFM: Resource and Ecology and Fisheries Management
 
 # Legal disclaimer

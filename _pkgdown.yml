@@ -11,6 +11,8 @@ reference:
       - as_spm_result
   - title: "Read and write inputs"
     contents:
+      - validate_spm_inputs
+      - write_spm_metadata
       - dat2list
       - list2dat
   - title: "Summarize and plot results"
