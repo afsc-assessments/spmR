@@ -1,5 +1,33 @@
 # Changelog
 
+## spmR 0.4.0
+
+- New projections require input metadata format 2 and a compatible
+  executable. Legacy output remains readable with `run = FALSE`.
+- Recruitment basis is explicit. The complete history is converted to
+  total recruitment before calculating arithmetic and harmonic means,
+  variability, simulations, and stock–recruitment inputs. Each projected
+  total is allocated equally to the two sexes once.
+- Female and male population weights are separate from spawning and
+  fishery weights. Missing male population weights require an explicit,
+  recorded substitute for split-sex inputs. Metadata validation checks
+  age order, dimensions, finite values, and compatible units.
+- Total biomass uses population weights throughout projections and
+  biomass reference calculations. Male reference calculations use male
+  selectivity.
+- Stock–recruitment fits use bounds tied to the normalized recruitment
+  history and mean-corrected lognormal draws. Unit-scaled fixtures check
+  the fitted relationships. New fitted runs require a maximum gradient
+  below 1e-4 and a positive-definite Hessian.
+- New runs validate inputs before execution, check the executable’s
+  format support, use a clean execution directory, and write SHA-256
+  provenance. Existing results survive a failed run.
+- Format 2 supports direct ABC projections (`TAC_ABC = 1`), recruitment
+  modes 1 and 2, abundance scaling `N_scalar = 1`, and weight in kg.
+  Auxiliary recruitment modes 3 and 4 and the experimental RTMB
+  projection runner require further implementation before use with this
+  format.
+
 ## spmR 0.3.0
 
 - [`as_spm_result()`](http://afsc-assessments.github.io/spmR/reference/as_spm_result.md)

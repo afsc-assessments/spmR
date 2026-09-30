@@ -9,7 +9,14 @@ completing the analysis.
 ## Usage
 
 ``` r
-runSPM(dirname, ctrl = NULL, run = FALSE, engine = c("admb", "rtmb"))
+runSPM(
+  dirname,
+  ctrl = NULL,
+  run = FALSE,
+  engine = c("admb", "rtmb"),
+  metadata = "spm_metadata.json",
+  strict = TRUE
+)
 ```
 
 ## Arguments
@@ -31,7 +38,20 @@ runSPM(dirname, ctrl = NULL, run = FALSE, engine = c("admb", "rtmb"))
 - engine:
 
   Model backend to use. \`"admb"\` runs or reads the legacy SPM
-  implementation; \`"rtmb"\` uses the experimental R implementation.
+  implementation; \`"rtmb"\` can read experimental output but cannot run
+  validated scientific projections. New ADMB runs require explicit
+  version-2 metadata and a compatible executable. Existing output can
+  still be read with \`run = FALSE\` without metadata.
+
+- metadata:
+
+  Filename of the version-2 metadata created by
+  \[write_spm_metadata()\]. Used only for new ADMB runs.
+
+- strict:
+
+  Reject unknown metadata fields when TRUE. Scientific input
+  requirements always apply.
 
 ## Value
 

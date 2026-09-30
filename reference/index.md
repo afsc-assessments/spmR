@@ -9,6 +9,9 @@
 
 ## Read and write inputs
 
+- [`write_spm_metadata()`](http://afsc-assessments.github.io/spmR/reference/write_spm_metadata.md)
+  [`validate_spm_inputs()`](http://afsc-assessments.github.io/spmR/reference/write_spm_metadata.md)
+  : Write explicit recruitment and population-weight metadata
 - [`dat2list()`](http://afsc-assessments.github.io/spmR/reference/dat2list.md)
   : Convert Data to List
 - [`list2dat()`](http://afsc-assessments.github.io/spmR/reference/list2dat.md)

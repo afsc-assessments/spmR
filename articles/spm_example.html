@@ -21,7 +21,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">spmR</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.3.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.4.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -130,7 +130,7 @@ directories that are kept in sync with the package:</p>
 <span><span class="co">#&gt;   ..   B40 = <span style="color: #00BB00;">col_double()</span>,</span></span>
 <span><span class="co">#&gt;   ..   B35 = <span style="color: #00BB00;">col_double()</span></span></span>
 <span><span class="co">#&gt;   .. )</span></span>
-<span><span class="co">#&gt;  - attr(*, "problems")=&lt;pointer: 0x556604f08970&gt;</span></span>
+<span><span class="co">#&gt;  - attr(*, "problems")=&lt;pointer: 0x56452fccd670&gt;</span></span>
 <span></span>
 <span><span class="va">atka_inputs</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/dat2list.html">dat2list</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="va">atka_dir</span>, <span class="st">"spm.dat"</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">atka_inputs</span><span class="op">)</span></span>
@@ -145,10 +145,12 @@ directories that are kept in sync with the package:</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/plotSPMx.html">plotSPMx</a></span><span class="op">(</span><span class="va">atka_detail</span>, alt <span class="op">=</span> <span class="fl">2</span>, thisyr <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">min</a></span><span class="op">(</span><span class="va">atka_detail</span><span class="op">$</span><span class="va">Year</span><span class="op">)</span>, mytitle <span class="op">=</span> <span class="st">"Atka detail plot"</span><span class="op">)</span></span></code></pre></div>
 <p><img src="spm_example_files/figure-html/atka-plot-1.png" class="r-plt" alt="" width="700"></p>
-<p>The experimental RTMB path can also be run from this directory when
-<code>RTMB</code> is installed.</p>
+<p>Archived experimental RTMB output can also be read from this
+directory. New RTMB projections are blocked because the prototype lacks
+population dynamics. New ADMB projections require
+<code><a href="../reference/write_spm_metadata.html">write_spm_metadata()</a></code> and a format-2 executable.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/runSPM.html">runSPM</a></span><span class="op">(</span><span class="va">atka_dir</span>, run <span class="op">=</span> <span class="cn">TRUE</span>, engine <span class="op">=</span> <span class="st">"rtmb"</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/runSPM.html">runSPM</a></span><span class="op">(</span><span class="va">atka_dir</span>, run <span class="op">=</span> <span class="cn">FALSE</span>, engine <span class="op">=</span> <span class="st">"rtmb"</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="summary-workflow-examplesbsre_ai">2. Summary workflow (<code>examples/BSRE_AI</code>)<a class="anchor" aria-label="anchor" href="#summary-workflow-examplesbsre_ai"></a>

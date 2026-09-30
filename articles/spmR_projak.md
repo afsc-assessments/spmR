@@ -2,6 +2,11 @@
 
 ## 1 Purpose
 
+These notes describe the earlier version 0.3.0 architecture. In version
+0.4.0, new spmR ADMB runs require explicit format-2 metadata for
+recruitment and population weights. New RTMB runs are blocked while the
+prototype awaits population dynamics; archived output remains readable.
+
 - `projak` (Ben Williams, v0.0.0.9000): pure-R package for NPFMC
   projection scenarios (1-7) downstream of an RTMB assessment; accepts a
   report object as input.

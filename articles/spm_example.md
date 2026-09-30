@@ -75,7 +75,7 @@ str(atka_detail)
 #>   ..   B40 = col_double(),
 #>   ..   B35 = col_double()
 #>   .. )
-#>  - attr(*, "problems")=<pointer: 0x556604f08970>
+#>  - attr(*, "problems")=<pointer: 0x56452fccd670>
 
 atka_inputs <- dat2list(file.path(atka_dir, "spm.dat"))
 names(atka_inputs)
@@ -97,12 +97,15 @@ plotSPMx(atka_detail, alt = 2, thisyr = min(atka_detail$Year), mytitle = "Atka d
 
 ![](spm_example_files/figure-html/atka-plot-1.png)
 
-The experimental RTMB path can also be run from this directory when
-`RTMB` is installed.
+Archived experimental RTMB output can also be read from this directory.
+New RTMB projections are blocked because the prototype lacks population
+dynamics. New ADMB projections require
+[`write_spm_metadata()`](http://afsc-assessments.github.io/spmR/reference/write_spm_metadata.md)
+and a format-2 executable.
 
 ``` r
 
-runSPM(atka_dir, run = TRUE, engine = "rtmb")
+runSPM(atka_dir, run = FALSE, engine = "rtmb")
 ```
 
 ## 2. Summary workflow (`examples/BSRE_AI`)
