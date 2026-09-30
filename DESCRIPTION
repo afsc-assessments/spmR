@@ -1,7 +1,7 @@
 Type: Package
 Package: spmR
 Title: Standard Projection Model
-Version: 0.3.0
+Version: 0.4.0
 Depends:
     R (>= 4.1.0)
 Author: Jim Ianelli
@@ -11,9 +11,11 @@ Description: Standard Projection model (SPM) for evaluating outcomes of
 License: CC0
 URL: http://afsc-assessments.github.io/spmR/
 Imports:
+    digest,
     dplyr,
     ggplot2,
     ggthemes,
+    jsonlite,
     magrittr,
     patchwork,
     readr,

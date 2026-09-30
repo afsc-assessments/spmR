@@ -12,10 +12,12 @@ knitr::opts_chunk$set(echo = TRUE, message = FALSE, warning = FALSE)
 ```
 
 This vignette compares the legacy ADMB workflow (`spm.tpl`) with the new
-RTMB path. The RTMB path is **experimental** and currently supports
-alternatives 1–5 only.
+RTMB prototype. Its archived outputs illustrate the interface; they are
+placeholders for population dynamics and cannot establish scientific equivalence.
+Version 0.4.0 stops new RTMB projections until the required dynamics and input
+contract are implemented. New ADMB runs require input format 2 metadata.
 
-## Run both engines
+## Read archived prototype output
 
 ```{r}
 # Replace with your run directory that contains spm.dat
@@ -26,17 +28,15 @@ run_dir <- normalizePath(run_dir, winslash = "/", mustWork = TRUE)
 
 set.seed(123)
 
-# ADMB run (requires spm binary)
+# ADMB run (requires a format-2 binary and validated spm_metadata.json)
 # admb_res <- runSPM(run_dir, run = TRUE, engine = "admb")
 
 # RTMB run
 rtmb_file <- file.path(run_dir, "spm_detail_rtmb.csv")
 if (file.exists(rtmb_file)) {
   rtmb_res <- utils::read.csv(rtmb_file)
-} else if (requireNamespace("spmR", quietly = TRUE)) {
-  rtmb_res <- spmR::runSPM(run_dir, run = TRUE, engine = "rtmb")
 } else {
-  stop("Need either an existing spm_detail_rtmb.csv file or an installed spmR package.")
+  stop("Need the archived spm_detail_rtmb.csv example file.")
 }
 ```
 
@@ -78,5 +78,6 @@ if (exists("admb_res")) {
 
 ## Notes
 
-- RTMB output is written to `spm_detail_rtmb.csv`.
-- Differences are expected due to seed and the current experimental scope.
+- Archived RTMB output is read from `spm_detail_rtmb.csv`.
+- Its differences from ADMB include missing population dynamics.
+- Use the native regression suite for validated pooled-sex and split-sex comparisons.

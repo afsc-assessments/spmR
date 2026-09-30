@@ -1,0 +1,40 @@
+name: Native projection regression tests
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  native-projections:
+    runs-on: ubuntu-22.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: r-lib/actions/setup-r@v2
+        with:
+          use-public-rspm: true
+      - uses: r-lib/actions/setup-r-dependencies@v2
+        with:
+          extra-packages: any::testthat, any::pkgload
+      - name: Install pinned ADMB 13.2
+        shell: bash
+        run: |
+          curl --fail --location --retry 3 https://github.com/admb-project/admb/releases/download/admb-13.2/admb-13.2-linux.zip -o "$RUNNER_TEMP/admb.zip"
+          echo 'd4770e85f5c8802f5adb33ba1c6fe726ca050cda1a32a6acea35ad840615707b  '"$RUNNER_TEMP/admb.zip" | sha256sum --check
+          unzip -q "$RUNNER_TEMP/admb.zip" -d "$RUNNER_TEMP/admb"
+          echo "$RUNNER_TEMP/admb/admb/bin" >> "$GITHUB_PATH"
+      - name: Compile projection engine
+        shell: bash
+        run: |
+          mkdir -p "$RUNNER_TEMP/spm-build"
+          cp inst/admb/spm.tpl inst/admb/spmr_input_v2.hpp "$RUNNER_TEMP/spm-build/"
+          cd "$RUNNER_TEMP/spm-build"
+          admb -f spm.tpl 2>&1 | tee compile.log
+          if grep -Ei 'warning:|error:' compile.log; then exit 1; fi
+          ./spm -spmr-capabilities | grep -Fx 'SPMR_INPUT_FORMAT=2'
+          echo "SPMR_TEST_EXE=$RUNNER_TEMP/spm-build/spm" >> "$GITHUB_ENV"
+      - name: Require R and native regression tests
+        shell: Rscript {0}
+        run: |
+          stopifnot(file.exists(Sys.getenv("SPMR_TEST_EXE")))
+          testthat::test_local(stop_on_failure = TRUE)

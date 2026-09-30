@@ -1,0 +1,48 @@
+# run_name
+weights_audit
+# Tier
+3
+# nalts
+1
+# alt_list
+5
+# TAC_ABC
+1
+# SrType
+2
+# Rec_Gen
+1
+# Fmsy_F35
+1
+# Rec_Cond
+0
+# Write_Big
+1
+# npro
+3
+# nsims
+1
+# styr
+2026
+# nyrs_catch_in
+1
+# nspp
+1
+# OY_min
+0
+# OY_max
+2000000
+# spp_file_name
+pm.prj
+# ABC_Multiplier
+1
+# N_scalar
+1
+# Alt4_SPR
+0.6
+# ntacspp
+1
+# tac_ind
+1
+# Obs_Catch
+2026 0
