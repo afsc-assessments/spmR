@@ -23,6 +23,33 @@ Seattle WA 98115
 
 Introduction
 ============
+## Current-input guidance: spmR 0.4.0
+
+The sections below preserve the historical development and proposals for
+SPM. For current projections, use the
+[split-sex input migration guide](split_sex_inputs.html) and the
+[current calculation summary](more_documentation.html).
+
+Version 0.4.0 requires format-2 metadata alongside the existing positional
+input files and a compatible executable. Keep each legacy file's field
+order unchanged. Declare whether historical recruitment is total or
+per sex; SPM converts the full history to total recruitment before
+calculations and allocates projected totals equally between sexes once.
+
+Supply separate female and male population weight-at-age vectors in the
+metadata. They determine total biomass. The legacy female weight vector
+serves spawning biomass, and fishery weights serve catch calculations.
+A missing male population vector stops a split-sex run unless the user
+explicitly selects a supported substitute. The migration guide describes
+the required units, age order, validation, and recorded substitutions.
+
+Initial abundance must refer to the beginning of the declared first
+projection year, including the chosen recruitment for that year. In a
+detailed output row for year $t$, `Rec` is the draw entering year $t+1$.
+Review this boundary and the input changes before revising assessment
+tables. Run provenance records the recruitment convention and executable
+hash so the calculation can be traced to its inputs and program version.
+
 ## 2024 update
 
 The following priorities have been updated in light of changes in requirements.

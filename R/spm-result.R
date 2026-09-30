@@ -29,13 +29,23 @@ as_spm_result <- function(x) {
 
   if (!"Scenario" %in% names(x)) {
     if (!"Alt" %in% names(x)) {
-      stop("`x` must contain `Scenario` or the legacy `Alt` column.", call. = FALSE)
+      stop(
+        "`x` must contain `Scenario` or the legacy `Alt` column.",
+        call. = FALSE
+      )
     }
     x$Scenario <- as.character(x$Alt)
   }
 
   required <- c(
-    "Stock", "Scenario", "Sim", "Year", "Catch", "SSB", "ABC", "OFL"
+    "Stock",
+    "Scenario",
+    "Sim",
+    "Year",
+    "Catch",
+    "SSB",
+    "ABC",
+    "OFL"
   )
   missing_columns <- setdiff(required, names(x))
   if (length(missing_columns) > 0) {
@@ -62,7 +72,9 @@ as_spm_result <- function(x) {
   }
 
   numeric_columns <- c("Sim", "Year", "Catch", "SSB", "ABC", "OFL")
-  invalid_numeric <- numeric_columns[!vapply(x[numeric_columns], is.numeric, logical(1))]
+  invalid_numeric <- numeric_columns[
+    !vapply(x[numeric_columns], is.numeric, logical(1))
+  ]
   if (length(invalid_numeric) > 0) {
     stop(
       "Result columns must be numeric: ",

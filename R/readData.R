@@ -19,7 +19,13 @@ list2dat <- function(D, fn, hdr = "a new file") {
 
   for (i in seq_along(D)) {
     cat(paste0("#", names(D[i]), "\n"))
-    write.table(D[[i]], append = TRUE, quote = FALSE, row.names = FALSE, col.names = FALSE)
+    write.table(
+      D[[i]],
+      append = TRUE,
+      quote = FALSE,
+      row.names = FALSE,
+      col.names = FALSE
+    )
   }
   # The following writes a data file
   # cat(file=fn,paste0("# ",hdr,"\n"))
@@ -41,7 +47,13 @@ list2dat <- function(D, fn, hdr = "a new file") {
 #' @export
 dat2list <- function(fn) {
   options(warn = -1) # Suppress the NA message in the coercion to double
-  datfile <- scan(fn, what = "character", flush = TRUE, blank.lines.skip = FALSE, quiet = TRUE)
+  datfile <- scan(
+    fn,
+    what = "character",
+    flush = TRUE,
+    blank.lines.skip = FALSE,
+    quiet = TRUE
+  )
 
   datfile
   # Identify potential list names by checking if they are not entirely numeric
@@ -59,7 +71,11 @@ dat2list <- function(fn) {
 
   for (i in 1:nv) {
     ir <- match(vnam[i], datfile)
-    if (i != nv) irr <- match(vnam[i + 1], datfile) else irr <- length(datfile) + 1 # next row
+    if (i != nv) {
+      irr <- match(vnam[i + 1], datfile)
+    } else {
+      irr <- length(datfile) + 1
+    } # next row
     dum <- NULL
 
     if (irr - ir <= 1) {
@@ -74,7 +90,13 @@ dat2list <- function(fn) {
         dum <- as.numeric(content)
       }
     } else if (irr - ir > 2) {
-      content <- read.table(fn, skip = ir, nrows = irr - ir - 1, fill = TRUE, row.names = NULL)
+      content <- read.table(
+        fn,
+        skip = ir,
+        nrows = irr - ir - 1,
+        fill = TRUE,
+        row.names = NULL
+      )
       if (all(is.na(as.numeric(as.matrix(content))))) {
         dum <- as.character(as.matrix(content))
       } else {

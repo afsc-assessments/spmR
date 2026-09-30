@@ -17,10 +17,16 @@ library(readr)
 ```
 
 This vignette is intentionally limited to two canonical example directories that are
-kept in sync with the package:
+provided with the package for reading archived output:
 
 - `examples/atka` for `runSPM()`, `dat2list()`, and `plotSPMx()`
 - `examples/BSRE_AI` for `plotSPM()` with `spm_summary.csv`
+
+The bundled positional files retain their historical layout. For a new run,
+create metadata with explicit recruitment basis and female/male population
+weights, then use a format-2 executable. Follow the runnable
+[split-sex input migration guide](split_sex_inputs.html). Keep each species
+file's existing field order and store added population vectors in the metadata.
 
 ## 1. Atka workflow (`examples/atka`)
 

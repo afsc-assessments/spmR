@@ -29,7 +29,9 @@ if (!all(key %in% common)) {
 }
 
 m <- merge(admb, rtmb, by = key, suffixes = c(".admb", ".rtmb"))
-numcols <- common[sapply(admb[common], is.numeric) & sapply(rtmb[common], is.numeric)]
+numcols <- common[
+  sapply(admb[common], is.numeric) & sapply(rtmb[common], is.numeric)
+]
 numcols <- setdiff(numcols, key)
 
 if (length(numcols) == 0) {
@@ -39,8 +41,10 @@ if (length(numcols) == 0) {
 stats <- t(sapply(numcols, function(n) {
   x <- m[[paste0(n, ".admb")]]
   y <- m[[paste0(n, ".rtmb")]]
-  c(mean_diff = mean(y - x, na.rm = TRUE),
-    rmse = sqrt(mean((y - x)^2, na.rm = TRUE)))
+  c(
+    mean_diff = mean(y - x, na.rm = TRUE),
+    rmse = sqrt(mean((y - x)^2, na.rm = TRUE))
+  )
 }))
 
 print(stats)

@@ -14,32 +14,49 @@ make_tier3a_exec_table <- function(run_dir, endyr, the_scalar) {
   bdf <- spmR::runSPM(run_dir, run = FALSE)
   df <- readr::read_csv(file.path(run_dir, "spm_summary.csv"))
   inp <- spmR::dat2list(file.path(run_dir, "spm.dat"))
-  fc <- data.frame(Year = inp$fixed_catch[, 1], mean = inp$fixed_catch[, 2], type = "C") # |>
+  fc <- data.frame(
+    Year = inp$fixed_catch[, 1],
+    mean = inp$fixed_catch[, 2],
+    type = "C"
+  ) # |>
   names(fc) <- c("Year", "mean", "type")
   fc <- fc |>
     expand_grid(Alt = c(1, 3, 5, 7)) |>
     mutate(Alt = as.factor(Alt), ub = mean, lb = mean)
-  proj_plot <- plotSPM(df) + geom_point(data = fc, aes(x = Year, y = mean)) +
+  proj_plot <- plotSPM(df) +
+    geom_point(data = fc, aes(x = Year, y = mean)) +
     ggplot2::theme_classic()
-  ggplot2::ggsave(proj_plot,
+  ggplot2::ggsave(
+    proj_plot,
     file = file.path(run_dir, "spm_plot.png"),
-    device = "png", height = 6, width = 8
+    device = "png",
+    height = 6,
+    width = 8
   )
-
 
   # Build executive summary table:
   stuff <- bdf %>%
     select(c(Year, Alt, Sim, SSB, F, Tot_biom, OFL, ABC)) %>%
     filter(Year == endyr + 1 | Year == endyr + 2, Alt == 2) %>%
     group_by(Year, Alt) %>%
-    summarise(meanTot_biom = mean(Tot_biom), meanSSB = mean(SSB), meanABC = mean(ABC), meanOFL = mean(OFL))
+    summarise(
+      meanTot_biom = mean(Tot_biom),
+      meanSSB = mean(SSB),
+      meanABC = mean(ABC),
+      meanOFL = mean(OFL)
+    )
 
-  stuff2 <- as_tibble(cbind(variable = names(stuff), round(t(stuff) * the_scalar))) %>% filter(variable != "Year", variable != "Alt")
+  stuff2 <- as_tibble(cbind(
+    variable = names(stuff),
+    round(t(stuff) * the_scalar)
+  )) %>%
+    filter(variable != "Year", variable != "Alt")
   names(stuff2) <- c("variable", endyr + 1, endyr + 2)
 
-
   ssb_ref_pts <- df %>%
-    filter(variable == "SSB_100" | variable == "SSB_40" | variable == "SSB_ofl") %>%
+    filter(
+      variable == "SSB_100" | variable == "SSB_40" | variable == "SSB_ofl"
+    ) %>%
     select(-c(spp_file, Alt, Year)) %>%
     mutate(value = round(value * the_scalar, 0)) %>%
     mutate(value2 = value)

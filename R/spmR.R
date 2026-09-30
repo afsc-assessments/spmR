@@ -53,12 +53,18 @@ runSPM_rtmb <- function(dirname, run = TRUE, seed = 123) {
 
   nspp <- as.integer(spm$nspp)
   npro <- as.integer(spm$npro)
-  if (length(npro) == 0 || is.na(npro)) npro <- as.integer(spm$nprj_yrs)
+  if (length(npro) == 0 || is.na(npro)) {
+    npro <- as.integer(spm$nprj_yrs)
+  }
   nsims <- as.integer(spm$nsims)
   styr <- as.integer(spm$styr)
-  if (length(styr) == 0 || is.na(styr)) styr <- as.integer(spm$beg_yr)
+  if (length(styr) == 0 || is.na(styr)) {
+    styr <- as.integer(spm$beg_yr)
+  }
   nyrs_catch <- as.integer(spm$nyrs_catch_in)
-  if (length(nyrs_catch) == 0 || is.na(nyrs_catch)) nyrs_catch <- as.integer(spm$nyrs_fixed_catch)
+  if (length(nyrs_catch) == 0 || is.na(nyrs_catch)) {
+    nyrs_catch <- as.integer(spm$nyrs_fixed_catch)
+  }
 
   if (is.na(nspp) || is.na(npro) || is.na(nsims)) {
     stop("spm.dat is missing nspp, npro, or nsims")
@@ -101,7 +107,9 @@ runSPM_rtmb <- function(dirname, run = TRUE, seed = 123) {
 
   for (ispp in seq_len(nspp)) {
     spname <- as.character(spp[[ispp]]$spname)
-    if (length(spname) == 0) spname <- paste0("spp", ispp)
+    if (length(spname) == 0) {
+      spname <- paste0("spp", ispp)
+    }
 
     Rtmp <- as.numeric(spp[[ispp]]$R)
     SSBtmp <- as.numeric(spp[[ispp]]$SSB)

@@ -1,6 +1,19 @@
 utils::globalVariables(c(
-  ".data", "ABC", "Alt", "Catch", "kind", "lb", "OFL", "Sim",
-  "spp_file", "SSB", "Tot_biom", "ub", "value", "variable", "Year"
+  ".data",
+  "ABC",
+  "Alt",
+  "Catch",
+  "kind",
+  "lb",
+  "OFL",
+  "Sim",
+  "spp_file",
+  "SSB",
+  "Tot_biom",
+  "ub",
+  "value",
+  "variable",
+  "Year"
 ))
 
 #' @name spmR-package

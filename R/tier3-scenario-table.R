@@ -40,7 +40,8 @@ tier3_scenario_table <- function(
     suppressWarnings(x$Alt <- as.integer(x$Scenario))
   }
   if (anyNA(x$Alt) || !all(x$Alt %in% 1:7)) {
-    stop("Tier 3 alternatives must be identified by `Alt` values 1 through 7.",
+    stop(
+      "Tier 3 alternatives must be identified by `Alt` values 1 through 7.",
       call. = FALSE
     )
   }
@@ -48,13 +49,16 @@ tier3_scenario_table <- function(
     stop("`scenario_names` must contain exactly seven names.", call. = FALSE)
   }
   available_years <- sort(unique(x$Year))
-  if (is.null(years)) years <- available_years
+  if (is.null(years)) {
+    years <- available_years
+  }
   years <- as.numeric(years)
   missing_years <- setdiff(years, available_years)
   if (length(missing_years)) {
     stop(
       "Requested projection year(s) not found: ",
-      paste(missing_years, collapse = ", "), ".",
+      paste(missing_years, collapse = ", "),
+      ".",
       call. = FALSE
     )
   }
@@ -63,7 +67,8 @@ tier3_scenario_table <- function(
   if (length(missing_columns)) {
     stop(
       "Tier 3 scenario table requires columns: ",
-      paste(missing_columns, collapse = ", "), ".",
+      paste(missing_columns, collapse = ", "),
+      ".",
       call. = FALSE
     )
   }
