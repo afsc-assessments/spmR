@@ -21,7 +21,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">spmR</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.4.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.4.1</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -63,14 +63,17 @@
 <p>This vignette compares the legacy ADMB workflow
 (<code>spm.tpl</code>) with the new RTMB prototype. Its archived outputs
 illustrate the interface; they are placeholders for population dynamics
-and cannot establish scientific equivalence. Version 0.4.0 stops new
+and cannot establish scientific equivalence. Version 0.4.1 stops new
 RTMB projections until the required dynamics and input contract are
-implemented. New ADMB runs require input format 2 metadata. The <a href="split_sex_inputs.html">split-sex input migration guide</a>
-provides a runnable example with explicit historical recruitment basis,
-separate female and male population weights, and starting-year checks.
-Add those fields to <code>spm_metadata.json</code> while preserving the
-positional species-file layout. Archived RTMB output remains a record of
-the earlier prototype; adding metadata leaves its results and scientific
+implemented. New ADMB runs require input format 2 metadata and a male
+spawning-weight vector <code>wt_M</code> after <code>wt_F</code> in
+split-sex species files. The <a href="split_sex_inputs.html">split-sex
+input migration guide</a> provides a runnable example with explicit
+historical recruitment basis, separate female and male population
+weights, and starting-year checks. Add those fields to
+<code>spm_metadata.json</code>. Version 0.4.1 no longer reads
+<code>tacpar.dat</code>. Archived RTMB output remains a record of the
+earlier prototype; adding metadata leaves its results and scientific
 limitations unchanged.</p>
 <div class="section level2">
 <h2 id="read-archived-prototype-output">Read archived prototype output<a class="anchor" aria-label="anchor" href="#read-archived-prototype-output"></a>

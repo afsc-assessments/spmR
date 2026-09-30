@@ -1,6 +1,6 @@
 # Migrating split-sex projection inputs
 
-Version 0.4.0 requires input format 2 for new ADMB projections. This
+Version 0.4.1 requires input format 2 for new ADMB projections. This
 guide uses synthetic data to show the change from legacy split-sex files
 to explicit recruitment and population-weight metadata. The validation
 examples run while this vignette is built; compiling and running ADMB
@@ -8,17 +8,20 @@ are separate steps.
 
 ## What changes in the input files
 
-Keep the positional layout of `spm.dat`, `tacpar.dat`, and each species
-file (for example, `stock.prj`). Add a separate `spm_metadata.json` file
-with one species record per stock, in the order listed in `spm.dat`.
+Keep the positional layout of `spm.dat`. In each split-sex species file
+(for example, `stock.prj`), insert `wt_M` immediately after `wt_F`.
+Version 0.4.1 does not read or require `tacpar.dat`. Add a separate
+`spm_metadata.json` file with one species record per stock, in the order
+listed in `spm.dat`.
 
 - Declare the basis of the complete historical recruitment series:
   `"total"` for both sexes combined or `"per_sex"` for either sex under
   a 50:50 recruitment ratio. Pooled-sex inputs require `"total"`.
 - Supply female and male **population** weight-at-age vectors in the
   metadata. Each vector carries its age labels. The positional `wt_F`
-  vector continues to supply spawning weights, and `wt_gear_F` and
-  `wt_gear_M` supply catch weights.
+  and `wt_M` vectors supply female and male spawning weights, and
+  `wt_gear_F` and `wt_gear_M` supply catch weights. Female spawning
+  weight continues to determine SSB.
 - Keep the initial female and male abundance vectors in the species
   file. The recruitment-basis declaration applies to historical
   recruitment; it leaves these sex-specific initial vectors unchanged.
@@ -26,12 +29,13 @@ with one species record per stock, in the order listed in `spm.dat`.
   before creating metadata. Update values as needed while preserving
   field order.
 
-**Keep additional population-weight vectors in the metadata file.**
-Inserting one into a positional species file can shift subsequent
-fields. An older executable may ignore additional information. The R
-runner validates metadata, creates the native `spm_input_v2.dat` file,
-and checks executable compatibility. Recompile the current
-`inst/admb/spm.tpl` before running format-2 inputs.
+**Keep population-weight vectors in the metadata file.** The new
+positional `wt_M` vector is a spawning weight, not a population weight.
+Inserting a field anywhere else in a positional species file can shift
+subsequent fields. An older executable may ignore additional
+information. The R runner validates metadata, creates the native
+`spm_input_v2.dat` file, and checks executable compatibility. Recompile
+the current `inst/admb/spm.tpl` before running format-2 inputs.
 
 ## A reproducible synthetic input folder
 
@@ -42,13 +46,11 @@ for an actual projection.
 
 ``` r
 
-library(spmR)
-
 projection_dir <- tempfile("spmr-split-sex-")
 dir.create(projection_dir)
 ages <- 1:3
 
-# Preserve the legacy field order; comments identify fields for the reader.
+# Comments identify fields and make the new split-sex order explicit.
 write_fields <- function(fields, path) {
   lines <- unlist(Map(function(name, values) {
     c(paste("#", name), paste(values, collapse = " "))
@@ -72,15 +74,12 @@ write_fields(list(
   M_F = rep(0.2, 3), M_M = rep(0.2, 3),
   pmature_F = c(0, 0.5, 1), pmature_M = c(0, 0.5, 1),
   wt_F = c(0.1, 0.25, 0.5),
+  wt_M = c(0.08, 0.2, 0.4),
   wt_gear_F = c(0.2, 0.4, 0.6), wt_gear_M = c(0.15, 0.3, 0.45),
   sel_F = c(0.1, 0.5, 1), sel_M = c(0.1, 0.5, 1),
   n0_F = c(100, 200, 300), n0_M = c(100, 180, 250),
   nrec = 4, R = c(80, 100, 120, 100), SSB = rep(1000, 4)
 ), file.path(projection_dir, "stock.prj"))
-
-# Required legacy file; TAC fitting is outside the supported format-2 modes.
-write_fields(list(nntmp = 1, nnodes = 0, maxabc = 1, theta = 0),
-             file.path(projection_dir, "tacpar.dat"))
 ```
 
 ## Add explicit recruitment and population weights

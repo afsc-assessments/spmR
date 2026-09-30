@@ -23,7 +23,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">spmR</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.4.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.4.1</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -66,11 +66,11 @@
     <section class="section level2" data-number="1"><h2 data-number="1" id="purpose">
 <span class="header-section-number">1</span> Purpose<a class="anchor" aria-label="anchor" href="#purpose"></a>
 </h2>
-<p>These notes describe the earlier version 0.3.0 architecture. In version 0.4.0, new spmR ADMB runs require explicit format-2 metadata for recruitment and population weights. New RTMB runs are blocked while the prototype awaits population dynamics; archived output remains readable.</p>
+<p>These notes describe the earlier version 0.3.0 architecture. In version 0.4.1, new spmR ADMB runs require explicit format-2 metadata for recruitment and population weights. New RTMB runs are blocked while the prototype awaits population dynamics; archived output remains readable.</p>
 <section class="level2" data-number="1.1"><h3 data-number="1.1" id="current-split-sex-input-requirements">
 <span class="header-section-number">1.1</span> Current split-sex input requirements<a class="anchor" aria-label="anchor" href="#current-split-sex-input-requirements"></a>
 </h3>
-<p>For spmR 0.4.0 ADMB projections, add <code>spm_metadata.json</code> alongside the legacy input files. Declare <code>recruitment_basis</code> as <code>"total"</code> or <code>"per_sex"</code> and supply female and male population weights with matching age labels and units. The engine converts the complete recruitment history to totals before calculation and splits each projected total equally between sexes once. Population weights determine total biomass; the positional spawning and fishery weights retain their separate roles. Missing male population weights require an explicit, recorded substitute before a split-sex run can proceed.</p>
+<p>For spmR 0.4.1 ADMB projections, add <code>spm_metadata.json</code> alongside <code>spm.dat</code> and the species files; <code>tacpar.dat</code> is no longer required. Split-sex species files place <code>wt_M</code> immediately after <code>wt_F</code>. Declare <code>recruitment_basis</code> as <code>"total"</code> or <code>"per_sex"</code> and supply female and male population weights with matching age labels and units. The engine converts the complete recruitment history to totals before calculation and splits each projected total equally between sexes once. Population weights determine total biomass; the positional spawning and fishery weights retain their separate roles. Missing male population weights require an explicit, recorded substitute before a split-sex run can proceed.</p>
 <p>The runnable <a href="split_sex_inputs.html">split-sex migration guide</a> documents the metadata, starting-year boundary, executable compatibility check, and output provenance. The comparison below describes the earlier architecture and retains that historical scope.</p>
 <ul>
 <li>

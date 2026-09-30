@@ -5,7 +5,7 @@ Seattle WA 98115
 
 ## Introduction
 
-### Current-input guidance: spmR 0.4.0
+### Current-input guidance: spmR 0.4.1
 
 The sections below preserve the historical development and proposals for
 SPM. For current projections, use the [split-sex input migration
@@ -13,19 +13,20 @@ guide](http://afsc-assessments.github.io/spmR/articles/split_sex_inputs.md)
 and the [current calculation
 summary](http://afsc-assessments.github.io/spmR/articles/more_documentation.md).
 
-Version 0.4.0 requires format-2 metadata alongside the existing
-positional input files and a compatible executable. Keep each legacy
-file’s field order unchanged. Declare whether historical recruitment is
-total or per sex; SPM converts the full history to total recruitment
-before calculations and allocates projected totals equally between sexes
-once.
+Version 0.4.1 requires format-2 metadata alongside the positional input
+files and a compatible executable. Split-sex species files place a male
+spawning weight vector `wt_M` immediately after `wt_F`; `tacpar.dat` is
+no longer read. Declare whether historical recruitment is total or per
+sex; SPM converts the full history to total recruitment before
+calculations and allocates projected totals equally between sexes once.
 
 Supply separate female and male population weight-at-age vectors in the
-metadata. They determine total biomass. The legacy female weight vector
-serves spawning biomass, and fishery weights serve catch calculations. A
-missing male population vector stops a split-sex run unless the user
-explicitly selects a supported substitute. The migration guide describes
-the required units, age order, validation, and recorded substitutions.
+metadata. They determine total biomass. The positional female and male
+weight vectors serve spawning calculations, and fishery weights serve
+catch calculations. A missing male population vector stops a split-sex
+run unless the user explicitly selects a supported substitute. The
+migration guide describes the required units, age order, validation, and
+recorded substitutions.
 
 Initial abundance must refer to the beginning of the declared first
 projection year, including the chosen recruitment for that year. In a

@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">spmR</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.4.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.4.1</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -32,6 +32,11 @@
 
     </div>
 
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="0.4.1" id="spmr-041">spmR 0.4.1<a class="anchor" aria-label="anchor" href="#spmr-041"></a></h2>
+<ul><li>Split-sex species files now contain a male spawning weight-at-age vector, <code>wt_M</code>, immediately after <code>wt_F</code>. The R validator and ADMB engine both read and validate the new field. Pooled-sex files continue to use <code>wt_F</code> for both internal sex groups.</li>
+<li>Version-2 projections no longer read or require <code>tacpar.dat</code>. They continue to require <code>TAC_ABC = 1</code>; legacy fitted and external TAC modes remain rejected.</li>
+</ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.4.0" id="spmr-040">spmR 0.4.0<a class="anchor" aria-label="anchor" href="#spmr-040"></a></h2>
 <ul><li>New projections require input metadata format 2 and a compatible executable. Legacy output remains readable with <code>run = FALSE</code>.</li>

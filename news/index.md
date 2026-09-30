@@ -1,5 +1,15 @@
 # Changelog
 
+## spmR 0.4.1
+
+- Split-sex species files now contain a male spawning weight-at-age
+  vector, `wt_M`, immediately after `wt_F`. The R validator and ADMB
+  engine both read and validate the new field. Pooled-sex files continue
+  to use `wt_F` for both internal sex groups.
+- Version-2 projections no longer read or require `tacpar.dat`. They
+  continue to require `TAC_ABC = 1`; legacy fitted and external TAC
+  modes remain rejected.
+
 ## spmR 0.4.0
 
 - New projections require input metadata format 2 and a compatible

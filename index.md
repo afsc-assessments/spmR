@@ -6,21 +6,22 @@ Differentiation Model Builder (`ADMB`).
 
 The main projection model is
 [`inst/admb/spm.tpl`](http://afsc-assessments.github.io/spmR/inst/admb/spm.tpl).
-A model run requires `spm.dat`, `tacpar.dat`, and a species-specific
-file containing assessment outputs. The
+A model run requires `spm.dat`, a species-specific file containing
+assessment outputs, and `spm_metadata.json`. The
 [`examples`](http://afsc-assessments.github.io/spmR/examples) directory
 contains complete example inputs and outputs. ADMB 13.0 or newer is
 required to compile the model.
 
 ## Input format 2
 
-Version 0.4.0 requires a `spm_metadata.json` file for new projections.
-Keep the legacy positional files unchanged. An extra vector in a
-positional file can shift subsequent fields or be ignored by an older
-program. The R runner validates the metadata and generates the native
-`spm_input_v2.dat` file. It checks the executable’s `-spmr-capabilities`
-response before running the projection. Recompile `inst/admb/spm.tpl`
-for this version.
+Version 0.4.1 requires a `spm_metadata.json` file for new projections. A
+split-sex species file now places the male spawning-weight vector `wt_M`
+immediately after `wt_F`; pooled-sex files retain `wt_F` alone. An extra
+vector in any other position can shift subsequent fields or be ignored
+by an older program. The R runner validates the metadata and generates
+the native `spm_input_v2.dat` file. It checks the executable’s
+`-spmr-capabilities` response before running the projection. Recompile
+`inst/admb/spm.tpl` for this version.
 
 Each stock declares `recruitment_basis = "total"` or `"per_sex"`.
 Per-sex inputs represent either sex under a 50:50 recruitment ratio. The
@@ -32,8 +33,9 @@ select it from the assessment’s definitions.
 
 Population weights determine total biomass. Supply separate female and
 male population weight-at-age vectors, with ages attached to each. The
-legacy female weight vector remains the spawning weight; fishery weights
-remain catch weights. A split-sex run with missing male population
+positional `wt_F` and `wt_M` vectors are female and male spawning
+weights; fishery weights remain catch weights. Female spawning weight
+continues to determine SSB. A split-sex run with missing male population
 weights stops before execution. An explicit `male_population_substitute`
 can select `"female_population"` or `"mean_male_fishery"`; either choice
 produces a warning and is recorded. Review that scientific assumption
@@ -94,11 +96,11 @@ abundance vector. The `Ntot` column reports mature abundance under the
 supplied maturity vectors; calculate total biomass from all ages and the
 population weights.
 
-Format 2 currently supports `TAC_ABC = 1` and recruitment modes 1 and 2.
-Modes 3 and 4 need an explicit convention for their auxiliary inputs.
-New experimental RTMB projections also require further implementation;
-existing output can still be read. These boundaries are checked before
-execution.
+Format 2 supports `TAC_ABC = 1` without `tacpar.dat`, and recruitment
+modes 1 and 2. Modes 3 and 4 need an explicit convention for their
+auxiliary inputs. New experimental RTMB projections also require further
+implementation; existing output can still be read. These boundaries are
+checked before execution.
 
 ## Supported public API
 

@@ -21,7 +21,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">spmR</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.4.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.4.1</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -281,14 +281,16 @@ recruitment variability are presented figures as deemed useful.</p>
 package on github for installation options and vignettes (Articles <a href="https://afsc-assessments.github.io/spmR/" class="external-link"><u>here</u></a>).</p>
 </div>
 <div class="section level2">
-<h2 id="current-inputs-spmr-0-4-0-and-format-2">Current inputs: spmR 0.4.0 and format 2<a class="anchor" aria-label="anchor" href="#current-inputs-spmr-0-4-0-and-format-2"></a>
+<h2 id="current-inputs-spmr-0-4-1-and-format-2">Current inputs: spmR 0.4.1 and format 2<a class="anchor" aria-label="anchor" href="#current-inputs-spmr-0-4-1-and-format-2"></a>
 </h2>
 <p>New projections require version-2 metadata in
 <code>spm_metadata.json</code> and a compatible executable compiled from
 the current <code>inst/admb/spm.tpl</code>. Keep the order and number of
-fields in <code>spm.dat</code>, <code>tacpar.dat</code>, and each
-species file unchanged. Store the new population weights in metadata;
-adding a positional vector can shift later fields or be ignored by an
+fields in <code>spm.dat</code>. In each split-sex species file, insert
+the male spawning-weight vector <code>wt_M</code> immediately after
+<code>wt_F</code>. Version 0.4.1 no longer reads
+<code>tacpar.dat</code>. Store population weights in metadata; adding
+another positional vector can shift later fields or be ignored by an
 older executable. The runner validates these inputs and generates
 <code>spm_input_v2.dat</code> for the native engine.</p>
 <p>Each species declares <code>recruitment_basis = "total"</code> or

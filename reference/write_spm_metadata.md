@@ -1,9 +1,12 @@
 # Write explicit recruitment and population-weight metadata
 
-Version 2 metadata accompanies the unchanged positional SPM input files.
-Recruitment must be identified as total across sexes or per sex.
-Population weights are distinct from fishery and spawning weights.
-Inputs are validated before replacing an existing metadata file.
+Version 2 metadata accompanies the positional SPM input files. Split-sex
+species files contain \`wt_M\` immediately after \`wt_F\`; pooled-sex
+files use \`wt_F\` for both internal sex groups. Recruitment must be
+identified as total across sexes or per sex. Population weights are
+distinct from fishery and spawning weights. Version-2 projections use
+\`TAC_ABC = 1\` and do not read \`tacpar.dat\`. Inputs are validated
+before replacing an existing metadata file.
 
 ## Usage
 
@@ -22,7 +25,7 @@ validate_spm_inputs(dirname, metadata = "spm_metadata.json", strict = TRUE)
 
 - dirname:
 
-  Directory containing \`spm.dat\`, \`tacpar.dat\`, and species files.
+  Directory containing \`spm.dat\` and species files.
 
 - species:
 

@@ -3,21 +3,23 @@
 ## 1 Purpose
 
 These notes describe the earlier version 0.3.0 architecture. In version
-0.4.0, new spmR ADMB runs require explicit format-2 metadata for
+0.4.1, new spmR ADMB runs require explicit format-2 metadata for
 recruitment and population weights. New RTMB runs are blocked while the
 prototype awaits population dynamics; archived output remains readable.
 
 ### 1.1 Current split-sex input requirements
 
-For spmR 0.4.0 ADMB projections, add `spm_metadata.json` alongside the
-legacy input files. Declare `recruitment_basis` as `"total"` or
-`"per_sex"` and supply female and male population weights with matching
-age labels and units. The engine converts the complete recruitment
-history to totals before calculation and splits each projected total
-equally between sexes once. Population weights determine total biomass;
-the positional spawning and fishery weights retain their separate roles.
-Missing male population weights require an explicit, recorded substitute
-before a split-sex run can proceed.
+For spmR 0.4.1 ADMB projections, add `spm_metadata.json` alongside
+`spm.dat` and the species files; `tacpar.dat` is no longer required.
+Split-sex species files place `wt_M` immediately after `wt_F`. Declare
+`recruitment_basis` as `"total"` or `"per_sex"` and supply female and
+male population weights with matching age labels and units. The engine
+converts the complete recruitment history to totals before calculation
+and splits each projected total equally between sexes once. Population
+weights determine total biomass; the positional spawning and fishery
+weights retain their separate roles. Missing male population weights
+require an explicit, recorded substitute before a split-sex run can
+proceed.
 
 The runnable [split-sex migration
 guide](http://afsc-assessments.github.io/spmR/articles/split_sex_inputs.md)

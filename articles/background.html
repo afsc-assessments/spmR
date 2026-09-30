@@ -21,7 +21,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">spmR</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.4.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.4.1</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -69,24 +69,25 @@ Seattle WA 98115</p>
 <h2 id="introduction">Introduction<a class="anchor" aria-label="anchor" href="#introduction"></a>
 </h2>
 <div class="section level3">
-<h3 id="current-input-guidance-spmr-0-4-0">Current-input guidance: spmR 0.4.0<a class="anchor" aria-label="anchor" href="#current-input-guidance-spmr-0-4-0"></a>
+<h3 id="current-input-guidance-spmr-0-4-1">Current-input guidance: spmR 0.4.1<a class="anchor" aria-label="anchor" href="#current-input-guidance-spmr-0-4-1"></a>
 </h3>
 <p>The sections below preserve the historical development and proposals
 for SPM. For current projections, use the <a href="split_sex_inputs.html">split-sex input migration guide</a> and the
 <a href="more_documentation.html">current calculation summary</a>.</p>
-<p>Version 0.4.0 requires format-2 metadata alongside the existing
-positional input files and a compatible executable. Keep each legacy
-file’s field order unchanged. Declare whether historical recruitment is
-total or per sex; SPM converts the full history to total recruitment
-before calculations and allocates projected totals equally between sexes
-once.</p>
+<p>Version 0.4.1 requires format-2 metadata alongside the positional
+input files and a compatible executable. Split-sex species files place a
+male spawning weight vector <code>wt_M</code> immediately after
+<code>wt_F</code>; <code>tacpar.dat</code> is no longer read. Declare
+whether historical recruitment is total or per sex; SPM converts the
+full history to total recruitment before calculations and allocates
+projected totals equally between sexes once.</p>
 <p>Supply separate female and male population weight-at-age vectors in
-the metadata. They determine total biomass. The legacy female weight
-vector serves spawning biomass, and fishery weights serve catch
-calculations. A missing male population vector stops a split-sex run
-unless the user explicitly selects a supported substitute. The migration
-guide describes the required units, age order, validation, and recorded
-substitutions.</p>
+the metadata. They determine total biomass. The positional female and
+male weight vectors serve spawning calculations, and fishery weights
+serve catch calculations. A missing male population vector stops a
+split-sex run unless the user explicitly selects a supported substitute.
+The migration guide describes the required units, age order, validation,
+and recorded substitutions.</p>
 <p>Initial abundance must refer to the beginning of the declared first
 projection year, including the chosen recruitment for that year. In a
 detailed output row for year
