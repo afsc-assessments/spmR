@@ -19,7 +19,10 @@ plotSPMx <- function(df, alt = 2, thisyr = 2022, mytitle = NULL) {
   required <- c("Sim", "Alt", "Year", "Catch", "SSB", "ABC", "OFL")
   missing_cols <- setdiff(required, names(df))
   if (length(missing_cols) > 0) {
-    stop("Missing required columns in `df`: ", paste(missing_cols, collapse = ", "))
+    stop(
+      "Missing required columns in `df`: ",
+      paste(missing_cols, collapse = ", ")
+    )
   }
 
   dfs <- df %>%
@@ -41,8 +44,18 @@ plotSPMx <- function(df, alt = 2, thisyr = 2022, mytitle = NULL) {
   names(pf) <- c("Year", "Alt", "variable", "median", "mean", "lb", "ub")
 
   # p1 <-
-  Cofl <- as.numeric(pf |> ungroup() |> filter(Alt == alt, variable == "OFL") |> summarise(max(mean)))
-  Cabc <- as.numeric(pf |> ungroup() |> filter(Alt == alt, variable == "ABC") |> summarise(max(mean)))
+  Cofl <- as.numeric(
+    pf |>
+      ungroup() |>
+      filter(Alt == alt, variable == "OFL") |>
+      summarise(max(mean))
+  )
+  Cabc <- as.numeric(
+    pf |>
+      ungroup() |>
+      filter(Alt == alt, variable == "ABC") |>
+      summarise(max(mean))
+  )
   p1 <- pf %>%
     filter(Alt == alt, variable == "Catch") |>
     ggplot(aes(x = Year, y = mean)) +
@@ -102,7 +115,6 @@ plotSPMx <- function(df, alt = 2, thisyr = 2022, mytitle = NULL) {
 # }
 # p1/p2/p3
 
-
 #' Plot SPM Data
 #'
 #' This function filters and processes a dataframe, then creates a plot
@@ -140,10 +152,17 @@ plotSPM <- function(df, alt = c(1, 3, 5, 7), mytitle = NULL) {
     mutate(
       type = str_extract(variable, "^[^_]+"),
       kind = str_extract(variable, "(?<=_).*"),
-      Alt  = as.factor(Alt)
+      Alt = as.factor(Alt)
     ) |>
     pivot_wider(id_cols = -variable, names_from = kind, values_from = value) |>
-    ggplot(aes(x = Year, y = mean, ymin = lb, ymax = ub, color = Alt, fill = Alt)) +
+    ggplot(aes(
+      x = Year,
+      y = mean,
+      ymin = lb,
+      ymax = ub,
+      color = Alt,
+      fill = Alt
+    )) +
     geom_line() +
     ylim(0, NA) +
     geom_ribbon(color = 0, alpha = .2) +

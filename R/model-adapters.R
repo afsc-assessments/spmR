@@ -562,7 +562,8 @@ rtmb_adapter <- function() {
 }
 
 spm_adapter <- function(engine, metadata = "spm_metadata.json", strict = TRUE) {
-  switch(engine,
+  switch(
+    engine,
     admb = admb_adapter(metadata, strict),
     rtmb = rtmb_adapter(),
     stop("Unknown model engine: ", engine, ".", call. = FALSE)
