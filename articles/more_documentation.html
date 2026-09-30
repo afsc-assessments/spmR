@@ -281,6 +281,49 @@ recruitment variability are presented figures as deemed useful.</p>
 package on github for installation options and vignettes (Articles <a href="https://afsc-assessments.github.io/spmR/" class="external-link"><u>here</u></a>).</p>
 </div>
 <div class="section level2">
+<h2 id="current-inputs-spmr-0-4-0-and-format-2">Current inputs: spmR 0.4.0 and format 2<a class="anchor" aria-label="anchor" href="#current-inputs-spmr-0-4-0-and-format-2"></a>
+</h2>
+<p>New projections require version-2 metadata in
+<code>spm_metadata.json</code> and a compatible executable compiled from
+the current <code>inst/admb/spm.tpl</code>. Keep the order and number of
+fields in <code>spm.dat</code>, <code>tacpar.dat</code>, and each
+species file unchanged. Store the new population weights in metadata;
+adding a positional vector can shift later fields or be ignored by an
+older executable. The runner validates these inputs and generates
+<code>spm_input_v2.dat</code> for the native engine.</p>
+<p>Each species declares <code>recruitment_basis = "total"</code> or
+<code>"per_sex"</code>. <code>"per_sex"</code> describes the recruitment
+of either sex under a 50:50 ratio; pooled-sex inputs require
+<code>"total"</code>. The complete historical series is converted to
+total recruitment before calculating its arithmetic mean, harmonic mean,
+variability, or stock-recruitment inputs. Each projected total is then
+divided equally between females and males once.</p>
+<p>Supply female and male population weights with an explicit age
+vector. The vectors must contain one positive, finite value per age in
+kg, with the declared consecutive, increasing age order. Abundance and
+biomass units must form a supported pair:
+<code>fish</code>/<code>kg</code>,
+<code>thousand_fish</code>/<code>t</code>, or
+<code>million_fish</code>/<code>thousand_t</code>. Convert existing
+values to the declared units and use <code>N_scalar = 1</code>.</p>
+<p>A split-sex run requires male population weights. When those data are
+unavailable, the user can explicitly select
+<code>male_population_substitute</code> as
+<code>"female_population"</code> or <code>"mean_male_fishery"</code>
+(the arithmetic mean across male fishery-weight vectors at each age).
+Each substitute produces a warning and is recorded with the output;
+document its biological justification. Setting
+<code>strict = FALSE</code> changes the treatment of unknown metadata
+fields to warnings; required inputs and scientific checks still
+apply.</p>
+<p>See <a href="split_sex_inputs.html">Migrating split-sex projection
+inputs</a> for a worked example. Run <code><a href="../reference/write_spm_metadata.html">validate_spm_inputs()</a></code>
+before a new projection. Output provenance records the recruitment
+convention, units, substitutions, and executable and input hashes.
+Historical output remains readable with
+<code>runSPM(..., run = FALSE)</code>.</p>
+</div>
+<div class="section level2">
 <h2 id="history-of-spm">History of SPM<a class="anchor" aria-label="anchor" href="#history-of-spm"></a>
 </h2>
 <p>&lt;links to the historical docs&gt;</p>
@@ -307,27 +350,59 @@ remainder of TY (Oct - Dec).</p>
 <h2 id="summary-of-spr-calculations-for-tier-3-stocks">Summary of SPR calculations for Tier 3 stocks<a class="anchor" aria-label="anchor" href="#summary-of-spr-calculations-for-tier-3-stocks"></a>
 </h2>
 <ol style="list-style-type: decimal">
-<li><p>SPM reads in the (average) biological input values: M, maturity,
-spawning and fisheries WAA, and fisheries selectivity. Uses a spawner
-per recruit (SPR) approach to calculate SPR at F=0, i.e., how much
-female spawning biomass (tons, kg, etc.) a single recruit produces in
-its lifetime.</p></li>
-<li><p>Uses vector of recruitments to calculate mean recruits (Rbar),
-which is multiplied by spawning biomass per recruit at F=0 to get
-unfished SSB (SSB0 or SSB100%). From that define SSB35=.35*SB100 and
-SB40=0.40*SB100. These are equilibrium values given assumptions about
-Rbar, biology, and selectivity.</p></li>
-<li><p>Uses a numerical solver to find F35%=FMSY=FOFL and F40%=FmaxABC
-in equilibrium by tuning F until SSB is SSB35 and SSB40, respectively.
-These go in the executive table.</p></li>
-<li><p>Proj next takes N_AY and inputted catches to get N_PY1. It then
-applies F_ABC, as modified by the harvest control rule, to get ABC in
-PY1. An assumption is made about catch taken in PY1, and so N_PY2 is
-calculated and F_ABC applied again to get ABC in PY2. A similar approach
-is used for OFL. The assumption depends on the scenarios (see below),
-but scenario X should be used which dictates that the ABC is taken in
-PY1.</p></li>
+<li><p>SPM reads natural mortality, maturity, spawning weights,
+population weights, fishery weights, and fishery selectivity. These
+weights have distinct roles: female spawning weights determine spawning
+biomass; female and male population weights determine total biomass;
+fishery weights convert catch numbers to catch biomass. Total biomass is
+the sum of abundance times population weight across ages and
+sexes.</p></li>
+<li><p>The spawning biomass per recruit (SPR) calculation follows one
+female recruit through survival, maturity, spawning timing, and the plus
+group. Let
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>ϕ</mi><mi>F</mi></msub><mo stretchy="false" form="prefix">(</mo><mn>0</mn><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">\phi_F(0)</annotation></semantics></math>
+denote lifetime spawning biomass per female recruit with fishing
+mortality equal to zero, and let
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mover><mi>R</mi><mo accent="true">¯</mo></mover><mrow><mi mathvariant="normal">t</mi><mi mathvariant="normal">o</mi><mi mathvariant="normal">t</mi><mi mathvariant="normal">a</mi><mi mathvariant="normal">l</mi></mrow></msub><annotation encoding="application/x-tex">\overline{R}_{\mathrm{total}}</annotation></semantics></math>
+be the arithmetic mean of the normalized total recruitment history.
+Under the 50:50 recruitment ratio,
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>S</mi><mi>S</mi><msub><mi>B</mi><mn>0</mn></msub><mo>=</mo><mn>0.5</mn><mspace width="0.167em"></mspace><msub><mover><mi>R</mi><mo accent="true">¯</mo></mover><mrow><mi mathvariant="normal">t</mi><mi mathvariant="normal">o</mi><mi mathvariant="normal">t</mi><mi mathvariant="normal">a</mi><mi mathvariant="normal">l</mi></mrow></msub><mspace width="0.167em"></mspace><msub><mi>ϕ</mi><mi>F</mi></msub><mo stretchy="false" form="prefix">(</mo><mn>0</mn><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">SSB_0 = 0.5\,\overline{R}_{\mathrm{total}}\,\phi_F(0)</annotation></semantics></math>.
+This applies the female fraction once. Summary output
+<code>Mean_rec</code> reports total recruitment;
+<code>Mean_rec_female</code> reports its female half. The reference
+biomasses are
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>S</mi><mi>S</mi><msub><mi>B</mi><mn>35</mn></msub><mo>=</mo><mn>0.35</mn><mspace width="0.167em"></mspace><mi>S</mi><mi>S</mi><msub><mi>B</mi><mn>0</mn></msub></mrow><annotation encoding="application/x-tex">SSB_{35}=0.35\,SSB_0</annotation></semantics></math>
+and
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>S</mi><mi>S</mi><msub><mi>B</mi><mn>40</mn></msub><mo>=</mo><mn>0.40</mn><mspace width="0.167em"></mspace><mi>S</mi><mi>S</mi><msub><mi>B</mi><mn>0</mn></msub></mrow><annotation encoding="application/x-tex">SSB_{40}=0.40\,SSB_0</annotation></semantics></math>.</p></li>
+<li><p>SPM solves for the fishing mortality rates that produce the
+specified fractions of unfished spawning biomass per recruit. For inputs
+using 40% and 35%, these are
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>F</mi><mrow><mn>40</mn><mi>%</mi></mrow></msub><annotation encoding="application/x-tex">F_{40\%}</annotation></semantics></math>
+for maximum ABC and
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>F</mi><mrow><mn>35</mn><mi>%</mi></mrow></msub><annotation encoding="application/x-tex">F_{35\%}</annotation></semantics></math>
+for OFL. The resulting rates and spawning biomass enter the applicable
+harvest control rule. Population biomass reference points use the
+separate population weights for both sexes.</p></li>
+<li><p>Initial numbers at age must describe the beginning of
+<code>styr</code>, the first projection year declared in
+<code>spm.dat</code>. If the assessment supplies numbers for an earlier
+year, advance survivors, ages, and the plus group to <code>styr</code>
+and explicitly choose recruitment entering that year before writing the
+inputs. Relabeling an earlier abundance vector changes the projection
+boundary without advancing the population. From the supplied initial
+state, SPM applies each year’s catches or scenario-specific fishing
+mortality and advances survivors into the next year. Record the catch
+assumptions and scenario used for each assessment table.</p></li>
 </ol>
+<p>The detailed output row labeled <code>Year = t</code> reports biomass
+from the beginning-of-year abundance in year
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>t</mi><annotation encoding="application/x-tex">t</annotation></semantics></math>;
+spawning biomass includes survival to spawning. Its <code>Rec</code>
+value is the recruitment draw entering the youngest age in year
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>t</mi><mo>+</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">t+1</annotation></semantics></math>.
+Initial-year recruitment is already part of the input abundance vectors.
+Check these dates when comparing an assessment’s terminal year with the
+first projection year.</p>
 </div>
 <div class="section level2">
 <h2 id="summary-of-the-alternative-scenario-simulations">Summary of the alternative scenario simulations<a class="anchor" aria-label="anchor" href="#summary-of-the-alternative-scenario-simulations"></a>

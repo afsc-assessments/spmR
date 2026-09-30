@@ -69,6 +69,36 @@ Seattle WA 98115</p>
 <h2 id="introduction">Introduction<a class="anchor" aria-label="anchor" href="#introduction"></a>
 </h2>
 <div class="section level3">
+<h3 id="current-input-guidance-spmr-0-4-0">Current-input guidance: spmR 0.4.0<a class="anchor" aria-label="anchor" href="#current-input-guidance-spmr-0-4-0"></a>
+</h3>
+<p>The sections below preserve the historical development and proposals
+for SPM. For current projections, use the <a href="split_sex_inputs.html">split-sex input migration guide</a> and the
+<a href="more_documentation.html">current calculation summary</a>.</p>
+<p>Version 0.4.0 requires format-2 metadata alongside the existing
+positional input files and a compatible executable. Keep each legacy
+file’s field order unchanged. Declare whether historical recruitment is
+total or per sex; SPM converts the full history to total recruitment
+before calculations and allocates projected totals equally between sexes
+once.</p>
+<p>Supply separate female and male population weight-at-age vectors in
+the metadata. They determine total biomass. The legacy female weight
+vector serves spawning biomass, and fishery weights serve catch
+calculations. A missing male population vector stops a split-sex run
+unless the user explicitly selects a supported substitute. The migration
+guide describes the required units, age order, validation, and recorded
+substitutions.</p>
+<p>Initial abundance must refer to the beginning of the declared first
+projection year, including the chosen recruitment for that year. In a
+detailed output row for year
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>t</mi><annotation encoding="application/x-tex">t</annotation></semantics></math>,
+<code>Rec</code> is the draw entering year
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>t</mi><mo>+</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">t+1</annotation></semantics></math>.
+Review this boundary and the input changes before revising assessment
+tables. Run provenance records the recruitment convention and executable
+hash so the calculation can be traced to its inputs and program
+version.</p>
+</div>
+<div class="section level3">
 <h3 id="update">2024 update<a class="anchor" aria-label="anchor" href="#update"></a>
 </h3>
 <p>The following priorities have been updated in light of changes in

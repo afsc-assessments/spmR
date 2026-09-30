@@ -64,7 +64,8 @@
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="http://afsc-assessments.github.io/spmR/">spmR</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://readr.tidyverse.org" class="external-link">readr</a></span><span class="op">)</span></span></code></pre></div>
 <p>This vignette is intentionally limited to two canonical example
-directories that are kept in sync with the package:</p>
+directories that are provided with the package for reading archived
+output:</p>
 <ul>
 <li>
 <code>examples/atka</code> for <code><a href="../reference/runSPM.html">runSPM()</a></code>,
@@ -75,6 +76,12 @@ directories that are kept in sync with the package:</p>
 <code>spm_summary.csv</code>
 </li>
 </ul>
+<p>The bundled positional files retain their historical layout. For a
+new run, create metadata with explicit recruitment basis and female/male
+population weights, then use a format-2 executable. Follow the runnable
+<a href="split_sex_inputs.html">split-sex input migration guide</a>.
+Keep each species file’s existing field order and store added population
+vectors in the metadata.</p>
 <div class="section level2">
 <h2 id="atka-workflow-examplesatka">1. Atka workflow (<code>examples/atka</code>)<a class="anchor" aria-label="anchor" href="#atka-workflow-examplesatka"></a>
 </h2>
@@ -130,7 +137,7 @@ directories that are kept in sync with the package:</p>
 <span><span class="co">#&gt;   ..   B40 = <span style="color: #00BB00;">col_double()</span>,</span></span>
 <span><span class="co">#&gt;   ..   B35 = <span style="color: #00BB00;">col_double()</span></span></span>
 <span><span class="co">#&gt;   .. )</span></span>
-<span><span class="co">#&gt;  - attr(*, "problems")=&lt;pointer: 0x55789ea2e970&gt;</span></span>
+<span><span class="co">#&gt;  - attr(*, "problems")=&lt;pointer: 0x56523be40560&gt;</span></span>
 <span></span>
 <span><span class="va">atka_inputs</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/dat2list.html">dat2list</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="va">atka_dir</span>, <span class="st">"spm.dat"</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">atka_inputs</span><span class="op">)</span></span>

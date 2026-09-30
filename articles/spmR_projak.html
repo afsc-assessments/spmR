@@ -67,12 +67,17 @@
 <span class="header-section-number">1</span> Purpose<a class="anchor" aria-label="anchor" href="#purpose"></a>
 </h2>
 <p>These notes describe the earlier version 0.3.0 architecture. In version 0.4.0, new spmR ADMB runs require explicit format-2 metadata for recruitment and population weights. New RTMB runs are blocked while the prototype awaits population dynamics; archived output remains readable.</p>
+<section class="level2" data-number="1.1"><h3 data-number="1.1" id="current-split-sex-input-requirements">
+<span class="header-section-number">1.1</span> Current split-sex input requirements<a class="anchor" aria-label="anchor" href="#current-split-sex-input-requirements"></a>
+</h3>
+<p>For spmR 0.4.0 ADMB projections, add <code>spm_metadata.json</code> alongside the legacy input files. Declare <code>recruitment_basis</code> as <code>"total"</code> or <code>"per_sex"</code> and supply female and male population weights with matching age labels and units. The engine converts the complete recruitment history to totals before calculation and splits each projected total equally between sexes once. Population weights determine total biomass; the positional spawning and fishery weights retain their separate roles. Missing male population weights require an explicit, recorded substitute before a split-sex run can proceed.</p>
+<p>The runnable <a href="split_sex_inputs.html">split-sex migration guide</a> documents the metadata, starting-year boundary, executable compatibility check, and output provenance. The comparison below describes the earlier architecture and retains that historical scope.</p>
 <ul>
 <li>
 <code>projak</code> (Ben Williams, v0.0.0.9000): pure-R package for NPFMC projection scenarios (1-7) downstream of an RTMB assessment; accepts a report object as input.</li>
 <li>
 <code>spmR</code> (Jim Ianelli, v0.3.0): Standard Projection Model wrapper around the legacy ADMB <code>spm</code> executable with an experimental RTMB path; reads <code>.dat</code> inputs (ADMB-style).</li>
-</ul></section><section class="section level2" data-number="2"><h2 data-number="2" id="architecture">
+</ul></section></section><section class="section level2" data-number="2"><h2 data-number="2" id="architecture">
 <span class="header-section-number">2</span> Architecture<a class="anchor" aria-label="anchor" href="#architecture"></a>
 </h2>
 <table class="table caption-top">

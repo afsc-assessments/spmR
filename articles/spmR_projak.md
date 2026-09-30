@@ -7,6 +7,24 @@ These notes describe the earlier version 0.3.0 architecture. In version
 recruitment and population weights. New RTMB runs are blocked while the
 prototype awaits population dynamics; archived output remains readable.
 
+### 1.1 Current split-sex input requirements
+
+For spmR 0.4.0 ADMB projections, add `spm_metadata.json` alongside the
+legacy input files. Declare `recruitment_basis` as `"total"` or
+`"per_sex"` and supply female and male population weights with matching
+age labels and units. The engine converts the complete recruitment
+history to totals before calculation and splits each projected total
+equally between sexes once. Population weights determine total biomass;
+the positional spawning and fishery weights retain their separate roles.
+Missing male population weights require an explicit, recorded substitute
+before a split-sex run can proceed.
+
+The runnable [split-sex migration
+guide](http://afsc-assessments.github.io/spmR/articles/split_sex_inputs.md)
+documents the metadata, starting-year boundary, executable compatibility
+check, and output provenance. The comparison below describes the earlier
+architecture and retains that historical scope.
+
 - `projak` (Ben Williams, v0.0.0.9000): pure-R package for NPFMC
   projection scenarios (1-7) downstream of an RTMB assessment; accepts a
   report object as input.

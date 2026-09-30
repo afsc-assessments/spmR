@@ -7,7 +7,8 @@ library(readr)
 ```
 
 This vignette is intentionally limited to two canonical example
-directories that are kept in sync with the package:
+directories that are provided with the package for reading archived
+output:
 
 - `examples/atka` for
   [`runSPM()`](http://afsc-assessments.github.io/spmR/reference/runSPM.md),
@@ -17,6 +18,14 @@ directories that are kept in sync with the package:
 - `examples/BSRE_AI` for
   [`plotSPM()`](http://afsc-assessments.github.io/spmR/reference/plotSPM.md)
   with `spm_summary.csv`
+
+The bundled positional files retain their historical layout. For a new
+run, create metadata with explicit recruitment basis and female/male
+population weights, then use a format-2 executable. Follow the runnable
+[split-sex input migration
+guide](http://afsc-assessments.github.io/spmR/articles/split_sex_inputs.md).
+Keep each species file’s existing field order and store added population
+vectors in the metadata.
 
 ## 1. Atka workflow (`examples/atka`)
 
@@ -75,7 +84,7 @@ str(atka_detail)
 #>   ..   B40 = col_double(),
 #>   ..   B35 = col_double()
 #>   .. )
-#>  - attr(*, "problems")=<pointer: 0x55789ea2e970>
+#>  - attr(*, "problems")=<pointer: 0x56523be40560>
 
 atka_inputs <- dat2list(file.path(atka_dir, "spm.dat"))
 names(atka_inputs)
