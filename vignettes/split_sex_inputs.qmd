@@ -93,7 +93,6 @@ write_fields(list(
   n0_F = c(100, 200, 300), n0_M = c(100, 180, 250),
   nrec = 4, R = c(80, 100, 120, 100), SSB = rep(1000, 4)
 ), file.path(projection_dir, "stock.prj"))
-
 ```
 
 ## Add explicit recruitment and population weights
@@ -147,8 +146,10 @@ suite checks the engine's recruitment moments, reference points, and trajectorie
 total_history <- c(80, 100, 120, 100)
 per_sex_history <- c(40, 50, 60, 50)
 stopifnot(identical(total_history, 2 * per_sex_history))
-c(arithmetic_mean = mean(total_history),
-  harmonic_mean = 1 / mean(1 / total_history))
+c(
+  arithmetic_mean = mean(total_history),
+  harmonic_mean = 1 / mean(1 / total_history)
+)
 ```
 
 Choose the basis from the assessment's recruitment definition. If the input
@@ -205,7 +206,7 @@ population weight. For this synthetic input:
 stock <- inputs$species[[1]]
 weights <- inputs$resolved_species[[1]]$population_weights
 initial_biomass_kg <- sum(stock$n0_F * weights$female +
-                         stock$n0_M * weights$male)
+  stock$n0_M * weights$male)
 stopifnot(isTRUE(all.equal(initial_biomass_kg, 236.8)))
 initial_biomass_kg
 ```
