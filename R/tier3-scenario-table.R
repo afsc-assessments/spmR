@@ -22,25 +22,27 @@
 #' )
 #' tier3_scenario_table(detail, years = 2027:2028)
 tier3_scenario_table <- function(
-    x,
-    years = NULL,
-    scenario_names = c(
-      "Maximum permissible ABC",
-      "Author-specified ABC",
-      "Average recent F",
-      "Alternative SPR rate",
-      "No fishing",
-      "OFL threshold determination",
-      "Status-determination ramp"
-    ),
-    digits = 1) {
+  x,
+  years = NULL,
+  scenario_names = c(
+    "Maximum permissible ABC",
+    "Author-specified ABC",
+    "Average recent F",
+    "Alternative SPR rate",
+    "No fishing",
+    "OFL threshold determination",
+    "Status-determination ramp"
+  ),
+  digits = 1
+) {
   x <- as_spm_result(x)
   if (!"Alt" %in% names(x)) {
     suppressWarnings(x$Alt <- as.integer(x$Scenario))
   }
   if (anyNA(x$Alt) || !all(x$Alt %in% 1:7)) {
     stop("Tier 3 alternatives must be identified by `Alt` values 1 through 7.",
-         call. = FALSE)
+      call. = FALSE
+    )
   }
   if (length(scenario_names) != 7L) {
     stop("`scenario_names` must contain exactly seven names.", call. = FALSE)
