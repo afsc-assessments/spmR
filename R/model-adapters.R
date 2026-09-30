@@ -31,7 +31,7 @@ spm_sha256 <- function(paths, root = NULL) {
 spm_execution_provenance <- function(dirname, metadata, strict) {
   parsed_files <- tryCatch(
     spm_read_legacy(dirname)$input_files,
-    error = function(e) c("spm.dat", "tacpar.dat")
+    error = function(e) "spm.dat"
   )
   list(
     format_version = 2L,

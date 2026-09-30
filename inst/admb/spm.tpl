@@ -132,26 +132,13 @@ DATA_SECTION
     *(ad_comm::global_datafile) >>  rho_in;
     // rho_in=0.82;
   }
-  // Open up tac-model parameters
-  ad_comm::change_datafile_name("tacpar.dat");
  END_CALCS
-  init_int nntmp
-  init_int nnodes
-  init_vector maxabc(1,ntacspp)
-  init_matrix theta(0,nnodes,1,ntacspp)
-  !! cout<<"read tacpar"<<endl;
-
   !! write_log(ABC_Multiplier); 
   !! write_log(N_scalar); 
   !! write_log(Alt4_SPR); 
   !! write_log(ntacspp); 
   !! write_log(tac_ind); 
   !! write_log(Obs_Catch); 
-  !! write_log(maxabc); 
-  !! write_log(theta); 
-  vector agg_abc(1,ntacspp)
-  vector agg_cat(1,ntacspp)
-  vector agg_tac(1,ntacspp)
   !! cout << spp_file_name(nspp) << endl;
   !! cout << ABC_Multiplier << endl;
   !! cout << N_scalar << endl;
@@ -181,6 +168,7 @@ DATA_SECTION
   matrix pmaturetmp_F(1,nspp,1,69);
   matrix pmaturetmp_M(1,nspp,1,69);
   matrix wt_Ftmp(1,nspp,1,69); 
+  matrix wt_Mtmp(1,nspp,1,69);
   3darray wt_gear_Ftmp(1,nspp,1,5,1,69);
   3darray wt_gear_Mtmp(1,nspp,1,5,1,69);
   3darray sel_Ftmp(1,nspp,1,5,1,69);
@@ -263,46 +251,53 @@ DATA_SECTION
      for (int k=1;k<=nages(i);k++)
        *(ad_comm::global_datafile) >> wt_Ftmp(i,k);          // 17
      write_log( wt_Ftmp(i));               
+     if (nsexes(i)==2)
+       for (int k=1;k<=nages(i);k++)
+         *(ad_comm::global_datafile) >> wt_Mtmp(i,k);        // 18
+     else
+       for (int k=1;k<=nages(i);k++)
+         wt_Mtmp(i,k) = wt_Ftmp(i,k);
+     write_log( wt_Mtmp(i));
      for (int j=1;j<=ngear(i);j++)
        for (int k=1;k<=nages(i);k++)
-         *(ad_comm::global_datafile) >> wt_gear_Ftmp(i,j,k); // 18
+         *(ad_comm::global_datafile) >> wt_gear_Ftmp(i,j,k); // 19
      write_log( wt_gear_Ftmp(i));               
 
      if (nsexes(i)==2)
        for (int j=1;j<=ngear(i);j++)
          for (int k=1;k<=nages(i);k++)
-           *(ad_comm::global_datafile) >> wt_gear_Mtmp(i,j,k);// 19
+           *(ad_comm::global_datafile) >> wt_gear_Mtmp(i,j,k);// 20
      write_log( wt_gear_Mtmp(i));               
       
      for (int j=1;j<=ngear(i);j++)
        for (int k=1;k<=nages(i);k++)
-         *(ad_comm::global_datafile) >> sel_Ftmp(i,j,k);    // 20
+         *(ad_comm::global_datafile) >> sel_Ftmp(i,j,k);    // 21
      write_log( sel_Ftmp(i));               
 
      if (nsexes(i)==2)
        for (int j=1;j<=ngear(i);j++)
          for (int k=1;k<=nages(i);k++)
-           *(ad_comm::global_datafile) >> sel_Mtmp(i,j,k);  // 21
+           *(ad_comm::global_datafile) >> sel_Mtmp(i,j,k);  // 22
      write_log( sel_Mtmp(i));               
      for (int k=1;k<=nages(i);k++)
-       *(ad_comm::global_datafile) >> n0_Ftmp(i,k);         // 22
+       *(ad_comm::global_datafile) >> n0_Ftmp(i,k);         // 23
      write_log(  n0_Ftmp(i));               
 
      if (nsexes(i)==2)
        for (int k=1;k<=nages(i);k++)
-         *(ad_comm::global_datafile) >> n0_Mtmp(i,k);       // 23
+         *(ad_comm::global_datafile) >> n0_Mtmp(i,k);       // 24
      write_log(  n0_Mtmp(i));               
 
          cout<<"N: "<<n0_Ftmp(i)(1,nages(i))<<endl;
 
-     *(ad_comm::global_datafile) >> nrec(i);                // 24
+     *(ad_comm::global_datafile) >> nrec(i);                // 25
      if (nrec(i)<2 || nrec(i)>69) spmr_input_error("historical recruitment requires 2 through 69 observations.");
          cout<<"nrec: "<<nrec(i)<<endl;
      for (int j=1;j<=nrec(i);j++)
-       *(ad_comm::global_datafile) >> Rtmp(i,j);            // 25
+       *(ad_comm::global_datafile) >> Rtmp(i,j);            // 26
       cout<<"Rec: "<<Rtmp(i)(1,nrec(i))<<endl;
      for (int j=1;j<=nrec(i);j++)
-       *(ad_comm::global_datafile) >> SSBtmp(i,j);          // 26
+       *(ad_comm::global_datafile) >> SSBtmp(i,j);          // 27
       cout<<"SSB: "<<SSBtmp(i)(1,nrec(i))<<endl;
   }
 	  write_log(nrec);
@@ -315,6 +310,7 @@ DATA_SECTION
   matrix pmature_F(1,nspp,1,nages);
   matrix pmature_M(1,nspp,1,nages);
   matrix wt_F(1,nspp,1,nages); 
+  matrix wt_M(1,nspp,1,nages);
   matrix population_wt_F(1,nspp,1,nages);
   matrix population_wt_M(1,nspp,1,nages);
   matrix Frat(1,nspp,1,ngear);
@@ -332,6 +328,7 @@ DATA_SECTION
   pmature_F.initialize();
   pmature_M.initialize();
   wt_F.initialize();
+  wt_M.initialize();
   wt_gear_F.initialize();
   wt_gear_F.initialize();
   sel_F.initialize();
@@ -363,12 +360,14 @@ DATA_SECTION
       }
       if (nsexes(i)==2) {
         pmature_M(i,k)  = pmaturetmp_M(i,k); 
+        wt_M(i,k) = wt_Mtmp(i,k);
         M_M(i,k)  = M_Mtmp(i,k); 
         n0_F(i,k) = n0_Ftmp(i,k); 
         n0_M(i,k) = n0_Mtmp(i,k); 
       }
       else {
         pmature_M(i,k)  = pmaturetmp_F(i,k); 
+        wt_M(i,k) = wt_Ftmp(i,k);
         M_M(i,k)  = M_Ftmp(i,k); 
         n0_F(i,k) = n0_Ftmp(i,k)/ 2.; 
         n0_M(i,k) = n0_F(i,k); 
@@ -398,7 +397,6 @@ DATA_SECTION
     for (int j=1;j<=ngear(i);j++)
       Frat(i,j) = Fratiotmp(i,j);
   }
-  for (int ispp=1;ispp<=nspp;ispp++) if(nyrs_catch_in > 0)  agg_cat(tac_ind(ispp))  += Obs_Catch(1,ispp);
   cout<<R<<endl;
 
   wtd_div.initialize(); 
@@ -415,6 +413,7 @@ DATA_SECTION
   matrix wt_mature_F(1,nspp,1,nages)
   matrix wt_mature_M(1,nspp,1,nages)
   !! wt_mature_F =  elem_prod(wt_F,pmature_F); 
+  !! wt_mature_M =  elem_prod(wt_M,pmature_M);
   vector yrfrac(1,nspp)        // Fraction of year prior to spawning 
   !! yrfrac= (spawnmo-1.)/12; 
 
@@ -917,9 +916,7 @@ FUNCTION void Mainloop(int& isim)
          /* ////////////////////////////////////////////////////////////////////////////// //int use_max = 1; // Need to move this into the setup file...  double max_catch=1500.;// EBS POllock special case (CHANGE THIS) //if (use_max==1) for (int ispp=1;ispp<=nspp;ispp++) Actual_Catch(ispp)   = min(TAC(ispp),max_catch); // cout<<"AC: "<<Actual_Catch(1,6)<<endl;; TAC_ABC=0; ////////////////////////////////////////////////////////////////////////////// */
          }
          else
-         {
-           Fit_TAC();
-         }
+           spmr_input_error("TAC_ABC must equal 1; fitted and external TAC modes are unsupported in input format 2.");
        }
      }
 
@@ -1431,54 +1428,6 @@ FUNCTION Status_Determ
   }
 
 
-
-FUNCTION Fit_TAC
-  int use_fit = 1; // Need to move this into the setup file...
-  //option to use "fit" program results (requires obtaining theta coef)
-  if (use_fit==1)
-  {
-    // Aggregate ABCs into main groups.....
-    agg_abc.initialize();
-    agg_tac.initialize();
-    TAC.initialize();
-    TAC = ABC;
-    for (int ispp=1;ispp<=nspp;ispp++) 
-      agg_abc(tac_ind(ispp))  += ABC(ispp)/1000;
-  
-    // Compute aggregate TACs based on aggregate ABCs from model
-    for (int itacspp=1;itacspp<=ntacspp;itacspp++) 
-    {
-      double abctmp = agg_abc(itacspp) / maxabc(itacspp) ;
-      int ijunk = min(nnodes,int(abctmp * nnodes)) ;
-      agg_tac(itacspp) = abctmp * mfexp(theta(ijunk,itacspp)) ;
-    }
-    agg_tac /= sum(agg_tac);
-    agg_tac *= 1945.; // Total catch in first year
- 
-    // Now dis-aggregate TACs to individual spp
-    for (int ispp=1;ispp<=nspp;ispp++) 
-    {
-      TAC(ispp) = agg_tac(tac_ind(ispp)) * Obs_Catch(1,ispp)/agg_cat(tac_ind(ispp));  // Just break out TAC by fractions of ABCs
-      Actual_Catch(ispp)   = min(TAC(ispp),ABC(ispp));
-    }
-  }
-  else // use generic "write_tac.bat"
-  {
-   // Given ABC's, what is the TAC?  // Go get actual catches (with constraints)
-   //  First write out ABC to file
-     ofstream abc("abc.dat");
-     abc<<ABC<<endl;
-     abc.close();
-   //  Then run TAC job as function of ABC
-     const int tac_exit_status = std::system("write_tac.bat >NUL ");
-     if (tac_exit_status != 0) spmr_input_error("External TAC command failed.");
-     ifstream tac("tac.dat");
-     tac>>TAC;
-     tac.close(); /* */
-     for (int ispp=1;ispp<=nspp;ispp++) 
-       Actual_Catch(ispp)   = min(TAC(ispp),ABC(ispp));
-  }
- 
 
 FUNCTION Avg_Age
     Avg_Age_End.initialize();

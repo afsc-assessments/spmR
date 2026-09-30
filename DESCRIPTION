@@ -1,7 +1,7 @@
 Type: Package
 Package: spmR
 Title: Standard Projection Model
-Version: 0.4.0
+Version: 0.4.1
 Author: Jim Ianelli
 Maintainer: Jim Ianelli <jim.ianelli@noaa.gov>
 Description: Standard Projection model (SPM) for evaluating outcomes of
@@ -25,10 +25,12 @@ Imports:
 Suggests: 
     here,
     knitr,
+    pkgload,
     quarto,
     rmarkdown,
     RTMB,
-    testthat (>= 3.0.0)
+    testthat (>= 3.0.0),
+    withr
 VignetteBuilder:
     knitr,
     quarto

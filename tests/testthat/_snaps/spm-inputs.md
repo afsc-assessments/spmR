@@ -102,6 +102,14 @@
       Error:
       ! metadata species 1 (pm.prj) male population weights: require exactly 15 finite positive numeric values.
 
+# male spawning weights are finite and positive
+
+    Code
+      write_spm_metadata(folder, spm_fixture_metadata())
+    Condition
+      Error:
+      ! pm.prj: invalid wt_M; expected finite numeric values in [2.22044604925031e-16, Inf].
+
 # unknown formats and fields are visible
 
     Code
