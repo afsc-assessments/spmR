@@ -25,6 +25,7 @@ articles:
   - title: "Getting started"
     contents:
       - "spm_example"
+      - "split_sex_inputs"
       - "background"
       - "more_documentation"
       - "rtmb_vs_admb"

@@ -142,6 +142,45 @@ See readme on
 package on github for installation options and vignettes (Articles
 [[here]{.underline}](https://afsc-assessments.github.io/spmR/)).
 
+# Current inputs: spmR 0.4.0 and format 2
+
+New projections require version-2 metadata in `spm_metadata.json` and a
+compatible executable compiled from the current `inst/admb/spm.tpl`.
+Keep the order and number of fields in `spm.dat`, `tacpar.dat`, and each
+species file unchanged. Store the new population weights in metadata;
+adding a positional vector can shift later fields or be ignored by an
+older executable. The runner validates these inputs and generates
+`spm_input_v2.dat` for the native engine.
+
+Each species declares `recruitment_basis = "total"` or `"per_sex"`.
+`"per_sex"` describes the recruitment of either sex under a 50:50 ratio;
+pooled-sex inputs require `"total"`. The complete historical series is
+converted to total recruitment before calculating its arithmetic mean,
+harmonic mean, variability, or stock-recruitment inputs. Each projected
+total is then divided equally between females and males once.
+
+Supply female and male population weights with an explicit age vector.
+The vectors must contain one positive, finite value per age in kg, with
+the declared consecutive, increasing age order. Abundance and biomass
+units must form a supported pair: `fish`/`kg`, `thousand_fish`/`t`, or
+`million_fish`/`thousand_t`. Convert existing values to the declared units
+and use `N_scalar = 1`.
+
+A split-sex run requires male population weights. When those data are
+unavailable, the user can explicitly select `male_population_substitute`
+as `"female_population"` or `"mean_male_fishery"` (the arithmetic mean
+across male fishery-weight vectors at each age). Each substitute produces
+a warning and is recorded with the output; document its biological
+justification. Setting `strict = FALSE` changes the treatment of unknown
+metadata fields to warnings; required inputs and scientific checks still
+apply.
+
+See [Migrating split-sex projection inputs](split_sex_inputs.html) for a
+worked example. Run `validate_spm_inputs()` before a new projection.
+Output provenance records the recruitment convention, units, substitutions,
+and executable and input hashes. Historical output remains readable with
+`runSPM(..., run = FALSE)`.
+
 # History of SPM
 
 \<links to the historical docs\>
@@ -176,29 +215,49 @@ N_PY2= numbers at age on Jan-1 of PY2
 
 # Summary of SPR calculations for Tier 3 stocks
 
-1.  SPM reads in the (average) biological input values: M, maturity,
-    spawning and fisheries WAA, and fisheries selectivity. Uses a
-    spawner per recruit (SPR) approach to calculate SPR at F=0, i.e.,
-    how much female spawning biomass (tons, kg, etc.) a single recruit
-    produces in its lifetime.
+1.  SPM reads natural mortality, maturity, spawning weights, population
+    weights, fishery weights, and fishery selectivity. These weights have
+    distinct roles: female spawning weights determine spawning biomass;
+    female and male population weights determine total biomass; fishery
+    weights convert catch numbers to catch biomass. Total biomass is the
+    sum of abundance times population weight across ages and sexes.
 
-2.  Uses vector of recruitments to calculate mean recruits (Rbar), which
-    is multiplied by spawning biomass per recruit at F=0 to get unfished
-    SSB (SSB0 or SSB100%). From that define SSB35=.35\*SB100 and
-    SB40=0.40\*SB100. These are equilibrium values given assumptions
-    about Rbar, biology, and selectivity.
+2.  The spawning biomass per recruit (SPR) calculation follows one female
+    recruit through survival, maturity, spawning timing, and the plus
+    group. Let $\phi_F(0)$ denote lifetime spawning biomass per female
+    recruit with fishing mortality equal to zero, and let
+    $\overline{R}_{\mathrm{total}}$ be the arithmetic mean of the normalized
+    total recruitment history. Under the 50:50 recruitment ratio,
+    $SSB_0 = 0.5\,\overline{R}_{\mathrm{total}}\,\phi_F(0)$.
+    This applies the female fraction once. Summary output `Mean_rec`
+    reports total recruitment; `Mean_rec_female` reports its female half.
+    The reference biomasses are $SSB_{35}=0.35\,SSB_0$ and
+    $SSB_{40}=0.40\,SSB_0$.
 
-3.  Uses a numerical solver to find F35%=FMSY=FOFL and F40%=FmaxABC in
-    equilibrium by tuning F until SSB is SSB35 and SSB40, respectively.
-    These go in the executive table.
+3.  SPM solves for the fishing mortality rates that produce the specified
+    fractions of unfished spawning biomass per recruit. For inputs using
+    40% and 35%, these are $F_{40\%}$ for maximum ABC and $F_{35\%}$ for
+    OFL. The resulting rates and spawning biomass enter the applicable
+    harvest control rule. Population biomass reference points use the
+    separate population weights for both sexes.
 
-4.  Proj next takes N_AY and inputted catches to get N_PY1. It then
-    applies F_ABC, as modified by the harvest control rule, to get ABC
-    in PY1. An assumption is made about catch taken in PY1, and so N_PY2
-    is calculated and F_ABC applied again to get ABC in PY2. A similar
-    approach is used for OFL. The assumption depends on the scenarios
-    (see below), but scenario X should be used which dictates that the
-    ABC is taken in PY1.
+4.  Initial numbers at age must describe the beginning of `styr`, the
+    first projection year declared in `spm.dat`. If the assessment supplies
+    numbers for an earlier year, advance survivors, ages, and the plus
+    group to `styr` and explicitly choose recruitment entering that year
+    before writing the inputs. Relabeling an earlier abundance vector
+    changes the projection boundary without advancing the population.
+    From the supplied initial state, SPM applies each year's catches or
+    scenario-specific fishing mortality and advances survivors into the
+    next year. Record the catch assumptions and scenario used for each
+    assessment table.
+
+The detailed output row labeled `Year = t` reports biomass from the
+beginning-of-year abundance in year $t$; spawning biomass includes
+survival to spawning. Its `Rec` value is the recruitment draw entering
+the youngest age in year $t+1$. Initial-year recruitment is already part
+of the input abundance vectors. Check these dates when comparing an
+assessment's terminal year with the first projection year.
 
 # Summary of the alternative scenario simulations
 

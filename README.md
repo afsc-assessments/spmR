@@ -49,6 +49,12 @@ Convert scaled inputs before creating metadata. All stocks within one
 run must share abundance and biomass units because the engine adds their
 catches when applying overall limits.
 
+The [split-sex input migration
+vignette](https://afsc-assessments.github.io/spmR/articles/split_sex_inputs.html)
+includes a runnable synthetic example, missing-male validation, explicit
+substitutes, and starting-year biomass checks. Its source is
+[`vignettes/split_sex_inputs.qmd`](vignettes/split_sex_inputs.qmd).
+
 For an existing projection folder, provide a species entry such as:
 
 ``` r
