@@ -34,6 +34,7 @@ testthat::test_that("version-2 metadata preserves inputs and emits explicit nati
   inputs <- validate_spm_inputs(folder)
   testthat::expect_s3_class(inputs, "spm_inputs")
   testthat::expect_equal(inputs$species[[1]]$R, c(80, 100, 120, 100))
+  testthat::expect_equal(inputs$species[[1]]$wt_M, (1:15) / 20)
   testthat::expect_equal(
     inputs$resolved_species[[1]]$population_weights$male,
     (1:15) / 20
@@ -140,6 +141,20 @@ testthat::test_that("population weights are finite and positive", {
   }
 })
 
+testthat::test_that("male spawning weights are finite and positive", {
+  folder <- local_spm_input_fixture()
+  spm_fixture_edit(
+    folder,
+    "pm.prj",
+    "0.05 0.1 0.15 0.2 0.25 0.3 0.35 0.4 0.45 0.5 0.55 0.6 0.65 0.7 0.75",
+    "0 0.1 0.15 0.2 0.25 0.3 0.35 0.4 0.45 0.5 0.55 0.6 0.65 0.7 0.75"
+  )
+  testthat::expect_snapshot(
+    error = TRUE,
+    write_spm_metadata(folder, spm_fixture_metadata())
+  )
+})
+
 testthat::test_that("unknown formats and fields are visible", {
   folder <- local_spm_input_fixture()
   document <- list(format_version = 3L, species = spm_fixture_metadata())
@@ -240,7 +255,7 @@ testthat::test_that("fresh execution rejects stale CSV despite success-like stdo
   testthat::expect_identical(provenance$exit_status, 0L)
   testthat::expect_named(
     provenance$input_hashes,
-    c("spm.dat", "pm.prj", "tacpar.dat", "spm_metadata.json")
+    c("spm.dat", "pm.prj", "spm_metadata.json")
   )
 })
 
@@ -271,7 +286,7 @@ testthat::test_that("pooled sexes share declared population weights with an expl
   folder <- local_spm_input_fixture()
   species <- spm_read_legacy(folder)$species[[1]]
   species$nsexes <- 1
-  species[c("file", "M_M", "pmature_M", "wt_gear_M", "sel_M", "n0_M")] <- NULL
+  species[c("file", "M_M", "pmature_M", "wt_M", "wt_gear_M", "sel_M", "n0_M")] <- NULL
   list2dat(species, file.path(folder, "pm.prj"))
   metadata <- spm_fixture_metadata()
   metadata[[1]]$population_weights$male <- NULL

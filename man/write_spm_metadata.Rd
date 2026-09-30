@@ -15,7 +15,7 @@ write_spm_metadata(
 validate_spm_inputs(dirname, metadata = "spm_metadata.json", strict = TRUE)
 }
 \arguments{
-\item{dirname}{Directory containing `spm.dat`, `tacpar.dat`, and species files.}
+\item{dirname}{Directory containing `spm.dat` and species files.}
 
 \item{species}{A list of species records. Each record contains `file`,
 `recruitment_basis` (`"total"` or `"per_sex"`), consecutive integer `ages`,
@@ -39,8 +39,10 @@ report them as warnings. Required fields and scientific checks always apply.}
   resolved population weights, unit declarations, and substitutions.
 }
 \description{
-Version 2 metadata accompanies the unchanged positional SPM input files.
-Recruitment must be identified as total across sexes or per sex. Population
-weights are distinct from fishery and spawning weights. Inputs are validated
-before replacing an existing metadata file.
+Version 2 metadata accompanies the positional SPM input files. Split-sex
+species files contain `wt_M` immediately after `wt_F`; pooled-sex files use
+`wt_F` for both internal sex groups. Recruitment must be identified as total
+across sexes or per sex. Population weights are distinct from fishery and
+spawning weights. Version-2 projections use `TAC_ABC = 1` and do not read
+`tacpar.dat`. Inputs are validated before replacing an existing metadata file.
 }

@@ -142,13 +142,14 @@ See readme on
 package on github for installation options and vignettes (Articles
 [[here]{.underline}](https://afsc-assessments.github.io/spmR/)).
 
-# Current inputs: spmR 0.4.0 and format 2
+# Current inputs: spmR 0.4.1 and format 2
 
 New projections require version-2 metadata in `spm_metadata.json` and a
 compatible executable compiled from the current `inst/admb/spm.tpl`.
-Keep the order and number of fields in `spm.dat`, `tacpar.dat`, and each
-species file unchanged. Store the new population weights in metadata;
-adding a positional vector can shift later fields or be ignored by an
+Keep the order and number of fields in `spm.dat`. In each split-sex species
+file, insert the male spawning-weight vector `wt_M` immediately after `wt_F`.
+Version 0.4.1 no longer reads `tacpar.dat`. Store population weights in metadata;
+adding another positional vector can shift later fields or be ignored by an
 older executable. The runner validates these inputs and generates
 `spm_input_v2.dat` for the native engine.
 

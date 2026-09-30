@@ -21,7 +21,9 @@ def fixture(name, nsex=2, basis=2, nsims=5000, mode=1, pop_f=1, pop_m=1, constan
     if nsex==2:p.append(('M_M',[math.log(2)]*age))
     p.append(('matureF',[1]*age))
     if nsex==2:p.append(('matureM',[1]*age))
-    p.extend([('spawnF',[1]*age),('fishF',[1]*age)])
+    p.append(('spawnF',[1]*age))
+    if nsex==2:p.append(('spawnM',[1]*age))
+    p.append(('fishF',[1]*age))
     if nsex==2:p.append(('fishM',[1]*age))
     p.append(('selF',[1]*age))
     if nsex==2:p.append(('selM',[1]*age))
@@ -31,7 +33,6 @@ def fixture(name, nsex=2, basis=2, nsims=5000, mode=1, pop_f=1, pop_m=1, constan
     write_pairs(d/'audit.prj',p)
     controls=[('run','audit'),('Tier',3),('nalts',1),('alts',5),('tac',1),('SrType',2),('Rec_Gen',mode),('Fmsy',0),('Rec_Cond',0),('detail',1),('npro',3),('nsims',nsims),('start',2026),('nyrscatch',1),('nspp',1),('OYmin',0),('OYmax',2e6),('filename','audit.prj'),('ABCmult',1),('Nscalar',1),('alt4spr',.6),('ntacspp',1),('tacind',1),('Catch',[2026,0])]
     write_pairs(d/'spm.dat',controls)
-    (d/'tacpar.dat').write_text('1\n0\n2000000\n0\n')
     meta=['SPMR_INPUT_V2 2 1',f'audit.prj {nsex} {age} {basis} 1 1 1 0',' '.join(map(str,range(1,age+1))),' '.join([str(pop_f)]*age),' '.join([str(pop_m)]*age),'END_SPMR_INPUT_V2']
     (d/'spm_input_v2.dat').write_text('\n'.join(meta)+'\n')
     return d
@@ -55,7 +56,7 @@ def run(d,good=True):
     assert len(rec)==1 and rec[0]['format_version']=='2',d.name
     return {'exit_code':r.returncode,'rows':len(rows),'receipt':rec[0],'first':rows[0],'mean_rec':statistics.mean(float(x['Rec']) for x in rows),'cv_rec':statistics.pstdev(float(x['Rec']) for x in rows)/statistics.mean(float(x['Rec']) for x in rows)}
 
-def weight_fixture(name, fish_multiplier=1., male_pop_multiplier=1.):
+def weight_fixture(name, fish_multiplier=1., male_pop_multiplier=1., male_spawn_multiplier=1.):
     d=fixture(name,nsims=1)
     p=d/'audit.prj';text=p.read_text()
     nages=15
@@ -66,6 +67,7 @@ def weight_fixture(name, fish_multiplier=1., male_pop_multiplier=1.):
       'selF':[min(.1+.1*a,1.) for a in range(nages)],'selM':[min(.05+.075*a,.8) for a in range(nages)],
       'matureF':[0,.25,.6]+[1]*12,'matureM':[0,.4,.8]+[1]*12,
       'spawnF':[.5+.1*a for a in range(nages)],
+      'spawnM':[male_spawn_multiplier*(.35+.08*a) for a in range(nages)],
       'fishF':[fish_multiplier*(.2+.04*a) for a in range(nages)],
       'fishM':[fish_multiplier*(.15+.025*a) for a in range(nages)],
       'popF':[.3+.15*a for a in range(nages)],
@@ -231,14 +233,16 @@ if __name__=='__main__':
     results['unequal_sex_reference']['expected_total_biomass_abc']=expected_reference
     results['unequal_sex_reference']['actual_total_biomass_abc']=summary['Total_biomass_abc']
     d=fixture('invalid_TAC',nsims=1);p=d/'spm.dat';p.write_text(p.read_text().replace('# tac\n1\n','# tac\n0\n'));results['invalid_TAC']=run(d,False)
-    for name,fish,pop in [('weight_trajectory',1.,1.),('fishery_weights_doubled',2.,1.),('male_population_weights_changed',1.,1.7)]:
-        d,inputs=weight_fixture(name,fish,pop)
+    for name,fish,pop,spawn_m in [('weight_trajectory',1.,1.,1.),('fishery_weights_doubled',2.,1.,1.),('male_population_weights_changed',1.,1.7,1.),('male_spawning_weights_changed',1.,1.,1.8)]:
+        d,inputs=weight_fixture(name,fish,pop,spawn_m)
         results[name]=run(d)
         results[name]['independent_trajectory']=check_weight_trajectory(d,inputs)
-    original=results['weight_trajectory']['first'];fish_changed=results['fishery_weights_doubled']['first'];pop_changed=results['male_population_weights_changed']['first']
+    original=results['weight_trajectory']['first'];fish_changed=results['fishery_weights_doubled']['first'];pop_changed=results['male_population_weights_changed']['first'];spawn_changed=results['male_spawning_weights_changed']['first']
     assert original['Tot_biom']==fish_changed['Tot_biom']
     assert float(original['F'])>float(fish_changed['F'])>0
     assert original['F']==pop_changed['F']
     assert float(pop_changed['Tot_biom'])>float(original['Tot_biom'])
+    assert original['SSB']==spawn_changed['SSB']
+    assert original['Tot_biom']==spawn_changed['Tot_biom']
     (ROOT/'validation.json').write_text(json.dumps({'status':'passed','checks':results},indent=2)+'\n')
     print(json.dumps({'status':'passed','cases':len(results),'split_equivalence':'exact CSV match across all 15000 rows','sr2_equivalence':'exact CSV match','zero_cv':'pass','missing_invalid_metadata':'rejected'},indent=2))

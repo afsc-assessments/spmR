@@ -1,11 +1,13 @@
 #' Write explicit recruitment and population-weight metadata
 #'
-#' Version 2 metadata accompanies the unchanged positional SPM input files.
-#' Recruitment must be identified as total across sexes or per sex. Population
-#' weights are distinct from fishery and spawning weights. Inputs are validated
-#' before replacing an existing metadata file.
+#' Version 2 metadata accompanies the positional SPM input files. Split-sex
+#' species files contain `wt_M` immediately after `wt_F`; pooled-sex files use
+#' `wt_F` for both internal sex groups. Recruitment must be identified as total
+#' across sexes or per sex. Population weights are distinct from fishery and
+#' spawning weights. Version-2 projections use `TAC_ABC = 1` and do not read
+#' `tacpar.dat`. Inputs are validated before replacing an existing metadata file.
 #'
-#' @param dirname Directory containing `spm.dat`, `tacpar.dat`, and species files.
+#' @param dirname Directory containing `spm.dat` and species files.
 #' @param species A list of species records. Each record contains `file`,
 #'   `recruitment_basis` (`"total"` or `"per_sex"`), consecutive integer `ages`,
 #'   `units`, and `population_weights`. Units contain `abundance` (`"fish"`,
@@ -117,7 +119,6 @@ spm_reserved_files <- function() {
     "spm",
     "spm.exe",
     "spm.dat",
-    "tacpar.dat",
     "spm_input_v2.dat",
     "spm_input_receipt.tsv",
     "spm_detail.csv",
@@ -349,6 +350,11 @@ spm_read_legacy <- function(dirname) {
       x$pmature_F
     }
     x$wt_F <- get(n, "wt_F", lower = .Machine$double.eps)
+    x$wt_M <- if (x$nsexes == 2) {
+      get(n, "wt_M", lower = .Machine$double.eps)
+    } else {
+      x$wt_F
+    }
     x$wt_gear_F <- matrix(
       get(n * g, "wt_gear_F", lower = .Machine$double.eps),
       nrow = g,
@@ -397,21 +403,10 @@ spm_read_legacy <- function(dirname) {
       call. = FALSE
     )
   }
-  p <- spm_token_reader(file.path(dirname, "tacpar.dat"))
-  get <- p$take
-  tac <- list(nntmp = get(field = "nntmp", integer = TRUE, lower = 1))
-  tac$nnodes <- get(field = "nnodes", integer = TRUE, lower = 0)
-  if (s$ntacspp > tac$nntmp) {
-    stop("tacpar.dat: fewer TAC categories than spm.dat.", call. = FALSE)
-  }
-  tac$maxabc <- get(tac$nntmp, "maxabc")
-  tac$theta <- get((tac$nnodes + 1L) * tac$nntmp, "theta")
-  p$done()
   list(
     spm = s,
     species = spp,
-    tacpar = tac,
-    input_files = c("spm.dat", s$spp_files, "tacpar.dat")
+    input_files = c("spm.dat", s$spp_files)
   )
 }
 
