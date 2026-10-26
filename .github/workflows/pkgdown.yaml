@@ -13,7 +13,7 @@ name: pkgdown
 
 jobs:
   pkgdown:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     # Only restrict concurrency for non-PR jobs
     concurrency:
       group: pkgdown-${{ github.event_name != 'pull_request' || github.run_id }}
@@ -34,6 +34,26 @@ jobs:
         with:
           extra-packages: any::pkgdown, local::.
           needs: website
+
+      - name: Install pinned ADMB 13.2
+        shell: bash
+        run: |
+          curl --fail --location --retry 3 https://github.com/admb-project/admb/releases/download/admb-13.2/admb-13.2-linux.zip -o "$RUNNER_TEMP/admb.zip"
+          echo 'd4770e85f5c8802f5adb33ba1c6fe726ca050cda1a32a6acea35ad840615707b  '"$RUNNER_TEMP/admb.zip" | sha256sum --check
+          unzip -q "$RUNNER_TEMP/admb.zip" -d "$RUNNER_TEMP/admb"
+          echo "$RUNNER_TEMP/admb/admb/bin" >> "$GITHUB_PATH"
+
+      - name: Compile projection engine for worked examples
+        shell: bash
+        run: |
+          mkdir -p "$RUNNER_TEMP/spm-build"
+          cp inst/admb/spm.tpl inst/admb/spmr_input_v2.hpp "$RUNNER_TEMP/spm-build/"
+          cd "$RUNNER_TEMP/spm-build"
+          admb -f spm.tpl 2>&1 | tee compile.log
+          if grep -Ei 'warning:|error:' compile.log; then exit 1; fi
+          ./spm -spmr-capabilities | grep -Fx 'SPMR_INPUT_FORMAT=2'
+          echo "SPMR_EXECUTABLE=$RUNNER_TEMP/spm-build/spm" >> "$GITHUB_ENV"
+          echo "SPMR_RUN_GT20=true" >> "$GITHUB_ENV"
 
       - name: Build site
         run: |

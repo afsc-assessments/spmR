@@ -18,7 +18,7 @@
 ^vignettes/\.quarto$
 ^src$
 ^examples/.+\.(exe|obj)$
-^examples/gt20/main$
+^examples/gt20/spmR_run$
 ^examples/AI_pollock/Alaska Plaice Projection 2023-20240228T180512Z-001\.zip$
 ^examples/AKplaice/23-09-06 Running Projection model from Alaska Plaice\.R$
 ^examples/data/AK Plaice 2020\.xlsx$

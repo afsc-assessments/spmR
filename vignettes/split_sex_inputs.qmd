@@ -22,8 +22,9 @@ if (file.exists(file.path("..", "DESCRIPTION"))) {
 
 Version 0.4.1 requires input format 2 for new ADMB projections. This guide
 uses synthetic data to show the change from legacy split-sex files to explicit
-recruitment and population-weight metadata. The validation examples run while
-this vignette is built; compiling and running ADMB are separate steps.
+recruitment and population-weight metadata. Validation runs whenever this
+vignette is built; native execution in the final worked example is enabled
+explicitly.
 
 ## What changes in the input files
 
@@ -227,16 +228,6 @@ Build `inst/admb/spm.tpl` with ADMB 13.0 or newer, then place the resulting `spm
 (or `spm.exe` on Windows) in the projection folder or on `PATH`. The runner
 checks the executable's `-spmr-capabilities` response before execution.
 
-```{r}
-#| eval: false
-result <- runSPM(projection_dir, run = TRUE, engine = "admb")
-provenance <- jsonlite::read_json(file.path(
-  projection_dir, "spm_last_success_provenance.json"
-))
-provenance$executable_sha256
-provenance$species[[1]]$recruitment_basis
-```
-
 The run record includes executable and input SHA-256 hashes, declared units,
 recruitment basis, resolved population weights, substitutions, and output hashes.
 Each attempt has a record in `spm_run_history/`; the last successful record is
@@ -252,3 +243,99 @@ Read archived output with `runSPM(..., run = FALSE)` without changing its
 inputs. Adding metadata leaves those historical results as they were; produce
 new results in a separate folder, review recruitment, biomass and reference
 points, and then update assessment tables.
+
+## Worked example: 2020 Greenland turbot
+
+The repository includes a documented conversion of the 2020 Bering Sea and
+Aleutian Islands Greenland turbot projection. The assessment treated this as a
+Tier 3a stock and projected ages 1–30, with age 30 as the plus group. The example
+retains the archived two-sex species input and writes all converted inputs and
+outputs to a temporary directory. It is a source-checkout example; clone the
+[spmR repository](https://github.com/afsc-assessments/spmR) before running the
+code below.
+
+The conversion declares total recruitment in `thousand_fish`, weights in `kg`,
+and biomass in `t`. The archived female spawning weights are reused as female
+population weights to preserve legacy biomass. No independent male
+population-weight vector was archived, so the example explicitly records
+`mean_male_fishery`; this is a reproducibility substitute, not a new biological
+estimate.
+
+```{r}
+# Locate the example both when Quarto starts in vignettes/ and when it starts at
+# the package root.
+gt20_candidates <- c(
+  file.path("..", "examples", "gt20"),
+  file.path("examples", "gt20")
+)
+gt20_source_dir <- gt20_candidates[file.exists(file.path(
+  gt20_candidates, "run_spmR_split_sex.R"
+))][1]
+if (is.na(gt20_source_dir)) {
+  stop("Clone the spmR source repository to run the GT20 worked example.")
+}
+gt20_source_dir <- normalizePath(gt20_source_dir, mustWork = TRUE)
+source(file.path(gt20_source_dir, "run_spmR_split_sex.R"), local = TRUE)
+
+# Input conversion and validation run in every build. Set SPMR_RUN_GT20=true to
+# opt in to native execution; the pkgdown workflow sets it after compiling the
+# pinned engine.
+gt20_run_native <- identical(
+  tolower(Sys.getenv("SPMR_RUN_GT20", unset = "false")), "true"
+)
+gt20_executable <- ""
+gt20_admb <- ""
+if (gt20_run_native) {
+  gt20_executable <- Sys.getenv(
+    "SPMR_EXECUTABLE", unset = Sys.getenv("SPMR_TEST_EXE", unset = "")
+  )
+  if (!nzchar(gt20_executable)) gt20_executable <- unname(Sys.which("spm"))
+  gt20_admb <- Sys.getenv("SPMR_ADMB", unset = "")
+  if (!nzchar(gt20_admb)) gt20_admb <- unname(Sys.which("admb"))
+  if (!nzchar(gt20_executable) && !nzchar(gt20_admb)) {
+    stop("SPMR_RUN_GT20=true but no SPM executable or ADMB compiler was found.")
+  }
+}
+
+gt20 <- run_gt20_projection(
+  source_dir = gt20_source_dir,
+  run_dir = tempfile("spmr-gt20-vignette-"),
+  executable = gt20_executable,
+  admb = gt20_admb,
+  build = TRUE,
+  run = gt20_run_native
+)
+
+data.frame(
+  metric = "Beginning-of-2020 total biomass (t)",
+  value = round(gt20$initial_biomass, 1)
+)
+```
+
+With `SPMR_RUN_GT20=true`, the same evaluated chunk runs all seven alternatives
+and verifies 14,000 rows (100 simulations over 20 years). The published site
+build supplies a pinned ADMB 13.2 engine and displays this concise alternative-1
+summary and its provenance record.
+
+```{r}
+if (gt20_run_native) {
+  print(gt20$summary[
+    gt20$summary$Alt == 1 & gt20$summary$Year <= 2022,
+    c("Alt", "Year", "SSB", "Catch", "ABC", "OFL")
+  ])
+  data.frame(
+    executable_sha256 = gt20$provenance$executable_sha256,
+    recruitment_basis = gt20$provenance$species[[1]]$recruitment_basis
+  )
+} else {
+  cat(paste(
+    "Format-2 inputs validated; set SPMR_RUN_GT20=true to run the native",
+    "projection."
+  ))
+}
+```
+
+The example reproduces beginning-of-2020 total biomass of `92,104.6 t`. For
+alternative 1, mean 2021 SSB is `51,913.9 t` and ABC is `7,326.4 t`, matching
+the published projection after rounding. The complete source is
+`examples/gt20/run_spmR_split_sex.R`.

@@ -1,84 +1,90 @@
 # Greenland turbot 2020 split-sex projection
 
-`run_spmR_split_sex.R` converts the archived GT20 inputs to the input-format-2
-contract used by spmR 0.4.1, validates them, and runs the ADMB projection when a
-compatible `spm` executable is available.
+This is a source-checkout example for the 2020 Bering Sea and Aleutian Islands
+Greenland turbot projection. It converts the archived two-sex species input to
+spmR input format 2, validates it, and runs all seven Tier 3 alternatives.
 
-Run from the repository root with:
+The directory intentionally retains only:
+
+- `data/Model_Proj.dat`: the archived assessment input;
+- `run_spmR_split_sex.R`: the documented converter and runner; and
+- this README.
+
+Current inputs, the compiled engine, results, and provenance are generated under
+the ignored `spmR_run/` directory.
+
+## Run the example
+
+Install spmR 0.4.1 or newer and either provide a compatible format-2 executable
+or install ADMB 13 or newer. From the repository root:
 
 ```r
 library(spmR)
 source("examples/gt20/run_spmR_split_sex.R")
+
+# Use an existing executable.
+gt20 <- run_gt20_projection(executable = "path/to/spm")
+
+# Alternatively, compile automatically when ADMB and a matching compiler exist:
+# gt20 <- run_gt20_projection()
+
+gt20$summary[gt20$summary$Alt == 1 & gt20$summary$Year <= 2022, ]
+gt20$provenance$executable_sha256
 ```
 
-Derived inputs and results are written to `spmR_run/`, which is intentionally
-ignored by Git. Set `SPMR_GT20_RUN_DIR` to use another output directory.
+Environment-variable equivalents are `SPMR_EXECUTABLE` for an existing engine,
+`SPMR_ADMB` for ADMB, `SPMR_CXX` for an optional matching C++ compiler, and
+`SPMR_GT20_RUN_DIR` for the output directory. `SPMR_CXX` is useful on Windows
+when the first compiler on `PATH` is newer than the libraries shipped with
+ADMB; for example, set it to the full path of a compatible `g++.exe`.
+A concrete Windows compiler setup is:
+
+```r
+Sys.setenv(
+  SPMR_ADMB = "C:/path/to/admb.cmd",
+  SPMR_CXX = "C:/path/to/compatible/g++.exe"
+)
+gt20 <- run_gt20_projection()
+```
+
+To create and validate the format-2 inputs without a native engine, use:
+
+```r
+gt20 <- run_gt20_projection(run = FALSE)
+gt20$initial_biomass
+```
+
+Running the file directly is equivalent to the default full run:
+
+```sh
+Rscript examples/gt20/run_spmR_split_sex.R
+```
 
 ## Conversion decisions
 
-- `setup.dat` and `spp_catch.dat` are consolidated into the current `spm.dat`
-  layout. The legacy `tacpar.dat` is not used by format 2.
-- Tier is `3`. The 2020 assessment classified BSAI Greenland turbot as Tier 3a;
-  the SPM input stores the numeric tier, while the harvest-control rule selects
-  the `a` condition from stock status.
-- Ages are `1:30`, and age 30 is the plus group. This matches both the assessment
-  description and the legacy model's plus-group update.
-- Recruitment is declared as `total`. The legacy executable calculated the mean
-  of the stored series and allocated projected recruitment equally to females
-  and males.
-- The abundance, weight, and biomass units are `thousand_fish`, `kg`, and `t`.
-  `N_scalar` is therefore `1`, as required by input format 2.
-- The legacy file stores 41 recruitment values but 43 SSB values. Only the first
-  41 SSB values were read by the legacy executable; the converter explicitly
-  removes the trailing 2019 and 2020 values before validation.
-- The first two female spawning weights are zero. Format 2 requires values at
-  least machine epsilon, so they are replaced by that negligible positive value.
-- For parity with `main.tpl`, female spawning weights are also used as female
-  population weights. Male population weights are the unweighted mean of the two
-  male fishery-weight vectors. The metadata records the latter explicitly as
-  `male_population_substitute = "mean_male_fishery"`.
-- GT20 has no separate male spawning-weight vector. The same mean male fishery
-  weights provide the required positive `wt_M` vector; spawning biomass remains
-  female-only.
+- Tier is stored as `3`; projected stock status selects the Tier 3a rule.
+- Ages are `1:30`, with age 30 as the plus group.
+- Recruitment is total across sexes and is allocated equally to females and
+  males during projection.
+- Abundance, weight, and biomass units are `thousand_fish`, `kg`, and `t`;
+  consequently, `N_scalar = 1`.
+- The two trailing SSB values that the legacy executable did not pair with the
+  41 recruitment observations are removed.
+- The first two zero female spawning weights are replaced by machine epsilon,
+  the minimum value allowed by input format 2.
+- The archived female spawning weights are reused as female population weights,
+  preserving the legacy biomass convention.
+- No independently estimated male spawning or population-weight vector is in
+  the archive. The unweighted age-specific mean of the two male fishery-weight
+  vectors is therefore declared and recorded as `mean_male_fishery`.
 
-These choices reproduce the archived beginning-of-2020 total biomass of
-`92,104.6 t`. They preserve the legacy example; they should not be represented
-as newly measured population weights.
-
-## Build the format-2 executable
-
-ADMB 13 or newer must compile the template installed with spmR. First copy the
-installed template and its format-2 header into the run directory from R:
-
-```r
-run_dir <- file.path("examples", "gt20", "spmR_run")
-dir.create(run_dir, recursive = TRUE, showWarnings = FALSE)
-admb_dir <- system.file("admb", package = "spmR", mustWork = TRUE)
-file.copy(
-  file.path(admb_dir, c("spm.tpl", "spmr_input_v2.hpp")),
-  run_dir,
-  overwrite = TRUE
-)
-```
-
-Then use a shell where the ADMB compiler is on `PATH`:
-
-```powershell
-Push-Location 'examples\gt20\spmR_run'
-try {
-  admb -f spm.tpl
-  & .\spm.exe -spmr-capabilities
-} finally {
-  Pop-Location
-}
-```
-
-The capability check must print `SPMR_INPUT_FORMAT=2`. Rerun the R script after
-building; it will validate the inputs and call `runSPM(..., engine = "admb")`.
+These choices reproduce the legacy beginning-of-2020 biomass of `92,104.6 t`.
+They are retained for reproducibility and should not be described as newly
+measured sex-specific population weights.
 
 The tested run produces 14,000 detail rows: seven alternatives, 100 simulations,
-and 20 years (2020-2039). For alternative 1, the mean 2021 SSB is `51,913.9 t`
-and ABC is `7,326.4 t`, reproducing the published projection after rounding.
+and 20 years (2020–2039). For alternative 1, mean 2021 SSB is `51,913.9 t` and
+ABC is `7,326.4 t`, matching the published assessment after rounding.
 
 ## Sources
 
