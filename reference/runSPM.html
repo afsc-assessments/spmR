@@ -11,7 +11,7 @@ It returns to the original working directory after completing the analysis."></h
 
     <a class="navbar-brand me-2" href="../index.html">spmR</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.4.2</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.4.3</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -50,7 +50,7 @@ It returns to the original working directory after completing the analysis.</p>
 <span>  ctrl <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  run <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  engine <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"admb"</span>, <span class="st">"rtmb"</span><span class="op">)</span>,</span>
-<span>  metadata <span class="op">=</span> <span class="st">"spm_metadata.json"</span>,</span>
+<span>  metadata <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  strict <span class="op">=</span> <span class="cn">TRUE</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
@@ -80,8 +80,9 @@ with `run = FALSE` without metadata.</p></dd>
 
 
 <dt id="arg-metadata">metadata<a class="anchor" aria-label="anchor" href="#arg-metadata"></a></dt>
-<dd><p>Filename of the version-2 metadata created by
-[write_spm_metadata()]. Used only for new ADMB runs.</p></dd>
+<dd><p>`NULL` discovers embedded species metadata, falling back to
+`spm_metadata.json` for older inputs. Supply a JSON filename to select it
+explicitly. See [write_spm_metadata()]. Used only for new ADMB runs.</p></dd>
 
 
 <dt id="arg-strict">strict<a class="anchor" aria-label="anchor" href="#arg-strict"></a></dt>

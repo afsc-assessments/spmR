@@ -23,7 +23,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">spmR</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.4.2</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.4.3</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -63,43 +63,41 @@
 
 
 
-    <p>The <code>examples/gt_2026</code> directory preserves the supplied Greenland turbot projection files. Its helper audits the inputs and creates a separate attempt directory for staging and execution. Population body weights, units, age and plus-group alignment, and the SS3 export-field mapping require confirmation before assessment use. This article executes the audit and input validation; it generates no projection results.</p>
+    <p>The <code>examples/gt_2026</code> directory preserves the supplied Greenland turbot projection files. The revised species input contains 47 recruitment values and 45 SSB values. The helper audits this mismatch and stops staging before creating an attempt directory. Matching source histories, population body weights, units, age and plus-group alignment, and SS3 export-field mapping require confirmation before assessment use. This article executes the audit and demonstrates the staging block; it generates no projection results.</p>
 <section class="level2"><h2 id="simple-commands">Simple commands<a class="anchor" aria-label="anchor" href="#simple-commands"></a>
 </h2>
 <p>Install the current spmR package and work from a clone of the <a href="https://github.com/afsc-assessments/spmR" class="external-link">source repository</a>. From its root:</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/source.html" class="external-link">source</a></span><span class="op">(</span><span class="st">"examples/gt_2026/run.R"</span><span class="op">)</span></span>
-<span><span class="fu">check_gt2026_inputs</span><span class="op">(</span><span class="op">)</span></span>
-<span><span class="va">staged</span> <span class="op">&lt;-</span> <span class="fu">run_gt2026_projection</span><span class="op">(</span>diagnostic <span class="op">=</span> <span class="cn">TRUE</span>, run <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
-<span><span class="va">staged</span><span class="op">$</span><span class="va">run_dir</span></span></code></pre></div>
+<span><span class="fu">check_gt2026_inputs</span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 </div>
-<p><code>diagnostic = TRUE</code> explicitly accepts the documented working assumptions. <code>run = FALSE</code> stages and validates inputs without compiling or executing ADMB. Each default call creates <code>examples/gt_2026/spmR_runs/attempt-###</code>, retaining source snapshots, SHA-256 hashes, metadata, and staging decisions. Supplying a new <code>run_dir</code> changes the destination. Existing attempt directories are protected against overwriting.</p>
+<p>The audit reads the current source values. Supply matching recruitment and SSB histories before staging. <code>diagnostic = TRUE</code> selects working population weights, units and ages explicitly; it cannot supply missing history values. Once inputs are complete, each successful default staging call creates <code>examples/gt_2026/spmR_runs/attempt-###</code>, retaining source snapshots, SHA-256 hashes, embedded declarations, and staging decisions. Existing attempt directories are protected against overwriting.</p>
 </section><section class="level2"><h2 id="audit-the-supplied-files">Audit the supplied files<a class="anchor" aria-label="anchor" href="#audit-the-supplied-files"></a>
 </h2>
-<p>The following chunks locate the example during an article build and stage it in a temporary directory. They require the source checkout or source package, where the example files are available.</p>
+<p>The following chunks locate and audit the example during an article build. They require the source checkout or source package, where the example files are available.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">audit</span> <span class="op">&lt;-</span> <span class="fu">check_gt2026_inputs</span><span class="op">(</span><span class="va">example_dir</span><span class="op">)</span></span>
 <span><span class="fu">gt</span><span class="fu">::</span><span class="fu"><a href="https://gt.rstudio.com/reference/gt.html" class="external-link">gt</a></span><span class="op">(</span><span class="va">audit</span><span class="op">)</span></span></code></pre></div>
 <div class="cell-output-display">
-<div id="cvsrgwqjrs" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
-<style>#cvsrgwqjrs table {
+<div id="eamhdjauqq" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#eamhdjauqq table {
   font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-#cvsrgwqjrs thead, #cvsrgwqjrs tbody, #cvsrgwqjrs tfoot, #cvsrgwqjrs tr, #cvsrgwqjrs td, #cvsrgwqjrs th {
+#eamhdjauqq thead, #eamhdjauqq tbody, #eamhdjauqq tfoot, #eamhdjauqq tr, #eamhdjauqq td, #eamhdjauqq th {
   border-style: none;
 }
 
-#cvsrgwqjrs p {
+#eamhdjauqq p {
   margin: 0;
   padding: 0;
 }
 
-#cvsrgwqjrs .gt_table {
+#eamhdjauqq .gt_table {
   display: table;
   border-collapse: collapse;
   line-height: normal;
@@ -125,12 +123,12 @@
   border-left-color: #D3D3D3;
 }
 
-#cvsrgwqjrs .gt_caption {
+#eamhdjauqq .gt_caption {
   padding-top: 4px;
   padding-bottom: 4px;
 }
 
-#cvsrgwqjrs .gt_title {
+#eamhdjauqq .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -142,7 +140,7 @@
   border-bottom-width: 0;
 }
 
-#cvsrgwqjrs .gt_subtitle {
+#eamhdjauqq .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -154,7 +152,7 @@
   border-top-width: 0;
 }
 
-#cvsrgwqjrs .gt_heading {
+#eamhdjauqq .gt_heading {
   background-color: #FFFFFF;
   text-align: center;
   border-bottom-color: #FFFFFF;
@@ -166,13 +164,13 @@
   border-right-color: #D3D3D3;
 }
 
-#cvsrgwqjrs .gt_bottom_border {
+#eamhdjauqq .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#cvsrgwqjrs .gt_col_headings {
+#eamhdjauqq .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -187,7 +185,7 @@
   border-right-color: #D3D3D3;
 }
 
-#cvsrgwqjrs .gt_col_heading {
+#eamhdjauqq .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -207,7 +205,7 @@
   overflow-x: hidden;
 }
 
-#cvsrgwqjrs .gt_column_spanner_outer {
+#eamhdjauqq .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -219,15 +217,15 @@
   padding-right: 4px;
 }
 
-#cvsrgwqjrs .gt_column_spanner_outer:first-child {
+#eamhdjauqq .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#cvsrgwqjrs .gt_column_spanner_outer:last-child {
+#eamhdjauqq .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#cvsrgwqjrs .gt_column_spanner {
+#eamhdjauqq .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -239,11 +237,11 @@
   width: 100%;
 }
 
-#cvsrgwqjrs .gt_spanner_row {
+#eamhdjauqq .gt_spanner_row {
   border-bottom-style: hidden;
 }
 
-#cvsrgwqjrs .gt_group_heading {
+#eamhdjauqq .gt_group_heading {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -269,7 +267,7 @@
   text-align: left;
 }
 
-#cvsrgwqjrs .gt_empty_group_heading {
+#eamhdjauqq .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -284,15 +282,15 @@
   vertical-align: middle;
 }
 
-#cvsrgwqjrs .gt_from_md > :first-child {
+#eamhdjauqq .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#cvsrgwqjrs .gt_from_md > :last-child {
+#eamhdjauqq .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#cvsrgwqjrs .gt_row {
+#eamhdjauqq .gt_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -311,7 +309,7 @@
   overflow-x: hidden;
 }
 
-#cvsrgwqjrs .gt_stub {
+#eamhdjauqq .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -324,7 +322,7 @@
   padding-right: 5px;
 }
 
-#cvsrgwqjrs .gt_stub_row_group {
+#eamhdjauqq .gt_stub_row_group {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -338,15 +336,15 @@
   vertical-align: top;
 }
 
-#cvsrgwqjrs .gt_row_group_first td {
+#eamhdjauqq .gt_row_group_first td {
   border-top-width: 2px;
 }
 
-#cvsrgwqjrs .gt_row_group_first th {
+#eamhdjauqq .gt_row_group_first th {
   border-top-width: 2px;
 }
 
-#cvsrgwqjrs .gt_summary_row {
+#eamhdjauqq .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -356,16 +354,16 @@
   padding-right: 5px;
 }
 
-#cvsrgwqjrs .gt_first_summary_row {
+#eamhdjauqq .gt_first_summary_row {
   border-top-style: solid;
   border-top-color: #D3D3D3;
 }
 
-#cvsrgwqjrs .gt_first_summary_row.thick {
+#eamhdjauqq .gt_first_summary_row.thick {
   border-top-width: 2px;
 }
 
-#cvsrgwqjrs .gt_last_summary_row {
+#eamhdjauqq .gt_last_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -375,7 +373,7 @@
   border-bottom-color: #D3D3D3;
 }
 
-#cvsrgwqjrs .gt_grand_summary_row {
+#eamhdjauqq .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -385,7 +383,7 @@
   padding-right: 5px;
 }
 
-#cvsrgwqjrs .gt_first_grand_summary_row {
+#eamhdjauqq .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -395,7 +393,7 @@
   border-top-color: #D3D3D3;
 }
 
-#cvsrgwqjrs .gt_last_grand_summary_row_top {
+#eamhdjauqq .gt_last_grand_summary_row_top {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -405,11 +403,11 @@
   border-bottom-color: #D3D3D3;
 }
 
-#cvsrgwqjrs .gt_striped {
+#eamhdjauqq .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-#cvsrgwqjrs .gt_table_body {
+#eamhdjauqq .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -418,7 +416,7 @@
   border-bottom-color: #D3D3D3;
 }
 
-#cvsrgwqjrs .gt_footnotes {
+#eamhdjauqq .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -432,7 +430,7 @@
   border-right-color: #D3D3D3;
 }
 
-#cvsrgwqjrs .gt_footnote {
+#eamhdjauqq .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding-top: 4px;
@@ -441,7 +439,7 @@
   padding-right: 5px;
 }
 
-#cvsrgwqjrs .gt_sourcenotes {
+#eamhdjauqq .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -455,7 +453,7 @@
   border-right-color: #D3D3D3;
 }
 
-#cvsrgwqjrs .gt_sourcenote {
+#eamhdjauqq .gt_sourcenote {
   font-size: 90%;
   padding-top: 4px;
   padding-bottom: 4px;
@@ -463,72 +461,72 @@
   padding-right: 5px;
 }
 
-#cvsrgwqjrs .gt_left {
+#eamhdjauqq .gt_left {
   text-align: left;
 }
 
-#cvsrgwqjrs .gt_center {
+#eamhdjauqq .gt_center {
   text-align: center;
 }
 
-#cvsrgwqjrs .gt_right {
+#eamhdjauqq .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#cvsrgwqjrs .gt_font_normal {
+#eamhdjauqq .gt_font_normal {
   font-weight: normal;
 }
 
-#cvsrgwqjrs .gt_font_bold {
+#eamhdjauqq .gt_font_bold {
   font-weight: bold;
 }
 
-#cvsrgwqjrs .gt_font_italic {
+#eamhdjauqq .gt_font_italic {
   font-style: italic;
 }
 
-#cvsrgwqjrs .gt_super {
+#eamhdjauqq .gt_super {
   font-size: 65%;
 }
 
-#cvsrgwqjrs .gt_footnote_marks {
+#eamhdjauqq .gt_footnote_marks {
   font-size: 75%;
   vertical-align: 0.4em;
   position: initial;
 }
 
-#cvsrgwqjrs .gt_asterisk {
+#eamhdjauqq .gt_asterisk {
   font-size: 100%;
   vertical-align: 0;
 }
 
-#cvsrgwqjrs .gt_indent_1 {
+#eamhdjauqq .gt_indent_1 {
   text-indent: 5px;
 }
 
-#cvsrgwqjrs .gt_indent_2 {
+#eamhdjauqq .gt_indent_2 {
   text-indent: 10px;
 }
 
-#cvsrgwqjrs .gt_indent_3 {
+#eamhdjauqq .gt_indent_3 {
   text-indent: 15px;
 }
 
-#cvsrgwqjrs .gt_indent_4 {
+#eamhdjauqq .gt_indent_4 {
   text-indent: 20px;
 }
 
-#cvsrgwqjrs .gt_indent_5 {
+#eamhdjauqq .gt_indent_5 {
   text-indent: 25px;
 }
 
-#cvsrgwqjrs .katex-display {
+#eamhdjauqq .katex-display {
   display: inline-flex !important;
   margin-bottom: 0.75em !important;
 }
 
-#cvsrgwqjrs div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
+#eamhdjauqq div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
   height: 0px !important;
 }
 </style>
@@ -541,50 +539,55 @@
 <tbody class="gt_table_body">
 <tr class="odd">
 <td class="gt_row gt_left" headers="item">Native metadata</td>
-<td class="gt_row gt_left" headers="status">missing</td>
-<td class="gt_row gt_left" headers="detail">spm_input_v2.dat must contain numeric declarations and two population-weight vectors; the runner generates it.</td>
+<td class="gt_row gt_left" headers="status">info</td>
+<td class="gt_row gt_left" headers="detail">A separate spm_input_v2.dat is optional; the runner embeds validated declarations in the staged species file.</td>
 </tr>
 <tr class="even">
 <td class="gt_row gt_left" headers="item">R metadata</td>
-<td class="gt_row gt_left" headers="status">missing</td>
-<td class="gt_row gt_left" headers="detail">The runner archives existing spm_metadata.json and writes staged metadata from explicit arguments before calling runSPM().</td>
+<td class="gt_row gt_left" headers="status">info</td>
+<td class="gt_row gt_left" headers="detail">A separate spm_metadata.json is optional. Existing files are archived; staged declarations come from explicit arguments or diagnostic defaults.</td>
 </tr>
 <tr class="odd">
 <td class="gt_row gt_left" headers="item">Recruitment rows</td>
 <td class="gt_row gt_left" headers="status">repair</td>
-<td class="gt_row gt_left" headers="detail">2 copies of a 45 value per-sex series; retain one. A second row would be read as SSB.</td>
+<td class="gt_row gt_left" headers="detail">2 copies of a 47 value series across 4 lines; retain one complete series. A second copy would be read as SSB.</td>
 </tr>
 <tr class="even">
+<td class="gt_row gt_left" headers="item">Recruitment basis</td>
+<td class="gt_row gt_left" headers="status">ok</td>
+<td class="gt_row gt_left" headers="detail">Source explicitly declares per_sex recruitment.</td>
+</tr>
+<tr class="odd">
 <td class="gt_row gt_left" headers="item">Spawning weights</td>
 <td class="gt_row gt_left" headers="status">repair</td>
 <td class="gt_row gt_left" headers="detail">4 zeros in effective spawning weights; stage them as 1e-12 for the current positive-weight contract.</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td class="gt_row gt_left" headers="item">Population weights</td>
 <td class="gt_row gt_left" headers="status">missing</td>
 <td class="gt_row gt_left" headers="detail">Population body weights require explicit runner arguments and SS3 verification. Diagnostic defaults use Fratio-weighted catch-weight proxies, with fleet fractions 0.96, 0.04</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td class="gt_row gt_left" headers="item">Units and ages</td>
 <td class="gt_row gt_left" headers="status">review</td>
 <td class="gt_row gt_left" headers="detail">Thousand fish, kg, tonnes and ages 1:30/30+ are working assumptions requiring SS3 export verification.</td>
 </tr>
-<tr class="odd">
-<td class="gt_row gt_left" headers="item">SSB history</td>
-<td class="gt_row gt_left" headers="status">review</td>
-<td class="gt_row gt_left" headers="detail">45 positions; source label: # SSB 1978-2026 . Calendar pairing remains unresolved; restrict to Tier 3, Rec_Gen=1.</td>
-</tr>
 <tr class="even">
+<td class="gt_row gt_left" headers="item">SSB history</td>
+<td class="gt_row gt_left" headers="status">missing</td>
+<td class="gt_row gt_left" headers="detail">47 recruitment values but 45 SSB values. Supply matching source histories before staging; values are never padded or discarded.</td>
+</tr>
+<tr class="odd">
 <td class="gt_row gt_left" headers="item">Maturity fields</td>
 <td class="gt_row gt_left" headers="status">info</td>
 <td class="gt_row gt_left" headers="detail">All-one maturity retains effective spawning weights. Ntot and SexRatio describe all fish and the all-fish female fraction. Confirm the SS3 spawning-weight definition.</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td class="gt_row gt_left" headers="item">Controls</td>
 <td class="gt_row gt_left" headers="status">ok</td>
 <td class="gt_row gt_left" headers="detail">2026-2040; 7 alternatives; 1000 simulations. Adapter requires Tier 3, Rec_Gen=1, TAC_ABC=1, beginning year 2026 and ForProjections.dat.</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td class="gt_row gt_left" headers="item">TAC parameters</td>
 <td class="gt_row gt_left" headers="status">info</td>
 <td class="gt_row gt_left" headers="detail">tacpar.dat is archived when supplied and unused with TAC_ABC=1.</td>
@@ -594,50 +597,65 @@
 </div>
 </div>
 </div>
-<p>The supplied native sidecar contains <code>SET_...</code> placeholders, and R metadata is absent. The helper generates metadata from declarations and lets <code><a href="../reference/runSPM.html">runSPM()</a></code> write the native sidecar when executing. These runtime metadata files serve a different purpose from the compiler template: <code>spm.tpl</code> is self-contained and requires no separate C++ header.</p>
-<p>The staged species file retains one of the two identical recruitment rows, declares that history as <code>per_sex</code>, and replaces four zero spawning weights with <code>1e-12</code> to satisfy the current positive-weight contract. The 45 SSB values include two terminal repeats. Their calendar alignment remains unresolved; the helper restricts execution to Tier 3 historical-recruitment mode (<code>Rec_Gen = 1</code>), which does not fit a stock–recruitment relationship.</p>
-</section><section class="level2"><h2 id="validate-the-conditional-inputs">Validate the conditional inputs<a class="anchor" aria-label="anchor" href="#validate-the-conditional-inputs"></a>
+<p>The input now explicitly declares <code>per sex</code>. Its two identical recruitment series contain 47 values each, wrapped across four lines and ending in <code>811.8, 460.5</code>. The SSB series has 45 values, ending in <code>28053.3, 27020.6, 25862.1</code>. The recruitment label still says 1978–2022 and the SSB label says 1978–2026; confirm the numerical histories and their calendar alignment from the source export. The revised average five-year F is <code>0.05605452</code>, with new female and male abundance vectors over 30 ages.</p>
+<p>The helper accepts the wrapped recruitment series and explicit basis. Once matching source histories are available, it can stage one recruitment copy, move the basis declaration into the versioned comment block, and replace four zero spawning weights with <code>1e-12</code> for the positive-weight contract. It keeps Tier 3 historical-recruitment mode (<code>Rec_Gen = 1</code>). That mode still requires matching positional recruitment and SSB lengths.</p>
+<p>The obsolete placeholder sidecar was removed from the canonical example; earlier source snapshots remain archived. Separate JSON and native metadata files are optional in version 0.4.3: the helper writes validated declarations as comments in the staged species file. The current native engine reads those comments directly. <code>spm.tpl</code> is self-contained and requires no separate C++ header.</p>
+</section><section class="level2"><h2 id="confirm-the-staging-block">Confirm the staging block<a class="anchor" aria-label="anchor" href="#confirm-the-staging-block"></a>
 </h2>
-<p>Diagnostic mode uses <code>0.96 × fleet 1 + 0.04 × fleet 2</code> catch-weight proxies separately for each sex as population weights. These coefficients are the supplied fishing-mortality allocation. The mixture is a computational assumption and requires review as a representation of population body weight. Diagnostic mode also declares thousand fish, kg, tonnes, and ages 1–30 with a terminal plus group. The supplied spawning weights already incorporate maturity; the all-one maturity fields are neutral multipliers. Under those fields, <code>Ntot</code> and <code>SexRatio</code> describe all fish and the all-fish female fraction.</p>
+<p>The current mismatch is reported as an expected input error, and no attempt directory is created. An unexpected error still stops the article build.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">attempt_dir</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempfile</a></span><span class="op">(</span><span class="st">"spmr-gt2026-article-"</span><span class="op">)</span></span>
+<span><span class="va">staging_status</span> <span class="op">&lt;-</span> <span class="kw"><a href="https://rdrr.io/r/base/conditions.html" class="external-link">tryCatch</a></span><span class="op">(</span></span>
+<span>  <span class="fu">run_gt2026_projection</span><span class="op">(</span></span>
+<span>    source_dir <span class="op">=</span> <span class="va">example_dir</span>,</span>
+<span>    run_dir <span class="op">=</span> <span class="va">attempt_dir</span>,</span>
+<span>    run <span class="op">=</span> <span class="cn">FALSE</span></span>
+<span>  <span class="op">)</span>,</span>
+<span>  error <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">condition</span><span class="op">)</span> <span class="op">{</span></span>
+<span>    <span class="va">detail</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/conditions.html" class="external-link">conditionMessage</a></span><span class="op">(</span><span class="va">condition</span><span class="op">)</span></span>
+<span>    <span class="kw">if</span> <span class="op">(</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/grep.html" class="external-link">grepl</a></span><span class="op">(</span><span class="st">"47 recruitment values but 45 SSB values"</span>, <span class="va">detail</span>, fixed <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
+<span>      <span class="kw"><a href="https://rdrr.io/r/base/stop.html" class="external-link">stop</a></span><span class="op">(</span><span class="va">condition</span><span class="op">)</span></span>
+<span>    <span class="op">}</span></span>
+<span>    <span class="va">detail</span></span>
+<span>  <span class="op">}</span></span>
+<span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/stopifnot.html" class="external-link">stopifnot</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/character.html" class="external-link">is.character</a></span><span class="op">(</span><span class="va">staging_status</span><span class="op">)</span>, <span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/files2.html" class="external-link">dir.exists</a></span><span class="op">(</span><span class="va">attempt_dir</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"Staging blocked:"</span>, <span class="va">staging_status</span><span class="op">)</span></span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Staging blocked: 47 recruitment values but 45 SSB values. Supply matching source histories before staging; values are never padded or discarded.</code></pre>
+</div>
+</div>
+</section><section class="level2"><h2 id="stage-complete-inputs-after-review">Stage complete inputs after review<a class="anchor" aria-label="anchor" href="#stage-complete-inputs-after-review"></a>
+</h2>
+<p>Diagnostic mode uses <code>0.96 × fleet 1 + 0.04 × fleet 2</code> catch-weight proxies separately for each sex as population weights. These coefficients are the supplied fishing-mortality allocation. The mixture is a computational assumption and requires review as a representation of population body weight. Diagnostic mode also declares thousand fish, kg, tonnes, and ages 1–30 with a terminal plus group. Whether the supplied spawning weights already incorporate maturity requires confirmation; the all-one maturity fields are neutral multipliers. Under those fields, <code>Ntot</code> and <code>SexRatio</code> describe all fish and the all-fish female fraction.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">staged</span> <span class="op">&lt;-</span> <span class="fu">run_gt2026_projection</span><span class="op">(</span></span>
 <span>  source_dir <span class="op">=</span> <span class="va">example_dir</span>,</span>
 <span>  run_dir <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempfile</a></span><span class="op">(</span><span class="st">"spmr-gt2026-article-"</span><span class="op">)</span>,</span>
 <span>  diagnostic <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  run <span class="op">=</span> <span class="cn">FALSE</span></span>
-<span><span class="op">)</span></span></code></pre></div>
-<div class="cell-output cell-output-stderr">
-<pre><code>Conditional computational projection; SS3 export review remains open; population weights: Fratio-weighted fishery proxies.</code></pre>
-</div>
-<div class="sourceCode cell-code" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/stopifnot.html" class="external-link">stopifnot</a></span><span class="op">(</span></span>
-<span>  <span class="va">staged</span><span class="op">$</span><span class="va">inputs</span><span class="op">$</span><span class="va">format_version</span> <span class="op">==</span> <span class="fl">2L</span>,</span>
-<span>  <span class="fu"><a href="https://rdrr.io/r/base/NULL.html" class="external-link">is.null</a></span><span class="op">(</span><span class="va">staged</span><span class="op">$</span><span class="va">result</span><span class="op">)</span>,</span>
-<span>  <span class="fu"><a href="https://rdrr.io/r/base/NULL.html" class="external-link">is.null</a></span><span class="op">(</span><span class="va">staged</span><span class="op">$</span><span class="va">summary</span><span class="op">)</span>,</span>
-<span>  <span class="fu"><a href="https://rdrr.io/r/base/files.html" class="external-link">file.exists</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="va">staged</span><span class="op">$</span><span class="va">run_dir</span>, <span class="st">"staging-decisions.json"</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"Format-2 inputs validated; native projection remains unrun."</span><span class="op">)</span></span></code></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>Format-2 inputs validated; native projection remains unrun.</code></pre>
+<span><span class="va">staged</span><span class="op">$</span><span class="va">run_dir</span></span></code></pre></div>
 </div>
-</div>
+<p>This command is displayed without execution. It requires matching source histories and an explicit decision to use the diagnostic assumptions.</p>
 </section><section class="level2"><h2 id="run-an-explicitly-chosen-diagnostic-projection">Run an explicitly chosen diagnostic projection<a class="anchor" aria-label="anchor" href="#run-an-explicitly-chosen-diagnostic-projection"></a>
 </h2>
-<p>After reviewing the assumptions, the following commands enable native execution. They are displayed without execution in this article.</p>
+<p>After supplying matching histories and reviewing the assumptions, these commands enable native execution. They are displayed without execution in this article.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb7"><pre class="downlit sourceCode r">
+<div class="sourceCode cell-code" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">gt2026</span> <span class="op">&lt;-</span> <span class="fu">run_gt2026_projection</span><span class="op">(</span>diagnostic <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span><span class="va">gt2026</span><span class="op">$</span><span class="va">summary</span></span>
 <span><span class="va">gt2026</span><span class="op">$</span><span class="va">run_dir</span></span></code></pre></div>
 </div>
 <p>The helper uses <code>admb</code> on <code>PATH</code>, <code>SPMR_ADMB</code>, or its <code>admb</code> argument to compile the installed template. <code>SPMR_CXX</code> selects a matching C++ compiler. A compatible existing executable can be selected with <code>SPMR_EXECUTABLE</code> or <code>executable</code>. If compilation still requests <code>spmr_input_v2.hpp</code>, reinstall spmR from the current checkout and restart R to refresh the installed template.</p>
-<p>A completed run must contain 105,000 detail rows: seven alternatives, 1,000 simulations, and 15 projection years (2026–2040). The helper verifies the row keys, finite outputs, initial biomass, fixed catches, and successful provenance. Gradient and Hessian fit diagnostics are inapplicable to historical-recruitment simulation. These checks establish the conditional calculation; the SS3 export definitions and scientific interpretation require their own review.</p>
+<p>A completed run under the supplied controls would contain 105,000 detail rows: seven alternatives, 1,000 simulations, and 15 projection years (2026–2040). The helper verifies the row keys, finite outputs, initial biomass, fixed catches, and successful provenance. Gradient and Hessian fit diagnostics are inapplicable to historical-recruitment simulation. These checks establish the conditional calculation; the SS3 export definitions and scientific interpretation require their own review.</p>
 </section><section class="level2"><h2 id="replace-the-population-weight-assumptions">Replace the population-weight assumptions<a class="anchor" aria-label="anchor" href="#replace-the-population-weight-assumptions"></a>
 </h2>
 <p>Provide actual female and male population body-weight vectors with verified units and age labels:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb8"><pre class="downlit sourceCode r">
+<div class="sourceCode cell-code" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">gt2026</span> <span class="op">&lt;-</span> <span class="fu">run_gt2026_projection</span><span class="op">(</span></span>
 <span>  population_weights <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
 <span>    female <span class="op">=</span> <span class="va">female_body_weights</span>,</span>

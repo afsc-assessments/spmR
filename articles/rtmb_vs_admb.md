@@ -10,8 +10,10 @@ in split-sex species files. The [split-sex input migration
 guide](https://afsc-assessments.github.io/spmR/articles/split_sex_inputs.md)
 provides a runnable example with explicit historical recruitment basis,
 separate female and male population weights, and starting-year checks.
-Add those fields to `spm_metadata.json`. The current engine no longer
-reads `tacpar.dat`. Archived RTMB output remains a record of the earlier
+[`write_spm_metadata()`](https://afsc-assessments.github.io/spmR/reference/write_spm_metadata.md)
+embeds these declarations as comments in each species file. Explicit
+JSON metadata remains supported. The current engine no longer reads
+`tacpar.dat`. Archived RTMB output remains a record of the earlier
 prototype; adding metadata leaves its results and scientific limitations
 unchanged.
 
@@ -27,7 +29,7 @@ run_dir <- normalizePath(run_dir, winslash = "/", mustWork = TRUE)
 
 set.seed(123)
 
-# ADMB run (requires a format-2 binary and validated spm_metadata.json)
+# ADMB run (requires a format-2 binary and validated input declarations)
 # admb_res <- runSPM(run_dir, run = TRUE, engine = "admb")
 
 # RTMB run

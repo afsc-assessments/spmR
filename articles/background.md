@@ -13,12 +13,16 @@ guide](https://afsc-assessments.github.io/spmR/articles/split_sex_inputs.md)
 and the [current calculation
 summary](https://afsc-assessments.github.io/spmR/articles/more_documentation.md).
 
-Current spmR requires format-2 metadata alongside the positional input
-files and a compatible executable. Split-sex species files place a male
-spawning weight vector `wt_M` immediately after `wt_F`; `tacpar.dat` is
-no longer read. Declare whether historical recruitment is total or per
-sex; SPM converts the full history to total recruitment before
-calculations and allocates projected totals equally between sexes once.
+Current spmR embeds format-2 declarations as comments in each species
+file and requires a compatible executable.
+[`write_spm_metadata()`](https://afsc-assessments.github.io/spmR/reference/write_spm_metadata.md)
+writes the embedded declarations by default; separate JSON metadata
+remains supported when explicitly selected. Split-sex species files
+place a male spawning weight vector `wt_M` immediately after `wt_F`;
+`tacpar.dat` is no longer read. Declare whether historical recruitment
+is total or per sex; SPM converts the full history to total recruitment
+before calculations and allocates projected totals equally between sexes
+once.
 
 Supply separate female and male population weight-at-age vectors in the
 metadata. They determine total biomass. The positional female and male

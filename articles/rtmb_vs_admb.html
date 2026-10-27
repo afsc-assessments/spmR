@@ -23,7 +23,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">spmR</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.4.2</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.4.3</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -63,7 +63,7 @@
 
 
 
-    <p>This vignette compares the legacy ADMB workflow (<code>spm.tpl</code>) with the new RTMB prototype. Its archived outputs illustrate the interface; they are placeholders for population dynamics and cannot establish scientific equivalence. Current spmR stops new RTMB projections until the required dynamics and input contract are implemented. New ADMB runs require input format 2 metadata and a male spawning-weight vector <code>wt_M</code> after <code>wt_F</code> in split-sex species files. The <a href="split_sex_inputs.html">split-sex input migration guide</a> provides a runnable example with explicit historical recruitment basis, separate female and male population weights, and starting-year checks. Add those fields to <code>spm_metadata.json</code>. The current engine no longer reads <code>tacpar.dat</code>. Archived RTMB output remains a record of the earlier prototype; adding metadata leaves its results and scientific limitations unchanged.</p>
+    <p>This vignette compares the legacy ADMB workflow (<code>spm.tpl</code>) with the new RTMB prototype. Its archived outputs illustrate the interface; they are placeholders for population dynamics and cannot establish scientific equivalence. Current spmR stops new RTMB projections until the required dynamics and input contract are implemented. New ADMB runs require input format 2 metadata and a male spawning-weight vector <code>wt_M</code> after <code>wt_F</code> in split-sex species files. The <a href="split_sex_inputs.html">split-sex input migration guide</a> provides a runnable example with explicit historical recruitment basis, separate female and male population weights, and starting-year checks. <code><a href="../reference/write_spm_metadata.html">write_spm_metadata()</a></code> embeds these declarations as comments in each species file. Explicit JSON metadata remains supported. The current engine no longer reads <code>tacpar.dat</code>. Archived RTMB output remains a record of the earlier prototype; adding metadata leaves its results and scientific limitations unchanged.</p>
 <section class="level2"><h2 id="read-archived-prototype-output">Read archived prototype output<a class="anchor" aria-label="anchor" href="#read-archived-prototype-output"></a>
 </h2>
 <div class="cell">
@@ -76,7 +76,7 @@
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">123</span><span class="op">)</span></span>
 <span></span>
-<span><span class="co"># ADMB run (requires a format-2 binary and validated spm_metadata.json)</span></span>
+<span><span class="co"># ADMB run (requires a format-2 binary and validated input declarations)</span></span>
 <span><span class="co"># admb_res &lt;- runSPM(run_dir, run = TRUE, engine = "admb")</span></span>
 <span></span>
 <span><span class="co"># RTMB run</span></span>

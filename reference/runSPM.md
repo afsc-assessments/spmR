@@ -14,7 +14,7 @@ runSPM(
   ctrl = NULL,
   run = FALSE,
   engine = c("admb", "rtmb"),
-  metadata = "spm_metadata.json",
+  metadata = NULL,
   strict = TRUE
 )
 ```
@@ -45,8 +45,10 @@ runSPM(
 
 - metadata:
 
-  Filename of the version-2 metadata created by
-  \[write_spm_metadata()\]. Used only for new ADMB runs.
+  \`NULL\` discovers embedded species metadata, falling back to
+  \`spm_metadata.json\` for older inputs. Supply a JSON filename to
+  select it explicitly. See \[write_spm_metadata()\]. Used only for new
+  ADMB runs.
 
 - strict:
 

@@ -25,7 +25,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">spmR</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.4.2</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.4.3</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -67,7 +67,11 @@
 
     <div class="cell">
 <div class="sourceCode cell-code" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://afsc-assessments.github.io/spmR/">spmR</a></span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="kw">if</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/files.html" class="external-link">file.exists</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="st">".."</span>, <span class="st">"DESCRIPTION"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="fu">pkgload</span><span class="fu">::</span><span class="fu"><a href="https://pkgload.r-lib.org/reference/load_all.html" class="external-link">load_all</a></span><span class="op">(</span><span class="st">".."</span>, export_all <span class="op">=</span> <span class="cn">FALSE</span>, helpers <span class="op">=</span> <span class="cn">FALSE</span>, quiet <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span><span class="op">}</span> <span class="kw">else</span> <span class="op">{</span></span>
+<span>  <span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://afsc-assessments.github.io/spmR/">spmR</a></span><span class="op">)</span></span>
+<span><span class="op">}</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://readr.tidyverse.org" class="external-link">readr</a></span><span class="op">)</span></span></code></pre></div>
 </div>
 <p>This vignette provides three canonical workflows from the <a href="https://github.com/afsc-assessments/spmR" class="external-link">source repository</a>:</p>
@@ -81,8 +85,8 @@
 <li>
 <code>examples/gt_2026</code> for auditing and staging new split-sex inputs</li>
 </ul>
-<p>The bundled positional files retain their historical layout. For a new run, create metadata with explicit recruitment basis and female/male population weights, then use a format-2 executable. Follow the runnable <a href="split_sex_inputs.html">split-sex input migration guide</a>. Keep each species file’s existing field order and store added population vectors in the metadata.</p>
-<p>The first two workflows read archived output. The third identifies missing scientific declarations and validates staged inputs for a conditional projection.</p>
+<p>The bundled positional files retain their historical layout. For a new run, use <code><a href="../reference/write_spm_metadata.html">write_spm_metadata()</a></code> to embed explicit recruitment basis and female/male population weights as comments in each species file, then use a format-2 executable. Follow the runnable <a href="split_sex_inputs.html">split-sex input migration guide</a>. Keep each species file’s existing field order and store added population vectors in the versioned comment block. The current native engine reads that block directly; separate JSON and native sidecar files remain supported for existing workflows.</p>
+<p>The first two workflows read archived output. The third identifies missing scientific declarations and incomplete histories before a new projection.</p>
 <section class="level2"><h2 id="atka-workflow-examplesatka">1. Atka workflow (<code>examples/atka</code>)<a class="anchor" aria-label="anchor" href="#atka-workflow-examplesatka"></a>
 </h2>
 <p>Use <code><a href="../reference/runSPM.html">runSPM()</a></code> to read existing ADMB output (<code>spm_detail.csv</code>) and inspect inputs using <code><a href="../reference/dat2list.html">dat2list()</a></code>.</p>
@@ -136,7 +140,7 @@
 <span><span class="co">#&gt;   ..   B40 = col_double(),</span></span>
 <span><span class="co">#&gt;   ..   B35 = col_double()</span></span>
 <span><span class="co">#&gt;   .. )</span></span>
-<span><span class="co">#&gt;  - attr(*, "problems")=&lt;pointer: 0x55e300d7cce0&gt;</span></span>
+<span><span class="co">#&gt;  - attr(*, "problems")=&lt;pointer: 0x55791e040950&gt;</span></span>
 <span></span>
 <span><span class="va">atka_inputs</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/dat2list.html">dat2list</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="va">atka_dir</span>, <span class="st">"spm.dat"</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">atka_inputs</span><span class="op">)</span></span>
@@ -180,30 +184,30 @@
 </div>
 </section><section class="level2"><h2 id="audit-and-stage-greenland-turbot-examplesgt_2026">3. Audit and stage Greenland turbot (<code>examples/gt_2026</code>)<a class="anchor" aria-label="anchor" href="#audit-and-stage-greenland-turbot-examplesgt_2026"></a>
 </h2>
-<p>The supplied 2026 export requires explicit population weights, units, age labels, and SS3 export-field review. Its helper preserves the original files and records corrections in a new attempt directory. The <a href="gt2026_inputs.html">GT2026 audit and staging guide</a> explains each finding.</p>
+<p>The revised 2026 export has 47 recruitment values and 45 SSB values. Its helper reports the mismatch and stops before staging until matching source histories are supplied. Population weights, units, ages, and SS3 export-field definitions also require review. The <a href="gt2026_inputs.html">GT2026 audit and staging guide</a> explains each finding.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">gt2026_dir</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="va">pkg_root</span>, <span class="st">"examples"</span>, <span class="st">"gt_2026"</span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/source.html" class="external-link">source</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="va">gt2026_dir</span>, <span class="st">"run.R"</span><span class="op">)</span>, local <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span><span class="fu">gt</span><span class="fu">::</span><span class="fu"><a href="https://gt.rstudio.com/reference/gt.html" class="external-link">gt</a></span><span class="op">(</span><span class="fu">check_gt2026_inputs</span><span class="op">(</span><span class="va">gt2026_dir</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <div class="cell-output-display">
-<div id="wybrtikchq" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
-<style>#wybrtikchq table {
+<div id="jzhghalpqp" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#jzhghalpqp table {
   font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-#wybrtikchq thead, #wybrtikchq tbody, #wybrtikchq tfoot, #wybrtikchq tr, #wybrtikchq td, #wybrtikchq th {
+#jzhghalpqp thead, #jzhghalpqp tbody, #jzhghalpqp tfoot, #jzhghalpqp tr, #jzhghalpqp td, #jzhghalpqp th {
   border-style: none;
 }
 
-#wybrtikchq p {
+#jzhghalpqp p {
   margin: 0;
   padding: 0;
 }
 
-#wybrtikchq .gt_table {
+#jzhghalpqp .gt_table {
   display: table;
   border-collapse: collapse;
   line-height: normal;
@@ -229,12 +233,12 @@
   border-left-color: #D3D3D3;
 }
 
-#wybrtikchq .gt_caption {
+#jzhghalpqp .gt_caption {
   padding-top: 4px;
   padding-bottom: 4px;
 }
 
-#wybrtikchq .gt_title {
+#jzhghalpqp .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -246,7 +250,7 @@
   border-bottom-width: 0;
 }
 
-#wybrtikchq .gt_subtitle {
+#jzhghalpqp .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -258,7 +262,7 @@
   border-top-width: 0;
 }
 
-#wybrtikchq .gt_heading {
+#jzhghalpqp .gt_heading {
   background-color: #FFFFFF;
   text-align: center;
   border-bottom-color: #FFFFFF;
@@ -270,13 +274,13 @@
   border-right-color: #D3D3D3;
 }
 
-#wybrtikchq .gt_bottom_border {
+#jzhghalpqp .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#wybrtikchq .gt_col_headings {
+#jzhghalpqp .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -291,7 +295,7 @@
   border-right-color: #D3D3D3;
 }
 
-#wybrtikchq .gt_col_heading {
+#jzhghalpqp .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -311,7 +315,7 @@
   overflow-x: hidden;
 }
 
-#wybrtikchq .gt_column_spanner_outer {
+#jzhghalpqp .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -323,15 +327,15 @@
   padding-right: 4px;
 }
 
-#wybrtikchq .gt_column_spanner_outer:first-child {
+#jzhghalpqp .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#wybrtikchq .gt_column_spanner_outer:last-child {
+#jzhghalpqp .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#wybrtikchq .gt_column_spanner {
+#jzhghalpqp .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -343,11 +347,11 @@
   width: 100%;
 }
 
-#wybrtikchq .gt_spanner_row {
+#jzhghalpqp .gt_spanner_row {
   border-bottom-style: hidden;
 }
 
-#wybrtikchq .gt_group_heading {
+#jzhghalpqp .gt_group_heading {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -373,7 +377,7 @@
   text-align: left;
 }
 
-#wybrtikchq .gt_empty_group_heading {
+#jzhghalpqp .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -388,15 +392,15 @@
   vertical-align: middle;
 }
 
-#wybrtikchq .gt_from_md > :first-child {
+#jzhghalpqp .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#wybrtikchq .gt_from_md > :last-child {
+#jzhghalpqp .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#wybrtikchq .gt_row {
+#jzhghalpqp .gt_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -415,7 +419,7 @@
   overflow-x: hidden;
 }
 
-#wybrtikchq .gt_stub {
+#jzhghalpqp .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -428,7 +432,7 @@
   padding-right: 5px;
 }
 
-#wybrtikchq .gt_stub_row_group {
+#jzhghalpqp .gt_stub_row_group {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -442,15 +446,15 @@
   vertical-align: top;
 }
 
-#wybrtikchq .gt_row_group_first td {
+#jzhghalpqp .gt_row_group_first td {
   border-top-width: 2px;
 }
 
-#wybrtikchq .gt_row_group_first th {
+#jzhghalpqp .gt_row_group_first th {
   border-top-width: 2px;
 }
 
-#wybrtikchq .gt_summary_row {
+#jzhghalpqp .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -460,16 +464,16 @@
   padding-right: 5px;
 }
 
-#wybrtikchq .gt_first_summary_row {
+#jzhghalpqp .gt_first_summary_row {
   border-top-style: solid;
   border-top-color: #D3D3D3;
 }
 
-#wybrtikchq .gt_first_summary_row.thick {
+#jzhghalpqp .gt_first_summary_row.thick {
   border-top-width: 2px;
 }
 
-#wybrtikchq .gt_last_summary_row {
+#jzhghalpqp .gt_last_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -479,7 +483,7 @@
   border-bottom-color: #D3D3D3;
 }
 
-#wybrtikchq .gt_grand_summary_row {
+#jzhghalpqp .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -489,7 +493,7 @@
   padding-right: 5px;
 }
 
-#wybrtikchq .gt_first_grand_summary_row {
+#jzhghalpqp .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -499,7 +503,7 @@
   border-top-color: #D3D3D3;
 }
 
-#wybrtikchq .gt_last_grand_summary_row_top {
+#jzhghalpqp .gt_last_grand_summary_row_top {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -509,11 +513,11 @@
   border-bottom-color: #D3D3D3;
 }
 
-#wybrtikchq .gt_striped {
+#jzhghalpqp .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-#wybrtikchq .gt_table_body {
+#jzhghalpqp .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -522,7 +526,7 @@
   border-bottom-color: #D3D3D3;
 }
 
-#wybrtikchq .gt_footnotes {
+#jzhghalpqp .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -536,7 +540,7 @@
   border-right-color: #D3D3D3;
 }
 
-#wybrtikchq .gt_footnote {
+#jzhghalpqp .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding-top: 4px;
@@ -545,7 +549,7 @@
   padding-right: 5px;
 }
 
-#wybrtikchq .gt_sourcenotes {
+#jzhghalpqp .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -559,7 +563,7 @@
   border-right-color: #D3D3D3;
 }
 
-#wybrtikchq .gt_sourcenote {
+#jzhghalpqp .gt_sourcenote {
   font-size: 90%;
   padding-top: 4px;
   padding-bottom: 4px;
@@ -567,72 +571,72 @@
   padding-right: 5px;
 }
 
-#wybrtikchq .gt_left {
+#jzhghalpqp .gt_left {
   text-align: left;
 }
 
-#wybrtikchq .gt_center {
+#jzhghalpqp .gt_center {
   text-align: center;
 }
 
-#wybrtikchq .gt_right {
+#jzhghalpqp .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#wybrtikchq .gt_font_normal {
+#jzhghalpqp .gt_font_normal {
   font-weight: normal;
 }
 
-#wybrtikchq .gt_font_bold {
+#jzhghalpqp .gt_font_bold {
   font-weight: bold;
 }
 
-#wybrtikchq .gt_font_italic {
+#jzhghalpqp .gt_font_italic {
   font-style: italic;
 }
 
-#wybrtikchq .gt_super {
+#jzhghalpqp .gt_super {
   font-size: 65%;
 }
 
-#wybrtikchq .gt_footnote_marks {
+#jzhghalpqp .gt_footnote_marks {
   font-size: 75%;
   vertical-align: 0.4em;
   position: initial;
 }
 
-#wybrtikchq .gt_asterisk {
+#jzhghalpqp .gt_asterisk {
   font-size: 100%;
   vertical-align: 0;
 }
 
-#wybrtikchq .gt_indent_1 {
+#jzhghalpqp .gt_indent_1 {
   text-indent: 5px;
 }
 
-#wybrtikchq .gt_indent_2 {
+#jzhghalpqp .gt_indent_2 {
   text-indent: 10px;
 }
 
-#wybrtikchq .gt_indent_3 {
+#jzhghalpqp .gt_indent_3 {
   text-indent: 15px;
 }
 
-#wybrtikchq .gt_indent_4 {
+#jzhghalpqp .gt_indent_4 {
   text-indent: 20px;
 }
 
-#wybrtikchq .gt_indent_5 {
+#jzhghalpqp .gt_indent_5 {
   text-indent: 25px;
 }
 
-#wybrtikchq .katex-display {
+#jzhghalpqp .katex-display {
   display: inline-flex !important;
   margin-bottom: 0.75em !important;
 }
 
-#wybrtikchq div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
+#jzhghalpqp div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
   height: 0px !important;
 }
 </style>
@@ -645,50 +649,55 @@
 <tbody class="gt_table_body">
 <tr class="odd">
 <td class="gt_row gt_left" headers="item">Native metadata</td>
-<td class="gt_row gt_left" headers="status">missing</td>
-<td class="gt_row gt_left" headers="detail">spm_input_v2.dat must contain numeric declarations and two population-weight vectors; the runner generates it.</td>
+<td class="gt_row gt_left" headers="status">info</td>
+<td class="gt_row gt_left" headers="detail">A separate spm_input_v2.dat is optional; the runner embeds validated declarations in the staged species file.</td>
 </tr>
 <tr class="even">
 <td class="gt_row gt_left" headers="item">R metadata</td>
-<td class="gt_row gt_left" headers="status">missing</td>
-<td class="gt_row gt_left" headers="detail">The runner archives existing spm_metadata.json and writes staged metadata from explicit arguments before calling runSPM().</td>
+<td class="gt_row gt_left" headers="status">info</td>
+<td class="gt_row gt_left" headers="detail">A separate spm_metadata.json is optional. Existing files are archived; staged declarations come from explicit arguments or diagnostic defaults.</td>
 </tr>
 <tr class="odd">
 <td class="gt_row gt_left" headers="item">Recruitment rows</td>
 <td class="gt_row gt_left" headers="status">repair</td>
-<td class="gt_row gt_left" headers="detail">2 copies of a 45 value per-sex series; retain one. A second row would be read as SSB.</td>
+<td class="gt_row gt_left" headers="detail">2 copies of a 47 value series across 4 lines; retain one complete series. A second copy would be read as SSB.</td>
 </tr>
 <tr class="even">
+<td class="gt_row gt_left" headers="item">Recruitment basis</td>
+<td class="gt_row gt_left" headers="status">ok</td>
+<td class="gt_row gt_left" headers="detail">Source explicitly declares per_sex recruitment.</td>
+</tr>
+<tr class="odd">
 <td class="gt_row gt_left" headers="item">Spawning weights</td>
 <td class="gt_row gt_left" headers="status">repair</td>
 <td class="gt_row gt_left" headers="detail">4 zeros in effective spawning weights; stage them as 1e-12 for the current positive-weight contract.</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td class="gt_row gt_left" headers="item">Population weights</td>
 <td class="gt_row gt_left" headers="status">missing</td>
 <td class="gt_row gt_left" headers="detail">Population body weights require explicit runner arguments and SS3 verification. Diagnostic defaults use Fratio-weighted catch-weight proxies, with fleet fractions 0.96, 0.04</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td class="gt_row gt_left" headers="item">Units and ages</td>
 <td class="gt_row gt_left" headers="status">review</td>
 <td class="gt_row gt_left" headers="detail">Thousand fish, kg, tonnes and ages 1:30/30+ are working assumptions requiring SS3 export verification.</td>
 </tr>
-<tr class="odd">
-<td class="gt_row gt_left" headers="item">SSB history</td>
-<td class="gt_row gt_left" headers="status">review</td>
-<td class="gt_row gt_left" headers="detail">45 positions; source label: # SSB 1978-2026 . Calendar pairing remains unresolved; restrict to Tier 3, Rec_Gen=1.</td>
-</tr>
 <tr class="even">
+<td class="gt_row gt_left" headers="item">SSB history</td>
+<td class="gt_row gt_left" headers="status">missing</td>
+<td class="gt_row gt_left" headers="detail">47 recruitment values but 45 SSB values. Supply matching source histories before staging; values are never padded or discarded.</td>
+</tr>
+<tr class="odd">
 <td class="gt_row gt_left" headers="item">Maturity fields</td>
 <td class="gt_row gt_left" headers="status">info</td>
 <td class="gt_row gt_left" headers="detail">All-one maturity retains effective spawning weights. Ntot and SexRatio describe all fish and the all-fish female fraction. Confirm the SS3 spawning-weight definition.</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td class="gt_row gt_left" headers="item">Controls</td>
 <td class="gt_row gt_left" headers="status">ok</td>
 <td class="gt_row gt_left" headers="detail">2026-2040; 7 alternatives; 1000 simulations. Adapter requires Tier 3, Rec_Gen=1, TAC_ABC=1, beginning year 2026 and ForProjections.dat.</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td class="gt_row gt_left" headers="item">TAC parameters</td>
 <td class="gt_row gt_left" headers="status">info</td>
 <td class="gt_row gt_left" headers="detail">tacpar.dat is archived when supplied and unused with TAC_ABC=1.</td>
@@ -698,21 +707,33 @@
 </div>
 </div>
 </div>
-<p>Diagnostic mode explicitly uses fishery-weight proxies for sex-specific population body weights and declares thousand fish, kg, tonnes, and ages 1–30 with a terminal plus group. These assumptions require confirmation before assessment use. The next chunk stages and validates them; <code>run = FALSE</code> leaves the native projection unrun.</p>
+<p>The next chunk displays the expected staging block and verifies that no attempt directory is created. <code>run = FALSE</code> leaves native execution disabled.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">gt2026</span> <span class="op">&lt;-</span> <span class="fu">run_gt2026_projection</span><span class="op">(</span></span>
-<span>  source_dir <span class="op">=</span> <span class="va">gt2026_dir</span>,</span>
-<span>  run_dir <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempfile</a></span><span class="op">(</span><span class="st">"spmr-gt2026-canonical-"</span><span class="op">)</span>,</span>
-<span>  diagnostic <span class="op">=</span> <span class="cn">TRUE</span>,</span>
-<span>  run <span class="op">=</span> <span class="cn">FALSE</span></span>
+<code class="sourceCode R"><span><span class="va">gt2026_attempt</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempfile</a></span><span class="op">(</span><span class="st">"spmr-gt2026-canonical-"</span><span class="op">)</span></span>
+<span><span class="va">gt2026_status</span> <span class="op">&lt;-</span> <span class="kw"><a href="https://rdrr.io/r/base/conditions.html" class="external-link">tryCatch</a></span><span class="op">(</span></span>
+<span>  <span class="fu">run_gt2026_projection</span><span class="op">(</span></span>
+<span>    source_dir <span class="op">=</span> <span class="va">gt2026_dir</span>,</span>
+<span>    run_dir <span class="op">=</span> <span class="va">gt2026_attempt</span>,</span>
+<span>    run <span class="op">=</span> <span class="cn">FALSE</span></span>
+<span>  <span class="op">)</span>,</span>
+<span>  error <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">condition</span><span class="op">)</span> <span class="op">{</span></span>
+<span>    <span class="va">detail</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/conditions.html" class="external-link">conditionMessage</a></span><span class="op">(</span><span class="va">condition</span><span class="op">)</span></span>
+<span>    <span class="kw">if</span> <span class="op">(</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/grep.html" class="external-link">grepl</a></span><span class="op">(</span><span class="st">"47 recruitment values but 45 SSB values"</span>, <span class="va">detail</span>, fixed <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
+<span>      <span class="kw"><a href="https://rdrr.io/r/base/stop.html" class="external-link">stop</a></span><span class="op">(</span><span class="va">condition</span><span class="op">)</span></span>
+<span>    <span class="op">}</span></span>
+<span>    <span class="va">detail</span></span>
+<span>  <span class="op">}</span></span>
 <span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/stopifnot.html" class="external-link">stopifnot</a></span><span class="op">(</span><span class="va">gt2026</span><span class="op">$</span><span class="va">inputs</span><span class="op">$</span><span class="va">format_version</span> <span class="op">==</span> <span class="fl">2L</span>, <span class="fu"><a href="https://rdrr.io/r/base/NULL.html" class="external-link">is.null</a></span><span class="op">(</span><span class="va">gt2026</span><span class="op">$</span><span class="va">result</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu"><a href="https://rdrr.io/r/base/stopifnot.html" class="external-link">stopifnot</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/character.html" class="external-link">is.character</a></span><span class="op">(</span><span class="va">gt2026_status</span><span class="op">)</span>, <span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/files2.html" class="external-link">dir.exists</a></span><span class="op">(</span><span class="va">gt2026_attempt</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"Staging blocked:"</span>, <span class="va">gt2026_status</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Staging blocked: 47 recruitment values but 45 SSB values. Supply matching source histories before staging; values are never padded or discarded.</span></span></code></pre></div>
 </div>
-<p>To run an explicitly chosen conditional projection from the repository root:</p>
+<p>After supplying matching source histories, diagnostic mode explicitly selects fishery-weight proxies for population body weights, thousand fish, kg, tonnes, and ages 1–30 with a terminal plus group. These assumptions require review. The following future commands are displayed without execution:</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/source.html" class="external-link">source</a></span><span class="op">(</span><span class="st">"examples/gt_2026/run.R"</span><span class="op">)</span></span>
+<span><span class="va">staged</span> <span class="op">&lt;-</span> <span class="fu">run_gt2026_projection</span><span class="op">(</span>diagnostic <span class="op">=</span> <span class="cn">TRUE</span>, run <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
 <span><span class="va">gt2026</span> <span class="op">&lt;-</span> <span class="fu">run_gt2026_projection</span><span class="op">(</span>diagnostic <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span><span class="va">gt2026</span><span class="op">$</span><span class="va">summary</span></span></code></pre></div>
 </div>

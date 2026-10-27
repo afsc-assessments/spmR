@@ -23,7 +23,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">spmR</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.4.2</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.4.3</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -63,17 +63,17 @@
 
 
 
-    <p>Current spmR requires input format 2 for new ADMB projections. This guide uses synthetic data to show the change from legacy split-sex files to explicit recruitment and population-weight metadata. Validation runs whenever this vignette is built; native execution in the final worked example is enabled explicitly.</p>
+    <p>Current spmR requires input format 2 for new ADMB projections. Version 0.4.3 embeds its declarations as comments in each species file by default. This guide uses synthetic data to show the change from legacy split-sex files to explicit recruitment and population-weight declarations. Validation runs whenever this vignette is built; native execution in the final worked example is enabled explicitly.</p>
 <section class="level2"><h2 id="what-changes-in-the-input-files">What changes in the input files<a class="anchor" aria-label="anchor" href="#what-changes-in-the-input-files"></a>
 </h2>
-<p>Keep the positional layout of <code>spm.dat</code>. In each split-sex species file (for example, <code>stock.prj</code>), insert <code>wt_M</code> immediately after <code>wt_F</code>. The current engine does not read or require <code>tacpar.dat</code>. Add a separate <code>spm_metadata.json</code> file with one species record per stock, in the order listed in <code>spm.dat</code>.</p>
+<p>Keep the positional layout of <code>spm.dat</code>. In each split-sex species file (for example, <code>stock.prj</code>), insert <code>wt_M</code> immediately after <code>wt_F</code>. The current engine does not read or require <code>tacpar.dat</code>. Use <code><a href="../reference/write_spm_metadata.html">write_spm_metadata()</a></code> to append a versioned comment block with the declarations for each stock.</p>
 <ul>
 <li>Declare the basis of the complete historical recruitment series: <code>"total"</code> for both sexes combined or <code>"per_sex"</code> for either sex under a 50:50 recruitment ratio. Pooled-sex inputs require <code>"total"</code>.</li>
 <li>Supply female and male <strong>population</strong> weight-at-age vectors in the metadata. Each vector carries its age labels. The positional <code>wt_F</code> and <code>wt_M</code> vectors supply female and male spawning weights, and <code>wt_gear_F</code> and <code>wt_gear_M</code> supply catch weights. Female spawning weight continues to determine SSB.</li>
 <li>Keep the initial female and male abundance vectors in the species file. The recruitment-basis declaration applies to historical recruitment; it leaves these sex-specific initial vectors unchanged.</li>
 <li>Use <code>N_scalar = 1</code>. Convert existing scaled data to the declared units before creating metadata. Update values as needed while preserving field order.</li>
 </ul>
-<p><strong>Keep population-weight vectors in the metadata file.</strong> The new positional <code>wt_M</code> vector is a spawning weight, not a population weight. Inserting a field anywhere else in a positional species file can shift subsequent fields. An older executable may ignore additional information. The R runner validates metadata, creates the native <code>spm_input_v2.dat</code> file, and checks executable compatibility. Recompile the current <code>inst/admb/spm.tpl</code> before running format-2 inputs.</p>
+<p><strong>Keep population-weight vectors in the versioned comment block.</strong> The positional <code>wt_M</code> vector supplies spawning weights. Adding another positional field can shift subsequent fields. The current native engine reads the appended comment block directly, preserving the existing positional field order. The R runner validates the declarations and checks executable compatibility. Recompile the current <code>inst/admb/spm.tpl</code> to use embedded inputs directly.</p>
 </section><section class="level2"><h2 id="a-reproducible-synthetic-input-folder">A reproducible synthetic input folder<a class="anchor" aria-label="anchor" href="#a-reproducible-synthetic-input-folder"></a>
 </h2>
 <p>The following small example represents two sexes, one fishery, and three ages. All abundance values are fish, all weights are kg, and catch and biomass are kg. Replace these synthetic values with assessment inputs for an actual projection.</p>
@@ -176,14 +176,32 @@ $male_population_substitute
 [1] "none"</code></pre>
 </div>
 </div>
-<p><code><a href="../reference/write_spm_metadata.html">write_spm_metadata()</a></code> writes <code>format_version = 2</code> and validates the complete input folder. Weight vectors must contain one finite, strictly positive value per age. Age labels must be consecutive, ascending, nonnegative integers and match the species file’s age count and abundance ordering, including its final plus group. The validator checks labels and dimensions; the author establishes that the original assessment values follow the declared order.</p>
+<p><code><a href="../reference/write_spm_metadata.html">write_spm_metadata()</a></code> embeds version-2 declarations in <code>stock.prj</code> and validates the complete input folder. Weight vectors must contain one finite, strictly positive value per age. Age labels must be consecutive, ascending, nonnegative integers and match the species file’s age count and abundance ordering, including its final plus group. The validator checks labels and dimensions; the author establishes that the original assessment values follow the declared order.</p>
 <p>Supported abundance/weight/biomass combinations are <code>fish</code>/<code>kg</code>/<code>kg</code>, <code>thousand_fish</code>/<code>kg</code>/<code>t</code>, and <code>million_fish</code>/<code>kg</code>/<code>thousand_t</code>. The metadata checks the declaration; it performs no unit conversion. All stocks in a run must share abundance and biomass units.</p>
+<p>The appended block for this synthetic stock is:</p>
+<pre class="text"><code><span><span class="co"># SPMR_INPUT_V2 2 1</span></span>
+<span><span class="co"># stock.prj 2 3 1 1 1 1 0</span></span>
+<span><span class="co"># 1 2 3</span></span>
+<span><span class="co"># 0.1 0.2 0.3</span></span>
+<span><span class="co"># 0.08 0.16 0.24</span></span>
+<span><span class="co"># END_SPMR_INPUT_V2</span></span></code></pre>
+<p>The versioned header identifies one stock. Its record gives the filename, sex count, age count, recruitment basis, abundance/weight/biomass unit codes, and male-weight substitution code. The final three rows contain ages, female population weights, and male population weights. Use the R writer to build and validate the block from named declarations.</p>
+</section><section class="level2"><h2 id="existing-json-workflows">Existing JSON workflows<a class="anchor" aria-label="anchor" href="#existing-json-workflows"></a>
+</h2>
+<p>The default <code>metadata = NULL</code> reads embedded declarations first. When no species file has a block, it falls back to <code>spm_metadata.json</code>. To select a JSON file explicitly, use the same <code>metadata</code> argument throughout:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/write_spm_metadata.html">write_spm_metadata</a></span><span class="op">(</span><span class="va">projection_dir</span>, <span class="va">species</span>, metadata <span class="op">=</span> <span class="st">"spm_metadata.json"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="../reference/write_spm_metadata.html">validate_spm_inputs</a></span><span class="op">(</span><span class="va">projection_dir</span>, metadata <span class="op">=</span> <span class="st">"spm_metadata.json"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="../reference/runSPM.html">runSPM</a></span><span class="op">(</span><span class="va">projection_dir</span>, run <span class="op">=</span> <span class="cn">TRUE</span>, metadata <span class="op">=</span> <span class="st">"spm_metadata.json"</span><span class="op">)</span></span></code></pre></div>
+</div>
+<p>The R runner prepares embedded declarations for current engines and generates the legacy <code>spm_input_v2.dat</code> sidecar for older format-2 engines. The current native engine accepts that sidecar when embedded declarations are absent.</p>
 </section><section class="level2"><h2 id="how-recruitment-is-normalized">How recruitment is normalized<a class="anchor" aria-label="anchor" href="#how-recruitment-is-normalized"></a>
 </h2>
 <p>For split-sex inputs, a per-sex history of <code>40, 50, 60, 50</code> represents the same total history as this example. The engine doubles the <strong>complete per-sex history</strong> before calculating its arithmetic mean, harmonic mean, variability, recruitment distribution, or stock–recruitment inputs. It then allocates each projected total equally to the two sexes once. Doubling only a fitted mean would leave other calculations on a different basis.</p>
 <p>The calculation below illustrates the normalization; the native regression suite checks the engine’s recruitment moments, reference points, and trajectories.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb4"><pre class="downlit sourceCode r">
+<div class="sourceCode cell-code" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">total_history</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">80</span>, <span class="fl">100</span>, <span class="fl">120</span>, <span class="fl">100</span><span class="op">)</span></span>
 <span><span class="va">per_sex_history</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">40</span>, <span class="fl">50</span>, <span class="fl">60</span>, <span class="fl">50</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/stopifnot.html" class="external-link">stopifnot</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/identical.html" class="external-link">identical</a></span><span class="op">(</span><span class="va">total_history</span>, <span class="fl">2</span> <span class="op">*</span> <span class="va">per_sex_history</span><span class="op">)</span><span class="op">)</span></span>
@@ -201,7 +219,7 @@ $male_population_substitute
 </h2>
 <p>A split-sex input with missing male population weights stops before execution, including when <code>strict = FALSE</code>. That argument controls unknown metadata fields; the scientific checks remain active.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb6"><pre class="downlit sourceCode r">
+<div class="sourceCode cell-code" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">missing_male</span> <span class="op">&lt;-</span> <span class="va">species</span></span>
 <span><span class="va">missing_male</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span><span class="op">$</span><span class="va">population_weights</span><span class="op">$</span><span class="va">male</span> <span class="op">&lt;-</span> <span class="cn">NULL</span></span>
 <span><span class="va">male_error</span> <span class="op">&lt;-</span> <span class="kw"><a href="https://rdrr.io/r/base/conditions.html" class="external-link">tryCatch</a></span><span class="op">(</span></span>
@@ -216,7 +234,7 @@ $male_population_substitute
 </div>
 <p>An author may explicitly select <code>"female_population"</code> (use female population weights for males) or <code>"mean_male_fishery"</code> (use the unweighted arithmetic mean of male fishery weights across fleets, at each age). Both choices produce a warning and enter the run record. Record the scientific reason for using a substitute in the assessment and compare its effect on biomass. Supply either male weights or a substitute selection.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb8"><pre class="downlit sourceCode r">
+<div class="sourceCode cell-code" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">substituted</span> <span class="op">&lt;-</span> <span class="va">missing_male</span></span>
 <span><span class="va">substituted</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span><span class="op">$</span><span class="va">male_population_substitute</span> <span class="op">&lt;-</span> <span class="st">"female_population"</span></span>
 <span><span class="fu"><a href="../reference/write_spm_metadata.html">write_spm_metadata</a></span><span class="op">(</span><span class="va">projection_dir</span>, <span class="va">substituted</span><span class="op">)</span></span></code></pre></div>
@@ -224,7 +242,7 @@ $male_population_substitute
 <pre><code>Warning: metadata species 1 (stock.prj): male population weights use declared
 female_population.</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb10"><pre class="downlit sourceCode r">
+<div class="sourceCode cell-code" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Restore the measured/synthetic sex-specific vectors for the main example.</span></span>
 <span><span class="fu"><a href="../reference/write_spm_metadata.html">write_spm_metadata</a></span><span class="op">(</span><span class="va">projection_dir</span>, <span class="va">species</span><span class="op">)</span></span></code></pre></div>
 </div>
@@ -233,7 +251,7 @@ female_population.</code></pre>
 <p>The supplied initial abundance must represent the beginning of <code>styr</code> in <code>spm.dat</code> (2026 here). If the assessment state is from the preceding year, advance survival and ageing, accumulate the plus group, and explicitly choose the youngest-age recruitment for the starting year before writing the files. The metadata declaration alone performs none of these boundary calculations.</p>
 <p>Total biomass at the beginning of the year is the sum over ages of female abundance times female population weight plus male abundance times male population weight. For this synthetic input:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb11"><pre class="downlit sourceCode r">
+<div class="sourceCode cell-code" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">stock</span> <span class="op">&lt;-</span> <span class="va">inputs</span><span class="op">$</span><span class="va">species</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span></span>
 <span><span class="va">weights</span> <span class="op">&lt;-</span> <span class="va">inputs</span><span class="op">$</span><span class="va">resolved_species</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span><span class="op">$</span><span class="va">population_weights</span></span>
 <span><span class="va">initial_biomass_kg</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="va">stock</span><span class="op">$</span><span class="va">n0_F</span> <span class="op">*</span> <span class="va">weights</span><span class="op">$</span><span class="va">female</span> <span class="op">+</span></span>
@@ -249,16 +267,17 @@ female_population.</code></pre>
 </section><section class="level2"><h2 id="run-and-retain-the-evidence">Run and retain the evidence<a class="anchor" aria-label="anchor" href="#run-and-retain-the-evidence"></a>
 </h2>
 <p>Build <code>inst/admb/spm.tpl</code> with ADMB 13.0 or newer, then place the resulting <code>spm</code> (or <code>spm.exe</code> on Windows) in the projection folder or on <code>PATH</code>. The runner checks the executable’s <code>-spmr-capabilities</code> response before execution.</p>
-<p>The template includes its format-2 reader and compiles on its own; there is no separate <code>spmr_input_v2.hpp</code> dependency. The example helpers can compile the installed template with <code>admb</code> on <code>PATH</code>, or a compiler selected by <code>SPMR_ADMB</code>. After updating the source checkout, reinstall spmR to refresh that template. <code>spm_input_v2.dat</code> remains a required runtime input generated by the R runner from validated metadata.</p>
+<p>The template includes its format-2 reader and compiles on its own; there is no separate <code>spmr_input_v2.hpp</code> dependency. The example helpers can compile the installed template with <code>admb</code> on <code>PATH</code>, or a compiler selected by <code>SPMR_ADMB</code>. After updating the source checkout, reinstall spmR to refresh that template. The current engine reports both <code>SPMR_INPUT_FORMAT=2</code> and <code>SPMR_INLINE_INPUT=1</code>. With the embedded blocks in place, a standalone run needs <code>spm.dat</code> and its species files. Older format-2 engines require the sidecar generated by the R runner.</p>
 <p>The run record includes executable and input SHA-256 hashes, declared units, recruitment basis, resolved population weights, substitutions, and output hashes. Each attempt has a record in <code>spm_run_history/</code>; the last successful record is retained separately. Archive the input folder and results together.</p>
 <p>Supported new runs use <code>TAC_ABC = 1</code>, <code>Rec_Gen = 1</code> (historical recruitment distribution) or <code>2</code> (stock–recruitment fit), and <code>N_scalar = 1</code>. Fitted runs require a maximum gradient below <code>1e-4</code> and a positive-definite Hessian. Auxiliary recruitment modes 3 and 4, TAC fitting, and new experimental RTMB projections require further implementation.</p>
 <p>Read archived output with <code>runSPM(..., run = FALSE)</code> without changing its inputs. Adding metadata leaves those historical results as they were; produce new results in a separate folder, review recruitment, biomass and reference points, and then update assessment tables.</p>
 </section><section class="level2"><h2 id="worked-example-2020-greenland-turbot">Worked example: 2020 Greenland turbot<a class="anchor" aria-label="anchor" href="#worked-example-2020-greenland-turbot"></a>
 </h2>
 <p>The repository includes a documented conversion of the 2020 Bering Sea and Aleutian Islands Greenland turbot projection. The assessment treated this as a Tier 3a stock and projected ages 1–30, with age 30 as the plus group. The example retains the archived two-sex species input and writes all converted inputs and outputs to a temporary directory. It is a source-checkout example; clone the <a href="https://github.com/afsc-assessments/spmR" class="external-link">spmR repository</a> before running the code below.</p>
+<p>The helper embeds its validated declarations as comments in the generated species file. The current native engine reads that file and <code>spm.dat</code> directly; the R runner supplies a sidecar when using an older format-2 executable.</p>
 <p>The conversion declares total recruitment in <code>thousand_fish</code>, weights in <code>kg</code>, and biomass in <code>t</code>. The archived female spawning weights are reused as female population weights to preserve legacy biomass. No independent male population-weight vector was archived, so the example explicitly records <code>mean_male_fishery</code>; this is a reproducibility substitute, not a new biological estimate.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb13"><pre class="downlit sourceCode r">
+<div class="sourceCode cell-code" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Locate the example both when Quarto starts in vignettes/ and when it starts at</span></span>
 <span><span class="co"># the package root.</span></span>
 <span><span class="va">gt20_candidates</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span>
@@ -307,9 +326,9 @@ female_population.</code></pre>
 <pre><code>Warning: GT20 uses declared mean_male_fishery population weights for males.</code></pre>
 </div>
 <div class="cell-output cell-output-stderr">
-<pre><code>Completed GT20 projection in /tmp/RtmpkFRf8E/spmr-gt20-vignette-19ee6924bfda; starting biomass = 92104.6 t.</code></pre>
+<pre><code>Completed GT20 projection in /tmp/RtmpZn3XP4/spmr-gt20-vignette-1a5769f94fdd; starting biomass = 92104.6 t.</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb16"><pre class="downlit sourceCode r">
+<div class="sourceCode cell-code" id="cb18"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span></span>
 <span>  metric <span class="op">=</span> <span class="st">"Beginning-of-2020 total biomass (t)"</span>,</span>
 <span>  value <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="va">gt20</span><span class="op">$</span><span class="va">initial_biomass</span>, <span class="fl">1</span><span class="op">)</span></span>
@@ -321,7 +340,7 @@ female_population.</code></pre>
 </div>
 <p>With <code>SPMR_RUN_GT20=true</code>, the same evaluated chunk runs all seven alternatives and verifies 14,000 rows (100 simulations over 20 years). The published site build supplies a pinned ADMB 13.2 engine and displays this concise alternative-1 summary and its provenance record.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb18"><pre class="downlit sourceCode r">
+<div class="sourceCode cell-code" id="cb20"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw">if</span> <span class="op">(</span><span class="va">gt20_run_native</span><span class="op">)</span> <span class="op">{</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">gt20</span><span class="op">$</span><span class="va">summary</span><span class="op">[</span></span>
 <span>    <span class="va">gt20</span><span class="op">$</span><span class="va">summary</span><span class="op">$</span><span class="va">Alt</span> <span class="op">==</span> <span class="fl">1</span> <span class="op">&amp;</span> <span class="va">gt20</span><span class="op">$</span><span class="va">summary</span><span class="op">$</span><span class="va">Year</span> <span class="op">&lt;=</span> <span class="fl">2022</span>,</span>
@@ -345,13 +364,13 @@ female_population.</code></pre>
 </div>
 <div class="cell-output cell-output-stdout">
 <pre><code>                                                 executable_sha256
-1 0b3467627488bb6e49362d2b8b6057f60ec7925933a0a6bf7779a9bc377bfe73
+1 3b3e126da558ca4ee12538ecf2e598e8ba64319c505c5a064cc5808a2be83fed
   recruitment_basis
 1             total</code></pre>
 </div>
 </div>
 <p>The example reproduces beginning-of-2020 total biomass of <code>92,104.6 t</code>. For alternative 1, mean 2021 SSB is <code>51,913.9 t</code> and ABC is <code>7,326.4 t</code>, matching the published projection after rounding. The complete source is <code>examples/gt20/run_spmR_split_sex.R</code>.</p>
-<p>The separate <a href="gt2026_inputs.html">2026 Greenland turbot example</a> preserves the supplied export, audits its unresolved definitions, and stages corrections in a new attempt directory. Its diagnostic population weights are fishery-weight proxies requiring separate scientific review.</p>
+<p>The separate <a href="gt2026_inputs.html">2026 Greenland turbot example</a> preserves the revised export and audits its unresolved definitions. Its 47 recruitment values and 45 SSB values block staging until matching source histories are supplied. Diagnostic population weights are fishery-weight proxies requiring an explicit choice and separate scientific review.</p>
 </section><script id="quarto-html-after-body" type="application/javascript">
   window.document.addEventListener("DOMContentLoaded", function (event) {
       var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);

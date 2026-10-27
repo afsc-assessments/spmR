@@ -2,7 +2,11 @@
 
 ``` r
 
-library(spmR)
+if (file.exists(file.path("..", "DESCRIPTION"))) {
+  pkgload::load_all("..", export_all = FALSE, helpers = FALSE, quiet = TRUE)
+} else {
+  library(spmR)
+}
 library(readr)
 ```
 
@@ -20,16 +24,20 @@ repository](https://github.com/afsc-assessments/spmR):
 - `examples/gt_2026` for auditing and staging new split-sex inputs
 
 The bundled positional files retain their historical layout. For a new
-run, create metadata with explicit recruitment basis and female/male
-population weights, then use a format-2 executable. Follow the runnable
-[split-sex input migration
+run, use
+[`write_spm_metadata()`](https://afsc-assessments.github.io/spmR/reference/write_spm_metadata.md)
+to embed explicit recruitment basis and female/male population weights
+as comments in each species file, then use a format-2 executable. Follow
+the runnable [split-sex input migration
 guide](https://afsc-assessments.github.io/spmR/articles/split_sex_inputs.md).
 Keep each species file’s existing field order and store added population
-vectors in the metadata.
+vectors in the versioned comment block. The current native engine reads
+that block directly; separate JSON and native sidecar files remain
+supported for existing workflows.
 
 The first two workflows read archived output. The third identifies
-missing scientific declarations and validates staged inputs for a
-conditional projection.
+missing scientific declarations and incomplete histories before a new
+projection.
 
 ## 1. Atka workflow (`examples/atka`)
 
@@ -88,7 +96,7 @@ str(atka_detail)
 #>   ..   B40 = col_double(),
 #>   ..   B35 = col_double()
 #>   .. )
-#>  - attr(*, "problems")=<pointer: 0x55e300d7cce0>
+#>  - attr(*, "problems")=<pointer: 0x55791e040950>
 
 atka_inputs <- dat2list(file.path(atka_dir, "spm.dat"))
 names(atka_inputs)
@@ -137,10 +145,11 @@ plotSPM(bsre_summary, alt = c(1, 3, 5, 7), mytitle = "BSRE_AI summary plot")
 
 ## 3. Audit and stage Greenland turbot (`examples/gt_2026`)
 
-The supplied 2026 export requires explicit population weights, units,
-age labels, and SS3 export-field review. Its helper preserves the
-original files and records corrections in a new attempt directory. The
-[GT2026 audit and staging
+The revised 2026 export has 47 recruitment values and 45 SSB values. Its
+helper reports the mismatch and stops before staging until matching
+source histories are supplied. Population weights, units, ages, and SS3
+export-field definitions also require review. The [GT2026 audit and
+staging
 guide](https://afsc-assessments.github.io/spmR/articles/gt2026_inputs.md)
 explains each finding.
 
@@ -153,40 +162,54 @@ gt::gt(check_gt2026_inputs(gt2026_dir))
 
 | item | status | detail |
 |----|----|----|
-| Native metadata | missing | spm_input_v2.dat must contain numeric declarations and two population-weight vectors; the runner generates it. |
-| R metadata | missing | The runner archives existing spm_metadata.json and writes staged metadata from explicit arguments before calling runSPM(). |
-| Recruitment rows | repair | 2 copies of a 45 value per-sex series; retain one. A second row would be read as SSB. |
+| Native metadata | info | A separate spm_input_v2.dat is optional; the runner embeds validated declarations in the staged species file. |
+| R metadata | info | A separate spm_metadata.json is optional. Existing files are archived; staged declarations come from explicit arguments or diagnostic defaults. |
+| Recruitment rows | repair | 2 copies of a 47 value series across 4 lines; retain one complete series. A second copy would be read as SSB. |
+| Recruitment basis | ok | Source explicitly declares per_sex recruitment. |
 | Spawning weights | repair | 4 zeros in effective spawning weights; stage them as 1e-12 for the current positive-weight contract. |
 | Population weights | missing | Population body weights require explicit runner arguments and SS3 verification. Diagnostic defaults use Fratio-weighted catch-weight proxies, with fleet fractions 0.96, 0.04 |
 | Units and ages | review | Thousand fish, kg, tonnes and ages 1:30/30+ are working assumptions requiring SS3 export verification. |
-| SSB history | review | 45 positions; source label: \# SSB 1978-2026 . Calendar pairing remains unresolved; restrict to Tier 3, Rec_Gen=1. |
+| SSB history | missing | 47 recruitment values but 45 SSB values. Supply matching source histories before staging; values are never padded or discarded. |
 | Maturity fields | info | All-one maturity retains effective spawning weights. Ntot and SexRatio describe all fish and the all-fish female fraction. Confirm the SS3 spawning-weight definition. |
 | Controls | ok | 2026-2040; 7 alternatives; 1000 simulations. Adapter requires Tier 3, Rec_Gen=1, TAC_ABC=1, beginning year 2026 and ForProjections.dat. |
 | TAC parameters | info | tacpar.dat is archived when supplied and unused with TAC_ABC=1. |
 
-Diagnostic mode explicitly uses fishery-weight proxies for sex-specific
-population body weights and declares thousand fish, kg, tonnes, and ages
-1–30 with a terminal plus group. These assumptions require confirmation
-before assessment use. The next chunk stages and validates them;
-`run = FALSE` leaves the native projection unrun.
+The next chunk displays the expected staging block and verifies that no
+attempt directory is created. `run = FALSE` leaves native execution
+disabled.
 
 ``` r
 
-gt2026 <- run_gt2026_projection(
-  source_dir = gt2026_dir,
-  run_dir = tempfile("spmr-gt2026-canonical-"),
-  diagnostic = TRUE,
-  run = FALSE
+gt2026_attempt <- tempfile("spmr-gt2026-canonical-")
+gt2026_status <- tryCatch(
+  run_gt2026_projection(
+    source_dir = gt2026_dir,
+    run_dir = gt2026_attempt,
+    run = FALSE
+  ),
+  error = function(condition) {
+    detail <- conditionMessage(condition)
+    if (!grepl("47 recruitment values but 45 SSB values", detail, fixed = TRUE)) {
+      stop(condition)
+    }
+    detail
+  }
 )
-stopifnot(gt2026$inputs$format_version == 2L, is.null(gt2026$result))
+stopifnot(is.character(gt2026_status), !dir.exists(gt2026_attempt))
+cat("Staging blocked:", gt2026_status)
+#> Staging blocked: 47 recruitment values but 45 SSB values. Supply matching source histories before staging; values are never padded or discarded.
 ```
 
-To run an explicitly chosen conditional projection from the repository
-root:
+After supplying matching source histories, diagnostic mode explicitly
+selects fishery-weight proxies for population body weights, thousand
+fish, kg, tonnes, and ages 1–30 with a terminal plus group. These
+assumptions require review. The following future commands are displayed
+without execution:
 
 ``` r
 
 source("examples/gt_2026/run.R")
+staged <- run_gt2026_projection(diagnostic = TRUE, run = FALSE)
 gt2026 <- run_gt2026_projection(diagnostic = TRUE)
 gt2026$summary
 ```
