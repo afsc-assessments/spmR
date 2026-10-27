@@ -10,8 +10,9 @@ Differentiation Model Builder (`ADMB`).
 
 The main projection model is
 [`inst/admb/spm.tpl`](https://github.com/afsc-assessments/spmR/blob/main/inst/admb/spm.tpl).
-A model run requires `spm.dat`, a species-specific file containing
-assessment outputs, and `spm_metadata.json`. The [example
+A model run requires `spm.dat` and the species files named in it, with
+recruitment, units and population-weight declarations embedded as
+comments in each species file. The [example
 index](https://github.com/afsc-assessments/spmR/blob/main/examples/README.md)
 distinguishes current workflows from archived inputs and outputs. ADMB
 13.0 or newer is required to compile the self-contained template; no
@@ -19,14 +20,26 @@ separate C++ header is needed.
 
 ## Input format 2
 
-Version 0.4.2 requires a `spm_metadata.json` file for new projections. A
-split-sex species file now places the male spawning-weight vector `wt_M`
+Version 0.4.3 stores the version-2 declarations directly in species
+files. `write_spm_metadata()` appends the validated comment block by
+default; `validate_spm_inputs()` and `runSPM()` read it automatically. A
+split-sex species file places the male spawning-weight vector `wt_M`
 immediately after `wt_F`; pooled-sex files retain `wt_F` alone. An extra
 vector in any other position can shift subsequent fields or be ignored
-by an older program. The R runner validates the metadata and generates
-the native `spm_input_v2.dat` file. It checks the executable’s
-`-spmr-capabilities` response before running the projection. Recompile
-`inst/admb/spm.tpl` for this version.
+by an older program. The added declarations belong in the versioned
+comment block after the positional data. The R runner checks the
+executable’s `-spmr-capabilities` response before running the
+projection. Recompile `inst/admb/spm.tpl` to use embedded declarations
+directly; the new engine reports both `SPMR_INPUT_FORMAT=2` and
+`SPMR_INLINE_INPUT=1`.
+
+Separate JSON and native sidecar files remain supported for existing
+workflows. With `metadata = NULL`, the R interface reads embedded
+declarations first and falls back to `spm_metadata.json` when no species
+file contains an embedded block. Pass `metadata = "name.json"`
+explicitly to write or read a JSON file. The R runner generates
+`spm_input_v2.dat` when using an older format-2 engine; the current
+engine reads the declarations in the species files directly.
 
 Each stock declares `recruitment_basis = "total"` or `"per_sex"`.
 Per-sex inputs represent either sex under a 50:50 recruitment ratio. The
@@ -78,6 +91,16 @@ species <- list(list(
 write_spm_metadata("projection", species = species)
 validate_spm_inputs("projection")
 result <- runSPM("projection", run = TRUE)
+```
+
+This writes the declarations into `stock.prj`. For an existing JSON
+workflow, use the same explicit filename in the writer, validator and
+runner:
+
+``` r
+write_spm_metadata("projection", species, metadata = "spm_metadata.json")
+validate_spm_inputs("projection", metadata = "spm_metadata.json")
+result <- runSPM("projection", run = TRUE, metadata = "spm_metadata.json")
 ```
 
 Stock–recruitment fits must have a maximum gradient below 1e-4 and a
@@ -151,7 +174,7 @@ installed from the command line. From Linux this would involve:
 ``` sh
 git clone https://github.com/afsc-assessments/spmR
 R CMD build spmR
-R CMD INSTALL spmR_0.4.2.tar.gz
+R CMD INSTALL spmR_0.4.3.tar.gz
 ```
 
 ### Option 3
@@ -199,13 +222,14 @@ From a source checkout:
 ``` r
 source("examples/gt_2026/run.R")
 check_gt2026_inputs()
-staged <- run_gt2026_projection(diagnostic = TRUE, run = FALSE)
 ```
 
-GT2026 preserves the supplied files and records each staging decision.
-Its diagnostic mode declares fishery-weight proxies explicitly; SS3
-population weights, units, ages and history alignment remain review
-items. The [example
+The revised GT2026 input has 47 recruitment values and 45 SSB values.
+The audit reports the mismatch; staging and execution stop until
+matching source histories are supplied. Population weights, units, ages
+and history alignment also require SS3 review. Diagnostic fishery-weight
+proxies require an explicit choice after resolving the history mismatch.
+The [example
 README](https://github.com/afsc-assessments/spmR/blob/main/examples/gt_2026/README.md)
 provides projection commands and the complete input evaluation.
 

@@ -37,7 +37,7 @@ def fixture(name, nsex=2, basis=2, nsims=5000, mode=1, pop_f=1, pop_m=1, constan
     (d/'spm_input_v2.dat').write_text('\n'.join(meta)+'\n')
     return d
 
-def run(d,good=True):
+def run(d,good=True,expected_stocks=1):
     for fn in ['spm_detail.csv','spm_input_receipt.tsv']:
         (d/fn).unlink(missing_ok=True)
     r=subprocess.run([str(EXE),'-nolp'],cwd=d,stdout=subprocess.PIPE,stderr=subprocess.STDOUT,timeout=120)
@@ -53,8 +53,47 @@ def run(d,good=True):
     assert rows,d.name
     assert all(math.isfinite(float(row[k])) for row in rows for k in row if k!='Stock'),d.name
     rec=list(csv.DictReader((d/'spm_input_receipt.tsv').open(),delimiter='\t'))
-    assert len(rec)==1 and rec[0]['format_version']=='2',d.name
-    return {'exit_code':r.returncode,'rows':len(rows),'receipt':rec[0],'first':rows[0],'mean_rec':statistics.mean(float(x['Rec']) for x in rows),'cv_rec':statistics.pstdev(float(x['Rec']) for x in rows)/statistics.mean(float(x['Rec']) for x in rows)}
+    assert len(rec)==expected_stocks and all(record['format_version']=='2' for record in rec),d.name
+    return {'exit_code':r.returncode,'rows':len(rows),'receipt':rec[0],'receipt_count':len(rec),'first':rows[0],'mean_rec':statistics.mean(float(x['Rec']) for x in rows),'cv_rec':statistics.pstdev(float(x['Rec']) for x in rows)/statistics.mean(float(x['Rec']) for x in rows)}
+
+def inline_metadata(directory,keep_sidecar=False,selected_files=None):
+    sidecar=directory/'spm_input_v2.dat'
+    metadata=sidecar.read_text().splitlines()
+    stock_count=int(metadata[0].split()[2])
+    for stock_index in range(stock_count):
+        stock_lines=metadata[1+4*stock_index:5+4*stock_index]
+        filename=stock_lines[0].split()[0]
+        if selected_files is not None and filename not in selected_files:
+            continue
+        species_path=directory/filename
+        block=['SPMR_INPUT_V2 2 1']+stock_lines+['END_SPMR_INPUT_V2']
+        species_path.write_text(species_path.read_text()+'\n'+''.join('# '+line+'\n' for line in block))
+    if not keep_sidecar:
+        sidecar.unlink()
+
+def multi_stock_fixture(name):
+    directory=fixture(name,nsims=10)
+    species=directory/'audit.prj'
+    (directory/'other.prj').write_text(species.read_text().replace('# spname\naudit\n','# spname\nother\n'))
+    controls=directory/'spm.dat'
+    text=controls.read_text()
+    changes={'# nspp\n1\n':'# nspp\n2\n',
+      '# filename\naudit.prj\n':'# filename\naudit.prj other.prj\n',
+      '# ABCmult\n1\n':'# ABCmult\n1 1\n',
+      '# Nscalar\n1\n':'# Nscalar\n1 1\n',
+      '# alt4spr\n0.6\n':'# alt4spr\n0.6 0.6\n',
+      '# ntacspp\n1\n':'# ntacspp\n2\n',
+      '# tacind\n1\n':'# tacind\n1 2\n',
+      '# Catch\n2026 0\n':'# Catch\n2026 40 40\n'}
+    for before,after in changes.items():
+        assert before in text,before
+        text=text.replace(before,after)
+    controls.write_text(text)
+    sidecar=directory/'spm_input_v2.dat'
+    metadata=sidecar.read_text().splitlines()
+    second_stock=[line.replace('audit.prj','other.prj') for line in metadata[1:5]]
+    sidecar.write_text('\n'.join(['SPMR_INPUT_V2 2 2']+metadata[1:5]+second_stock+['END_SPMR_INPUT_V2'])+'\n')
+    return directory
 
 def weight_fixture(name, fish_multiplier=1., male_pop_multiplier=1., male_spawn_multiplier=1.):
     d=fixture(name,nsims=1)
@@ -137,12 +176,32 @@ if __name__=='__main__':
     EXE=args.executable.resolve();ROOT=args.output.resolve();ROOT.mkdir(parents=True,exist_ok=True)
     results={}
     r=subprocess.run([str(EXE),'-spmr-capabilities'],cwd=ROOT,stdout=subprocess.PIPE,stderr=subprocess.PIPE)
-    assert r.returncode==0 and r.stdout==b'SPMR_INPUT_FORMAT=2\n' and r.stderr==b''
+    assert r.returncode==0 and r.stdout==b'SPMR_INPUT_FORMAT=2\nSPMR_INLINE_INPUT=1\n' and r.stderr==b''
     for name,nsex,basis in [('split_per_sex',2,2),('split_total',2,1),('pooled_total',1,1)]:
         results[name]=run(fixture(name,nsex,basis))
     expected=(ROOT/'fixtures/split_total/spm_detail.csv').read_bytes()
     for name in ['split_per_sex','pooled_total']:
         assert expected==(ROOT/'fixtures'/name/'spm_detail.csv').read_bytes(),name
+    for name,nsex,basis in [('inline_per_sex',2,2),('inline_total',2,1),('inline_pooled',1,1)]:
+        directory=fixture(name,nsex,basis)
+        inline_metadata(directory)
+        results[name]=run(directory)
+        assert expected==(directory/'spm_detail.csv').read_bytes(),name
+    directory=fixture('inline_stale_sidecar',basis=1)
+    inline_metadata(directory,keep_sidecar=True)
+    (directory/'spm_input_v2.dat').write_text('stale invalid metadata\n')
+    results['inline_stale_sidecar']=run(directory)
+    assert expected==(directory/'spm_detail.csv').read_bytes()
+    directory=multi_stock_fixture('multi_sidecar')
+    results['multi_sidecar']=run(directory,expected_stocks=2)
+    multi_expected=(directory/'spm_detail.csv').read_bytes()
+    directory=multi_stock_fixture('multi_inline')
+    inline_metadata(directory)
+    results['multi_inline']=run(directory,expected_stocks=2)
+    assert multi_expected==(directory/'spm_detail.csv').read_bytes()
+    directory=multi_stock_fixture('invalid_inline_mixed')
+    inline_metadata(directory,keep_sidecar=True,selected_files=['audit.prj'])
+    results['invalid_inline_mixed']=run(directory,False)
     assert abs(results['split_total']['cv_rec']-math.sqrt(100/96-1))<.01
     for name,kw in [('zero_variance',{'constant':True}),('population_weights',{'nsims':1,'pop_f':2,'pop_m':3}),('deterministic',{'nsims':1})]:
         results[name]=run(fixture(name,**kw))
@@ -168,11 +227,55 @@ if __name__=='__main__':
       'bad_weight_unit':lambda s:s.replace('2 15 2 1 1 1 0','2 15 2 1 2 1 0'),
       'bad_substitute':lambda s:s.replace('2 15 2 1 1 1 0','2 15 2 1 1 1 3'),
     }
+    for storage in ['sidecar','inline']:
+        case='preserve_outputs_invalid_'+storage
+        directory=fixture(case,nsims=1)
+        sidecar=directory/'spm_input_v2.dat'
+        sidecar.write_text(mutations['bad_units'](sidecar.read_text()))
+        if storage=='inline':
+            inline_metadata(directory)
+        saved_outputs={filename:('preserve '+filename+'\n').encode() for filename in [
+          'spm_detail.csv','spm_summary.csv','means.out','alt_proj.out',
+          'percentiles.out','F_profile.out','elasticity.csv']}
+        for filename,contents in saved_outputs.items():
+            (directory/filename).write_bytes(contents)
+        outcome=subprocess.run([str(EXE),'-nolp'],cwd=directory,stdout=subprocess.PIPE,stderr=subprocess.STDOUT,timeout=120)
+        (directory/'run.log').write_bytes(outcome.stdout)
+        assert outcome.returncode==2,(case,outcome.returncode,outcome.stdout[-2000:])
+        assert b'SPMR input format 2: incompatible units' in outcome.stdout,(case,outcome.stdout[-2000:])
+        for filename,contents in saved_outputs.items():
+            assert (directory/filename).read_bytes()==contents,(case,filename)
+        results[case]={'exit_code':outcome.returncode,'preserved_outputs':list(saved_outputs)}
     for name,mutate in mutations.items():
         d=fixture('invalid_'+name,nsims=1);p=d/'spm_input_v2.dat';new=mutate(p.read_text())
         if new is None:p.unlink()
         else:p.write_text(new)
         results['invalid_'+name]=run(d,False)
+    for name in ['truncated','trailing','bad_version','bad_count','wrong_file','wrong_sexes','wrong_ages','wrong_basis','bad_age_vector','zero_weight','bad_units','bad_weight_unit','bad_substitute']:
+        directory=fixture('invalid_inline_'+name,nsims=1)
+        sidecar=directory/'spm_input_v2.dat'
+        block=mutations[name](sidecar.read_text())
+        if name=='trailing':
+            block=block.replace('END_SPMR_INPUT_V2\nextra','END_SPMR_INPUT_V2 extra')
+        species=directory/'audit.prj'
+        species.write_text(species.read_text()+''.join('# '+line+'\n' for line in block.splitlines()))
+        sidecar.unlink()
+        results['invalid_inline_'+name]=run(directory,False)
+    block_mutations={
+      'duplicate':lambda block:block+block,
+      'uncommented':lambda block:block.replace('# SPMR_INPUT_V2','SPMR_INPUT_V2',1),
+      'broken_comment':lambda block:block.replace('# audit.prj','audit.prj',1),
+      'extra_sentinel':lambda block:block+'# END_SPMR_INPUT_V2\n',
+      'orphan_sentinel':lambda block:'# END_SPMR_INPUT_V2\n',
+    }
+    for name,mutate in block_mutations.items():
+        directory=fixture('invalid_inline_'+name,nsims=1)
+        sidecar=directory/'spm_input_v2.dat'
+        block=''.join('# '+line+'\n' for line in sidecar.read_text().splitlines())
+        species=directory/'audit.prj'
+        species.write_text(species.read_text()+mutate(block))
+        sidecar.unlink()
+        results['invalid_inline_'+name]=run(directory,False)
     for mode in [3,4]:results['invalid_mode'+str(mode)]=run(fixture('invalid_mode'+str(mode),mode=mode,nsims=1),False)
     d=fixture('invalid_scalar',nsims=1);p=d/'spm.dat';p.write_text(p.read_text().replace('# Nscalar\n1\n','# Nscalar\n1000\n'));results['invalid_scalar']=run(d,False)
     for name,nsex,basis in [('sr2_split',2,2),('sr2_total',2,1),('sr2_pooled',1,1)]:results[name]=run(fixture(name,nsex,basis,nsims=10,mode=2))
@@ -245,4 +348,4 @@ if __name__=='__main__':
     assert original['SSB']==spawn_changed['SSB']
     assert original['Tot_biom']==spawn_changed['Tot_biom']
     (ROOT/'validation.json').write_text(json.dumps({'status':'passed','checks':results},indent=2)+'\n')
-    print(json.dumps({'status':'passed','cases':len(results),'split_equivalence':'exact CSV match across all 15000 rows','sr2_equivalence':'exact CSV match','zero_cv':'pass','missing_invalid_metadata':'rejected'},indent=2))
+    print(json.dumps({'status':'passed','cases':len(results),'split_equivalence':'exact CSV match across all 15000 rows','inline_equivalence':'exact CSV match for split, pooled and two-stock runs','inline_precedence':'stale sidecar ignored when every stock has inline metadata','sr2_equivalence':'exact CSV match','zero_cv':'pass','missing_invalid_metadata':'rejected'},indent=2))

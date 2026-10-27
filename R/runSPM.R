@@ -12,8 +12,9 @@
 #'   validated scientific projections. New ADMB runs require explicit version-2
 #'   metadata and a compatible executable. Existing output can still be read
 #'   with `run = FALSE` without metadata.
-#' @param metadata Filename of the version-2 metadata created by
-#'   [write_spm_metadata()]. Used only for new ADMB runs.
+#' @param metadata `NULL` discovers embedded species metadata, falling back to
+#'   `spm_metadata.json` for older inputs. Supply a JSON filename to select it
+#'   explicitly. See [write_spm_metadata()]. Used only for new ADMB runs.
 #' @param strict Reject unknown metadata fields when TRUE. Scientific input
 #'   requirements always apply.
 #' @return An `spm_result` data frame containing standardized projection
@@ -29,7 +30,7 @@ runSPM <- function(
   ctrl = NULL,
   run = FALSE,
   engine = c("admb", "rtmb"),
-  metadata = "spm_metadata.json",
+  metadata = NULL,
   strict = TRUE
 ) {
   engine <- match.arg(engine)

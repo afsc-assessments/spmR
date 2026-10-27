@@ -1,15 +1,32 @@
-local_gt2026_example <- function(env = parent.frame()) {
+local_gt2026_example <- function(complete = TRUE, env = parent.frame()) {
   script <- testthat::test_path("..", "..", "examples", "gt_2026", "run.R")
   testthat::skip_if_not(file.exists(script), "GT2026 example is unavailable")
   script <- normalizePath(script, mustWork = TRUE)
   withr::local_dir(dirname(dirname(dirname(script))), .local_envir = env)
   runner <- new.env(parent = globalenv())
   sys.source(script, envir = runner)
-  list(runner = runner, source_dir = dirname(script))
+  source_dir <- dirname(script)
+  if (complete) {
+    source_dir <- withr::local_tempdir(.local_envir = env)
+    supplied <- intersect(
+      c("ForProjections.dat", "spm.dat", "spm_input_v2.dat", "tacpar.dat"),
+      list.files(dirname(script))
+    )
+    stopifnot(all(file.copy(file.path(dirname(script), supplied), source_dir)))
+    stock_path <- file.path(source_dir, "ForProjections.dat")
+    stock_lines <- readLines(stock_path, warn = FALSE)
+    stock_lines <- c(
+      stock_lines,
+      "# Synthetic test-only SSB positions",
+      "25000 24000"
+    )
+    writeLines(stock_lines, stock_path)
+  }
+  list(runner = runner, source_dir = source_dir, script_dir = dirname(script))
 }
 
 testthat::test_that("GT2026 audit identifies incomplete and repairable inputs", {
-  example <- local_gt2026_example()
+  example <- local_gt2026_example(complete = FALSE)
   audit <- example$runner$check_gt2026_inputs(example$source_dir)
 
   testthat::expect_s3_class(audit, "data.frame")
@@ -22,6 +39,50 @@ testthat::test_that("GT2026 audit identifies incomplete and repairable inputs", 
   testthat::expect_true(any(audit$status == "repair"))
   testthat::expect_true(all(nzchar(audit$item)))
   testthat::expect_true(all(nzchar(audit$detail)))
+  testthat::expect_identical(
+    audit$status[audit$item == "SSB history"],
+    "missing"
+  )
+  testthat::expect_match(
+    audit$detail[audit$item == "SSB history"],
+    "47 recruitment values but 45 SSB values",
+    fixed = TRUE
+  )
+  testthat::expect_identical(
+    audit$status[audit$item == "Recruitment basis"],
+    "ok"
+  )
+})
+
+testthat::test_that("GT2026 preserves updated inputs and rejects incomplete histories", {
+  example <- local_gt2026_example(complete = FALSE)
+  source_path <- file.path(example$source_dir, "ForProjections.dat")
+  source_hash <- digest::digest(source_path, file = TRUE, algo = "sha256")
+  raw <- example$runner$gt2026_read_source(example$source_dir)
+  destination <- file.path(withr::local_tempdir(), "incomplete")
+
+  testthat::expect_length(raw$recruitment, 47)
+  testthat::expect_equal(tail(raw$recruitment, 2), c(811.8, 460.5))
+  testthat::expect_equal(raw$recruitment_copies, 2)
+  testthat::expect_length(raw$recruitment_rows, 4)
+  testthat::expect_identical(raw$recruitment_basis, "per_sex")
+  testthat::expect_length(raw$ssb, 45)
+  testthat::expect_equal(tail(raw$ssb, 2), c(27020.6, 25862.1))
+  testthat::expect_error(
+    example$runner$run_gt2026_projection(
+      example$source_dir,
+      run_dir = destination,
+      diagnostic = TRUE,
+      run = FALSE
+    ),
+    "47 recruitment values but 45 SSB values",
+    fixed = TRUE
+  )
+  testthat::expect_false(dir.exists(destination))
+  testthat::expect_identical(
+    digest::digest(source_path, file = TRUE, algo = "sha256"),
+    source_hash
+  )
 })
 
 testthat::test_that("GT2026 requires scientific declarations before staging", {
@@ -65,11 +126,14 @@ testthat::test_that("GT2026 diagnostic staging preserves supplied data and histo
   example <- local_gt2026_example()
   source_files <- file.path(
     example$source_dir,
-    c(
-      "ForProjections.dat",
-      "spm.dat",
-      "spm_input_v2.dat",
-      "tacpar.dat"
+    intersect(
+      c(
+        "ForProjections.dat",
+        "spm.dat",
+        "spm_input_v2.dat",
+        "tacpar.dat"
+      ),
+      list.files(example$source_dir)
     )
   )
   before <- vapply(
@@ -79,10 +143,7 @@ testthat::test_that("GT2026 diagnostic staging preserves supplied data and histo
     file = TRUE,
     algo = "sha256"
   )
-  supplied_lines <- readLines(source_files[1], warn = FALSE)
-  supplied_values <- function(line) {
-    scan(text = sub("#.*$", "", supplied_lines[line]), quiet = TRUE)
-  }
+  raw <- example$runner$gt2026_read_source(example$source_dir)
   destination <- file.path(withr::local_tempdir(), "diagnostic")
 
   staged <- example$runner$run_gt2026_projection(
@@ -100,17 +161,35 @@ testthat::test_that("GT2026 diagnostic staging preserves supplied data and histo
   )
   testthat::expect_s3_class(staged$inputs, "spm_inputs")
   testthat::expect_true(dir.exists(staged$run_dir))
-  testthat::expect_length(stock$R, 45)
-  testthat::expect_equal(stock$R, supplied_values(41))
-  testthat::expect_equal(stock$SSB, supplied_values(44))
+  testthat::expect_false(file.exists(file.path(
+    staged$run_dir,
+    "spm_metadata.json"
+  )))
+  testthat::expect_false(file.exists(file.path(
+    staged$run_dir,
+    "spm_input_v2.dat"
+  )))
+  testthat::expect_true(any(grepl(
+    "^# SPMR_INPUT_V2 2 1$",
+    readLines(file.path(staged$run_dir, "ForProjections.dat"))
+  )))
+  testthat::expect_length(stock$R, 47)
+  testthat::expect_equal(stock$R, raw$recruitment)
+  testthat::expect_equal(stock$SSB, raw$ssb)
   testthat::expect_equal(stock$SSB[1], 397243)
   testthat::expect_false(identical(stock$SSB, stock$R))
-  testthat::expect_equal(tail(stock$SSB, 2), rep(28053.3, 2))
+  testthat::expect_equal(tail(stock$SSB, 2), c(25000, 24000))
   testthat::expect_identical(metadata$recruitment_basis, "per_sex")
   testthat::expect_equal(stock$wt_F[1:2] / 1e-12, rep(1, 2), tolerance = 1e-14)
   testthat::expect_equal(stock$wt_M[1:2] / 1e-12, rep(1, 2), tolerance = 1e-14)
-  testthat::expect_equal(stock$wt_F[-(1:2)], supplied_values(21)[-(1:2)])
-  testthat::expect_equal(stock$wt_M[-(1:2)], supplied_values(22)[-(1:2)])
+  testthat::expect_equal(
+    stock$wt_F[-(1:2)],
+    raw$numbers(raw$female_spawn)[-(1:2)]
+  )
+  testthat::expect_equal(
+    stock$wt_M[-(1:2)],
+    raw$numbers(raw$male_spawn)[-(1:2)]
+  )
   testthat::expect_equal(stock$pmature_F, rep(1, 30))
   testthat::expect_equal(stock$pmature_M, rep(1, 30))
   testthat::expect_equal(
@@ -127,20 +206,17 @@ testthat::test_that("GT2026 diagnostic staging preserves supplied data and histo
 
 testthat::test_that("GT2026 diagnostic biomass uses declared fleet mixtures by sex", {
   example <- local_gt2026_example()
-  supplied_lines <- readLines(
-    file.path(example$source_dir, "ForProjections.dat"),
-    warn = FALSE
-  )
-  supplied_values <- function(line) {
-    scan(text = sub("#.*$", "", supplied_lines[line]), quiet = TRUE)
-  }
-  female_weights <- 0.96 * supplied_values(24) + 0.04 * supplied_values(25)
-  male_weights <- 0.96 * supplied_values(27) + 0.04 * supplied_values(28)
-  expected_biomass <- sum(supplied_values(36) * female_weights) +
-    sum(supplied_values(37) * male_weights)
-  spawning_weights <- supplied_values(21)
+  raw <- example$runner$gt2026_read_source(example$source_dir)
+  female_weights <- as.numeric(crossprod(
+    raw$fleet_fraction,
+    raw$female_fishery
+  ))
+  male_weights <- as.numeric(crossprod(raw$fleet_fraction, raw$male_fishery))
+  expected_biomass <- sum(raw$female_abundance * female_weights) +
+    sum(raw$male_abundance * male_weights)
+  spawning_weights <- raw$numbers(raw$female_spawn)
   spawning_weights[spawning_weights == 0] <- 1e-12
-  expected_ssb <- sum(supplied_values(36) * spawning_weights)
+  expected_ssb <- sum(raw$female_abundance * spawning_weights)
   destination <- file.path(withr::local_tempdir(), "diagnostic")
 
   staged <- example$runner$run_gt2026_projection(
@@ -202,19 +278,24 @@ testthat::test_that("GT2026 refuses unequal female and male recruitment historie
   fixture <- withr::local_tempdir()
   source_files <- file.path(
     example$source_dir,
-    c(
-      "ForProjections.dat",
-      "spm.dat",
-      "spm_input_v2.dat",
-      "tacpar.dat"
+    intersect(
+      c(
+        "ForProjections.dat",
+        "spm.dat",
+        "spm_input_v2.dat",
+        "tacpar.dat"
+      ),
+      list.files(example$source_dir)
     )
   )
   testthat::expect_true(all(file.copy(source_files, fixture)))
   stock_file <- file.path(fixture, "ForProjections.dat")
   stock_lines <- readLines(stock_file, warn = FALSE)
-  second_recruitment <- scan(text = stock_lines[42], quiet = TRUE)
+  raw <- example$runner$gt2026_read_source(fixture)
+  second_row <- raw$recruitment_rows[3]
+  second_recruitment <- scan(text = stock_lines[second_row], quiet = TRUE)
   second_recruitment[1] <- second_recruitment[1] + 1
-  stock_lines[42] <- paste(second_recruitment, collapse = " ")
+  stock_lines[second_row] <- paste(second_recruitment, collapse = " ")
   writeLines(stock_lines, stock_file)
   destination <- file.path(withr::local_tempdir(), "rejected")
 
@@ -231,7 +312,48 @@ testthat::test_that("GT2026 refuses unequal female and male recruitment historie
   testthat::expect_false(dir.exists(destination))
 })
 
-testthat::test_that("GT2026 reports missing sidecar and stages without unused TAC file", {
+testthat::test_that("GT2026 accepts a wrapped single total-recruitment series", {
+  example <- local_gt2026_example()
+  source_path <- file.path(example$source_dir, "ForProjections.dat")
+  raw <- example$runner$gt2026_read_source(example$source_dir)
+  source_lines <- raw$lines
+  source_lines[raw$recruitment_declaration] <- "total # recruitment basis"
+  source_lines <- source_lines[-raw$recruitment_rows[3:4]]
+  writeLines(source_lines, source_path)
+
+  revised <- example$runner$gt2026_read_source(example$source_dir)
+  testthat::expect_identical(revised$recruitment_basis, "total")
+  testthat::expect_equal(revised$recruitment_copies, 1)
+  testthat::expect_length(revised$recruitment_rows, 2)
+  testthat::expect_equal(revised$recruitment, raw$recruitment)
+
+  staged <- example$runner$run_gt2026_projection(
+    example$source_dir,
+    run_dir = file.path(withr::local_tempdir(), "total"),
+    diagnostic = TRUE,
+    run = FALSE
+  )
+  testthat::expect_identical(
+    staged$inputs$resolved_species[[1]]$recruitment_basis,
+    "total"
+  )
+  testthat::expect_equal(staged$inputs$species[[1]]$R, raw$recruitment)
+  audit <- example$runner$check_gt2026_inputs(staged$run_dir)
+  testthat::expect_identical(
+    audit$status[audit$item == "Native metadata"],
+    "review"
+  )
+  testthat::expect_identical(
+    audit$status[audit$item == "Population weights"],
+    "review"
+  )
+  testthat::expect_identical(
+    example$runner$gt2026_read_source(staged$run_dir)$recruitment_basis,
+    "total"
+  )
+})
+
+testthat::test_that("GT2026 stages without an external sidecar or unused TAC file", {
   example <- local_gt2026_example()
   fixture <- withr::local_tempdir()
   required_files <- c("ForProjections.dat", "spm.dat")
@@ -243,7 +365,7 @@ testthat::test_that("GT2026 reports missing sidecar and stages without unused TA
   audit <- example$runner$check_gt2026_inputs(fixture)
   testthat::expect_identical(
     audit$status[audit$item == "Native metadata"],
-    "missing"
+    "info"
   )
   destination <- file.path(withr::local_tempdir(), "diagnostic")
   staged <- example$runner$run_gt2026_projection(
@@ -264,13 +386,16 @@ testthat::test_that("GT2026 reports missing sidecar and stages without unused TA
 
 testthat::test_that("GT2026 finds helpers beside its script from another input directory", {
   example <- local_gt2026_example()
-  script <- file.path(example$source_dir, "run.R")
+  script <- file.path(example$script_dir, "run.R")
   fixture <- withr::local_tempdir()
-  supplied_files <- c(
-    "ForProjections.dat",
-    "spm.dat",
-    "spm_input_v2.dat",
-    "tacpar.dat"
+  supplied_files <- intersect(
+    c(
+      "ForProjections.dat",
+      "spm.dat",
+      "spm_input_v2.dat",
+      "tacpar.dat"
+    ),
+    list.files(example$source_dir)
   )
   testthat::expect_true(all(file.copy(
     file.path(example$source_dir, supplied_files),
@@ -280,7 +405,7 @@ testthat::test_that("GT2026 finds helpers beside its script from another input d
   runner <- new.env(parent = globalenv())
   source(script, local = runner)
 
-  testthat::expect_identical(runner$.gt2026_source_dir, example$source_dir)
+  testthat::expect_identical(runner$.gt2026_source_dir, example$script_dir)
   destination <- file.path(withr::local_tempdir(), "diagnostic")
   staged <- runner$run_gt2026_projection(
     fixture,

@@ -34,8 +34,10 @@ SPM. For current projections, use the
 [split-sex input migration guide](split_sex_inputs.html) and the
 [current calculation summary](more_documentation.html).
 
-Current spmR requires format-2 metadata alongside the positional input files
-and a compatible executable. Split-sex species files place a male spawning
+Current spmR embeds format-2 declarations as comments in each species file
+and requires a compatible executable. `write_spm_metadata()` writes the
+embedded declarations by default; separate JSON metadata remains supported
+when explicitly selected. Split-sex species files place a male spawning
 weight vector `wt_M` immediately after `wt_F`; `tacpar.dat` is no longer read.
 Declare whether historical recruitment is total or
 per sex; SPM converts the full history to total recruitment before

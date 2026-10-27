@@ -20,7 +20,7 @@ testthat::test_that("example capability probes preserve the caller directory", {
     !nzchar(executable),
     "Set SPMR_TEST_EXE for the native probe"
   )
-  executable <- normalizePath(executable, mustWork = TRUE)
+  executable <- normalizePath(executable, winslash = "/", mustWork = TRUE)
   runner <- local_example_executable_runner()
   caller_dir <- withr::local_tempdir()
   withr::local_dir(caller_dir)
@@ -33,7 +33,7 @@ testthat::test_that("example capability probes preserve the caller directory", {
   verified <- runner$gt20_verify_executable(executable)
 
   testthat::expect_identical(verified, executable)
-  testthat::expect_identical(getwd(), normalizePath(caller_dir))
+  testthat::expect_identical(getwd(), normalizePath(caller_dir, winslash = "/"))
   testthat::expect_length(
     list.files(caller_dir, all.files = TRUE, no.. = TRUE),
     0L
@@ -60,7 +60,7 @@ testthat::test_that("failed example capability probes clean up their files", {
     "not compatible with input format 2",
     fixed = TRUE
   )
-  testthat::expect_identical(getwd(), normalizePath(caller_dir))
+  testthat::expect_identical(getwd(), normalizePath(caller_dir, winslash = "/"))
   testthat::expect_identical(
     list.files(caller_dir, all.files = TRUE, no.. = TRUE),
     "legacy-spm"

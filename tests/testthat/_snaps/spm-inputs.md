@@ -212,7 +212,7 @@
       runSPM(folder, run = TRUE)
     Condition
       Error:
-      ! Missing spm_metadata.json: declare recruitment basis, units, and female/male population weights with write_spm_metadata() before running projections.
+      ! Missing embedded metadata or spm_metadata.json: declare recruitment basis, units, and female/male population weights with write_spm_metadata() before running projections.
 
 # stock recruitment fits require a small gradient and positive Hessian
 

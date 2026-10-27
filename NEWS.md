@@ -1,3 +1,9 @@
+# spmR 0.4.3
+
+* `write_spm_metadata()` embeds validated version-2 declarations as comments in each species file by default. `validate_spm_inputs()` and `runSPM()` read those declarations automatically; an explicit `metadata = "name.json"` retains the separate JSON workflow.
+* The self-contained native engine reads the embedded declarations directly and advertises `SPMR_INLINE_INPUT=1`. A standalone run needs `spm.dat` and its species files. Legacy native sidecars remain readable, and the R runner generates a sidecar for older format-2 executables.
+* The GT2026 adapter accepts wrapped recruitment histories and an explicit `per sex` declaration. The revised example has 47 recruitment values and 45 SSB values; staging stops before creating an attempt until matching source histories are supplied. The audit and articles report this gap without padding or discarding values.
+
 # spmR 0.4.2
 
 * The ADMB projection engine now compiles from `inst/admb/spm.tpl` alone; the format-2 input checks are included in the template, and a separate C++ header is no longer required.

@@ -9,7 +9,7 @@ runSPM(
   ctrl = NULL,
   run = FALSE,
   engine = c("admb", "rtmb"),
-  metadata = "spm_metadata.json",
+  metadata = NULL,
   strict = TRUE
 )
 }
@@ -26,8 +26,9 @@ validated scientific projections. New ADMB runs require explicit version-2
 metadata and a compatible executable. Existing output can still be read
 with `run = FALSE` without metadata.}
 
-\item{metadata}{Filename of the version-2 metadata created by
-[write_spm_metadata()]. Used only for new ADMB runs.}
+\item{metadata}{`NULL` discovers embedded species metadata, falling back to
+`spm_metadata.json` for older inputs. Supply a JSON filename to select it
+explicitly. See [write_spm_metadata()]. Used only for new ADMB runs.}
 
 \item{strict}{Reject unknown metadata fields when TRUE. Scientific input
 requirements always apply.}
