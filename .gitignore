@@ -1,5 +1,14 @@
 inst/doc
 .Rproj.user
+.Rhistory
+.RData
+.Ruserdata
+.DS_Store
+/DESCRIPTION.bak
+cmpdiff.tmp
+gradfil1.tmp
+gradfil2.tmp
+varssave.tmp
 .vscode/
 ..Rcheck/
 *.swo
