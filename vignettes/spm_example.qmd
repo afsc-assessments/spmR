@@ -1,0 +1,120 @@
+---
+title: "spmR canonical examples"
+vignette: >
+  %\VignetteIndexEntry{spmR canonical examples}
+  %\VignetteEncoding{UTF-8}
+  %\VignetteEngine{quarto::html}
+lightbox: true
+format:
+  html:
+    toc: true
+    embed-resources: true
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(collapse = TRUE, comment = "#>", warning = FALSE, message = FALSE)
+```
+
+```{r setup}
+library(spmR)
+library(readr)
+```
+
+This vignette provides three canonical workflows from the
+[source repository](https://github.com/afsc-assessments/spmR):
+
+- `examples/atka` for `runSPM()`, `dat2list()`, and `plotSPMx()`
+- `examples/BSRE_AI` for `plotSPM()` with `spm_summary.csv`
+- `examples/gt_2026` for auditing and staging new split-sex inputs
+
+The bundled positional files retain their historical layout. For a new run,
+create metadata with explicit recruitment basis and female/male population
+weights, then use a format-2 executable. Follow the runnable
+[split-sex input migration guide](split_sex_inputs.html). Keep each species
+file's existing field order and store added population vectors in the metadata.
+
+The first two workflows read archived output. The third identifies missing
+scientific declarations and validates staged inputs for a conditional projection.
+
+## 1. Atka workflow (`examples/atka`)
+
+Use `runSPM()` to read existing ADMB output (`spm_detail.csv`) and inspect inputs
+using `dat2list()`.
+
+```{r atka-read}
+pkg_root <- if (file.exists("DESCRIPTION")) "." else ".."
+atka_dir <- file.path(pkg_root, "examples", "atka")
+
+atka_detail <- runSPM(atka_dir, run = FALSE, engine = "admb")
+str(atka_detail)
+
+atka_inputs <- dat2list(file.path(atka_dir, "spm.dat"))
+names(atka_inputs)
+```
+
+Plot detailed simulation trajectories with `plotSPMx()`.
+
+```{r atka-plot}
+plotSPMx(atka_detail, alt = 2, thisyr = min(atka_detail$Year), mytitle = "Atka detail plot")
+```
+
+Archived experimental RTMB output can also be read from this directory. New
+RTMB projections are blocked because the prototype lacks population dynamics.
+New ADMB projections require `write_spm_metadata()` and a format-2 executable.
+
+```{r atka-rtmb, eval = FALSE}
+runSPM(atka_dir, run = FALSE, engine = "rtmb")
+```
+
+## 2. Summary workflow (`examples/BSRE_AI`)
+
+`plotSPM()` expects summary-format data (`spm_summary.csv`).
+
+```{r bsre-summary}
+bsre_dir <- file.path(pkg_root, "examples", "BSRE_AI")
+bsre_summary <- read_csv(file.path(bsre_dir, "spm_summary.csv"))
+plotSPM(bsre_summary, alt = c(1, 3, 5, 7), mytitle = "BSRE_AI summary plot")
+```
+
+## 3. Audit and stage Greenland turbot (`examples/gt_2026`)
+
+The supplied 2026 export requires explicit population weights, units, age
+labels, and SS3 export-field review. Its helper preserves the original files
+and records corrections in a new attempt directory. The
+[GT2026 audit and staging guide](gt2026_inputs.html) explains each finding.
+
+```{r}
+gt2026_dir <- file.path(pkg_root, "examples", "gt_2026")
+source(file.path(gt2026_dir, "run.R"), local = TRUE)
+gt::gt(check_gt2026_inputs(gt2026_dir))
+```
+
+Diagnostic mode explicitly uses fishery-weight proxies for sex-specific
+population body weights and declares thousand fish, kg, tonnes, and ages 1–30
+with a terminal plus group. These assumptions require confirmation before
+assessment use. The next chunk stages and validates them; `run = FALSE`
+leaves the native projection unrun.
+
+```{r}
+gt2026 <- run_gt2026_projection(
+  source_dir = gt2026_dir,
+  run_dir = tempfile("spmr-gt2026-canonical-"),
+  diagnostic = TRUE,
+  run = FALSE
+)
+stopifnot(gt2026$inputs$format_version == 2L, is.null(gt2026$result))
+```
+
+To run an explicitly chosen conditional projection from the repository root:
+
+```{r}
+#| eval: false
+source("examples/gt_2026/run.R")
+gt2026 <- run_gt2026_projection(diagnostic = TRUE)
+gt2026$summary
+```
+
+The helper compiles the self-contained template using `admb` on `PATH` or
+`SPMR_ADMB`; `SPMR_EXECUTABLE` selects an existing compatible executable.
+Review the complete input evaluation in `examples/gt_2026/README.md` before
+interpreting results.

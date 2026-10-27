@@ -1,6 +1,8 @@
-# spmR (development version)
+# spmR 0.4.2
 
 * The ADMB projection engine now compiles from `inst/admb/spm.tpl` alone; the format-2 input checks are included in the template, and a separate C++ header is no longer required.
+* Package vignettes and website articles use Quarto, with a canonical GT2026 audit/staging example and a separate guide to its input definitions and conditional diagnostic runs.
+* `run_gt2026_projection()` in `examples/gt_2026/run.R` stages the supplied Greenland turbot inputs, records input repairs and metadata, and separates explicitly requested diagnostic weight proxies from supplied population weights. `check_gt2026_inputs()` lists the remaining source-data issues.
 
 # spmR 0.4.1
 

@@ -1,5 +1,6 @@
 # Auto detect text files and perform LF normalization
 * text=auto
+examples/gt_2026/*.dat -text whitespace=cr-at-eol,-blank-at-eof
 
 # Custom for Visual Studio
 *.cs     diff=csharp

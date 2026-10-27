@@ -286,7 +286,15 @@ testthat::test_that("pooled sexes share declared population weights with an expl
   folder <- local_spm_input_fixture()
   species <- spm_read_legacy(folder)$species[[1]]
   species$nsexes <- 1
-  species[c("file", "M_M", "pmature_M", "wt_M", "wt_gear_M", "sel_M", "n0_M")] <- NULL
+  species[c(
+    "file",
+    "M_M",
+    "pmature_M",
+    "wt_M",
+    "wt_gear_M",
+    "sel_M",
+    "n0_M"
+  )] <- NULL
   list2dat(species, file.path(folder, "pm.prj"))
   metadata <- spm_fixture_metadata()
   metadata[[1]]$population_weights$male <- NULL

@@ -1,4 +1,4 @@
-url: http://afsc-assessments.github.io/spmR/
+url: https://afsc-assessments.github.io/spmR/
 template:
   bootstrap: 5
 development:
@@ -26,6 +26,9 @@ articles:
     contents:
       - "spm_example"
       - "split_sex_inputs"
+      - "gt2026_inputs"
+  - title: "Methods and historical context"
+    contents:
       - "background"
       - "more_documentation"
       - "rtmb_vs_admb"

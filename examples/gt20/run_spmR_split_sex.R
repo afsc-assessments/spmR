@@ -113,6 +113,16 @@ gt20_command_path <- function(command, label) {
 
 gt20_verify_executable <- function(executable) {
   executable <- gt20_command_path(executable, "SPM executable")
+  probe_dir <- tempfile("spmr-capabilities-")
+  if (!dir.create(probe_dir)) {
+    stop("Could not create executable-probe directory.", call. = FALSE)
+  }
+  previous_dir <- getwd()
+  on.exit({
+    setwd(previous_dir)
+    unlink(probe_dir, recursive = TRUE)
+  }, add = TRUE)
+  setwd(probe_dir)
   output <- suppressWarnings(system2(
     executable, "-spmr-capabilities", stdout = TRUE, stderr = TRUE
   ))
