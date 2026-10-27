@@ -5,16 +5,17 @@ groundfish at the AFSC. The model was coded using Automatic
 Differentiation Model Builder (`ADMB`).
 
 The main projection model is
-[`inst/admb/spm.tpl`](http://afsc-assessments.github.io/spmR/inst/admb/spm.tpl).
+[`inst/admb/spm.tpl`](https://github.com/afsc-assessments/spmR/blob/main/inst/admb/spm.tpl).
 A model run requires `spm.dat`, a species-specific file containing
-assessment outputs, and `spm_metadata.json`. The
-[`examples`](http://afsc-assessments.github.io/spmR/examples) directory
-contains complete example inputs and outputs. ADMB 13.0 or newer is
-required to compile the model.
+assessment outputs, and `spm_metadata.json`. The [example
+index](https://github.com/afsc-assessments/spmR/blob/main/examples/README.md)
+distinguishes current workflows from archived inputs and outputs. ADMB
+13.0 or newer is required to compile the self-contained template; no
+separate C++ header is needed.
 
 ## Input format 2
 
-Version 0.4.1 requires a `spm_metadata.json` file for new projections. A
+Version 0.4.2 requires a `spm_metadata.json` file for new projections. A
 split-sex species file now places the male spawning-weight vector `wt_M`
 immediately after `wt_F`; pooled-sex files retain `wt_F` alone. An extra
 vector in any other position can shift subsequent fields or be ignored
@@ -54,7 +55,7 @@ The [split-sex input migration
 vignette](https://afsc-assessments.github.io/spmR/articles/split_sex_inputs.html)
 includes a runnable synthetic example, missing-male validation, explicit
 substitutes, and starting-year biomass checks. Its source is
-[`vignettes/split_sex_inputs.qmd`](http://afsc-assessments.github.io/spmR/vignettes/split_sex_inputs.qmd).
+[`vignettes/split_sex_inputs.qmd`](https://github.com/afsc-assessments/spmR/blob/main/vignettes/split_sex_inputs.qmd).
 
 For an existing projection folder, provide a species entry such as:
 
@@ -106,15 +107,15 @@ checked before execution.
 
 The supported exported functions are:
 
-- [`dat2list()`](http://afsc-assessments.github.io/spmR/reference/dat2list.md)
-- [`list2dat()`](http://afsc-assessments.github.io/spmR/reference/list2dat.md)
-- [`write_spm_metadata()`](http://afsc-assessments.github.io/spmR/reference/write_spm_metadata.md)
-- [`validate_spm_inputs()`](http://afsc-assessments.github.io/spmR/reference/write_spm_metadata.md)
-- [`as_spm_result()`](http://afsc-assessments.github.io/spmR/reference/as_spm_result.md)
-- [`runSPM()`](http://afsc-assessments.github.io/spmR/reference/runSPM.md)
-- [`plotSPM()`](http://afsc-assessments.github.io/spmR/reference/plotSPM.md)
-- [`plotSPMx()`](http://afsc-assessments.github.io/spmR/reference/plotSPMx.md)
-- [`tier3_scenario_table()`](http://afsc-assessments.github.io/spmR/reference/tier3_scenario_table.md)
+- [`dat2list()`](https://afsc-assessments.github.io/spmR/reference/dat2list.md)
+- [`list2dat()`](https://afsc-assessments.github.io/spmR/reference/list2dat.md)
+- [`write_spm_metadata()`](https://afsc-assessments.github.io/spmR/reference/write_spm_metadata.md)
+- [`validate_spm_inputs()`](https://afsc-assessments.github.io/spmR/reference/write_spm_metadata.md)
+- [`as_spm_result()`](https://afsc-assessments.github.io/spmR/reference/as_spm_result.md)
+- [`runSPM()`](https://afsc-assessments.github.io/spmR/reference/runSPM.md)
+- [`plotSPM()`](https://afsc-assessments.github.io/spmR/reference/plotSPM.md)
+- [`plotSPMx()`](https://afsc-assessments.github.io/spmR/reference/plotSPMx.md)
+- [`tier3_scenario_table()`](https://afsc-assessments.github.io/spmR/reference/tier3_scenario_table.md)
 
 ## Cloning the repository (optional)
 
@@ -137,8 +138,7 @@ The `spmR` package can be installed from within R using:
 
 ``` r
 
-devtools::install_github(repo = "afsc-assessments/spmR", dependencies = TRUE, 
-                         build_vignettes = TRUE, auth_token = "your_PAT")
+devtools::install_github("afsc-assessments/spmR", build_vignettes = TRUE)
 ```
 
 ### Option 2
@@ -146,9 +146,10 @@ devtools::install_github(repo = "afsc-assessments/spmR", dependencies = TRUE,
 The GitHub repository can be cloned to your computer and the package
 installed from the command line. From Linux this would involve:
 
-``` r
+``` sh
 git clone https://github.com/afsc-assessments/spmR
-R CMD INSTALL spmR
+R CMD build spmR
+R CMD INSTALL spmR_0.4.2.tar.gz
 ```
 
 ### Option 3
@@ -157,7 +158,7 @@ This time from within R using:
 
 ``` r
 
-devtools::install("spmR")
+devtools::install("spmR", build_vignettes = TRUE)
 ```
 
 ## Help
@@ -192,6 +193,25 @@ browseVignettes(package = "spmR")
 vignette(topic = "spm_example", package = "spmR")
 ```
 
+The canonical examples cover archived Atka and rockfish output and the
+[GT2026 input audit and staging
+workflow](https://afsc-assessments.github.io/spmR/articles/gt2026_inputs.html).
+From a source checkout:
+
+``` r
+
+source("examples/gt_2026/run.R")
+check_gt2026_inputs()
+staged <- run_gt2026_projection(diagnostic = TRUE, run = FALSE)
+```
+
+GT2026 preserves the supplied files and records each staging decision.
+Its diagnostic mode declares fishery-weight proxies explicitly; SS3
+population weights, units, ages and history alignment remain review
+items. The [example
+README](https://github.com/afsc-assessments/spmR/blob/main/examples/gt_2026/README.md)
+provides projection commands and the complete input evaluation.
+
 ## Website
 
 All of the vignettes and the help pages for each function are bundled
@@ -200,8 +220,11 @@ together and published on the website
 
 ## Developers
 
-Developers will want to do things slightly differently. See the
-`Model development` vignette.
+See the [ADMB and experimental RTMB
+comparison](https://afsc-assessments.github.io/spmR/articles/rtmb_vs_admb.html)
+and the [native engine
+guide](https://github.com/afsc-assessments/spmR/blob/main/inst/admb/README.md)
+for development and validation.
 
 # Acronyms
 

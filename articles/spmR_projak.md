@@ -2,14 +2,14 @@
 
 ## 1 Purpose
 
-These notes describe the earlier version 0.3.0 architecture. In version
-0.4.1, new spmR ADMB runs require explicit format-2 metadata for
-recruitment and population weights. New RTMB runs are blocked while the
-prototype awaits population dynamics; archived output remains readable.
+These notes describe the earlier version 0.3.0 architecture. Current
+spmR ADMB runs require explicit format-2 metadata for recruitment and
+population weights. New RTMB runs are blocked while the prototype awaits
+population dynamics; archived output remains readable.
 
 ### 1.1 Current split-sex input requirements
 
-For spmR 0.4.1 ADMB projections, add `spm_metadata.json` alongside
+For current spmR ADMB projections, add `spm_metadata.json` alongside
 `spm.dat` and the species files; `tacpar.dat` is no longer required.
 Split-sex species files place `wt_M` immediately after `wt_F`. Declare
 `recruitment_basis` as `"total"` or `"per_sex"` and supply female and
@@ -22,7 +22,7 @@ require an explicit, recorded substitute before a split-sex run can
 proceed.
 
 The runnable [split-sex migration
-guide](http://afsc-assessments.github.io/spmR/articles/split_sex_inputs.md)
+guide](https://afsc-assessments.github.io/spmR/articles/split_sex_inputs.md)
 documents the metadata, starting-year boundary, executable compatibility
 check, and output provenance. The comparison below describes the earlier
 architecture and retains that historical scope.
@@ -64,7 +64,7 @@ parameterization paths:
 
 ## 5 Key Gap
 
-[`runSPM_rtmb()`](http://afsc-assessments.github.io/spmR/reference/runSPM_rtmb.md)
+[`runSPM_rtmb()`](https://afsc-assessments.github.io/spmR/reference/runSPM_rtmb.md)
 in `spmR` is currently a scaffold: recruitment draws are implemented,
 but age-structured population dynamics are not. In contrast,
 `projak::project_step()` performs full age-structured projection

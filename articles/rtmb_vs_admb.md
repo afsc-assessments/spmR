@@ -3,15 +3,15 @@
 This vignette compares the legacy ADMB workflow (`spm.tpl`) with the new
 RTMB prototype. Its archived outputs illustrate the interface; they are
 placeholders for population dynamics and cannot establish scientific
-equivalence. Version 0.4.1 stops new RTMB projections until the required
+equivalence. Current spmR stops new RTMB projections until the required
 dynamics and input contract are implemented. New ADMB runs require input
 format 2 metadata and a male spawning-weight vector `wt_M` after `wt_F`
 in split-sex species files. The [split-sex input migration
-guide](http://afsc-assessments.github.io/spmR/articles/split_sex_inputs.md)
+guide](https://afsc-assessments.github.io/spmR/articles/split_sex_inputs.md)
 provides a runnable example with explicit historical recruitment basis,
 separate female and male population weights, and starting-year checks.
-Add those fields to `spm_metadata.json`. Version 0.4.1 no longer reads
-`tacpar.dat`. Archived RTMB output remains a record of the earlier
+Add those fields to `spm_metadata.json`. The current engine no longer
+reads `tacpar.dat`. Archived RTMB output remains a record of the earlier
 prototype; adding metadata leaves its results and scientific limitations
 unchanged.
 
@@ -52,8 +52,8 @@ if (exists("admb_res")) {
 summary(rtmb_res$SSB)
 ```
 
-    ##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
-    ##  181439  181439  181439  181439  181439  181439
+       Min. 1st Qu.  Median    Mean 3rd Qu.    Max.
+     181439  181439  181439  181439  181439  181439 
 
 ``` r
 

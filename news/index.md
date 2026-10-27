@@ -1,5 +1,19 @@
 # Changelog
 
+## spmR 0.4.2
+
+- The ADMB projection engine now compiles from `inst/admb/spm.tpl`
+  alone; the format-2 input checks are included in the template, and a
+  separate C++ header is no longer required.
+- Package vignettes and website articles use Quarto, with a canonical
+  GT2026 audit/staging example and a separate guide to its input
+  definitions and conditional diagnostic runs.
+- `run_gt2026_projection()` in `examples/gt_2026/run.R` stages the
+  supplied Greenland turbot inputs, records input repairs and metadata,
+  and separates explicitly requested diagnostic weight proxies from
+  supplied population weights. `check_gt2026_inputs()` lists the
+  remaining source-data issues.
+
 ## spmR 0.4.1
 
 - Split-sex species files now contain a male spawning weight-at-age
@@ -40,14 +54,14 @@
 
 ## spmR 0.3.0
 
-- [`as_spm_result()`](http://afsc-assessments.github.io/spmR/reference/as_spm_result.md)
+- [`as_spm_result()`](https://afsc-assessments.github.io/spmR/reference/as_spm_result.md)
   provides a validated common result format for projection model
   backends while preserving model-specific columns.
-- [`runSPM()`](http://afsc-assessments.github.io/spmR/reference/runSPM.md)
+- [`runSPM()`](https://afsc-assessments.github.io/spmR/reference/runSPM.md)
   now dispatches through internal model adapters and returns an
   `spm_result` while remaining compatible with legacy ADMB and
   experimental RTMB calls.
-- [`tier3_scenario_table()`](http://afsc-assessments.github.io/spmR/reference/tier3_scenario_table.md)
+- [`tier3_scenario_table()`](https://afsc-assessments.github.io/spmR/reference/tier3_scenario_table.md)
   summarizes simulation output into assessment-ready rows for the seven
   Tier 3 projection alternatives.
 

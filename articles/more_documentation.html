@@ -10,7 +10,9 @@
 <link href="../deps/bootstrap-5.3.8/bootstrap.min.css" rel="stylesheet">
 <script src="../deps/bootstrap-5.3.8/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
 <link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
-<script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><link href="../extra.css" rel="stylesheet">
+<script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><script src="more_documentation_files/libs/quarto-html/popper.min.js"></script><script src="more_documentation_files/libs/quarto-html/tippy.umd.min.js"></script><link href="more_documentation_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="more_documentation_files/libs/quarto-html/light-border.css" rel="stylesheet">
+<!-- pkgdown --><script src="../pkgdown.js"></script><link href="../extra.css" rel="stylesheet">
 <meta property="og:title" content="Draft additional documentation for spmR">
 </head>
 <body>
@@ -21,7 +23,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">spmR</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.4.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.4.2</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -43,297 +45,213 @@
 
 
   </div>
-</nav><div class="container template-article">
-
-
-
-
+</nav><div class="container template-quarto">
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
 
       <h1>Draft additional documentation for spmR</h1>
-                        <h4 data-toc-skip class="author">Jim Ianelli,
-Cole Monnahan</h4>
-            
-            <h4 data-toc-skip class="date">2026-10-26</h4>
-      
 
-      <div class="d-none name"><code>more_documentation.Rmd</code></div>
+      <p class="author">Jim Ianelli, Cole Monnahan</p>
+      <p class="date">2026-10-27</p>
+
+
+      <div class="d-none name"><code></code></div>
     </div>
 
-    
-    
-<div class="section level2">
-<h2 id="projections-for-operational-assessments">Projections for operational assessments<a class="anchor" aria-label="anchor" href="#projections-for-operational-assessments"></a>
+
+
+
+
+
+    <section class="section level2"><h2 id="projections-for-operational-assessments">Projections for operational assessments<a class="anchor" aria-label="anchor" href="#projections-for-operational-assessments"></a>
 </h2>
-<p>The R package spmR provides a tool to project assessment results in a
-consistent way over all “Tier 3” groundfish stocks. This is to conform
-to the Fishery Management Plan (FMP) for the Gulf of Alaska (GOA) and
-the Bering Sea and Aleutian Islands (BSAI). Specifically, as outlined in
-Amendment 56 of the FMP, age-structured assessment results are linked to
-the projection based on specified input files. These inputs allow
-estimation of fishing mortality rates based on spawning biomass per
-recruits (e.g., <em>F<sub>40%</sub></em> and
-<em>F<sub>35%</sub></em>)<em>.</em> These rates (and variants) are
-applied to the estimated abundance at age from the most recent
-assessment model. The trend in spawning biomass is then contrasted with
-proxy reference points that align with the FMP. In summary, the model
-estimates proxy Fmsy values, applied to estimated population numbers at
-age, and compared against reference points to adjust the rates according
-to the control rule of the FMP.</p>
-<p>Catch from the model follows three main scenarios given a selected
-model (approved by the SSC):</p>
+<p>The R package spmR provides a tool to project assessment results in a consistent way over all “Tier 3” groundfish stocks. This is to conform to the Fishery Management Plan (FMP) for the Gulf of Alaska (GOA) and the Bering Sea and Aleutian Islands (BSAI). Specifically, as outlined in Amendment 56 of the FMP, age-structured assessment results are linked to the projection based on specified input files. These inputs allow estimation of fishing mortality rates based on spawning biomass per recruits (e.g., <em>F<sub>40%</sub></em> and <em>F<sub>35%</sub></em>). These rates (and variants) are applied to the estimated abundance at age from the most recent assessment model. The trend in spawning biomass is then contrasted with proxy reference points that align with the FMP. In summary, the model estimates proxy Fmsy values, applied to estimated population numbers at age, and compared against reference points to adjust the rates according to the control rule of the FMP.</p>
+<p>Catch from the model follows three main scenarios given a selected model (approved by the SSC):</p>
 <ul>
 <li><p>The maximum permissible ABC</p></li>
 <li><p>The status determination relative to overfishing</p></li>
-<li><p>The status determination to determine if the stock is overfished
-or approaching an overfished condition.</p></li>
+<li><p>The status determination to determine if the stock is overfished or approaching an overfished condition.</p></li>
 </ul>
-<p>Additional “scenarios” are optionally included and were part of the
-historical requirement for an annual Environmental Assessment for
-ABC/OFL specifications by the Alaska Regional Office. They provide
-contrast and included scenarios based on the “author recommended” ABC,
-one with no fishing, one based on the recent 5-year average F, another
-with an alternative F-spr basis (varied between some stocks).</p>
-<p>Biological assumptions used in the projections should follow the
-assessment model and decisions about expected future selectivity,
-maturity, weight-at-age etc should be considered best estimates and may
-reflect means over different recent periods. It should be noted that
-their specification should be clearly documented within the
-assessment.</p>
-<p>Tier 3 stocks are based on expected trends and the extent to which
-these proxy estimates are determined with uncertainty is not explicitly
-part of the FMP ABC/OFL specification process. Nonetheless, the software
-runs simulations over the mean and variability of recruitment that is
-specified in the model input files. For FMP ABC/OFL specifications, the
-means are presented but longer-term trajectories accounting only for
-recruitment variability are presented figures as deemed useful.</p>
-</div>
-<div class="section level2">
-<h2 id="abbreviations">Abbreviations<a class="anchor" aria-label="anchor" href="#abbreviations"></a>
+<p>Additional “scenarios” are optionally included and were part of the historical requirement for an annual Environmental Assessment for ABC/OFL specifications by the Alaska Regional Office. They provide contrast and included scenarios based on the “author recommended” ABC, one with no fishing, one based on the recent 5-year average F, another with an alternative F-spr basis (varied between some stocks).</p>
+<p>Biological assumptions used in the projections should follow the assessment model and decisions about expected future selectivity, maturity, weight-at-age etc should be considered best estimates and may reflect means over different recent periods. It should be noted that their specification should be clearly documented within the assessment.</p>
+<p>Tier 3 stocks are based on expected trends and the extent to which these proxy estimates are determined with uncertainty is not explicitly part of the FMP ABC/OFL specification process. Nonetheless, the software runs simulations over the mean and variability of recruitment that is specified in the model input files. For FMP ABC/OFL specifications, the means are presented but longer-term trajectories accounting only for recruitment variability are presented figures as deemed useful.</p>
+</section><section class="section level2"><h2 id="abbreviations">Abbreviations<a class="anchor" aria-label="anchor" href="#abbreviations"></a>
 </h2>
-<p>​​</p>
-<table style="width:94%;" class="table">
-<colgroup>
-<col width="9%">
-<col width="34%">
-<col width="13%">
-<col width="36%">
-</colgroup>
+<table class="table caption-top">
 <thead><tr class="header">
-<th><strong>A BC</strong></th>
-<th>Acceptable Biological Catch</th>
-<th><ul>
-<li>*IRFA**</li>
-</ul></th>
-<th>Initial Regulatory Flexibility Analysis</th>
+<th>Abbreviation</th>
+<th>Meaning</th>
 </tr></thead>
 <tbody>
 <tr class="odd">
-<td><strong> AI</strong></td>
+<td>ABC</td>
+<td>Acceptable Biological Catch</td>
+</tr>
+<tr class="even">
+<td>AI</td>
 <td>Aleutian Islands</td>
-<td><strong>LLP</strong></td>
+</tr>
+<tr class="odd">
+<td>AP</td>
+<td>Advisory Panel</td>
+</tr>
+<tr class="even">
+<td>ADFG</td>
+<td>Alaska Department of Fish and Game</td>
+</tr>
+<tr class="odd">
+<td>BS</td>
+<td>Bering Sea</td>
+</tr>
+<tr class="even">
+<td>BSAI</td>
+<td>Bering Sea and Aleutian Islands</td>
+</tr>
+<tr class="odd">
+<td>CDQ</td>
+<td>Community Development Quota</td>
+</tr>
+<tr class="even">
+<td>EA/RIR</td>
+<td>Environmental Assessment/Regulatory Impact Review</td>
+</tr>
+<tr class="odd">
+<td>EBS</td>
+<td>Eastern Bering Sea</td>
+</tr>
+<tr class="even">
+<td>EEZ</td>
+<td>Exclusive Economic Zone</td>
+</tr>
+<tr class="odd">
+<td>EFH</td>
+<td>Essential Fish Habitat</td>
+</tr>
+<tr class="even">
+<td>EFP</td>
+<td>Exempted Fishing Permit</td>
+</tr>
+<tr class="odd">
+<td>ESA</td>
+<td>Endangered Species Act</td>
+</tr>
+<tr class="even">
+<td>FEP</td>
+<td>Fishery Ecosystem Plan</td>
+</tr>
+<tr class="odd">
+<td>FMP</td>
+<td>Fishery Management Plan</td>
+</tr>
+<tr class="even">
+<td>GHL</td>
+<td>Guideline Harvest Level</td>
+</tr>
+<tr class="odd">
+<td>GOA</td>
+<td>Gulf of Alaska</td>
+</tr>
+<tr class="even">
+<td>HAPC</td>
+<td>Habitat Areas of Particular Concern</td>
+</tr>
+<tr class="odd">
+<td>IFQ</td>
+<td>Individual Fishing Quota</td>
+</tr>
+<tr class="even">
+<td>IPHC</td>
+<td>International Pacific Halibut Commission</td>
+</tr>
+<tr class="odd">
+<td>IRFA</td>
+<td>Initial Regulatory Flexibility Analysis</td>
+</tr>
+<tr class="even">
+<td>LLP</td>
 <td>License Limitation Program</td>
 </tr>
-<tr class="even">
-<td><strong> AP</strong></td>
-<td>Advisory Panel</td>
-<td><strong>M SFCMA</strong></td>
-<td>
-<p>Magnuson-Stevens Fishery</p>
-<p>Conservation and Management Act</p>
-</td>
-</tr>
 <tr class="odd">
-<td><strong>AD FG</strong></td>
-<td>Alaska Dept. of Fish and Game</td>
-<td><ul>
-<li>*MMPA**</li>
-</ul></td>
+<td>MSFCMA</td>
+<td>Magnuson-Stevens Fishery Conservation and Management Act</td>
+</tr>
+<tr class="even">
+<td>MMPA</td>
 <td>Marine Mammal Protection Act</td>
 </tr>
-<tr class="even">
-<td><strong> BS</strong></td>
-<td>Bering Sea</td>
-<td><strong>MRA</strong></td>
+<tr class="odd">
+<td>MRA</td>
 <td>Maximum Retainable Amount</td>
 </tr>
-<tr class="odd">
-<td><strong>BS AI</strong></td>
-<td>Bering Sea and Aleutian Islands</td>
-<td><strong>MSY</strong></td>
+<tr class="even">
+<td>MSY</td>
 <td>Maximum Sustainable Yield</td>
 </tr>
-<tr class="even">
-<td><strong>C DQ</strong></td>
-<td>Community Development Quota</td>
-<td><strong>t</strong></td>
+<tr class="odd">
+<td>t</td>
 <td>Metric tons</td>
 </tr>
-<tr class="odd">
-<td><strong> EA/R IR</strong></td>
-<td>
-<p>Environmental Assessment/Regulatory</p>
-<p>Impact Review</p>
-</td>
-<td><ul>
-<li>*NMFS**</li>
-</ul></td>
+<tr class="even">
+<td>NMFS</td>
 <td>National Marine Fisheries Service</td>
 </tr>
+<tr class="odd">
+<td>NOAA</td>
+<td>National Oceanic and Atmospheric Administration</td>
+</tr>
 <tr class="even">
-<td><strong>E BS</strong></td>
-<td>Eastern Bering Sea</td>
-<td><ul>
-<li>*NOAA**</li>
-</ul></td>
-<td>National Oceanic &amp; Atmospheric Adm.</td>
+<td>NPFMC</td>
+<td>North Pacific Fishery Management Council</td>
 </tr>
 <tr class="odd">
-<td><strong>E EZ</strong></td>
-<td>Exclusive Economic Zone</td>
-<td><strong> NPFMC</strong></td>
-<td>
-<p>North Pacific Fishery</p>
-<p>Management Council</p>
-</td>
-</tr>
-<tr class="even">
-<td><strong>E FH</strong></td>
-<td>Essential Fish Habitat</td>
-<td><strong>OY</strong></td>
+<td>OY</td>
 <td>Optimum Yield</td>
 </tr>
-<tr class="odd">
-<td><strong>E FP</strong></td>
-<td>Exempted Fishing Permit</td>
-<td><ul>
-<li>*PEEC**</li>
-</ul></td>
+<tr class="even">
+<td>PEEC</td>
 <td>Preview of Economic and Ecosystem Considerations</td>
 </tr>
-<tr class="even">
-<td><strong>E SA</strong></td>
-<td>Endangered Species Act</td>
-<td><strong>PSC</strong></td>
+<tr class="odd">
+<td>PSC</td>
 <td>Prohibited Species Catch</td>
 </tr>
-<tr class="odd">
-<td><strong>F EP</strong></td>
-<td>Fishery Ecosystem Plan</td>
-<td><ul>
-<li>*SAFE**</li>
-</ul></td>
+<tr class="even">
+<td>SAFE</td>
 <td>Stock Assessment and Fishery Evaluation</td>
 </tr>
-<tr class="even">
-<td><strong>F MP</strong></td>
-<td>Fishery Management Plan</td>
-<td><strong>SSC</strong></td>
+<tr class="odd">
+<td>SSC</td>
 <td>Scientific and Statistical Committee</td>
 </tr>
-<tr class="odd">
-<td><strong>G HL</strong></td>
-<td>Guideline Harvest Level</td>
-<td><strong>SSL</strong></td>
+<tr class="even">
+<td>SSL</td>
 <td>Steller Sea Lion</td>
 </tr>
-<tr class="even">
-<td><strong>G OA</strong></td>
-<td>Gulf of Alaska</td>
-<td><strong>TAC</strong></td>
+<tr class="odd">
+<td>TAC</td>
 <td>Total Allowable Catch</td>
 </tr>
-<tr class="odd">
-<td><strong>HA PC</strong></td>
-<td>Habitat Areas of Particular Concern</td>
-<td><strong> USFWS</strong></td>
-<td>United States Fish &amp; Wildlife Service</td>
-</tr>
 <tr class="even">
-<td>
-<h2 id="section"></h2>
-<p><strong>I FQ</strong></p>
-</td>
-<td>Individual Fishing Quota</td>
-<td></td>
-<td></td>
-</tr>
-<tr class="odd">
-<td>
-<h2 id="section-1"></h2>
-<p><strong>IP HC</strong></p>
-</td>
-<td>
-<p>International Pacific Halibut</p>
-<p>Commission</p>
-</td>
-<td></td>
-<td></td>
+<td>USFWS</td>
+<td>United States Fish and Wildlife Service</td>
 </tr>
 </tbody>
-</table>
-</div>
-<div class="section level2">
-<h2 id="recommended-usage">Recommended usage<a class="anchor" aria-label="anchor" href="#recommended-usage"></a>
+</table></section><section class="section level2"><h2 id="recommended-usage">Recommended usage<a class="anchor" aria-label="anchor" href="#recommended-usage"></a>
 </h2>
-<p>See readme on <a href="https://github.com/afsc-assessments/spmR/tree/main" class="external-link"><u>spmR</u></a>
-package on github for installation options and vignettes (Articles <a href="https://afsc-assessments.github.io/spmR/" class="external-link"><u>here</u></a>).</p>
-</div>
-<div class="section level2">
-<h2 id="current-inputs-spmr-0-4-1-and-format-2">Current inputs: spmR 0.4.1 and format 2<a class="anchor" aria-label="anchor" href="#current-inputs-spmr-0-4-1-and-format-2"></a>
+<p>See the <a href="https://github.com/afsc-assessments/spmR/tree/main" class="external-link">spmR README</a> for installation options and the <a href="https://afsc-assessments.github.io/spmR/articles/index.html">articles</a> for worked examples and input guidance.</p>
+</section><section class="section level2"><h2 id="current-inputs-format-2">Current inputs: format 2<a class="anchor" aria-label="anchor" href="#current-inputs-format-2"></a>
 </h2>
-<p>New projections require version-2 metadata in
-<code>spm_metadata.json</code> and a compatible executable compiled from
-the current <code>inst/admb/spm.tpl</code>. Keep the order and number of
-fields in <code>spm.dat</code>. In each split-sex species file, insert
-the male spawning-weight vector <code>wt_M</code> immediately after
-<code>wt_F</code>. Version 0.4.1 no longer reads
-<code>tacpar.dat</code>. Store population weights in metadata; adding
-another positional vector can shift later fields or be ignored by an
-older executable. The runner validates these inputs and generates
-<code>spm_input_v2.dat</code> for the native engine.</p>
-<p>Each species declares <code>recruitment_basis = "total"</code> or
-<code>"per_sex"</code>. <code>"per_sex"</code> describes the recruitment
-of either sex under a 50:50 ratio; pooled-sex inputs require
-<code>"total"</code>. The complete historical series is converted to
-total recruitment before calculating its arithmetic mean, harmonic mean,
-variability, or stock-recruitment inputs. Each projected total is then
-divided equally between females and males once.</p>
-<p>Supply female and male population weights with an explicit age
-vector. The vectors must contain one positive, finite value per age in
-kg, with the declared consecutive, increasing age order. Abundance and
-biomass units must form a supported pair:
-<code>fish</code>/<code>kg</code>,
-<code>thousand_fish</code>/<code>t</code>, or
-<code>million_fish</code>/<code>thousand_t</code>. Convert existing
-values to the declared units and use <code>N_scalar = 1</code>.</p>
-<p>A split-sex run requires male population weights. When those data are
-unavailable, the user can explicitly select
-<code>male_population_substitute</code> as
-<code>"female_population"</code> or <code>"mean_male_fishery"</code>
-(the arithmetic mean across male fishery-weight vectors at each age).
-Each substitute produces a warning and is recorded with the output;
-document its biological justification. Setting
-<code>strict = FALSE</code> changes the treatment of unknown metadata
-fields to warnings; required inputs and scientific checks still
-apply.</p>
-<p>See <a href="split_sex_inputs.html">Migrating split-sex projection
-inputs</a> for a worked example. Run <code><a href="../reference/write_spm_metadata.html">validate_spm_inputs()</a></code>
-before a new projection. Output provenance records the recruitment
-convention, units, substitutions, and executable and input hashes.
-Historical output remains readable with
-<code>runSPM(..., run = FALSE)</code>.</p>
-</div>
-<div class="section level2">
-<h2 id="history-of-spm">History of SPM<a class="anchor" aria-label="anchor" href="#history-of-spm"></a>
+<p>New projections require version-2 metadata in <code>spm_metadata.json</code> and a compatible executable compiled from the current <code>inst/admb/spm.tpl</code>. Keep the order and number of fields in <code>spm.dat</code>. In each split-sex species file, insert the male spawning-weight vector <code>wt_M</code> immediately after <code>wt_F</code>. The current engine no longer reads <code>tacpar.dat</code>. Store population weights in metadata; adding another positional vector can shift later fields or be ignored by an older executable. The runner validates these inputs and generates <code>spm_input_v2.dat</code> for the native engine.</p>
+<p>Each species declares <code>recruitment_basis = "total"</code> or <code>"per_sex"</code>. <code>"per_sex"</code> describes the recruitment of either sex under a 50:50 ratio; pooled-sex inputs require <code>"total"</code>. The complete historical series is converted to total recruitment before calculating its arithmetic mean, harmonic mean, variability, or stock-recruitment inputs. Each projected total is then divided equally between females and males once.</p>
+<p>Supply female and male population weights with an explicit age vector. The vectors must contain one positive, finite value per age in kg, with the declared consecutive, increasing age order. Abundance and biomass units must form a supported pair: <code>fish</code>/<code>kg</code>, <code>thousand_fish</code>/<code>t</code>, or <code>million_fish</code>/<code>thousand_t</code>. Convert existing values to the declared units and use <code>N_scalar = 1</code>.</p>
+<p>A split-sex run requires male population weights. When those data are unavailable, the user can explicitly select <code>male_population_substitute</code> as <code>"female_population"</code> or <code>"mean_male_fishery"</code> (the arithmetic mean across male fishery-weight vectors at each age). Each substitute produces a warning and is recorded with the output; document its biological justification. Setting <code>strict = FALSE</code> changes the treatment of unknown metadata fields to warnings; required inputs and scientific checks still apply.</p>
+<p>See <a href="split_sex_inputs.html">Migrating split-sex projection inputs</a> for a worked example. Run <code><a href="../reference/write_spm_metadata.html">validate_spm_inputs()</a></code> before a new projection. Output provenance records the recruitment convention, units, substitutions, and executable and input hashes. Historical output remains readable with <code>runSPM(..., run = FALSE)</code>.</p>
+</section><section class="section level2"><h2 id="history-of-spm">History of SPM<a class="anchor" aria-label="anchor" href="#history-of-spm"></a>
 </h2>
 <p>&lt;links to the historical docs&gt;</p>
-<p><a href="https://afsc-assessments.github.io/spmR/articles/background.html" class="external-link"><u>https://afsc-assessments.github.io/spmR/articles/background.html</u></a></p>
+<p><a href="https://afsc-assessments.github.io/spmR/articles/background.html"><u>https://afsc-assessments.github.io/spmR/articles/background.html</u></a></p>
 <p>How spmr grew out of “proj” and what the differences are</p>
-</div>
-<div class="section level2">
-<h2 id="definitions">Definitions<a class="anchor" aria-label="anchor" href="#definitions"></a>
+</section><section class="section level2"><h2 id="definitions">Definitions<a class="anchor" aria-label="anchor" href="#definitions"></a>
 </h2>
 <p>Let</p>
 <p>TY= this year - the year in which SPM is run</p>
@@ -341,114 +259,37 @@ Historical output remains readable with
 <p>PY1= TY+1 = projection year 1 in the exec table</p>
 <p>PY2= TY+2 = projection year 2 in the exec table</p>
 <p>PYn=TY+n = projection year n in alternative scenarios</p>
-<p>C_TY=estimate/assumed catch for the entirety of TY using e.g., an
-assumption about catch=ABC or some calculation to extrapolate for the
-remainder of TY (Oct - Dec).</p>
+<p>C_TY=estimate/assumed catch for the entirety of TY using e.g., an assumption about catch=ABC or some calculation to extrapolate for the remainder of TY (Oct - Dec).</p>
 <p>N_AY= numbers at age on Jan-1 of AY</p>
 <p>N_PY1= numbers at age on Jan-1 of PY1</p>
 <p>N_PY2= numbers at age on Jan-1 of PY2</p>
-</div>
-<div class="section level2">
-<h2 id="summary-of-spr-calculations-for-tier-3-stocks">Summary of SPR calculations for Tier 3 stocks<a class="anchor" aria-label="anchor" href="#summary-of-spr-calculations-for-tier-3-stocks"></a>
+</section><section class="section level2"><h2 id="summary-of-spr-calculations-for-tier-3-stocks">Summary of SPR calculations for Tier 3 stocks<a class="anchor" aria-label="anchor" href="#summary-of-spr-calculations-for-tier-3-stocks"></a>
 </h2>
-<ol style="list-style-type: decimal">
-<li><p>SPM reads natural mortality, maturity, spawning weights,
-population weights, fishery weights, and fishery selectivity. These
-weights have distinct roles: female spawning weights determine spawning
-biomass; female and male population weights determine total biomass;
-fishery weights convert catch numbers to catch biomass. Total biomass is
-the sum of abundance times population weight across ages and
-sexes.</p></li>
-<li><p>The spawning biomass per recruit (SPR) calculation follows one
-female recruit through survival, maturity, spawning timing, and the plus
-group. Let
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>ϕ</mi><mi>F</mi></msub><mo stretchy="false" form="prefix">(</mo><mn>0</mn><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">\phi_F(0)</annotation></semantics></math>
-denote lifetime spawning biomass per female recruit with fishing
-mortality equal to zero, and let
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mover><mi>R</mi><mo accent="true">¯</mo></mover><mrow><mi mathvariant="normal">t</mi><mi mathvariant="normal">o</mi><mi mathvariant="normal">t</mi><mi mathvariant="normal">a</mi><mi mathvariant="normal">l</mi></mrow></msub><annotation encoding="application/x-tex">\overline{R}_{\mathrm{total}}</annotation></semantics></math>
-be the arithmetic mean of the normalized total recruitment history.
-Under the 50:50 recruitment ratio,
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>S</mi><mi>S</mi><msub><mi>B</mi><mn>0</mn></msub><mo>=</mo><mn>0.5</mn><mspace width="0.167em"></mspace><msub><mover><mi>R</mi><mo accent="true">¯</mo></mover><mrow><mi mathvariant="normal">t</mi><mi mathvariant="normal">o</mi><mi mathvariant="normal">t</mi><mi mathvariant="normal">a</mi><mi mathvariant="normal">l</mi></mrow></msub><mspace width="0.167em"></mspace><msub><mi>ϕ</mi><mi>F</mi></msub><mo stretchy="false" form="prefix">(</mo><mn>0</mn><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">SSB_0 = 0.5\,\overline{R}_{\mathrm{total}}\,\phi_F(0)</annotation></semantics></math>.
-This applies the female fraction once. Summary output
-<code>Mean_rec</code> reports total recruitment;
-<code>Mean_rec_female</code> reports its female half. The reference
-biomasses are
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>S</mi><mi>S</mi><msub><mi>B</mi><mn>35</mn></msub><mo>=</mo><mn>0.35</mn><mspace width="0.167em"></mspace><mi>S</mi><mi>S</mi><msub><mi>B</mi><mn>0</mn></msub></mrow><annotation encoding="application/x-tex">SSB_{35}=0.35\,SSB_0</annotation></semantics></math>
-and
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>S</mi><mi>S</mi><msub><mi>B</mi><mn>40</mn></msub><mo>=</mo><mn>0.40</mn><mspace width="0.167em"></mspace><mi>S</mi><mi>S</mi><msub><mi>B</mi><mn>0</mn></msub></mrow><annotation encoding="application/x-tex">SSB_{40}=0.40\,SSB_0</annotation></semantics></math>.</p></li>
-<li><p>SPM solves for the fishing mortality rates that produce the
-specified fractions of unfished spawning biomass per recruit. For inputs
-using 40% and 35%, these are
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>F</mi><mrow><mn>40</mn><mi>%</mi></mrow></msub><annotation encoding="application/x-tex">F_{40\%}</annotation></semantics></math>
-for maximum ABC and
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>F</mi><mrow><mn>35</mn><mi>%</mi></mrow></msub><annotation encoding="application/x-tex">F_{35\%}</annotation></semantics></math>
-for OFL. The resulting rates and spawning biomass enter the applicable
-harvest control rule. Population biomass reference points use the
-separate population weights for both sexes.</p></li>
-<li><p>Initial numbers at age must describe the beginning of
-<code>styr</code>, the first projection year declared in
-<code>spm.dat</code>. If the assessment supplies numbers for an earlier
-year, advance survivors, ages, and the plus group to <code>styr</code>
-and explicitly choose recruitment entering that year before writing the
-inputs. Relabeling an earlier abundance vector changes the projection
-boundary without advancing the population. From the supplied initial
-state, SPM applies each year’s catches or scenario-specific fishing
-mortality and advances survivors into the next year. Record the catch
-assumptions and scenario used for each assessment table.</p></li>
+<ol type="1">
+<li><p>SPM reads natural mortality, maturity, spawning weights, population weights, fishery weights, and fishery selectivity. These weights have distinct roles: female spawning weights determine spawning biomass; female and male population weights determine total biomass; fishery weights convert catch numbers to catch biomass. Total biomass is the sum of abundance times population weight across ages and sexes.</p></li>
+<li><p>The spawning biomass per recruit (SPR) calculation follows one female recruit through survival, maturity, spawning timing, and the plus group. Let <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>ϕ</mi><mi>F</mi></msub><mo stretchy="false" form="prefix">(</mo><mn>0</mn><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">\phi_F(0)</annotation></semantics></math> denote lifetime spawning biomass per female recruit with fishing mortality equal to zero, and let <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mover><mi>R</mi><mo accent="true">¯</mo></mover><mrow><mi mathvariant="normal">t</mi><mi mathvariant="normal">o</mi><mi mathvariant="normal">t</mi><mi mathvariant="normal">a</mi><mi mathvariant="normal">l</mi></mrow></msub><annotation encoding="application/x-tex">\overline{R}_{\mathrm{total}}</annotation></semantics></math> be the arithmetic mean of the normalized total recruitment history. Under the 50:50 recruitment ratio, <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>S</mi><mi>S</mi><msub><mi>B</mi><mn>0</mn></msub><mo>=</mo><mn>0.5</mn><mspace width="0.167em"></mspace><msub><mover><mi>R</mi><mo accent="true">¯</mo></mover><mrow><mi mathvariant="normal">t</mi><mi mathvariant="normal">o</mi><mi mathvariant="normal">t</mi><mi mathvariant="normal">a</mi><mi mathvariant="normal">l</mi></mrow></msub><mspace width="0.167em"></mspace><msub><mi>ϕ</mi><mi>F</mi></msub><mo stretchy="false" form="prefix">(</mo><mn>0</mn><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">SSB_0 = 0.5\,\overline{R}_{\mathrm{total}}\,\phi_F(0)</annotation></semantics></math>. This applies the female fraction once. Summary output <code>Mean_rec</code> reports total recruitment; <code>Mean_rec_female</code> reports its female half. The reference biomasses are <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>S</mi><mi>S</mi><msub><mi>B</mi><mn>35</mn></msub><mo>=</mo><mn>0.35</mn><mspace width="0.167em"></mspace><mi>S</mi><mi>S</mi><msub><mi>B</mi><mn>0</mn></msub></mrow><annotation encoding="application/x-tex">SSB_{35}=0.35\,SSB_0</annotation></semantics></math> and <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>S</mi><mi>S</mi><msub><mi>B</mi><mn>40</mn></msub><mo>=</mo><mn>0.40</mn><mspace width="0.167em"></mspace><mi>S</mi><mi>S</mi><msub><mi>B</mi><mn>0</mn></msub></mrow><annotation encoding="application/x-tex">SSB_{40}=0.40\,SSB_0</annotation></semantics></math>.</p></li>
+<li><p>SPM solves for the fishing mortality rates that produce the specified fractions of unfished spawning biomass per recruit. For inputs using 40% and 35%, these are <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>F</mi><mrow><mn>40</mn><mi>%</mi></mrow></msub><annotation encoding="application/x-tex">F_{40\%}</annotation></semantics></math> for maximum ABC and <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>F</mi><mrow><mn>35</mn><mi>%</mi></mrow></msub><annotation encoding="application/x-tex">F_{35\%}</annotation></semantics></math> for OFL. The resulting rates and spawning biomass enter the applicable harvest control rule. Population biomass reference points use the separate population weights for both sexes.</p></li>
+<li><p>Initial numbers at age must describe the beginning of <code>styr</code>, the first projection year declared in <code>spm.dat</code>. If the assessment supplies numbers for an earlier year, advance survivors, ages, and the plus group to <code>styr</code> and explicitly choose recruitment entering that year before writing the inputs. Relabeling an earlier abundance vector changes the projection boundary without advancing the population. From the supplied initial state, SPM applies each year’s catches or scenario-specific fishing mortality and advances survivors into the next year. Record the catch assumptions and scenario used for each assessment table.</p></li>
 </ol>
-<p>The detailed output row labeled <code>Year = t</code> reports biomass
-from the beginning-of-year abundance in year
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>t</mi><annotation encoding="application/x-tex">t</annotation></semantics></math>;
-spawning biomass includes survival to spawning. Its <code>Rec</code>
-value is the recruitment draw entering the youngest age in year
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>t</mi><mo>+</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">t+1</annotation></semantics></math>.
-Initial-year recruitment is already part of the input abundance vectors.
-Check these dates when comparing an assessment’s terminal year with the
-first projection year.</p>
-</div>
-<div class="section level2">
-<h2 id="summary-of-the-alternative-scenario-simulations">Summary of the alternative scenario simulations<a class="anchor" aria-label="anchor" href="#summary-of-the-alternative-scenario-simulations"></a>
+<p>The detailed output row labeled <code>Year = t</code> reports biomass from the beginning-of-year abundance in year <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>t</mi><annotation encoding="application/x-tex">t</annotation></semantics></math>; spawning biomass includes survival to spawning. Its <code>Rec</code> value is the recruitment draw entering the youngest age in year <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>t</mi><mo>+</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">t+1</annotation></semantics></math>. Initial-year recruitment is already part of the input abundance vectors. Check these dates when comparing an assessment’s terminal year with the first projection year.</p>
+</section><section class="section level2"><h2 id="summary-of-the-alternative-scenario-simulations">Summary of the alternative scenario simulations<a class="anchor" aria-label="anchor" href="#summary-of-the-alternative-scenario-simulations"></a>
 </h2>
-<p>There are 7 projection “scenarios” built into spmR, along with some
-others that have been customized to address specific questions.</p>
-<div class="section level3">
-<h3 id="how-to-determine-overfishing-and-overfished-status-">How to determine overfishing and overfished status.<a class="anchor" aria-label="anchor" href="#how-to-determine-overfishing-and-overfished-status-"></a>
+<p>There are 7 projection “scenarios” built into spmR, along with some others that have been customized to address specific questions.</p>
+<section class="level2"><h3 id="how-to-determine-overfishing-and-overfished-status-">How to determine overfishing and overfished status.<a class="anchor" aria-label="anchor" href="#how-to-determine-overfishing-and-overfished-status-"></a>
 </h3>
 <p>To do</p>
-</div>
-</div>
-<div class="section level2">
-<h2 id="how-to-specify-catches-in-ty">How to specify catches in TY<a class="anchor" aria-label="anchor" href="#how-to-specify-catches-in-ty"></a>
+</section></section><section class="section level2"><h2 id="how-to-specify-catches-in-ty">How to specify catches in TY<a class="anchor" aria-label="anchor" href="#how-to-specify-catches-in-ty"></a>
 </h2>
-<p>Years between AY and TY will have finalized total catches available.
-The total catches in TY are not complete and must be assumed. Several
-approaches are used:</p>
-<ol style="list-style-type: decimal">
-<li><p>The full ABC is taken in TY. This will be reasonable for fully
-exploited stocks. It may be wise as a general rule to be conservative.
-But for lightly exploited stocks it may not.</p></li>
-<li><p>Extrapolate catches in TY from the end of the year using catches
-through October and historical catch patterns in the fishery. E.g., if
-80% of total catches are typically taken by October then they can be
-scaled up by that number.</p></li>
-</ol>
-</div>
-<div class="section level2">
-<h2 id="known-issues">Known issues<a class="anchor" aria-label="anchor" href="#known-issues"></a>
+<p>Years between AY and TY will have finalized total catches available. The total catches in TY are not complete and must be assumed. Several approaches are used:</p>
+<ol type="1">
+<li><p>The full ABC is taken in TY. This will be reasonable for fully exploited stocks. It may be wise as a general rule to be conservative. But for lightly exploited stocks it may not.</p></li>
+<li><p>Extrapolate catches in TY from the end of the year using catches through October and historical catch patterns in the fishery. E.g., if 80% of total catches are typically taken by October then they can be scaled up by that number.</p></li>
+</ol></section><section class="section level2"><h2 id="known-issues">Known issues<a class="anchor" aria-label="anchor" href="#known-issues"></a>
 </h2>
-<p>When using time-varying quantities in a model then the average values
-used by proj to construct N_PY1 will not match what is used in the
-assessment and thus not much. For instance if spawning WAA is different,
-the N_PY will match between the AM and SPM in TY, but spawning biomass
-in TY will not match. If fisheries selectivity is different, then N_PY1
-will differ as different fish are killed off between the beginning and
-end of TY. When there are no time-varying inputs then SPM will be able
-to recreate the AM through TY identically and there is no issue.</p>
+<p>When using time-varying quantities in a model then the average values used by proj to construct N_PY1 will not match what is used in the assessment and thus not much. For instance if spawning WAA is different, the N_PY will match between the AM and SPM in TY, but spawning biomass in TY will not match. If fisheries selectivity is different, then N_PY1 will differ as different fish are killed off between the beginning and end of TY. When there are no time-varying inputs then SPM will be able to recreate the AM through TY identically and there is no issue.</p>
 <p>Cases where SPM needs to be run more than once.</p>
 <p>Weird issues arising when there’s a big gap between AY and TY.</p>
-</div>
-<div class="section level2">
-<h2 id="multispecies-and-other-advanced-features">Multispecies and other advanced features<a class="anchor" aria-label="anchor" href="#multispecies-and-other-advanced-features"></a>
+</section><section class="section level2"><h2 id="multispecies-and-other-advanced-features">Multispecies and other advanced features<a class="anchor" aria-label="anchor" href="#multispecies-and-other-advanced-features"></a>
 </h2>
 <p>Jim this one is all you</p>
 <ul>
@@ -457,12 +298,91 @@ to recreate the AM through TY identically and there is no issue.</p>
 <li><p>Linear programming for total yield cap</p></li>
 <li>
 </li>
-</ul>
+</ul></section><script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp('/' + window.location.host + '/');
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'light-border',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config);
+    }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script></main>
 </div>
-  </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
-    </nav></aside>
-</div>
-
 
 
     <footer><div class="pkgdown-footer-left">

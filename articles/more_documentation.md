@@ -9,8 +9,8 @@ the Bering Sea and Aleutian Islands (BSAI). Specifically, as outlined in
 Amendment 56 of the FMP, age-structured assessment results are linked to
 the projection based on specified input files. These inputs allow
 estimation of fishing mortality rates based on spawning biomass per
-recruits (e.g., *F_(40%)* and *F_(35%)*)*.* These rates (and variants)
-are applied to the estimated abundance at age from the most recent
+recruits (e.g., *F_(40%)* and *F_(35%)*). These rates (and variants) are
+applied to the estimated abundance at age from the most recent
 assessment model. The trend in spawning biomass is then contrasted with
 proxy reference points that align with the FMP. In summary, the model
 estimates proxy Fmsy values, applied to estimated population numbers at
@@ -50,24 +50,62 @@ recruitment variability are presented figures as deemed useful.
 
 ## Abbreviations
 
-​​
-
-[TABLE]
+| Abbreviation | Meaning                                                  |
+|--------------|----------------------------------------------------------|
+| ABC          | Acceptable Biological Catch                              |
+| AI           | Aleutian Islands                                         |
+| AP           | Advisory Panel                                           |
+| ADFG         | Alaska Department of Fish and Game                       |
+| BS           | Bering Sea                                               |
+| BSAI         | Bering Sea and Aleutian Islands                          |
+| CDQ          | Community Development Quota                              |
+| EA/RIR       | Environmental Assessment/Regulatory Impact Review        |
+| EBS          | Eastern Bering Sea                                       |
+| EEZ          | Exclusive Economic Zone                                  |
+| EFH          | Essential Fish Habitat                                   |
+| EFP          | Exempted Fishing Permit                                  |
+| ESA          | Endangered Species Act                                   |
+| FEP          | Fishery Ecosystem Plan                                   |
+| FMP          | Fishery Management Plan                                  |
+| GHL          | Guideline Harvest Level                                  |
+| GOA          | Gulf of Alaska                                           |
+| HAPC         | Habitat Areas of Particular Concern                      |
+| IFQ          | Individual Fishing Quota                                 |
+| IPHC         | International Pacific Halibut Commission                 |
+| IRFA         | Initial Regulatory Flexibility Analysis                  |
+| LLP          | License Limitation Program                               |
+| MSFCMA       | Magnuson-Stevens Fishery Conservation and Management Act |
+| MMPA         | Marine Mammal Protection Act                             |
+| MRA          | Maximum Retainable Amount                                |
+| MSY          | Maximum Sustainable Yield                                |
+| t            | Metric tons                                              |
+| NMFS         | National Marine Fisheries Service                        |
+| NOAA         | National Oceanic and Atmospheric Administration          |
+| NPFMC        | North Pacific Fishery Management Council                 |
+| OY           | Optimum Yield                                            |
+| PEEC         | Preview of Economic and Ecosystem Considerations         |
+| PSC          | Prohibited Species Catch                                 |
+| SAFE         | Stock Assessment and Fishery Evaluation                  |
+| SSC          | Scientific and Statistical Committee                     |
+| SSL          | Steller Sea Lion                                         |
+| TAC          | Total Allowable Catch                                    |
+| USFWS        | United States Fish and Wildlife Service                  |
 
 ## Recommended usage
 
-See readme on
-[*spmR*](https://github.com/afsc-assessments/spmR/tree/main) package on
-github for installation options and vignettes (Articles
-[*here*](https://afsc-assessments.github.io/spmR/)).
+See the [spmR
+README](https://github.com/afsc-assessments/spmR/tree/main) for
+installation options and the
+[articles](https://afsc-assessments.github.io/spmR/articles/index.html)
+for worked examples and input guidance.
 
-## Current inputs: spmR 0.4.1 and format 2
+## Current inputs: format 2
 
 New projections require version-2 metadata in `spm_metadata.json` and a
 compatible executable compiled from the current `inst/admb/spm.tpl`.
 Keep the order and number of fields in `spm.dat`. In each split-sex
 species file, insert the male spawning-weight vector `wt_M` immediately
-after `wt_F`. Version 0.4.1 no longer reads `tacpar.dat`. Store
+after `wt_F`. The current engine no longer reads `tacpar.dat`. Store
 population weights in metadata; adding another positional vector can
 shift later fields or be ignored by an older executable. The runner
 validates these inputs and generates `spm_input_v2.dat` for the native
@@ -97,9 +135,9 @@ of unknown metadata fields to warnings; required inputs and scientific
 checks still apply.
 
 See [Migrating split-sex projection
-inputs](http://afsc-assessments.github.io/spmR/articles/split_sex_inputs.md)
+inputs](https://afsc-assessments.github.io/spmR/articles/split_sex_inputs.md)
 for a worked example. Run
-[`validate_spm_inputs()`](http://afsc-assessments.github.io/spmR/reference/write_spm_metadata.md)
+[`validate_spm_inputs()`](https://afsc-assessments.github.io/spmR/reference/write_spm_metadata.md)
 before a new projection. Output provenance records the recruitment
 convention, units, substitutions, and executable and input hashes.
 Historical output remains readable with `runSPM(..., run = FALSE)`.

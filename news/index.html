@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">spmR</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.4.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.4.2</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -32,6 +32,13 @@
 
     </div>
 
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="0.4.2" id="spmr-042">spmR 0.4.2<a class="anchor" aria-label="anchor" href="#spmr-042"></a></h2>
+<ul><li>The ADMB projection engine now compiles from <code>inst/admb/spm.tpl</code> alone; the format-2 input checks are included in the template, and a separate C++ header is no longer required.</li>
+<li>Package vignettes and website articles use Quarto, with a canonical GT2026 audit/staging example and a separate guide to its input definitions and conditional diagnostic runs.</li>
+<li>
+<code>run_gt2026_projection()</code> in <code>examples/gt_2026/run.R</code> stages the supplied Greenland turbot inputs, records input repairs and metadata, and separates explicitly requested diagnostic weight proxies from supplied population weights. <code>check_gt2026_inputs()</code> lists the remaining source-data issues.</li>
+</ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.4.1" id="spmr-041">spmR 0.4.1<a class="anchor" aria-label="anchor" href="#spmr-041"></a></h2>
 <ul><li>Split-sex species files now contain a male spawning weight-at-age vector, <code>wt_M</code>, immediately after <code>wt_F</code>. The R validator and ADMB engine both read and validate the new field. Pooled-sex files continue to use <code>wt_F</code> for both internal sex groups.</li>

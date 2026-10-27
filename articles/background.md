@@ -5,15 +5,15 @@ Seattle WA 98115
 
 ## Introduction
 
-### Current-input guidance: spmR 0.4.1
+### Current-input guidance
 
 The sections below preserve the historical development and proposals for
 SPM. For current projections, use the [split-sex input migration
-guide](http://afsc-assessments.github.io/spmR/articles/split_sex_inputs.md)
+guide](https://afsc-assessments.github.io/spmR/articles/split_sex_inputs.md)
 and the [current calculation
-summary](http://afsc-assessments.github.io/spmR/articles/more_documentation.md).
+summary](https://afsc-assessments.github.io/spmR/articles/more_documentation.md).
 
-Version 0.4.1 requires format-2 metadata alongside the positional input
+Current spmR requires format-2 metadata alongside the positional input
 files and a compatible executable. Split-sex species files place a male
 spawning weight vector `wt_M` immediately after `wt_F`; `tacpar.dat` is
 no longer read. Declare whether historical recruitment is total or per

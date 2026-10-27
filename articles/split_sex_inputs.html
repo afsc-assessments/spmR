@@ -23,7 +23,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">spmR</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.4.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.4.2</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -63,10 +63,10 @@
 
 
 
-    <p>Version 0.4.1 requires input format 2 for new ADMB projections. This guide uses synthetic data to show the change from legacy split-sex files to explicit recruitment and population-weight metadata. Validation runs whenever this vignette is built; native execution in the final worked example is enabled explicitly.</p>
+    <p>Current spmR requires input format 2 for new ADMB projections. This guide uses synthetic data to show the change from legacy split-sex files to explicit recruitment and population-weight metadata. Validation runs whenever this vignette is built; native execution in the final worked example is enabled explicitly.</p>
 <section class="level2"><h2 id="what-changes-in-the-input-files">What changes in the input files<a class="anchor" aria-label="anchor" href="#what-changes-in-the-input-files"></a>
 </h2>
-<p>Keep the positional layout of <code>spm.dat</code>. In each split-sex species file (for example, <code>stock.prj</code>), insert <code>wt_M</code> immediately after <code>wt_F</code>. Version 0.4.1 does not read or require <code>tacpar.dat</code>. Add a separate <code>spm_metadata.json</code> file with one species record per stock, in the order listed in <code>spm.dat</code>.</p>
+<p>Keep the positional layout of <code>spm.dat</code>. In each split-sex species file (for example, <code>stock.prj</code>), insert <code>wt_M</code> immediately after <code>wt_F</code>. The current engine does not read or require <code>tacpar.dat</code>. Add a separate <code>spm_metadata.json</code> file with one species record per stock, in the order listed in <code>spm.dat</code>.</p>
 <ul>
 <li>Declare the basis of the complete historical recruitment series: <code>"total"</code> for both sexes combined or <code>"per_sex"</code> for either sex under a 50:50 recruitment ratio. Pooled-sex inputs require <code>"total"</code>.</li>
 <li>Supply female and male <strong>population</strong> weight-at-age vectors in the metadata. Each vector carries its age labels. The positional <code>wt_F</code> and <code>wt_M</code> vectors supply female and male spawning weights, and <code>wt_gear_F</code> and <code>wt_gear_M</code> supply catch weights. Female spawning weight continues to determine SSB.</li>
@@ -187,8 +187,10 @@ $male_population_substitute
 <code class="sourceCode R"><span><span class="va">total_history</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">80</span>, <span class="fl">100</span>, <span class="fl">120</span>, <span class="fl">100</span><span class="op">)</span></span>
 <span><span class="va">per_sex_history</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">40</span>, <span class="fl">50</span>, <span class="fl">60</span>, <span class="fl">50</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/stopifnot.html" class="external-link">stopifnot</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/identical.html" class="external-link">identical</a></span><span class="op">(</span><span class="va">total_history</span>, <span class="fl">2</span> <span class="op">*</span> <span class="va">per_sex_history</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span>arithmetic_mean <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">total_history</span><span class="op">)</span>,</span>
-<span>  harmonic_mean <span class="op">=</span> <span class="fl">1</span> <span class="op">/</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="fl">1</span> <span class="op">/</span> <span class="va">total_history</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span>
+<span>  arithmetic_mean <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">total_history</span><span class="op">)</span>,</span>
+<span>  harmonic_mean <span class="op">=</span> <span class="fl">1</span> <span class="op">/</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="fl">1</span> <span class="op">/</span> <span class="va">total_history</span><span class="op">)</span></span>
+<span><span class="op">)</span></span></code></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>arithmetic_mean   harmonic_mean
       100.00000        97.95918 </code></pre>
@@ -235,7 +237,7 @@ female_population.</code></pre>
 <code class="sourceCode R"><span><span class="va">stock</span> <span class="op">&lt;-</span> <span class="va">inputs</span><span class="op">$</span><span class="va">species</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span></span>
 <span><span class="va">weights</span> <span class="op">&lt;-</span> <span class="va">inputs</span><span class="op">$</span><span class="va">resolved_species</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span><span class="op">$</span><span class="va">population_weights</span></span>
 <span><span class="va">initial_biomass_kg</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="va">stock</span><span class="op">$</span><span class="va">n0_F</span> <span class="op">*</span> <span class="va">weights</span><span class="op">$</span><span class="va">female</span> <span class="op">+</span></span>
-<span>                         <span class="va">stock</span><span class="op">$</span><span class="va">n0_M</span> <span class="op">*</span> <span class="va">weights</span><span class="op">$</span><span class="va">male</span><span class="op">)</span></span>
+<span>  <span class="va">stock</span><span class="op">$</span><span class="va">n0_M</span> <span class="op">*</span> <span class="va">weights</span><span class="op">$</span><span class="va">male</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/stopifnot.html" class="external-link">stopifnot</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/Logic.html" class="external-link">isTRUE</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/all.equal.html" class="external-link">all.equal</a></span><span class="op">(</span><span class="va">initial_biomass_kg</span>, <span class="fl">236.8</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="va">initial_biomass_kg</span></span></code></pre></div>
 <div class="cell-output cell-output-stdout">
@@ -247,6 +249,7 @@ female_population.</code></pre>
 </section><section class="level2"><h2 id="run-and-retain-the-evidence">Run and retain the evidence<a class="anchor" aria-label="anchor" href="#run-and-retain-the-evidence"></a>
 </h2>
 <p>Build <code>inst/admb/spm.tpl</code> with ADMB 13.0 or newer, then place the resulting <code>spm</code> (or <code>spm.exe</code> on Windows) in the projection folder or on <code>PATH</code>. The runner checks the executable’s <code>-spmr-capabilities</code> response before execution.</p>
+<p>The template includes its format-2 reader and compiles on its own; there is no separate <code>spmr_input_v2.hpp</code> dependency. The example helpers can compile the installed template with <code>admb</code> on <code>PATH</code>, or a compiler selected by <code>SPMR_ADMB</code>. After updating the source checkout, reinstall spmR to refresh that template. <code>spm_input_v2.dat</code> remains a required runtime input generated by the R runner from validated metadata.</p>
 <p>The run record includes executable and input SHA-256 hashes, declared units, recruitment basis, resolved population weights, substitutions, and output hashes. Each attempt has a record in <code>spm_run_history/</code>; the last successful record is retained separately. Archive the input folder and results together.</p>
 <p>Supported new runs use <code>TAC_ABC = 1</code>, <code>Rec_Gen = 1</code> (historical recruitment distribution) or <code>2</code> (stock–recruitment fit), and <code>N_scalar = 1</code>. Fitted runs require a maximum gradient below <code>1e-4</code> and a positive-definite Hessian. Auxiliary recruitment modes 3 and 4, TAC fitting, and new experimental RTMB projections require further implementation.</p>
 <p>Read archived output with <code>runSPM(..., run = FALSE)</code> without changing its inputs. Adding metadata leaves those historical results as they were; produce new results in a separate folder, review recruitment, biomass and reference points, and then update assessment tables.</p>
@@ -281,7 +284,8 @@ female_population.</code></pre>
 <span><span class="va">gt20_admb</span> <span class="op">&lt;-</span> <span class="st">""</span></span>
 <span><span class="kw">if</span> <span class="op">(</span><span class="va">gt20_run_native</span><span class="op">)</span> <span class="op">{</span></span>
 <span>  <span class="va">gt20_executable</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/Sys.getenv.html" class="external-link">Sys.getenv</a></span><span class="op">(</span></span>
-<span>    <span class="st">"SPMR_EXECUTABLE"</span>, unset <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Sys.getenv.html" class="external-link">Sys.getenv</a></span><span class="op">(</span><span class="st">"SPMR_TEST_EXE"</span>, unset <span class="op">=</span> <span class="st">""</span><span class="op">)</span></span>
+<span>    <span class="st">"SPMR_EXECUTABLE"</span>,</span>
+<span>    unset <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Sys.getenv.html" class="external-link">Sys.getenv</a></span><span class="op">(</span><span class="st">"SPMR_TEST_EXE"</span>, unset <span class="op">=</span> <span class="st">""</span><span class="op">)</span></span>
 <span>  <span class="op">)</span></span>
 <span>  <span class="kw">if</span> <span class="op">(</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/nchar.html" class="external-link">nzchar</a></span><span class="op">(</span><span class="va">gt20_executable</span><span class="op">)</span><span class="op">)</span> <span class="va">gt20_executable</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/unname.html" class="external-link">unname</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/Sys.which.html" class="external-link">Sys.which</a></span><span class="op">(</span><span class="st">"spm"</span><span class="op">)</span><span class="op">)</span></span>
 <span>  <span class="va">gt20_admb</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/Sys.getenv.html" class="external-link">Sys.getenv</a></span><span class="op">(</span><span class="st">"SPMR_ADMB"</span>, unset <span class="op">=</span> <span class="st">""</span><span class="op">)</span></span>
@@ -303,7 +307,7 @@ female_population.</code></pre>
 <pre><code>Warning: GT20 uses declared mean_male_fishery population weights for males.</code></pre>
 </div>
 <div class="cell-output cell-output-stderr">
-<pre><code>Completed GT20 projection in /tmp/RtmpYNTbUI/spmr-gt20-vignette-1bb564d96a00; starting biomass = 92104.6 t.</code></pre>
+<pre><code>Completed GT20 projection in /tmp/RtmpkFRf8E/spmr-gt20-vignette-19ee6924bfda; starting biomass = 92104.6 t.</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb16"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span></span>
@@ -341,12 +345,13 @@ female_population.</code></pre>
 </div>
 <div class="cell-output cell-output-stdout">
 <pre><code>                                                 executable_sha256
-1 ed57f77058c6f30b3dae3d2aebb82e0a0452348e5e28fc630dfeb793ab1a4f64
+1 0b3467627488bb6e49362d2b8b6057f60ec7925933a0a6bf7779a9bc377bfe73
   recruitment_basis
 1             total</code></pre>
 </div>
 </div>
 <p>The example reproduces beginning-of-2020 total biomass of <code>92,104.6 t</code>. For alternative 1, mean 2021 SSB is <code>51,913.9 t</code> and ABC is <code>7,326.4 t</code>, matching the published projection after rounding. The complete source is <code>examples/gt20/run_spmR_split_sex.R</code>.</p>
+<p>The separate <a href="gt2026_inputs.html">2026 Greenland turbot example</a> preserves the supplied export, audits its unresolved definitions, and stages corrections in a new attempt directory. Its diagnostic population weights are fishery-weight proxies requiring separate scientific review.</p>
 </section><script id="quarto-html-after-body" type="application/javascript">
   window.document.addEventListener("DOMContentLoaded", function (event) {
       var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
