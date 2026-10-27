@@ -2084,7 +2084,7 @@ GLOBALS_SECTION
 
   std::vector<SpmrStockMetadata> spmr_read_metadata() {
     std::ifstream input("spm_input_v2.dat");
-    if (!input) spmr_input_error("required spm_input_v2.dat is missing; regenerate inputs with the v2 R interface.");
+    if (!input) spmr_input_error("required spm_input_v2.dat is missing; place the format-2 recruitment, unit and population-weight metadata file in the run directory.");
     std::string magic;
     int version = 0, count = 0;
     if (!(input >> magic >> version >> count) || magic != "SPMR_INPUT_V2" || version != 2 || count < 1 || count > 20)
