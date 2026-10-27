@@ -226,9 +226,9 @@ gt20_build_executable <- function(run_dir, admb = "", cxx = "") {
   }, add = TRUE)
 
   admb_dir <- system.file("admb", package = "spmR", mustWork = TRUE)
-  sources <- file.path(admb_dir, c("spm.tpl", "spmr_input_v2.hpp"))
-  if (!all(file.copy(sources, build_dir, overwrite = TRUE))) {
-    stop("Could not stage the installed ADMB sources.", call. = FALSE)
+  source <- file.path(admb_dir, "spm.tpl")
+  if (!file.copy(source, build_dir, overwrite = TRUE)) {
+    stop("Could not stage the installed ADMB template.", call. = FALSE)
   }
 
   setwd(build_dir)

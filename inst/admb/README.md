@@ -4,7 +4,7 @@ The ADMB templates and helper scripts for the Standard Projection Model live
 in this installed-data directory because an R package's `src/` directory is
 reserved for source code compiled during package installation.
 
-To compile the main model with ADMB 13.0 or newer, copy this directory to a
+To compile the main model with ADMB 13.0 or newer, copy `spm.tpl` to a
 writable location and run:
 
 ```sh
@@ -13,8 +13,8 @@ admb -f spm.tpl
 
 `Makefile.admb` contains an optional cross-platform wrapper for this command.
 
-The executable requires metadata format 2. Keep `spmr_input_v2.hpp` beside the
-template while compiling. `spm -spmr-capabilities` must print
+The template includes its input-format-2 metadata reader and needs no separate
+header. `spm -spmr-capabilities` must print
 `SPMR_INPUT_FORMAT=2`. Use `write_spm_metadata()` and `runSPM(run = TRUE)` to
 validate the complete input set and generate `spm_input_v2.dat`.
 

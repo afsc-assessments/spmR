@@ -1,3 +1,7 @@
+# spmR (development version)
+
+* The ADMB projection engine now compiles from `inst/admb/spm.tpl` alone; the format-2 input checks are included in the template, and a separate C++ header is no longer required.
+
 # spmR 0.4.1
 
 * Split-sex species files now contain a male spawning weight-at-age vector,
