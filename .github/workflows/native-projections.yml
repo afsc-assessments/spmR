@@ -27,7 +27,7 @@ jobs:
         shell: bash
         run: |
           mkdir -p "$RUNNER_TEMP/spm-build"
-          cp inst/admb/spm.tpl inst/admb/spmr_input_v2.hpp "$RUNNER_TEMP/spm-build/"
+          cp inst/admb/spm.tpl "$RUNNER_TEMP/spm-build/"
           cd "$RUNNER_TEMP/spm-build"
           admb -f spm.tpl 2>&1 | tee compile.log
           if grep -Ei 'warning:|error:' compile.log; then exit 1; fi

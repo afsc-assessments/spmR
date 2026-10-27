@@ -1,5 +1,16 @@
 inst/doc
 .Rproj.user
+.Rhistory
+.RData
+.Ruserdata
+.DS_Store
+/DESCRIPTION.bak
+/Input_Log.rep
+/fmin.log
+cmpdiff.tmp
+gradfil1.tmp
+gradfil2.tmp
+varssave.tmp
 .vscode/
 ..Rcheck/
 *.swo
@@ -20,3 +31,4 @@ examples/atka/scenario3_5yr_projection_table.csv
 /.audit/
 /inst/admb/spm
 examples/gt20/spmR_run/
+examples/gt_2026/spmR_runs/

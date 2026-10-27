@@ -113,6 +113,16 @@ gt20_command_path <- function(command, label) {
 
 gt20_verify_executable <- function(executable) {
   executable <- gt20_command_path(executable, "SPM executable")
+  probe_dir <- tempfile("spmr-capabilities-")
+  if (!dir.create(probe_dir)) {
+    stop("Could not create executable-probe directory.", call. = FALSE)
+  }
+  previous_dir <- getwd()
+  on.exit({
+    setwd(previous_dir)
+    unlink(probe_dir, recursive = TRUE)
+  }, add = TRUE)
+  setwd(probe_dir)
   output <- suppressWarnings(system2(
     executable, "-spmr-capabilities", stdout = TRUE, stderr = TRUE
   ))
@@ -226,9 +236,9 @@ gt20_build_executable <- function(run_dir, admb = "", cxx = "") {
   }, add = TRUE)
 
   admb_dir <- system.file("admb", package = "spmR", mustWork = TRUE)
-  sources <- file.path(admb_dir, c("spm.tpl", "spmr_input_v2.hpp"))
-  if (!all(file.copy(sources, build_dir, overwrite = TRUE))) {
-    stop("Could not stage the installed ADMB sources.", call. = FALSE)
+  source <- file.path(admb_dir, "spm.tpl")
+  if (!file.copy(source, build_dir, overwrite = TRUE)) {
+    stop("Could not stage the installed ADMB template.", call. = FALSE)
   }
 
   setwd(build_dir)

@@ -1,0 +1,57 @@
+# a new file
+#rn
+Greenland_turbot
+#Tier
+3
+#nalts
+7
+#alts
+1
+2
+3
+4
+5
+6
+7
+#tac_flag
+1
+#srr_type
+2
+#srr_form
+1
+#srr_conditioning
+0
+#srr_reserved
+0
+#spm_detail_flag
+1
+#nprj_yrs
+15
+#nsims
+1000
+#beg_yr
+2026
+#nyrs_fixed_catch
+3
+#nspp
+1
+#OY_min
+0
+#OY_max
+2e+06
+#datafile
+ForProjections.dat
+#ABC_mults
+1
+#scalars
+1
+#alt4_spr
+0.75
+#nTAC_cat
+1
+#nTACind
+1
+#fixed_catch
+2026 193.28
+2027 378
+2028 378
