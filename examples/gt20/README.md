@@ -15,7 +15,7 @@ the ignored `spmR_run/` directory.
 
 ## Run the example
 
-Install spmR 0.4.1 or newer and either provide a compatible format-2 executable
+Install spmR 0.4.3 or newer and either provide a compatible format-2 executable
 or install ADMB 13 or newer. From the repository root:
 
 ```r
@@ -53,6 +53,12 @@ To create and validate the format-2 inputs without a native engine, use:
 gt20 <- run_gt20_projection(run = FALSE)
 gt20$initial_biomass
 ```
+
+The helper embeds the validated recruitment, units, ages and population-weight
+declarations as comments in the generated species file. With the current native
+engine, a standalone run uses that species file and `spm.dat`. Separate JSON
+metadata and a native sidecar are optional compatibility paths; the R runner
+generates a sidecar when executing an older format-2 binary.
 
 Running the file directly is equivalent to the default full run:
 

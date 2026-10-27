@@ -5,14 +5,9 @@
 \alias{validate_spm_inputs}
 \title{Write explicit recruitment and population-weight metadata}
 \usage{
-write_spm_metadata(
-  dirname,
-  species,
-  metadata = "spm_metadata.json",
-  strict = TRUE
-)
+write_spm_metadata(dirname, species, metadata = NULL, strict = TRUE)
 
-validate_spm_inputs(dirname, metadata = "spm_metadata.json", strict = TRUE)
+validate_spm_inputs(dirname, metadata = NULL, strict = TRUE)
 }
 \arguments{
 \item{dirname}{Directory containing `spm.dat` and species files.}
@@ -28,21 +23,28 @@ explicitly specifies `"female_population"` or `"mean_male_fishery"`.
 Pooled-sex models can use the female population vector for both internal
 sex groups; that assumption is recorded and reported.}
 
-\item{metadata}{Relative metadata filename. Defaults to `spm_metadata.json`.}
+\item{metadata}{`NULL` embeds metadata when writing and discovers embedded
+metadata when validating. Validation falls back to `spm_metadata.json`
+when no species file has embedded metadata. Supply a relative `.json`
+filename to explicitly write or read JSON instead. Embedded declarations
+take precedence over an old JSON file during automatic discovery.}
 
 \item{strict}{Logical. If `TRUE`, reject unknown metadata fields; otherwise
 report them as warnings. Required fields and scientific checks always apply.}
 }
 \value{
-`write_spm_metadata()` invisibly returns the validated metadata path.
+`write_spm_metadata()` invisibly returns the updated species paths
+  or the explicitly requested JSON path.
   `validate_spm_inputs()` returns an `spm_inputs` list containing parsed inputs,
   resolved population weights, unit declarations, and substitutions.
 }
 \description{
-Version 2 metadata accompanies the positional SPM input files. Split-sex
+Version 2 metadata is embedded in comments in each species input file by
+default. An explicitly named JSON file supports older workflows. Split-sex
 species files contain `wt_M` immediately after `wt_F`; pooled-sex files use
 `wt_F` for both internal sex groups. Recruitment must be identified as total
 across sexes or per sex. Population weights are distinct from fishery and
 spawning weights. Version-2 projections use `TAC_ABC = 1` and do not read
-`tacpar.dat`. Inputs are validated before replacing an existing metadata file.
+`tacpar.dat`. Inputs are validated before replacing metadata. Work in a copy
+of the assessment inputs to retain the original export.
 }

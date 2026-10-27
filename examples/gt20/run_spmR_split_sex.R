@@ -9,7 +9,7 @@
 #
 # Requirements
 # ------------
-# - spmR >= 0.4.1
+# - spmR >= 0.4.3
 # - ADMB >= 13 and a matching C++ toolchain when `build = TRUE`
 #
 # Usage
@@ -40,8 +40,8 @@
 # satisfy the positive-weight format-2 contract.
 
 if (!requireNamespace("spmR", quietly = TRUE) ||
-    utils::packageVersion("spmR") < "0.4.1") {
-  stop("Install spmR >= 0.4.1 before running this example.", call. = FALSE)
+    utils::packageVersion("spmR") < "0.4.3") {
+  stop("Install spmR >= 0.4.3 before running this example.", call. = FALSE)
 }
 
 gt20_locate_source <- function() {

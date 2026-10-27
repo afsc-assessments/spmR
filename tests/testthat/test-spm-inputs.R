@@ -30,7 +30,11 @@ spm_fixture_edit <- function(folder, file, old, new) {
 testthat::test_that("version-2 metadata preserves inputs and emits explicit native schedules", {
   folder <- local_spm_input_fixture()
   before <- spm_sha256(list.files(folder, full.names = TRUE))
-  write_spm_metadata(folder, spm_fixture_metadata())
+  write_spm_metadata(
+    folder,
+    spm_fixture_metadata(),
+    metadata = "spm_metadata.json"
+  )
   inputs <- validate_spm_inputs(folder)
   testthat::expect_s3_class(inputs, "spm_inputs")
   testthat::expect_equal(inputs$species[[1]]$R, c(80, 100, 120, 100))
@@ -61,11 +65,11 @@ testthat::test_that("missing recruitment basis preserves existing metadata", {
   folder <- local_spm_input_fixture()
   metadata <- spm_fixture_metadata()
   write_spm_metadata(folder, metadata)
-  before <- readLines(file.path(folder, "spm_metadata.json"))
+  before <- readLines(file.path(folder, "pm.prj"))
   metadata[[1]]$recruitment_basis <- NULL
   testthat::expect_snapshot(error = TRUE, write_spm_metadata(folder, metadata))
   testthat::expect_identical(
-    readLines(file.path(folder, "spm_metadata.json")),
+    readLines(file.path(folder, "pm.prj")),
     before
   )
 })
@@ -255,7 +259,7 @@ testthat::test_that("fresh execution rejects stale CSV despite success-like stdo
   testthat::expect_identical(provenance$exit_status, 0L)
   testthat::expect_named(
     provenance$input_hashes,
-    c("spm.dat", "pm.prj", "spm_metadata.json")
+    c("spm.dat", "pm.prj")
   )
 })
 

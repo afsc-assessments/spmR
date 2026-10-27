@@ -14,15 +14,7 @@
  //
  ////////////////////////////////////////////////////////////////////////////
 DATA_SECTION
-  !! spmr_metadata = spmr_read_metadata();
-  !!CLASS ofstream means_out("means.out")
-  !!CLASS ofstream alts_proj("alt_proj.out")
-  !!CLASS ofstream percent_out("percentiles.out")
   // !!CLASS ofstream Alt3bstuff("alt3b.out")
-  !!CLASS ofstream spm_summary("spm_summary.csv")
-  !!CLASS ofstream detail_out("spm_detail.csv")
-  !!CLASS ofstream prof_F("F_profile.out");
-  !!CLASS ofstream elasticity("elasticity.csv");
   int condition_SR
   int ipro
   int isim
@@ -92,12 +84,17 @@ DATA_SECTION
   init_int nyrs_catch_in // Number of years that catch is specified (starting at first year: styr) 
   !! cout<<"First year, and number of years catch is pre-specified. "<<styr<<" "<<nyrs_catch_in<<endl;
   init_int nspp          // Number of species
-  !! if (nspp != int(spmr_metadata.size())) spmr_input_error("stock count differs between spm.dat and spm_input_v2.dat.");
+  !! if (nspp < 1 || nspp > 20) spmr_input_error("stock count must be 1 through 20.");
   init_number OY_min;    // !! OY_min = 1361.521;
   init_number OY_max;
  LOCAL_CALCS
    for (int i=1;i<=nspp;i++)
      *(ad_comm::global_datafile) >>  spp_file_name(i);
+
+  std::vector<std::string> spmr_stock_files;
+  for (int spmr_stock = 1; spmr_stock <= nspp; ++spmr_stock)
+    spmr_stock_files.push_back(std::string((char*)spp_file_name(spmr_stock)));
+  spmr_metadata = spmr_read_metadata(spmr_stock_files);
 
   write_log(nyrs_catch_in); 
   write_log(nspp); 
@@ -106,6 +103,13 @@ DATA_SECTION
   write_log(spp_file_name); 
 
  END_CALCS
+  !!CLASS ofstream means_out("means.out")
+  !!CLASS ofstream alts_proj("alt_proj.out")
+  !!CLASS ofstream percent_out("percentiles.out")
+  !!CLASS ofstream spm_summary("spm_summary.csv")
+  !!CLASS ofstream detail_out("spm_detail.csv")
+  !!CLASS ofstream prof_F("F_profile.out");
+  !!CLASS ofstream elasticity("elasticity.csv");
   !! cout <<"OYMax "<<OY_max<<endl;
   init_vector ABC_Multiplier(1,nspp) // ABC_Multiplier  
   init_vector N_scalar(1,nspp)       // population scalar                           
@@ -2067,6 +2071,7 @@ GLOBALS_SECTION
   #include <fstream>
   #include <iomanip>
   #include <iostream>
+  #include <sstream>
   #include <string>
   #include <vector>
 
@@ -2082,9 +2087,7 @@ GLOBALS_SECTION
     std::exit(2);
   }
 
-  std::vector<SpmrStockMetadata> spmr_read_metadata() {
-    std::ifstream input("spm_input_v2.dat");
-    if (!input) spmr_input_error("required spm_input_v2.dat is missing; place the format-2 recruitment, unit and population-weight metadata file in the run directory.");
+  std::vector<SpmrStockMetadata> spmr_parse_metadata(std::istream& input) {
     std::string magic;
     int version = 0, count = 0;
     if (!(input >> magic >> version >> count) || magic != "SPMR_INPUT_V2" || version != 2 || count < 1 || count > 20)
@@ -2129,6 +2132,75 @@ GLOBALS_SECTION
     std::string end, extra;
     if (!(input >> end) || end != "END_SPMR_INPUT_V2") spmr_input_error("missing END_SPMR_INPUT_V2 sentinel.");
     if (input >> extra) spmr_input_error("unexpected content after END_SPMR_INPUT_V2.");
+    return stocks;
+  }
+
+  std::string spmr_trim_line(const std::string& line) {
+    const std::string whitespace = " \t\r\n";
+    const std::size_t first = line.find_first_not_of(whitespace);
+    if (first == std::string::npos) return "";
+    return line.substr(first, line.find_last_not_of(whitespace) - first + 1);
+  }
+
+  bool spmr_inline_metadata(const std::string& filename, SpmrStockMetadata& stock) {
+    std::ifstream input(filename.c_str());
+    if (!input) spmr_input_error("cannot open species input " + filename + ".");
+    bool started = false, finished = false;
+    std::string line, block;
+    while (std::getline(input, line)) {
+      const std::string trimmed = spmr_trim_line(line);
+      const bool comment = !trimmed.empty() && trimmed[0] == '#';
+      const std::string content = comment ? spmr_trim_line(trimmed.substr(1)) : trimmed;
+      std::istringstream tokens(content);
+      std::string marker;
+      tokens >> marker;
+      if (marker == "SPMR_INPUT_V2") {
+        if (!comment) spmr_input_error("inline metadata must use comment lines in " + filename + ".");
+        if (started) spmr_input_error("duplicate inline metadata block in " + filename + ".");
+        started = true;
+      } else if (marker == "END_SPMR_INPUT_V2") {
+        if (!comment || !started || finished)
+          spmr_input_error("unexpected inline metadata sentinel in " + filename + ".");
+        block += content + "\n";
+        finished = true;
+        continue;
+      }
+      if (started && !finished) {
+        if (!comment) spmr_input_error("inline metadata must use comment lines in " + filename + ".");
+        block += content + "\n";
+      }
+    }
+    if (!started) return false;
+    if (!finished) spmr_input_error("missing END_SPMR_INPUT_V2 sentinel in " + filename + ".");
+    std::istringstream metadata(block);
+    const std::vector<SpmrStockMetadata> parsed = spmr_parse_metadata(metadata);
+    if (parsed.size() != 1 || parsed[0].filename != filename)
+      spmr_input_error("inline metadata must describe exactly its own species file " + filename + ".");
+    stock = parsed[0];
+    return true;
+  }
+
+  std::vector<SpmrStockMetadata> spmr_read_metadata(const std::vector<std::string>& filenames) {
+    std::vector<SpmrStockMetadata> stocks;
+    for (const auto& filename : filenames) {
+      SpmrStockMetadata stock;
+      if (spmr_inline_metadata(filename, stock)) {
+        for (const auto& existing : stocks)
+          if (existing.filename == stock.filename) spmr_input_error("duplicate stock filename " + stock.filename + ".");
+        stocks.push_back(stock);
+      }
+    }
+    if (!stocks.empty()) {
+      if (stocks.size() != filenames.size())
+        spmr_input_error("mixed metadata sources; every species file must contain an inline block, or all must use spm_input_v2.dat.");
+      return stocks;
+    }
+    std::ifstream input("spm_input_v2.dat");
+    if (!input)
+      spmr_input_error("metadata is missing; add a comment-prefixed SPMR_INPUT_V2 block to each species file or provide legacy spm_input_v2.dat.");
+    stocks = spmr_parse_metadata(input);
+    if (stocks.size() != filenames.size())
+      spmr_input_error("stock count differs between spm.dat and spm_input_v2.dat.");
     return stocks;
   }
   std::vector<SpmrStockMetadata> spmr_metadata;
@@ -2614,6 +2686,7 @@ TOP_OF_MAIN_SECTION
     if (std::string(argv[spmr_arg]) == "-spmr-capabilities")
     {
       std::cout << "SPMR_INPUT_FORMAT=2" << std::endl;
+      std::cout << "SPMR_INLINE_INPUT=1" << std::endl;
       return 0;
     }
   /*

@@ -48,19 +48,62 @@ gt2026_read_source <- function(source_dir) {
   recruitment_heading <- field("^# Recruitment ")
   ssb_heading <- field("^# SSB ")
   recruitment_rows <- seq.int(recruitment_heading + 1L, ssb_heading - 1L)
-  recruitment_rows <- recruitment_rows[nzchar(trimws(lines[recruitment_rows]))]
-  recruitment <- lapply(recruitment_rows, numbers)
+  recruitment_rows <- recruitment_rows[
+    nzchar(trimws(sub("#.*$", "", lines[recruitment_rows])))
+  ]
   nrec <- numbers(field("^# No Recruitments$") + 1L)
   if (
-    !length(recruitment) %in% 1:2 ||
-      any(lengths(recruitment) != nrec) ||
-      (length(recruitment) == 2L &&
-        !identical(recruitment[[1]], recruitment[[2]]))
+    length(nrec) != 1L || !is.finite(nrec) || nrec < 2 || nrec != trunc(nrec)
+  ) {
+    stop("No Recruitments must be one positive integer of at least two.", call. = FALSE)
+  }
+  recruitment_values <- unlist(lapply(recruitment_rows, numbers))
+  recruitment_copies <- length(recruitment_values) / nrec
+  if (
+    !recruitment_copies %in% 1:2 ||
+      (recruitment_copies == 2L &&
+        !identical(recruitment_values[seq_len(nrec)], recruitment_values[nrec + seq_len(nrec)]))
   ) {
     stop(
-      "Expected one per-sex recruitment series or two identical copies; review the source export.",
+      "Expected one recruitment series or two identical copies of No Recruitments values; line wrapping is allowed. Review the source export.",
       call. = FALSE
     )
+  }
+  declarations <- tolower(trimws(sub("#.*$", "", lines)))
+  recruitment_declaration <- grep("^(per[ _-]+sex|total)$", declarations)
+  inline_heading <- grep(
+    "^[[:space:]]*#[[:space:]]*SPMR_INPUT_V2[[:space:]]+2[[:space:]]+1[[:space:]]*$",
+    lines
+  )
+  inline_basis <- NULL
+  if (length(inline_heading)) {
+    if (length(inline_heading) != 1L || inline_heading >= length(lines)) {
+      stop("Expected one complete inline metadata block.", call. = FALSE)
+    }
+    inline_header <- strsplit(
+      trimws(sub("^[[:space:]]*#[[:space:]]*", "", lines[inline_heading + 1L])),
+      "[[:space:]]+"
+    )[[1]]
+    if (length(inline_header) != 8L || !inline_header[4] %in% c("1", "2")) {
+      stop("Invalid inline recruitment-basis declaration.", call. = FALSE)
+    }
+    inline_basis <- c("total", "per_sex")[as.integer(inline_header[4])]
+  }
+  if (length(recruitment_declaration) > 1L) {
+    stop("Expected at most one recruitment-basis declaration.", call. = FALSE)
+  }
+  recruitment_basis <- if (length(recruitment_declaration)) {
+    if (declarations[recruitment_declaration] == "total") "total" else "per_sex"
+  } else if (!is.null(inline_basis)) {
+    inline_basis
+  } else {
+    "per_sex"
+  }
+  if (!is.null(inline_basis) && recruitment_basis != inline_basis) {
+    stop("Recruitment-basis declarations conflict.", call. = FALSE)
+  }
+  if (recruitment_copies == 2L && recruitment_basis != "per_sex") {
+    stop("Two recruitment copies conflict with a total-recruitment basis.", call. = FALSE)
   }
   female_spawn <- field("^# wt spawn females$") + 1L
   male_spawn <- female_spawn + 1L
@@ -85,16 +128,24 @@ gt2026_read_source <- function(source_dir) {
       call. = FALSE
     )
   }
-  ssb <- numbers(ssb_heading + 1L)
-  if (length(ssb) != nrec) {
-    stop("Recruitment and SSB input lengths differ.", call. = FALSE)
+  ssb_rows <- if (ssb_heading < length(lines)) {
+    seq.int(ssb_heading + 1L, length(lines))
+  } else {
+    integer()
   }
+  ssb_rows <- ssb_rows[nzchar(trimws(sub("#.*$", "", lines[ssb_rows])))]
+  ssb <- unlist(lapply(ssb_rows, numbers))
   list(
     lines = lines,
     numbers = numbers,
     recruitment_rows = recruitment_rows,
-    recruitment = recruitment[[1]],
+    recruitment = recruitment_values[seq_len(nrec)],
+    recruitment_copies = recruitment_copies,
+    recruitment_basis = recruitment_basis,
+    recruitment_declaration = recruitment_declaration,
+    recruitment_basis_declared = length(recruitment_declaration) > 0L || !is.null(inline_basis),
     ssb_heading = ssb_heading,
+    ssb_rows = ssb_rows,
     ssb = ssb,
     female_spawn = female_spawn,
     male_spawn = male_spawn,
@@ -130,6 +181,10 @@ check_gt2026_inputs <- function(source_dir = .gt2026_source_dir) {
   zeros <- sum(raw$numbers(raw$female_spawn) == 0) +
     sum(raw$numbers(raw$male_spawn) == 0)
   metadata_present <- file.exists(file.path(source_dir, "spm_metadata.json"))
+  inline_metadata_present <- any(grepl(
+    "^[[:space:]]*#[[:space:]]*SPMR_INPUT_V2[[:space:]]+2[[:space:]]+1[[:space:]]*$",
+    raw$lines
+  ))
   sidecar_incomplete <- !length(sidecar) || any(grepl("SET_", sidecar))
   all_one_maturity <- all(c(raw$female_maturity, raw$male_maturity) == 1)
   tibble::tibble(
@@ -137,6 +192,7 @@ check_gt2026_inputs <- function(source_dir = .gt2026_source_dir) {
       "Native metadata",
       "R metadata",
       "Recruitment rows",
+      "Recruitment basis",
       "Spawning weights",
       "Population weights",
       "Units and ages",
@@ -146,25 +202,32 @@ check_gt2026_inputs <- function(source_dir = .gt2026_source_dir) {
       "TAC parameters"
     ),
     status = c(
-      if (sidecar_incomplete) "missing" else "review",
-      if (metadata_present) "review" else "missing",
-      if (length(raw$recruitment_rows) == 2L) "repair" else "ok",
+      if (inline_metadata_present || !sidecar_incomplete) "review" else "info",
+      if (metadata_present) "review" else "info",
+      if (raw$recruitment_copies == 2L) "repair" else "ok",
+      if (raw$recruitment_basis_declared) "ok" else "review",
       if (zeros > 0) "repair" else "ok",
-      if (metadata_present || !sidecar_incomplete) "review" else "missing",
+      if (metadata_present || inline_metadata_present || !sidecar_incomplete) "review" else "missing",
       "review",
-      "review",
+      if (length(raw$ssb) == length(raw$recruitment)) "review" else "missing",
       "info",
       if (gt2026_supported_controls(controls)) "ok" else "review",
       "info"
     ),
     detail = c(
-      "spm_input_v2.dat must contain numeric declarations and two population-weight vectors; the runner generates it.",
-      "The runner archives existing spm_metadata.json and writes staged metadata from explicit arguments before calling runSPM().",
+      "A separate spm_input_v2.dat is optional; the runner embeds validated declarations in the staged species file.",
+      "A separate spm_metadata.json is optional. Existing files are archived; staged declarations come from explicit arguments or diagnostic defaults.",
       paste(
-        length(raw$recruitment_rows),
+        raw$recruitment_copies,
         "copies of a", length(raw$recruitment),
-        "value per-sex series; retain one. A second row would be read as SSB."
+        "value series across", length(raw$recruitment_rows),
+        "lines; retain one complete series. A second copy would be read as SSB."
       ),
+      if (raw$recruitment_basis_declared) {
+        paste("Source explicitly declares", raw$recruitment_basis, "recruitment.")
+      } else {
+        "Working per_sex basis requires confirmation; add a per sex or total declaration."
+      },
       paste(
         zeros,
         "zeros in effective spawning weights; stage them as 1e-12 for the current positive-weight contract."
@@ -175,11 +238,18 @@ check_gt2026_inputs <- function(source_dir = .gt2026_source_dir) {
         paste(raw$fleet_fraction, collapse = ", ")
       ),
       "Thousand fish, kg, tonnes and ages 1:30/30+ are working assumptions requiring SS3 export verification.",
-      paste(
-        length(raw$ssb), "positions; source label:",
-        trimws(raw$lines[raw$ssb_heading]),
-        ". Calendar pairing remains unresolved; restrict to Tier 3, Rec_Gen=1."
-      ),
+      if (length(raw$ssb) != length(raw$recruitment)) {
+        paste0(
+          length(raw$recruitment), " recruitment values but ", length(raw$ssb),
+          " SSB values. Supply matching source histories before staging; values are never padded or discarded."
+        )
+      } else {
+        paste(
+          length(raw$ssb), "positions; source label:",
+          trimws(raw$lines[raw$ssb_heading]),
+          ". Calendar pairing remains unresolved; restrict to Tier 3, Rec_Gen=1."
+        )
+      },
       if (all_one_maturity) {
         "All-one maturity retains effective spawning weights. Ntot and SexRatio describe all fish and the all-fish female fraction. Confirm the SS3 spawning-weight definition."
       } else {
@@ -218,6 +288,13 @@ run_gt2026_projection <- function(
   if (!gt2026_supported_controls(controls)) {
     stop(
       "This adapter requires Tier 3, Rec_Gen=1, TAC_ABC=1 and the supplied beginning-of-2026 controls.",
+      call. = FALSE
+    )
+  }
+  if (length(raw$ssb) != length(raw$recruitment)) {
+    stop(
+      length(raw$recruitment), " recruitment values but ", length(raw$ssb),
+      " SSB values. Supply matching source histories before staging; values are never padded or discarded.",
       call. = FALSE
     )
   }
@@ -319,15 +396,15 @@ run_gt2026_projection <- function(
   lines[
     raw$ssb_heading
   ] <- "# SSB input positions; calendar years unresolved"
-  if (length(raw$recruitment_rows) == 2L) {
-    lines <- lines[-raw$recruitment_rows[2]]
-  }
+  lines[raw$recruitment_rows[1]] <- helpers$gt20_number_line(raw$recruitment)
+  removed_lines <- c(raw$recruitment_rows[-1], raw$recruitment_declaration)
+  if (length(removed_lines)) lines <- lines[-removed_lines]
   writeLines(lines, file.path(run_dir, "ForProjections.dat"))
   spmR::write_spm_metadata(
     run_dir,
     list(list(
       file = "ForProjections.dat",
-      recruitment_basis = "per_sex",
+      recruitment_basis = raw$recruitment_basis,
       ages = ages,
       units = units,
       population_weights = list(
@@ -348,8 +425,9 @@ run_gt2026_projection <- function(
     units = units,
     ages = ages,
     terminal_age = "Plus group; confirm SS3 alignment",
-    recruitment_basis = "per_sex; confirm SS3 recruitment export definition",
-    recruitment_rows_removed = length(raw$recruitment_rows) - 1L,
+    recruitment_basis = raw$recruitment_basis,
+    recruitment_copies_removed = raw$recruitment_copies - 1L,
+    recruitment_lines_removed = length(raw$recruitment_rows) - 1L,
     initial_state = "Beginning of 2026; confirm SS3 export timing",
     spawning_weights = "Retain supplied maturity multipliers and spawning weights; floor zero weights to 1e-12. Confirm SS3 spawning-weight definition.",
     ssb_history = paste(

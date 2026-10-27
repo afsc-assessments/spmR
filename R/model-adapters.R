@@ -453,7 +453,7 @@ spm_publish_outputs <- function(folder, dirname, generated, provenance) {
   invisible(NULL)
 }
 
-admb_adapter <- function(metadata = "spm_metadata.json", strict = TRUE) {
+admb_adapter <- function(metadata = NULL, strict = TRUE) {
   execute <- function(dirname) {
     provenance <- spm_execution_provenance(dirname, metadata, strict)
     folder <- tempfile("spmr-run-")
@@ -488,12 +488,22 @@ admb_adapter <- function(metadata = "spm_metadata.json", strict = TRUE) {
           stop("Could not stage SPM executable.", call. = FALSE)
         }
         Sys.chmod(staged_executable, mode = "0755")
-        spm_write_native_input(inputs, file.path(folder, "spm_input_v2.dat"))
-        provenance$native_input_sha256 <- digest::digest(
-          file.path(folder, "spm_input_v2.dat"),
-          algo = "sha256",
-          file = TRUE
-        )
+        if ("SPMR_INLINE_INPUT=1" %in% provenance$capabilities$stdout) {
+          spm_write_inline_input(inputs, folder)
+          provenance$native_input_storage <- "inline"
+          provenance$native_input_sha256 <- spm_sha256(file.path(
+            folder,
+            inputs$spm$spp_files
+          ))
+        } else {
+          spm_write_native_input(inputs, file.path(folder, "spm_input_v2.dat"))
+          provenance$native_input_storage <- "sidecar"
+          provenance$native_input_sha256 <- digest::digest(
+            file.path(folder, "spm_input_v2.dat"),
+            algo = "sha256",
+            file = TRUE
+          )
+        }
         status <- spm_call_executable(
           staged_executable,
           character(),
@@ -561,7 +571,7 @@ rtmb_adapter <- function() {
   new_spm_adapter("rtmb", execute, read_output)
 }
 
-spm_adapter <- function(engine, metadata = "spm_metadata.json", strict = TRUE) {
+spm_adapter <- function(engine, metadata = NULL, strict = TRUE) {
   switch(
     engine,
     admb = admb_adapter(metadata, strict),

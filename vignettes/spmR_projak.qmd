@@ -23,8 +23,11 @@ population dynamics; archived output remains readable.
 
 ## Current split-sex input requirements
 
-For current spmR ADMB projections, add `spm_metadata.json` alongside `spm.dat`
-and the species files; `tacpar.dat` is no longer required. Split-sex species
+For current spmR ADMB projections, use `write_spm_metadata()` to embed validated
+version-2 declarations as comments in each species file. A standalone run with
+the current engine needs `spm.dat` and those species files; separate JSON and
+native sidecars remain supported for existing workflows. `tacpar.dat` is no
+longer required. Split-sex species
 files place `wt_M` immediately after `wt_F`. Declare `recruitment_basis` as
 `"total"` or `"per_sex"` and supply
 female and male population weights with matching age labels and units. The

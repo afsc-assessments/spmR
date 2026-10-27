@@ -1,11 +1,13 @@
 #' Write explicit recruitment and population-weight metadata
 #'
-#' Version 2 metadata accompanies the positional SPM input files. Split-sex
+#' Version 2 metadata is embedded in comments in each species input file by
+#' default. An explicitly named JSON file supports older workflows. Split-sex
 #' species files contain `wt_M` immediately after `wt_F`; pooled-sex files use
 #' `wt_F` for both internal sex groups. Recruitment must be identified as total
 #' across sexes or per sex. Population weights are distinct from fishery and
 #' spawning weights. Version-2 projections use `TAC_ABC = 1` and do not read
-#' `tacpar.dat`. Inputs are validated before replacing an existing metadata file.
+#' `tacpar.dat`. Inputs are validated before replacing metadata. Work in a copy
+#' of the assessment inputs to retain the original export.
 #'
 #' @param dirname Directory containing `spm.dat` and species files.
 #' @param species A list of species records. Each record contains `file`,
@@ -18,23 +20,33 @@
 #'   explicitly specifies `"female_population"` or `"mean_male_fishery"`.
 #'   Pooled-sex models can use the female population vector for both internal
 #'   sex groups; that assumption is recorded and reported.
-#' @param metadata Relative metadata filename. Defaults to `spm_metadata.json`.
+#' @param metadata `NULL` embeds metadata when writing and discovers embedded
+#'   metadata when validating. Validation falls back to `spm_metadata.json`
+#'   when no species file has embedded metadata. Supply a relative `.json`
+#'   filename to explicitly write or read JSON instead. Embedded declarations
+#'   take precedence over an old JSON file during automatic discovery.
 #' @param strict Logical. If `TRUE`, reject unknown metadata fields; otherwise
 #'   report them as warnings. Required fields and scientific checks always apply.
-#' @return `write_spm_metadata()` invisibly returns the validated metadata path.
+#' @return `write_spm_metadata()` invisibly returns the updated species paths
+#'   or the explicitly requested JSON path.
 #'   `validate_spm_inputs()` returns an `spm_inputs` list containing parsed inputs,
 #'   resolved population weights, unit declarations, and substitutions.
 #' @export
 write_spm_metadata <- function(
   dirname,
   species,
-  metadata = "spm_metadata.json",
+  metadata = NULL,
   strict = TRUE
 ) {
   dirname <- normalizePath(dirname, winslash = "/", mustWork = TRUE)
-  metadata <- spm_metadata_filename(metadata)
+  if (!is.null(metadata)) {
+    metadata <- spm_metadata_filename(metadata)
+  }
   document <- list(format_version = 2L, species = species)
   validated <- spm_validate_document(dirname, document, strict)
+  if (is.null(metadata)) {
+    return(invisible(spm_write_inline_input(validated, dirname)))
+  }
   if (tolower(metadata) %in% tolower(validated$input_files)) {
     stop(
       "metadata filename must differ from legacy input filenames.",
@@ -66,18 +78,52 @@ write_spm_metadata <- function(
 #' @export
 validate_spm_inputs <- function(
   dirname,
-  metadata = "spm_metadata.json",
+  metadata = NULL,
   strict = TRUE
 ) {
   dirname <- normalizePath(dirname, winslash = "/", mustWork = TRUE)
+  if (is.null(metadata)) {
+    inputs <- spm_read_legacy(dirname)
+    blocks <- lapply(file.path(dirname, inputs$spm$spp_files), spm_inline_block)
+    present <- lengths(lapply(blocks, `[[`, "indices")) > 0L
+    if (any(present)) {
+      if (!all(present)) {
+        stop(
+          "Embed metadata in every species file, not only some stocks.",
+          call. = FALSE
+        )
+      }
+      parsed <- Map(spm_read_inline_record, blocks, inputs$species)
+      document <- list(
+        format_version = 2L,
+        species = lapply(parsed, `[[`, "record")
+      )
+      result <- spm_validate_document(dirname, document, strict)
+      for (index in seq_along(parsed)) {
+        expected <- result$resolved_species[[index]]$population_weights$male
+        if (
+          !isTRUE(all.equal(parsed[[index]]$male, expected, tolerance = 1e-14))
+        ) {
+          stop(
+            "Embedded male weights disagree with the declared substitute.",
+            call. = FALSE
+          )
+        }
+      }
+      result$metadata_file <- NULL
+      result$metadata_storage <- "inline"
+      return(result)
+    }
+    metadata <- "spm_metadata.json"
+  }
   metadata <- spm_metadata_filename(metadata)
   path <- file.path(dirname, metadata)
   if (!file.exists(path)) {
     stop(
-      "Missing ",
+      "Missing embedded metadata or ",
       metadata,
-      ": declare recruitment basis, units, and female/male ",
-      "population weights with write_spm_metadata() before running projections.",
+      ": declare recruitment basis, units, and female/male population weights ",
+      "with write_spm_metadata() before running projections.",
       call. = FALSE
     )
   }
@@ -95,6 +141,7 @@ validate_spm_inputs <- function(
     )
   }
   result$metadata_file <- metadata
+  result$metadata_storage <- "json"
   result$input_files <- c(result$input_files, metadata)
   result
 }
@@ -162,13 +209,17 @@ spm_input_filename <- function(x, field) {
   x
 }
 
-spm_token_reader <- function(path) {
-  if (!file.exists(path)) {
-    stop("Missing input file: ", basename(path), call. = FALSE)
+spm_token_reader <- function(path, text = NULL, strip_comments = TRUE) {
+  if (is.null(text)) {
+    if (!file.exists(path)) {
+      stop("Missing input file: ", basename(path), call. = FALSE)
+    }
+    text <- readLines(path, warn = FALSE)
   }
-  text <- readLines(path, warn = FALSE)
-  text <- sub("#.*$", "", text)
-  text <- sub("//.*$", "", text)
+  if (strip_comments) {
+    text <- sub("#.*$", "", text)
+    text <- sub("//.*$", "", text)
+  }
   tokens <- strsplit(paste(text, collapse = " "), "[[:space:]]+")[[1]]
   tokens <- tokens[nzchar(tokens)]
   position <- 0L
@@ -674,7 +725,7 @@ spm_validate_document <- function(dirname, document, strict) {
   inputs
 }
 
-spm_write_native_input <- function(inputs, path) {
+spm_native_input_lines <- function(inputs) {
   number_line <- function(x) {
     paste(
       format(x, digits = 17, scientific = TRUE, trim = TRUE),
@@ -704,6 +755,236 @@ spm_write_native_input <- function(inputs, path) {
       number_line(z$population_weights$male)
     )
   }
-  writeLines(c(lines, "END_SPMR_INPUT_V2"), path)
+  c(lines, "END_SPMR_INPUT_V2")
+}
+
+spm_write_native_input <- function(inputs, path) {
+  writeLines(spm_native_input_lines(inputs), path)
   invisible(path)
+}
+
+spm_inline_block <- function(path) {
+  lines <- readLines(path, warn = FALSE)
+  start <- grep("^[[:space:]]*#[[:space:]]*SPMR_INPUT_V2([[:space:]]|$)", lines)
+  end <- grep(
+    "^[[:space:]]*#[[:space:]]*END_SPMR_INPUT_V2([[:space:]]|$)",
+    lines
+  )
+  if (!length(start) && !length(end)) {
+    return(list(lines = lines, indices = integer(), text = character()))
+  }
+  if (length(start) != 1L || length(end) != 1L || end <= start) {
+    stop(
+      basename(path),
+      ": expected one complete embedded metadata block.",
+      call. = FALSE
+    )
+  }
+  indices <- seq.int(start, end)
+  if (any(!grepl("^[[:space:]]*#", lines[indices]))) {
+    stop(
+      basename(path),
+      ": embedded metadata must use comment lines.",
+      call. = FALSE
+    )
+  }
+  list(
+    lines = lines,
+    indices = indices,
+    text = sub("^[[:space:]]*#[[:space:]]*", "", lines[indices])
+  )
+}
+
+spm_read_inline_record <- function(block, species) {
+  tokens <- strsplit(
+    trimws(paste(block$text, collapse = " ")),
+    "[[:space:]]+"
+  )[[1]]
+  if (
+    length(tokens) >= 11L &&
+      any(!grepl("^[+-]?[0-9]+$", tokens[c(2L, 3L, 5:11)]))
+  ) {
+    stop(
+      species$file,
+      ": embedded metadata header codes must use integer tokens.",
+      call. = FALSE
+    )
+  }
+  reader <- spm_token_reader(
+    species$file,
+    text = block$text,
+    strip_comments = FALSE
+  )
+  take <- reader$take
+  magic <- take(field = "metadata header", numeric = FALSE)
+  version <- take(
+    field = "metadata version",
+    integer = TRUE,
+    lower = 2,
+    upper = 2
+  )
+  count <- take(
+    field = "metadata stock count",
+    integer = TRUE,
+    lower = 1,
+    upper = 1
+  )
+  filename <- take(field = "metadata filename", numeric = FALSE)
+  sexes <- take(field = "metadata sexes", integer = TRUE, lower = 1, upper = 2)
+  ages_count <- take(
+    field = "metadata age count",
+    integer = TRUE,
+    lower = 2,
+    upper = 69
+  )
+  if (
+    magic != "SPMR_INPUT_V2" ||
+      filename != species$file ||
+      sexes != species$nsexes ||
+      ages_count != species$nages
+  ) {
+    stop(
+      species$file,
+      ": embedded metadata header or dimensions differ from the species inputs.",
+      call. = FALSE
+    )
+  }
+  basis <- take(
+    field = "recruitment basis code",
+    integer = TRUE,
+    lower = 1,
+    upper = 2
+  )
+  abundance <- take(
+    field = "abundance unit code",
+    integer = TRUE,
+    lower = 1,
+    upper = 3
+  )
+  weight <- take(
+    field = "weight unit code",
+    integer = TRUE,
+    lower = 1,
+    upper = 1
+  )
+  biomass <- take(
+    field = "biomass unit code",
+    integer = TRUE,
+    lower = 1,
+    upper = 3
+  )
+  substitute <- take(
+    field = "male substitute code",
+    integer = TRUE,
+    lower = 0,
+    upper = 2
+  )
+  ages <- take(ages_count, "metadata ages", integer = TRUE, lower = 0)
+  female <- take(
+    ages_count,
+    "female population weights",
+    lower = 0
+  )
+  male <- take(
+    ages_count,
+    "male population weights",
+    lower = 0
+  )
+  sentinel <- take(field = "metadata sentinel", numeric = FALSE)
+  if (sentinel != "END_SPMR_INPUT_V2") {
+    stop(species$file, ": invalid embedded metadata sentinel.", call. = FALSE)
+  }
+  reader$done()
+  record <- list(
+    file = filename,
+    recruitment_basis = c("total", "per_sex")[basis],
+    ages = ages,
+    units = list(
+      abundance = c("fish", "thousand_fish", "million_fish")[abundance],
+      weight = "kg",
+      biomass = c("kg", "t", "thousand_t")[biomass]
+    ),
+    population_weights = list(female = list(ages = ages, values = female))
+  )
+  if (substitute == 0) {
+    record$population_weights$male <- list(ages = ages, values = male)
+  } else {
+    record$male_population_substitute <- c(
+      "female_population",
+      "mean_male_fishery"
+    )[substitute]
+  }
+  list(record = record, male = male)
+}
+
+spm_replace_input <- function(from, to) {
+  file.rename(from, to)
+}
+
+spm_write_inline_input <- function(inputs, dirname) {
+  paths <- file.path(dirname, inputs$spm$spp_files)
+  replacements <- lapply(seq_along(paths), function(index) {
+    block <- spm_inline_block(paths[index])
+    lines <- block$lines
+    if (length(block$indices)) {
+      lines <- lines[-block$indices]
+    }
+    stock <- inputs
+    stock$spm$nspp <- 1L
+    stock$resolved_species <- inputs$resolved_species[index]
+    c(lines, paste("#", spm_native_input_lines(stock)))
+  })
+  temporary <- vapply(
+    paths,
+    function(path) {
+      tempfile(".spm-inline-", tmpdir = dirname(path))
+    },
+    character(1)
+  )
+  backup <- vapply(
+    paths,
+    function(path) {
+      tempfile(".spm-original-", tmpdir = dirname(path))
+    },
+    character(1)
+  )
+  keep_backup <- FALSE
+  on.exit(unlink(c(temporary, if (!keep_backup) backup)), add = TRUE)
+  if (!all(file.copy(paths, backup, copy.mode = TRUE))) {
+    stop("Could not preserve inputs before embedding metadata.", call. = FALSE)
+  }
+  for (index in seq_along(paths)) {
+    writeLines(replacements[[index]], temporary[index])
+  }
+  installed <- integer()
+  tryCatch(
+    {
+      for (index in seq_along(paths)) {
+        if (!spm_replace_input(temporary[index], paths[index])) {
+          stop(
+            "Could not replace species input: ",
+            basename(paths[index]),
+            call. = FALSE
+          )
+        }
+        installed <- c(installed, index)
+      }
+    },
+    error = function(error) {
+      if (
+        length(installed) &&
+          !all(file.copy(backup[installed], paths[installed], overwrite = TRUE))
+      ) {
+        keep_backup <<- TRUE
+        stop(
+          conditionMessage(error),
+          "; originals retained at ",
+          paste(backup, collapse = ", "),
+          call. = FALSE
+        )
+      }
+      stop(conditionMessage(error), call. = FALSE)
+    }
+  )
+  invisible(paths)
 }

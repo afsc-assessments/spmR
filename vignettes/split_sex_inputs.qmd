@@ -20,9 +20,10 @@ if (file.exists(file.path("..", "DESCRIPTION"))) {
 }
 ```
 
-Current spmR requires input format 2 for new ADMB projections. This guide
+Current spmR requires input format 2 for new ADMB projections. Version 0.4.3
+embeds its declarations as comments in each species file by default. This guide
 uses synthetic data to show the change from legacy split-sex files to explicit
-recruitment and population-weight metadata. Validation runs whenever this
+recruitment and population-weight declarations. Validation runs whenever this
 vignette is built; native execution in the final worked example is enabled
 explicitly.
 
@@ -30,8 +31,8 @@ explicitly.
 
 Keep the positional layout of `spm.dat`. In each split-sex species file (for
 example, `stock.prj`), insert `wt_M` immediately after `wt_F`. The current engine
-does not read or require `tacpar.dat`. Add a separate `spm_metadata.json` file
-with one species record per stock, in the order listed in `spm.dat`.
+does not read or require `tacpar.dat`. Use `write_spm_metadata()` to append a
+versioned comment block with the declarations for each stock.
 
 - Declare the basis of the complete historical recruitment series: `"total"`
   for both sexes combined or `"per_sex"` for either sex under a 50:50 recruitment
@@ -46,12 +47,12 @@ with one species record per stock, in the order listed in `spm.dat`.
 - Use `N_scalar = 1`. Convert existing scaled data to the declared units
   before creating metadata. Update values as needed while preserving field order.
 
-**Keep population-weight vectors in the metadata file.** The new positional
-`wt_M` vector is a spawning weight, not a population weight. Inserting a field
-anywhere else in a positional species file can shift subsequent fields. An older
-executable may ignore additional information. The R runner validates metadata,
-creates the native `spm_input_v2.dat` file, and checks executable compatibility.
-Recompile the current `inst/admb/spm.tpl` before running format-2 inputs.
+**Keep population-weight vectors in the versioned comment block.** The
+positional `wt_M` vector supplies spawning weights. Adding another positional
+field can shift subsequent fields. The current native engine reads the appended
+comment block directly, preserving the existing positional field order. The R
+runner validates the declarations and checks executable compatibility.
+Recompile the current `inst/admb/spm.tpl` to use embedded inputs directly.
 
 ## A reproducible synthetic input folder
 
@@ -119,8 +120,8 @@ stopifnot(inputs$format_version == 2L)
 inputs$resolved_species[[1]]
 ```
 
-`write_spm_metadata()` writes `format_version = 2` and validates the complete
-input folder. Weight vectors must contain one finite, strictly positive value
+`write_spm_metadata()` embeds version-2 declarations in `stock.prj` and
+validates the complete input folder. Weight vectors must contain one finite, strictly positive value
 per age. Age labels must be consecutive, ascending, nonnegative integers and
 match the species file's age count and abundance ordering, including its final
 plus group. The validator checks labels and dimensions; the author establishes
@@ -130,6 +131,40 @@ Supported abundance/weight/biomass combinations are `fish`/`kg`/`kg`,
 `thousand_fish`/`kg`/`t`, and `million_fish`/`kg`/`thousand_t`. The metadata
 checks the declaration; it performs no unit conversion. All stocks in a run
 must share abundance and biomass units.
+
+The appended block for this synthetic stock is:
+
+```text
+# SPMR_INPUT_V2 2 1
+# stock.prj 2 3 1 1 1 1 0
+# 1 2 3
+# 0.1 0.2 0.3
+# 0.08 0.16 0.24
+# END_SPMR_INPUT_V2
+```
+
+The versioned header identifies one stock. Its record gives the filename,
+sex count, age count, recruitment basis, abundance/weight/biomass unit codes,
+and male-weight substitution code. The final three rows contain ages, female
+population weights, and male population weights. Use the R writer to build
+and validate the block from named declarations.
+
+## Existing JSON workflows
+
+The default `metadata = NULL` reads embedded declarations first. When no
+species file has a block, it falls back to `spm_metadata.json`. To select a
+JSON file explicitly, use the same `metadata` argument throughout:
+
+```{r}
+#| eval: false
+write_spm_metadata(projection_dir, species, metadata = "spm_metadata.json")
+validate_spm_inputs(projection_dir, metadata = "spm_metadata.json")
+runSPM(projection_dir, run = TRUE, metadata = "spm_metadata.json")
+```
+
+The R runner prepares embedded declarations for current engines and generates
+the legacy `spm_input_v2.dat` sidecar for older format-2 engines. The current
+native engine accepts that sidecar when embedded declarations are absent.
 
 ## How recruitment is normalized
 
@@ -233,8 +268,10 @@ The template includes its format-2 reader and compiles on its own; there is
 no separate `spmr_input_v2.hpp` dependency. The example helpers can compile the
 installed template with `admb` on `PATH`, or a compiler selected by `SPMR_ADMB`.
 After updating the source checkout, reinstall spmR to refresh that template.
-`spm_input_v2.dat` remains a required runtime input generated by the R runner
-from validated metadata.
+The current engine reports both `SPMR_INPUT_FORMAT=2` and
+`SPMR_INLINE_INPUT=1`. With the embedded blocks in place, a standalone run
+needs `spm.dat` and its species files. Older format-2 engines require the
+sidecar generated by the R runner.
 
 The run record includes executable and input SHA-256 hashes, declared units,
 recruitment basis, resolved population weights, substitutions, and output hashes.
@@ -261,6 +298,10 @@ retains the archived two-sex species input and writes all converted inputs and
 outputs to a temporary directory. It is a source-checkout example; clone the
 [spmR repository](https://github.com/afsc-assessments/spmR) before running the
 code below.
+
+The helper embeds its validated declarations as comments in the generated
+species file. The current native engine reads that file and `spm.dat` directly;
+the R runner supplies a sidecar when using an older format-2 executable.
 
 The conversion declares total recruitment in `thousand_fish`, weights in `kg`,
 and biomass in `t`. The archived female spawning weights are reused as female
@@ -350,6 +391,7 @@ the published projection after rounding. The complete source is
 `examples/gt20/run_spmR_split_sex.R`.
 
 The separate [2026 Greenland turbot example](gt2026_inputs.html) preserves the
-supplied export, audits its unresolved definitions, and stages corrections in
-a new attempt directory. Its diagnostic population weights are fishery-weight
-proxies requiring separate scientific review.
+revised export and audits its unresolved definitions. Its 47 recruitment values
+and 45 SSB values block staging until matching source histories are supplied.
+Diagnostic population weights are fishery-weight proxies requiring an explicit
+choice and separate scientific review.

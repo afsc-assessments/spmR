@@ -113,14 +113,21 @@ for worked examples and input guidance.
 
 # Current inputs: format 2
 
-New projections require version-2 metadata in `spm_metadata.json` and a
-compatible executable compiled from the current `inst/admb/spm.tpl`.
+New projections require version-2 declarations and a compatible executable
+compiled from the current `inst/admb/spm.tpl`. `write_spm_metadata()` embeds
+the declarations as comments in each species file by default.
 Keep the order and number of fields in `spm.dat`. In each split-sex species
 file, insert the male spawning-weight vector `wt_M` immediately after `wt_F`.
-The current engine no longer reads `tacpar.dat`. Store population weights in metadata;
-adding another positional vector can shift later fields or be ignored by an
-older executable. The runner validates these inputs and generates
-`spm_input_v2.dat` for the native engine.
+The current engine no longer reads `tacpar.dat`. Store population weights in
+the embedded declaration block; adding another positional vector can shift
+later fields or be ignored by an older executable. The current native engine
+reads the comment block directly and reports `SPMR_INLINE_INPUT=1`.
+
+The R interface reads embedded declarations first, then falls back to
+`spm_metadata.json` when no species file has an embedded block. An explicit
+`metadata = "name.json"` selects a separate JSON file. The R runner generates
+`spm_input_v2.dat` for older format-2 engines; the current native engine also
+accepts that legacy sidecar when embedded declarations are absent.
 
 Each species declares `recruitment_basis = "total"` or `"per_sex"`.
 `"per_sex"` describes the recruitment of either sex under a 50:50 ratio;
