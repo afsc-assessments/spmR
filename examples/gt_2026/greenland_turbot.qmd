@@ -13,7 +13,7 @@ format:
     code-fold: true
     code-tools: true
 params:
-  saved_run: "spmR_runs/attempt-001"
+  saved_run: ""
 execute:
   cache: false
   freeze: false
