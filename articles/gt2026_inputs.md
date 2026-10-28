@@ -13,15 +13,18 @@ preserve it.
 
 Open the [rendered Greenland turbot
 results](https://afsc-assessments.github.io/spmR/greenland_turbot.html)
-for two Alternative 2 figures: spawning biomass on a logarithmic y-axis
-with dashed B40 and B35 reference lines, and catch. Salmon ribbons show
-the 90% projection intervals. This example uses Jim’s confirmed local
-47-value SSB history and diagnostic population-weight assumptions;
-successful execution is separate from scientific input review. Figure
-downloads: [spawning
-biomass](https://afsc-assessments.github.io/spmR/gt2026-figures/SSB.png)
-and
-[catch](https://afsc-assessments.github.io/spmR/gt2026-figures/Catch.png).
+for three Alternative 2 figures: spawning biomass and catch on
+logarithmic y-axes, and fishing mortality on a linear y-axis. Dashed
+reference lines show B40 and B35 on the spawning-biomass figure and F35
+and F40 on the fishing-mortality figure. Salmon ribbons show the 90%
+projection intervals. This example uses Jim’s confirmed local 47-value
+SSB history and diagnostic population-weight assumptions; successful
+execution is separate from scientific input review. Figure downloads:
+[spawning
+biomass](https://afsc-assessments.github.io/spmR/gt2026-figures/SSB.png),
+[catch](https://afsc-assessments.github.io/spmR/gt2026-figures/Catch.png),
+and [fishing
+mortality](https://afsc-assessments.github.io/spmR/gt2026-figures/F.png).
 
 The `examples/gt_2026` directory preserves the supplied Greenland turbot
 projection files. The current species input contains 47 recruitment
@@ -228,12 +231,13 @@ README contains the complete input evaluation and terminal commands.
 ## Standalone run-and-results report
 
 `examples/gt_2026/greenland_turbot.qmd` provides visible manual run
-controls, the current input audit, and two Alternative 2 figures. The
-spawning-biomass figure uses a logarithmic y-axis and dashed B40 and B35
-reference lines. Both figures show the all-simulation median and a
-salmon 90% projection interval. Rendering performs no projection; select
-a reviewed saved attempt to populate the results. From the repository
-root:
+controls, the current input audit, and three Alternative 2 figures.
+Spawning biomass and catch use logarithmic y-axes; fishing mortality
+uses a linear y-axis. Dashed reference lines show B40 and B35 on the
+spawning-biomass figure and F35 and F40 on the fishing-mortality figure.
+All three figures show the all-simulation median and a salmon 90%
+projection interval. Rendering performs no projection; select a reviewed
+saved attempt to populate the results. From the repository root:
 
 ``` bash
 quarto render examples/gt_2026/greenland_turbot.qmd
