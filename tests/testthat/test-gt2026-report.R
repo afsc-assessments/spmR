@@ -434,10 +434,12 @@ testthat::test_that("GT2026 source report renders an audit by default and saved 
     !is.null(quarto::quarto_path()),
     "Quarto CLI is unavailable"
   )
-  package_examples <- normalizePath(
-    testthat::test_path("..", "..", "examples"),
-    mustWork = TRUE
+  package_examples <- testthat::test_path("..", "..", "examples")
+  testthat::skip_if_not(
+    dir.exists(package_examples),
+    "Source examples are unavailable in installed-package checks"
   )
+  package_examples <- normalizePath(package_examples, mustWork = TRUE)
   root <- withr::local_tempdir()
   example_dir <- file.path(root, "examples", "gt_2026")
   helper_dir <- file.path(root, "examples", "gt20")
@@ -480,7 +482,10 @@ testthat::test_that("GT2026 source report renders an audit by default and saved 
   testthat::expect_false(dir.exists(attempts))
   qmd <- file.path(example_dir, "greenland_turbot.qmd")
   rendered_body <- function(filename) {
-    html <- paste(readLines(file.path(example_dir, filename), warn = FALSE), collapse = "\n")
+    html <- paste(
+      readLines(file.path(example_dir, filename), warn = FALSE),
+      collapse = "\n"
+    )
     for (tag in c("script", "style", "pre", "code")) {
       html <- gsub(
         paste0("(?is)<", tag, "\\b[^>]*>.*?</", tag, ">"),

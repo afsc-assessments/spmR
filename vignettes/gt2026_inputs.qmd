@@ -13,22 +13,22 @@ vignette: >
 
 ## Colleague handoff
 
-Download the [complete runnable handoff](../gt2026-handoff.zip) to get the
+Download the [complete runnable handoff](https://afsc-assessments.github.io/spmR/gt2026-handoff.zip) to get the
 actual `ForProjections.dat`, `spm.dat` and `tacpar.dat` files, a plain-language
 field guide, installation requirements, and a short R script for checking or
 changing inputs, running a new attempt, plotting selected alternatives and
 exporting useful CSV tables. The bundle includes one completed conditional
 run and its provenance; new runs preserve it.
 
-Open the [rendered Greenland turbot results](../greenland_turbot.html) for
+Open the [rendered Greenland turbot results](https://afsc-assessments.github.io/spmR/greenland_turbot.html) for
 five figures and summary tables. This example uses Jim's confirmed local
 47-value SSB history and diagnostic population-weight assumptions; successful
 execution is separate from scientific input review. Figure downloads:
-[spawning biomass](../gt2026-figures/SSB.png),
-[total biomass](../gt2026-figures/Tot_biom.png),
-[catch](../gt2026-figures/Catch.png),
-[ABC](../gt2026-figures/ABC.png), and
-[OFL](../gt2026-figures/OFL.png).
+[spawning biomass](https://afsc-assessments.github.io/spmR/gt2026-figures/SSB.png),
+[total biomass](https://afsc-assessments.github.io/spmR/gt2026-figures/Tot_biom.png),
+[catch](https://afsc-assessments.github.io/spmR/gt2026-figures/Catch.png),
+[ABC](https://afsc-assessments.github.io/spmR/gt2026-figures/ABC.png), and
+[OFL](https://afsc-assessments.github.io/spmR/gt2026-figures/OFL.png).
 
 ```{r}
 #| include: false

@@ -155,6 +155,7 @@ gt2026_read_source <- function(source_dir) {
     male_abundance = numbers(abundance[2]),
     female_maturity = numbers(field("^# Maturity females$") + 1L),
     male_maturity = numbers(field("^# Maturity males$") + 1L),
+    spawning_month = numbers(field("# Spawning month$")),
     fleet_fraction = numbers(field("# Fratio$"))
   )
 }
@@ -295,6 +296,12 @@ run_gt2026_projection <- function(
   if (!gt2026_supported_controls(controls)) {
     stop(
       "This adapter requires Tier 3, Rec_Gen=1, TAC_ABC=1 and the supplied beginning-of-2026 controls.",
+      call. = FALSE
+    )
+  }
+  if (!identical(raw$spawning_month, 1)) {
+    stop(
+      "This adapter requires spawning month 1; other months need revised initial-SSB validation.",
       call. = FALSE
     )
   }

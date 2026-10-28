@@ -154,6 +154,36 @@ testthat::test_that("GT2026 requires scientific declarations before staging", {
   }
 })
 
+testthat::test_that("GT2026 rejects unsupported spawning timing before staging", {
+  example <- local_gt2026_example()
+  stock_file <- file.path(example$source_dir, "ForProjections.dat")
+  lines <- readLines(stock_file, warn = FALSE)
+  lines[grepl("# Spawning month$", trimws(lines))] <- "4 # Spawning month"
+  writeLines(lines, stock_file)
+  before <- digest::digest(stock_file, file = TRUE, algo = "sha256")
+  destination <- file.path(withr::local_tempdir(), "unsupported-spawning")
+
+  condition <- tryCatch(
+    example$runner$run_gt2026_projection(
+      example$source_dir,
+      run_dir = destination,
+      diagnostic = TRUE,
+      run = FALSE
+    ),
+    error = identity
+  )
+  testthat::expect_s3_class(condition, "error")
+  testthat::expect_match(
+    conditionMessage(condition),
+    "requires spawning month 1"
+  )
+  testthat::expect_identical(dir.exists(destination), FALSE)
+  testthat::expect_identical(
+    digest::digest(stock_file, file = TRUE, algo = "sha256"),
+    before
+  )
+})
+
 testthat::test_that("GT2026 flags a repeated terminal SSB pair and permits diagnostic staging", {
   example <- local_gt2026_example()
   raw <- example$runner$gt2026_read_source(example$source_dir)
