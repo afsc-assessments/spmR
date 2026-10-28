@@ -199,6 +199,37 @@ if __name__=='__main__':
     inline_metadata(directory)
     results['multi_inline']=run(directory,expected_stocks=2)
     assert multi_expected==(directory/'spm_detail.csv').read_bytes()
+    # Status-determination catches remain specific to each stock, including
+    # after alternative 7 switches from maximum ABC to its status ramp.
+    for alternative in [6,7]:
+        name='multi_status_'+str(alternative)
+        directory=multi_stock_fixture(name)
+        controls=directory/'spm.dat'
+        controls.write_text(controls.read_text().replace('# alts\n5\n','# alts\n'+str(alternative)+'\n').replace('# nsims\n10\n','# nsims\n1\n').replace('# npro\n3\n','# npro\n5\n'))
+        species=directory/'other.prj'
+        text=species.read_text()
+        for field in ['N_F','N_M','R','SSB']:
+            text=re.sub(r'(# '+field+r'\n)([^\n]+)',lambda m:m.group(1)+' '.join(str(float(x)*2) for x in m.group(2).split()),text)
+        species.write_text(text)
+        results[name]=run(directory,expected_stocks=2)
+        rows=list(csv.DictReader((directory/'spm_detail.csv').open()))
+        for row in rows:
+            year=int(row['Year'])
+            if year==2026:
+                assert float(row['Catch'])==40,(name,row)
+                continue
+            expected_field='OFL' if alternative==6 else ('MaxABC' if year<=2028 else 'ABC')
+            assert math.isclose(float(row['Catch']),float(row[expected_field]),rel_tol=1e-5,abs_tol=.002),(name,expected_field,row)
+        second_year={row['Stock']:float(row['Catch']) for row in rows if row['Year']=='2027'}
+        assert second_year['audit']!=second_year['other'],(name,second_year)
+    # More stocks than fixed-catch years must permit a zero catch for stock 2.
+    directory=multi_stock_fixture('multi_zero_catch')
+    controls=directory/'spm.dat'
+    controls.write_text(controls.read_text().replace('# Catch\n2026 40 40\n','# Catch\n2026 40 0\n'))
+    results['multi_zero_catch']=run(directory,expected_stocks=2)
+    first_year={row['Stock']:row for row in csv.DictReader((directory/'spm_detail.csv').open()) if row['Sim']=='1' and row['Year']=='2026'}
+    assert float(first_year['audit']['Catch'])==40
+    assert float(first_year['other']['Catch'])==0 and float(first_year['other']['F'])==0
     directory=multi_stock_fixture('invalid_inline_mixed')
     inline_metadata(directory,keep_sidecar=True,selected_files=['audit.prj'])
     results['invalid_inline_mixed']=run(directory,False)
@@ -283,6 +314,38 @@ if __name__=='__main__':
     for name in ['sr2_split','sr2_pooled']:assert sr==(ROOT/'fixtures'/name/'spm_detail.csv').read_bytes(),name
     for name in ['sr2_split','sr2_total','sr2_pooled']:
         results[name]['convergence']=check_sr_fit(ROOT/'fixtures'/name)
+    # Reordering independent Ricker stocks must preserve their projections.
+    directory=multi_stock_fixture('ricker_order_forward')
+    controls=directory/'spm.dat'
+    controls.write_text(controls.read_text().replace('# SrType\n2\n','# SrType\n4\n').replace('# Rec_Gen\n1\n','# Rec_Gen\n2\n'))
+    for filename,mortality,rzero,steepness in [('audit.prj',math.log(2),500,.65),('other.prj',.4,700,.8)]:
+        bzero=.5*rzero/(1-math.exp(-mortality))
+        beta=math.log(5*steepness)/(.8*bzero)
+        alpha=math.log(rzero/bzero)+beta*bzero
+        ssb=[bzero*(.1+1.2*k/29) for k in range(30)]
+        recruitment=[s*math.exp(alpha-beta*s+[-.2,.2][k%2]-.02)/2 for k,s in enumerate(ssb)]
+        species=directory/filename
+        text=species.read_text()
+        for field,values in [('M_F',[mortality]*15),('M_M',[mortality]*15),('R',recruitment),('SSB',ssb)]:
+            text=re.sub(r'(# '+field+r'\n)([^\n]+)',lambda m:m.group(1)+' '.join(map(str,values)),text)
+        species.write_text(text)
+    reverse=directory.parent/'ricker_order_reverse'
+    shutil.copytree(directory,reverse,dirs_exist_ok=True)
+    controls=reverse/'spm.dat'
+    controls.write_text(controls.read_text().replace('audit.prj other.prj','other.prj audit.prj'))
+    sidecar=reverse/'spm_input_v2.dat'
+    lines=sidecar.read_text().splitlines()
+    sidecar.write_text('\n'.join(lines[:1]+lines[5:9]+lines[1:5]+lines[9:])+'\n')
+    for candidate in [directory,reverse]:
+        results[candidate.name]=run(candidate,expected_stocks=2)
+        results[candidate.name]['convergence']=check_sr_fit(candidate)
+    forward_rows={(r['Stock'],r['Sim'],r['Year']):r for r in csv.DictReader((directory/'spm_detail.csv').open())}
+    reverse_rows={(r['Stock'],r['Sim'],r['Year']):r for r in csv.DictReader((reverse/'spm_detail.csv').open())}
+    assert forward_rows.keys()==reverse_rows.keys()
+    for key,row in forward_rows.items():
+        for field in row:
+            if field=='Stock':continue
+            assert math.isclose(float(row[field]),float(reverse_rows[key][field]),rel_tol=2e-5,abs_tol=.002),(key,field,row[field],reverse_rows[key][field])
     # The same physical population in fish/kg, thousand fish/t, and million fish/thousand t.
     # Recruitment and all biomass/catch inputs scale together; individual weights stay in kg.
     reference_dir=ROOT/'fixtures/sr2_total'

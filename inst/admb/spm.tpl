@@ -701,7 +701,7 @@ PARAMETER_SECTION
       if (Obs_Catch(k,ispp) > 0 )
         F_begin_yr(k,ispp) = SolveF2(n0_F(ispp), n0_M(ispp), Obs_Catch(k,ispp),ispp); // F_yr_one(ispp) = SolveF2(n0_F(ispp), n0_M(ispp), yr_one_catch(ispp),ispp);
       else
-        F_begin_yr(ispp) = 0; // F_yr_one(ispp) = 0; // cout<<spname(ispp)<<" "<<F_yr_one(ispp)<<" "<<yr_one_catch(ispp)<<endl;
+        F_begin_yr(k,ispp) = 0;
     }
   } 
 
@@ -1404,31 +1404,31 @@ FUNCTION void Project_Pops(const int& isim, const int& i)
 FUNCTION Status_Determ
   if (alt == 6)
     for (int ispp=1;ispp<=nspp;ispp++) 
-      Actual_Catch   = Get_Catch(alt,ispp);
+      Actual_Catch(ispp) = Get_Catch(alt,ispp);
   if (alt == 66)
     for (int ispp=1;ispp<=nspp;ispp++) 
-      Actual_Catch   = Get_Catch(alt,ispp);
+      Actual_Catch(ispp) = Get_Catch(alt,ispp);
   if (alt == 7)
   {
     if (ipro<=3)
     {
       for (int ispp=1;ispp<=nspp;ispp++) 
-        Actual_Catch = Get_Catch(1,ispp); // Fish 2 years at max permissible rate 
+        Actual_Catch(ispp) = Get_Catch(1,ispp); // Initial maximum permissible rate.
     }
     else 
       for (int ispp=1;ispp<=nspp;ispp++) 
-        Actual_Catch = Get_Catch(7,ispp);
+        Actual_Catch(ispp) = Get_Catch(7,ispp);
   }
   if (alt == 77)
   {
     if (ipro<=2)
     {
       for (int ispp=1;ispp<=nspp;ispp++) 
-        Actual_Catch = Get_Catch(1,ispp); // Fish 2 years at max permissible rate 
+        Actual_Catch(ispp) = Get_Catch(1,ispp); // Initial maximum permissible rate.
     }
     else 
       for (int ispp=1;ispp<=nspp;ispp++) 
-        Actual_Catch = Get_Catch(7,ispp);
+        Actual_Catch(ispp) = Get_Catch(7,ispp);
   }
 
 
@@ -2347,7 +2347,7 @@ FUNCTION void Get_Bzero(const int& ispp)
     case 4:
     // R = S * EXP(sr_alpha - beta * S))
       beta(ispp)  = log(5.*steepness(ispp))/(0.8*Bzero(ispp)) ;
-      sr_alpha = log(Rzero(ispp)/Bzero(ispp))+beta(ispp)*Bzero(ispp);
+      sr_alpha(ispp) = log(Rzero(ispp)/Bzero(ispp))+beta(ispp)*Bzero(ispp);
       break;
   }
 

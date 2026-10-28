@@ -11,38 +11,24 @@ vignette: >
   %\VignetteEncoding{UTF-8}
 ---
 
-The `examples/gt_2026` directory preserves the supplied Greenland turbot
-projection files. The revised species input contains 47 recruitment values
-and 45 SSB values. The helper audits this mismatch and stops staging before
-creating an attempt directory. Matching source histories, population body
-weights, units, age and plus-group alignment, and SS3 export-field mapping
-require confirmation before assessment use. This article executes the audit
-and demonstrates the staging block; it generates no projection results.
+## Colleague handoff
 
-## Simple commands
+Download the [complete runnable handoff](https://afsc-assessments.github.io/spmR/gt2026-handoff.zip) to get the
+actual `ForProjections.dat`, `spm.dat` and `tacpar.dat` files, a plain-language
+field guide, installation requirements, and a short R script for checking or
+changing inputs, running a new attempt, plotting selected alternatives and
+exporting useful CSV tables. The bundle includes one completed conditional
+run and its provenance; new runs preserve it.
 
-Install the current spmR package and work from a clone of the
-[source repository](https://github.com/afsc-assessments/spmR). From its root:
-
-```{r}
-#| eval: false
-source("examples/gt_2026/run.R")
-check_gt2026_inputs()
-```
-
-The audit reads the current source values. Supply matching recruitment and
-SSB histories before staging. `diagnostic = TRUE` selects working population
-weights, units and ages explicitly; it cannot supply missing history values.
-Once inputs are complete, each successful default staging call creates
-`examples/gt_2026/spmR_runs/attempt-###`, retaining source snapshots, SHA-256
-hashes, embedded declarations, and staging decisions. Existing attempt
-directories are protected against overwriting.
-
-## Audit the supplied files
-
-The following chunks locate and audit the example during an article build.
-They require the source checkout or source package, where the example files
-are available.
+Open the [rendered Greenland turbot results](https://afsc-assessments.github.io/spmR/greenland_turbot.html) for
+five figures and summary tables. This example uses Jim's confirmed local
+47-value SSB history and diagnostic population-weight assumptions; successful
+execution is separate from scientific input review. Figure downloads:
+[spawning biomass](https://afsc-assessments.github.io/spmR/gt2026-figures/SSB.png),
+[total biomass](https://afsc-assessments.github.io/spmR/gt2026-figures/Tot_biom.png),
+[catch](https://afsc-assessments.github.io/spmR/gt2026-figures/Catch.png),
+[ABC](https://afsc-assessments.github.io/spmR/gt2026-figures/ABC.png), and
+[OFL](https://afsc-assessments.github.io/spmR/gt2026-figures/OFL.png).
 
 ```{r}
 #| include: false
@@ -63,23 +49,75 @@ if (is.na(example_dir)) {
 }
 example_dir <- normalizePath(example_dir, mustWork = TRUE)
 source(file.path(example_dir, "run.R"), local = TRUE)
+raw_inputs <- gt2026_read_source(example_dir)
+audit <- check_gt2026_inputs(example_dir)
+history_counts_match <- length(raw_inputs$recruitment) == length(raw_inputs$ssb)
+ssb_repeats_final_pair <- length(raw_inputs$ssb) >= 4L &&
+  identical(tail(raw_inputs$ssb, 2L), head(tail(raw_inputs$ssb, 4L), 2L))
+history_labels <- raw_inputs$lines[
+  grepl("^# (Recruitment |SSB )", trimws(raw_inputs$lines))
+]
 ```
+
+The `examples/gt_2026` directory preserves the supplied Greenland turbot
+projection files. The current species input contains
+`r length(raw_inputs$recruitment)` recruitment values and
+`r length(raw_inputs$ssb)` SSB values.
+`r if (history_counts_match) "The counts match; their calendar alignment still requires confirmation." else "The counts differ, so the helper stops staging before creating an attempt directory."`
+Population body weights, units, age and plus-group alignment, and SS3
+export-field mapping also require confirmation before assessment use. This
+article executes a read-only audit; it stages no files and generates no
+projection results.
+
+## Simple commands
+
+Install the current spmR package and work from a clone of the
+[source repository](https://github.com/afsc-assessments/spmR). From its root:
+
+```{r}
+#| eval: false
+source("examples/gt_2026/run.R")
+check_gt2026_inputs()
+```
+
+The audit reads the current source values. Confirm the recruitment and SSB
+histories and their year alignment before staging. `diagnostic = TRUE` selects
+working population weights, units and ages explicitly; it cannot supply
+missing history values or establish their calendar alignment.
+Once inputs are reviewed, each successful default staging call creates
+`examples/gt_2026/spmR_runs/attempt-###`, retaining source snapshots, SHA-256
+hashes, embedded declarations, and staging decisions. Existing attempt
+directories are protected against overwriting.
+
+## Audit the supplied files
+
+The article locates and audits the example during its build. It requires the
+source checkout or source package, where the example files are available.
 
 ```{r}
 audit <- check_gt2026_inputs(example_dir)
 gt::gt(audit)
 ```
 
-The input now explicitly declares `per sex`. Its two identical recruitment
-series contain 47 values each, wrapped across four lines and ending in
-`811.8, 460.5`. The SSB series has 45 values, ending in
-`28053.3, 27020.6, 25862.1`. The recruitment label still says 1978–2022
-and the SSB label says 1978–2026; confirm the numerical histories and their
-calendar alignment from the source export. The revised average five-year F
-is `0.05605452`, with new female and male abundance vectors over 30 ages.
+The input recruitment basis is `r raw_inputs$recruitment_basis`. It contains
+`r raw_inputs$recruitment_copies` recruitment copies with
+`r length(raw_inputs$recruitment)` values each across
+`r length(raw_inputs$recruitment_rows)` numeric lines, ending in
+`r paste(tail(raw_inputs$recruitment, 2L), collapse = ", ")`.
+The SSB series ends in
+`r paste(tail(raw_inputs$ssb, 5L), collapse = ", ")`.
+`r if (ssb_repeats_final_pair) "The final two SSB values repeat the preceding pair. Confirm that these are the intended source values rather than placeholders." else "Confirm these terminal SSB values against the source export."`
 
-The helper accepts the wrapped recruitment series and explicit basis. Once
-matching source histories are available, it can stage one recruitment copy,
+The source history labels are printed below. Counts alone establish neither
+the calendar years nor the recruitment/SSB year pairing. Confirm both against
+the SS3 export, including any labels that remain from an earlier revision.
+
+```{r}
+cat(history_labels, sep = "\n")
+```
+
+The helper accepts wrapped recruitment series and an explicit basis. With
+matching source histories and declared inputs, it can stage one recruitment copy,
 move the basis declaration into the versioned comment block, and replace four
 zero spawning weights with `1e-12` for the positive-weight contract. It keeps
 Tier 3 historical-recruitment mode (`Rec_Gen = 1`). That mode still requires
@@ -92,29 +130,30 @@ validated declarations as comments in the staged species file. The current
 native engine reads those comments directly. `spm.tpl` is self-contained and
 requires no separate C++ header.
 
-## Confirm the staging block
+## Check staging readiness
 
-The current mismatch is reported as an expected input error, and no attempt
-directory is created. An unexpected error still stops the article build.
+The following table selects the current findings that need repair,
+declarations, or review. It reads the audit without choosing diagnostic
+assumptions or creating an attempt directory. The runner can repair duplicate
+recruitment copies and zero spawning weights during staging; population
+weights, units, and ages require explicit arguments or an explicit diagnostic
+choice. Calendar alignment and the SS3 field definitions require scientific
+review in either case.
 
 ```{r}
-attempt_dir <- tempfile("spmr-gt2026-article-")
-staging_status <- tryCatch(
-  run_gt2026_projection(
-    source_dir = example_dir,
-    run_dir = attempt_dir,
-    run = FALSE
-  ),
-  error = function(condition) {
-    detail <- conditionMessage(condition)
-    if (!grepl("47 recruitment values but 45 SSB values", detail, fixed = TRUE)) {
-      stop(condition)
-    }
-    detail
-  }
-)
-stopifnot(is.character(staging_status), !dir.exists(attempt_dir))
-cat("Staging blocked:", staging_status)
+readiness <- audit[audit$status %in% c("missing", "review", "repair"), ]
+readiness |>
+  dplyr::rename(
+    readiness_item = item,
+    readiness_status = status,
+    readiness_detail = detail
+  ) |>
+  gt::gt() |>
+  gt::cols_label(
+    readiness_item = "item",
+    readiness_status = "status",
+    readiness_detail = "detail"
+  )
 ```
 
 ## Stage complete inputs after review
@@ -144,7 +183,7 @@ histories and an explicit decision to use the diagnostic assumptions.
 
 ## Run an explicitly chosen diagnostic projection
 
-After supplying matching histories and reviewing the assumptions, these commands enable native execution.
+After confirming the histories and explicitly choosing the diagnostic assumptions, these commands enable native execution.
 They are displayed without execution in this article.
 
 ```{r}
@@ -189,3 +228,23 @@ beginning-of-2026 abundance state, plus group, and recruitment/SSB year pairing
 against the SS3 export code and source fields. Supplying population weights
 alone leaves those remaining checks open. The example README contains the
 complete input evaluation and terminal commands.
+
+## Standalone run-and-results report
+
+`examples/gt_2026/greenland_turbot.qmd` provides visible manual run controls,
+the current input audit, and saved-output tables and plots. Each projection
+panel displays 15 simulation trajectories, the median, and a 90% projection
+interval. Rendering performs no projection; select a reviewed saved attempt
+to populate the results. From the repository root:
+
+```{bash}
+#| eval: false
+quarto render examples/gt_2026/greenland_turbot.qmd
+quarto render examples/gt_2026/greenland_turbot.qmd -P saved_run:spmR_runs/attempt-001
+```
+
+The first command produces the audit only, including in a fresh source
+checkout without saved output. The second selects results explicitly.
+
+Replace `attempt-001` with the intended saved attempt. Saved results from an
+older source revision are labelled separately from the current input audit.

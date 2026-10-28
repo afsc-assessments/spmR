@@ -1,0 +1,365 @@
+---
+title: "Greenland turbot 2026 projections"
+subtitle: "Input audit and conditional projection results"
+lang: en
+language:
+  title-block-published: "Rendered"
+date: today
+lightbox: true
+format:
+  html:
+    toc: true
+    embed-resources: true
+    code-fold: true
+    code-tools: true
+params:
+  saved_run: ""
+execute:
+  cache: false
+  freeze: false
+  message: false
+---
+
+This working report audits the current input files and, when explicitly selected,
+reads a completed projection attempt. Rendering **never compiles or runs ADMB**.
+Conditional projections describe the supplied inputs and assumptions; they are
+not adopted catch recommendations.
+
+## Run controls
+
+From this directory, render the current input audit with:
+
+```bash
+quarto render greenland_turbot.qmd
+```
+
+The default selects no saved attempt, so this command works in a fresh source
+checkout and produces the audit without projection figures or tables.
+
+To include results, set `saved_run` in the YAML above or pass the actual attempt
+directory explicitly. This example path is illustrative; the report never selects
+the newest directory automatically:
+
+```bash
+quarto render greenland_turbot.qmd -P saved_run:spmR_runs/attempt-001
+```
+
+```{r}
+#| label: report_controls
+#| code-fold: false
+saved_run <- params$saved_run
+worms_per_plot <- 15L
+table_years <- 3L
+```
+
+### Start a new projection manually
+
+Run this chunk yourself in R **after reviewing the input audit**. It is excluded
+from rendering. Keep `run_new_projections = FALSE` until the histories are complete.
+Supply verified population weights, units and ages, or explicitly choose the
+diagnostic assumptions with `use_diagnostic_weights = TRUE`. Diagnostic mode
+cannot repair missing history values. Work from `examples/gt_2026` in R.
+
+```{r}
+#| label: manual_projection
+#| eval: false
+#| code-fold: false
+source("run.R")
+run_new_projections <- FALSE
+use_diagnostic_weights <- FALSE
+population_weights <- NULL
+units <- NULL
+ages <- NULL
+
+if (run_new_projections) {
+  projection <- run_gt2026_projection(
+    diagnostic = use_diagnostic_weights,
+    population_weights = population_weights,
+    units = units,
+    ages = ages
+  )
+  projection$run_dir
+}
+```
+
+After a successful run, use the returned directory as `saved_run` and render again.
+Each new run receives a separate attempt directory. Re-rendering reads saved
+outputs and preserves the attempt contents.
+
+```{r}
+#| label: setup
+#| include: false
+required_packages <- c("spmR", "gt", "ggplot2", "ggthemes", "dplyr", "tidyr")
+missing_packages <- required_packages[
+  !vapply(required_packages, requireNamespace, logical(1), quietly = TRUE)
+]
+if (length(missing_packages)) {
+  stop("Install required packages: ", paste(missing_packages, collapse = ", "))
+}
+if (utils::packageVersion("spmR") < "0.4.3") {
+  stop("Install spmR 0.4.3 or later and restart R.")
+}
+example_candidates <- c(".", file.path("examples", "gt_2026"))
+example_dir <- example_candidates[
+  file.exists(file.path(example_candidates, "ForProjections.dat")) &
+    file.exists(file.path(example_candidates, "report.R"))
+][1]
+if (is.na(example_dir)) stop("Render from the source checkout or example directory.")
+example_dir <- normalizePath(example_dir, winslash = "/", mustWork = TRUE)
+source(file.path(example_dir, "run.R"), local = TRUE)
+source(file.path(example_dir, "report.R"), local = TRUE)
+audit <- check_gt2026_inputs(example_dir)
+raw_inputs <- gt2026_read_source(example_dir)
+current_control <- spmR::dat2list(file.path(example_dir, "spm.dat"))
+if (!is.character(saved_run) || length(saved_run) != 1L || is.na(saved_run)) {
+  stop("saved_run must be one directory name, or an empty string for audit only.")
+}
+saved <- NULL
+series <- NULL
+if (nzchar(saved_run)) {
+  selected_path <- if (grepl("^(~|/|[A-Za-z]:[/\\\\])", saved_run)) {
+    path.expand(saved_run)
+  } else {
+    file.path(example_dir, saved_run)
+  }
+  saved <- gt2026_read_report_run(selected_path, example_dir)
+  series <- gt2026_report_series(saved$result, n_worms = worms_per_plot)
+}
+```
+
+## Current status
+
+```{r}
+#| label: current_status
+#| echo: false
+#| results: asis
+if (is.null(saved)) {
+  cat("**Audit only: no saved attempt selected.** No new projection was run.\n\n")
+} else {
+  cat("**Saved conditional projection loaded.** No new projection was run.\n\n")
+  if (!all(saved$source_comparison$matches_current)) {
+    cat("**Different source inputs:** these saved results belong to an earlier or different input revision, not the current files.\n\n")
+  }
+}
+if (length(raw_inputs$recruitment) != length(raw_inputs$ssb)) {
+  cat(sprintf(
+    "**New runs blocked:** the current file contains %d recruitment values and %d SSB values. Supply matching histories and confirm their calendar alignment; values are never padded or discarded.\n\n",
+    length(raw_inputs$recruitment), length(raw_inputs$ssb)
+  ))
+} else {
+  cat("Current recruitment and SSB lengths agree. Their calendar pairing and scientific declarations still require review.\n\n")
+}
+```
+
+Diagnostic population weights are fleet-weighted catch-weight proxies, not
+verified population body weights. SS3 export definitions, units, age order,
+plus group, initial abundance timing and spawning-weight/maturity definitions
+remain scientific review items. The audit below refers to **current files**;
+saved-run assumptions are displayed separately in the provenance section.
+
+## Input audit
+
+The current controls request `r current_control$nsims` simulations across
+`r current_control$nalts` alternatives for `r current_control$nprj_yrs` years,
+beginning in `r current_control$beg_yr`.
+
+```{r}
+#| label: tbl-input-audit
+#| tbl-cap: "Current GT2026 input checks. Repair and review entries remain visible even when a saved run is selected."
+#| echo: false
+audit |>
+  gt::gt() |>
+  gt::cols_label(item = "Input", status = "Status", detail = "Finding") |>
+  gt::cols_width(item ~ gt::pct(18), status ~ gt::pct(12), detail ~ gt::pct(70))
+```
+
+## Projection plots
+
+Each panel represents one alternative. The **same 15 simulations**, selected
+deterministically by their sorted simulation IDs, appear as thin blue lines
+("worms") in every plot. The black line is the median across **all** simulations;
+the grey band spans their 5th–95th percentiles, a **90% projection interval**.
+The 15 paths illustrate simulations rather than estimating the full uncertainty
+by themselves. Fixed catches can cause several paths to overlap exactly.
+
+```{r}
+#| label: plot_setup
+#| echo: false
+if (is.null(series)) {
+  cat("Plots will appear after selecting a verified completed attempt with at least 15 simulations. No placeholder projection data are plotted.")
+} else {
+  cat("Simulation IDs shown:", paste(series$worm_ids, collapse = ", "))
+}
+projection_plot <- function(metric_name, axis_label) {
+  summary_data <- dplyr::filter(series$summary, .data$metric == metric_name)
+  worm_data <- dplyr::filter(series$worms, .data$metric == metric_name)
+  ggplot2::ggplot(summary_data, ggplot2::aes(x = .data$Year)) +
+    ggplot2::geom_ribbon(
+      ggplot2::aes(ymin = .data$lower, ymax = .data$upper),
+      fill = "grey85"
+    ) +
+    ggplot2::geom_line(
+      data = worm_data,
+      ggplot2::aes(y = .data$value, group = .data$Sim),
+      colour = "#336A99", alpha = 0.35, linewidth = 0.35
+    ) +
+    ggplot2::geom_line(ggplot2::aes(y = .data$median), linewidth = 0.65) +
+    ggplot2::facet_wrap(ggplot2::vars(Alt), ncol = 2, labeller = "label_both") +
+    ggplot2::labs(
+      x = "Projection year",
+      y = paste0(axis_label, " (", saved$biomass_units, ")")
+    ) +
+    ggthemes::theme_few(base_size = 11)
+}
+```
+
+```{r}
+#| label: fig-ssb-worms
+#| echo: false
+#| fig-width: 9
+#| fig-height: 9
+#| fig-cap: "Conditional spawning biomass: 15 simulation paths per alternative, all-simulation median and 90% projection interval."
+#| fig-alt: "Faceted spawning-biomass trajectories with one panel per alternative. Thin lines show fifteen selected simulations, a black line the median, and a grey band the projection interval. Numerical summaries follow the plots."
+if (!is.null(series)) projection_plot("SSB", "Spawning biomass")
+```
+
+```{r}
+#| label: fig-biomass-worms
+#| echo: false
+#| fig-width: 9
+#| fig-height: 9
+#| fig-cap: "Conditional total population biomass under the saved run's population-weight declarations."
+#| fig-alt: "Faceted total-biomass trajectories by alternative, with fifteen simulation paths, the all-simulation median and the 90 percent projection interval."
+if (!is.null(series)) projection_plot("Tot_biom", "Total biomass")
+```
+
+```{r}
+#| label: fig-catch-worms
+#| echo: false
+#| fig-width: 9
+#| fig-height: 9
+#| fig-cap: "Conditional catch trajectories. Prescribed catches can make the 15 simulation paths overlap."
+#| fig-alt: "Faceted catch trajectories by alternative. Fifteen selected paths overlap where catches are prescribed; the median and projection interval use every simulation."
+if (!is.null(series)) projection_plot("Catch", "Catch")
+```
+
+```{r}
+#| label: fig-abc-worms
+#| echo: false
+#| fig-width: 9
+#| fig-height: 9
+#| fig-cap: "Conditional model ABC trajectories; these calculations are not adopted catch recommendations."
+#| fig-alt: "Faceted conditional ABC trajectories by alternative with fifteen simulation paths, the median and the 90 percent projection interval."
+if (!is.null(series)) projection_plot("ABC", "ABC")
+```
+
+```{r}
+#| label: fig-ofl-worms
+#| echo: false
+#| fig-width: 9
+#| fig-height: 9
+#| fig-cap: "Conditional model OFL trajectories; scientific input review remains separate from successful execution."
+#| fig-alt: "Faceted conditional OFL trajectories by alternative with fifteen simulation paths, the median and the 90 percent projection interval."
+if (!is.null(series)) projection_plot("OFL", "OFL")
+```
+
+## Summary tables
+
+Tables use all simulations, not only the 15 displayed paths. They are recomputed
+from the hash-verified detailed output rather than an independently edited
+summary file. The first table covers the first `r table_years` projection years;
+the second reports terminal-year distributions.
+
+```{r}
+#| label: annual_means_table
+#| echo: false
+if (is.null(series)) {
+  cat("No projection tables are available until a completed attempt is selected.")
+} else {
+  annual_means <- series$summary |>
+    dplyr::select(dplyr::all_of(c("Alt", "Year", "metric", "mean"))) |>
+    tidyr::pivot_wider(names_from = "metric", values_from = "mean")
+  annual_means |>
+    dplyr::filter(.data$Year < min(.data$Year) + table_years) |>
+    dplyr::mutate(Alt = paste("Alternative", .data$Alt)) |>
+    dplyr::rename_with(~ paste0("annual_", .x)) |>
+    gt::gt(groupname_col = "annual_Alt") |>
+    gt::tab_caption("Conditional annual means by alternative for the first projection years. Units follow the saved run.") |>
+    gt::tab_header(title = paste("Conditional annual means —", saved$biomass_units)) |>
+    gt::cols_label(annual_Year = "Year", annual_Tot_biom = "Total biomass", annual_SSB = "Spawning biomass", annual_Catch = "Catch", annual_ABC = "ABC", annual_OFL = "OFL") |>
+    gt::fmt_number(columns = paste0("annual_", c("SSB", "Tot_biom", "Catch", "ABC", "OFL")), decimals = 1)
+}
+```
+
+```{r}
+#| label: terminal_distribution_table
+#| echo: false
+if (!is.null(series)) {
+  series$summary |>
+    dplyr::filter(.data$Year == max(.data$Year)) |>
+    dplyr::select(dplyr::all_of(c("metric", "Alt", "Year", "median", "lower", "upper"))) |>
+    dplyr::rename_with(~ paste0("terminal_", .x)) |>
+    gt::gt(groupname_col = "terminal_metric") |>
+    gt::tab_caption("Terminal-year median and 5th–95th percentile projection range, using all simulations.") |>
+    gt::tab_header(title = paste("Terminal projection distributions —", saved$biomass_units)) |>
+    gt::cols_label(terminal_Alt = "Alternative", terminal_Year = "Year", terminal_median = "Median", terminal_lower = "5th percentile", terminal_upper = "95th percentile") |>
+    gt::fmt_number(columns = c("terminal_median", "terminal_lower", "terminal_upper"), decimals = 1)
+}
+```
+
+## Provenance and checks
+
+The report requires a successful native exit and verifies recorded input,
+output and archived-source hashes before displaying a saved run. It checks
+result dimensions, alternative/year/simulation keys and finite nonnegative
+quantities. Current-source differences are labelled rather than overwritten.
+Historical-recruitment simulation fits no parameters: maximum-gradient and
+positive-definite-Hessian diagnostics are **not applicable** in this mode.
+
+```{r}
+#| label: saved_provenance
+#| echo: false
+if (!is.null(saved)) {
+  tibble::tibble(
+    provenance_field = c("Selected directory", "Run ID", "Completed UTC", "spmR version at execution", "Executable SHA-256", "Population weights", "Scientific status"),
+    recorded_value = c(
+      saved_run, saved$provenance$run_id, saved$provenance$completed_utc,
+      saved$provenance$package_version, saved$provenance$executable_sha256,
+      saved$decisions$population_weights, saved$decisions$status
+    )
+  ) |>
+    gt::gt() |>
+    gt::cols_label(provenance_field = "Provenance", recorded_value = "Recorded value") |>
+    gt::tab_options(table.font.size = gt::px(13))
+}
+```
+
+```{r}
+#| label: source_comparison
+#| echo: false
+if (!is.null(saved)) {
+  saved$source_comparison |>
+    gt::gt() |>
+    gt::cols_label(file = "Archived source", matches_current = "Matches current source")
+}
+```
+
+<details>
+<summary>Current input fingerprints and rendering environment</summary>
+
+```{r}
+#| label: current_fingerprints
+#| echo: false
+current_files <- c("spm.dat", "ForProjections.dat")
+current_hashes <- vapply(
+  file.path(example_dir, current_files),
+  digest::digest,
+  character(1),
+  algo = "sha256",
+  file = TRUE
+)
+print(stats::setNames(current_hashes, current_files))
+sessionInfo()
+```
+
+</details>

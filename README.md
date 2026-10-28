@@ -224,12 +224,15 @@ source("examples/gt_2026/run.R")
 check_gt2026_inputs()
 ```
 
-The revised GT2026 input has 47 recruitment values and 45 SSB values.
-The audit reports the mismatch; staging and execution stop until
-matching source histories are supplied. Population weights, units, ages
-and history alignment also require SS3 review. Diagnostic fishery-weight
-proxies require an explicit choice after resolving the history mismatch.
-The [example
+The corrected GT2026 input has 47 recruitment values and 47 SSB values.
+The audit reads the current file and flags remaining declarations and
+review items. The final two SSB values repeat the preceding pair;
+confirm those values and the history year labels against the source
+export. Population weights, units, ages and history alignment require
+SS3 review. Diagnostic fishery-weight proxies require an explicit
+choice. The standalone `examples/gt_2026/greenland_turbot.qmd` report
+provides an input audit and, for an explicitly selected completed run,
+tables and 15-path projection plots. The [example
 README](https://github.com/afsc-assessments/spmR/blob/main/examples/gt_2026/README.md)
 provides projection commands and the complete input evaluation.
 
