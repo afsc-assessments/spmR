@@ -121,7 +121,7 @@ Conservation Act are currently under revision. The projection model and
 code has been designed to easily be adopted to meet anticipated future
 demands.
 
-## Standard projection model
+### Standard projection model
 
 #### Stock-recruitment relationship specifications
 

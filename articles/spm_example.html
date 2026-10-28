@@ -86,7 +86,7 @@
 <code>examples/gt_2026</code> for auditing and staging new split-sex inputs</li>
 </ul>
 <p>The bundled positional files retain their historical layout. For a new run, use <code><a href="../reference/write_spm_metadata.html">write_spm_metadata()</a></code> to embed explicit recruitment basis and female/male population weights as comments in each species file, then use a format-2 executable. Follow the runnable <a href="split_sex_inputs.html">split-sex input migration guide</a>. Keep each species file’s existing field order and store added population vectors in the versioned comment block. The current native engine reads that block directly; separate JSON and native sidecar files remain supported for existing workflows.</p>
-<p>The first two workflows read archived output. The third identifies missing scientific declarations and incomplete histories before a new projection.</p>
+<p>The first two workflows read archived output. The third audits scientific declarations and history alignment before a new projection.</p>
 <section class="level2"><h2 id="atka-workflow-examplesatka">1. Atka workflow (<code>examples/atka</code>)<a class="anchor" aria-label="anchor" href="#atka-workflow-examplesatka"></a>
 </h2>
 <p>Use <code><a href="../reference/runSPM.html">runSPM()</a></code> to read existing ADMB output (<code>spm_detail.csv</code>) and inspect inputs using <code><a href="../reference/dat2list.html">dat2list()</a></code>.</p>
@@ -140,7 +140,7 @@
 <span><span class="co">#&gt;   ..   B40 = col_double(),</span></span>
 <span><span class="co">#&gt;   ..   B35 = col_double()</span></span>
 <span><span class="co">#&gt;   .. )</span></span>
-<span><span class="co">#&gt;  - attr(*, "problems")=&lt;pointer: 0x557667e63560&gt;</span></span>
+<span><span class="co">#&gt;  - attr(*, "problems")=&lt;pointer: 0x55898abf6130&gt;</span></span>
 <span></span>
 <span><span class="va">atka_inputs</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/dat2list.html">dat2list</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="va">atka_dir</span>, <span class="st">"spm.dat"</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">atka_inputs</span><span class="op">)</span></span>
@@ -184,30 +184,28 @@
 </div>
 </section><section class="level2"><h2 id="audit-and-stage-greenland-turbot-examplesgt_2026">3. Audit and stage Greenland turbot (<code>examples/gt_2026</code>)<a class="anchor" aria-label="anchor" href="#audit-and-stage-greenland-turbot-examplesgt_2026"></a>
 </h2>
-<p>The revised 2026 export has 47 recruitment values and 45 SSB values. Its helper reports the mismatch and stops before staging until matching source histories are supplied. Population weights, units, ages, and SS3 export-field definitions also require review. The <a href="gt2026_inputs.html">GT2026 audit and staging guide</a> explains each finding.</p>
+<p>The current 2026 export has 47 recruitment values and 47 SSB values. The counts match; confirm their source values and calendar alignment. Population weights, units, ages, and SS3 export-field definitions also require review. This section reads the inputs without staging files or running a projection. The <a href="gt2026_inputs.html">GT2026 audit and staging guide</a> explains each finding.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">gt2026_dir</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="va">pkg_root</span>, <span class="st">"examples"</span>, <span class="st">"gt_2026"</span><span class="op">)</span></span>
-<span><span class="kw"><a href="https://rdrr.io/r/base/source.html" class="external-link">source</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="va">gt2026_dir</span>, <span class="st">"run.R"</span><span class="op">)</span>, local <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
-<span><span class="fu">gt</span><span class="fu">::</span><span class="fu"><a href="https://gt.rstudio.com/reference/gt.html" class="external-link">gt</a></span><span class="op">(</span><span class="fu">check_gt2026_inputs</span><span class="op">(</span><span class="va">gt2026_dir</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu">gt</span><span class="fu">::</span><span class="fu"><a href="https://gt.rstudio.com/reference/gt.html" class="external-link">gt</a></span><span class="op">(</span><span class="va">gt2026_audit</span><span class="op">)</span></span></code></pre></div>
 <div class="cell-output-display">
-<div id="hdroatshqv" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
-<style>#hdroatshqv table {
+<div id="nvkyddbanw" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#nvkyddbanw table {
   font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-#hdroatshqv thead, #hdroatshqv tbody, #hdroatshqv tfoot, #hdroatshqv tr, #hdroatshqv td, #hdroatshqv th {
+#nvkyddbanw thead, #nvkyddbanw tbody, #nvkyddbanw tfoot, #nvkyddbanw tr, #nvkyddbanw td, #nvkyddbanw th {
   border-style: none;
 }
 
-#hdroatshqv p {
+#nvkyddbanw p {
   margin: 0;
   padding: 0;
 }
 
-#hdroatshqv .gt_table {
+#nvkyddbanw .gt_table {
   display: table;
   border-collapse: collapse;
   line-height: normal;
@@ -233,12 +231,12 @@
   border-left-color: #D3D3D3;
 }
 
-#hdroatshqv .gt_caption {
+#nvkyddbanw .gt_caption {
   padding-top: 4px;
   padding-bottom: 4px;
 }
 
-#hdroatshqv .gt_title {
+#nvkyddbanw .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -250,7 +248,7 @@
   border-bottom-width: 0;
 }
 
-#hdroatshqv .gt_subtitle {
+#nvkyddbanw .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -262,7 +260,7 @@
   border-top-width: 0;
 }
 
-#hdroatshqv .gt_heading {
+#nvkyddbanw .gt_heading {
   background-color: #FFFFFF;
   text-align: center;
   border-bottom-color: #FFFFFF;
@@ -274,13 +272,13 @@
   border-right-color: #D3D3D3;
 }
 
-#hdroatshqv .gt_bottom_border {
+#nvkyddbanw .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#hdroatshqv .gt_col_headings {
+#nvkyddbanw .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -295,7 +293,7 @@
   border-right-color: #D3D3D3;
 }
 
-#hdroatshqv .gt_col_heading {
+#nvkyddbanw .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -315,7 +313,7 @@
   overflow-x: hidden;
 }
 
-#hdroatshqv .gt_column_spanner_outer {
+#nvkyddbanw .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -327,15 +325,15 @@
   padding-right: 4px;
 }
 
-#hdroatshqv .gt_column_spanner_outer:first-child {
+#nvkyddbanw .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#hdroatshqv .gt_column_spanner_outer:last-child {
+#nvkyddbanw .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#hdroatshqv .gt_column_spanner {
+#nvkyddbanw .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -347,11 +345,11 @@
   width: 100%;
 }
 
-#hdroatshqv .gt_spanner_row {
+#nvkyddbanw .gt_spanner_row {
   border-bottom-style: hidden;
 }
 
-#hdroatshqv .gt_group_heading {
+#nvkyddbanw .gt_group_heading {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -377,7 +375,7 @@
   text-align: left;
 }
 
-#hdroatshqv .gt_empty_group_heading {
+#nvkyddbanw .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -392,15 +390,15 @@
   vertical-align: middle;
 }
 
-#hdroatshqv .gt_from_md > :first-child {
+#nvkyddbanw .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#hdroatshqv .gt_from_md > :last-child {
+#nvkyddbanw .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#hdroatshqv .gt_row {
+#nvkyddbanw .gt_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -419,7 +417,7 @@
   overflow-x: hidden;
 }
 
-#hdroatshqv .gt_stub {
+#nvkyddbanw .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -432,7 +430,7 @@
   padding-right: 5px;
 }
 
-#hdroatshqv .gt_stub_row_group {
+#nvkyddbanw .gt_stub_row_group {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -446,15 +444,15 @@
   vertical-align: top;
 }
 
-#hdroatshqv .gt_row_group_first td {
+#nvkyddbanw .gt_row_group_first td {
   border-top-width: 2px;
 }
 
-#hdroatshqv .gt_row_group_first th {
+#nvkyddbanw .gt_row_group_first th {
   border-top-width: 2px;
 }
 
-#hdroatshqv .gt_summary_row {
+#nvkyddbanw .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -464,16 +462,16 @@
   padding-right: 5px;
 }
 
-#hdroatshqv .gt_first_summary_row {
+#nvkyddbanw .gt_first_summary_row {
   border-top-style: solid;
   border-top-color: #D3D3D3;
 }
 
-#hdroatshqv .gt_first_summary_row.thick {
+#nvkyddbanw .gt_first_summary_row.thick {
   border-top-width: 2px;
 }
 
-#hdroatshqv .gt_last_summary_row {
+#nvkyddbanw .gt_last_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -483,7 +481,7 @@
   border-bottom-color: #D3D3D3;
 }
 
-#hdroatshqv .gt_grand_summary_row {
+#nvkyddbanw .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -493,7 +491,7 @@
   padding-right: 5px;
 }
 
-#hdroatshqv .gt_first_grand_summary_row {
+#nvkyddbanw .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -503,7 +501,7 @@
   border-top-color: #D3D3D3;
 }
 
-#hdroatshqv .gt_last_grand_summary_row_top {
+#nvkyddbanw .gt_last_grand_summary_row_top {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -513,11 +511,11 @@
   border-bottom-color: #D3D3D3;
 }
 
-#hdroatshqv .gt_striped {
+#nvkyddbanw .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-#hdroatshqv .gt_table_body {
+#nvkyddbanw .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -526,7 +524,7 @@
   border-bottom-color: #D3D3D3;
 }
 
-#hdroatshqv .gt_footnotes {
+#nvkyddbanw .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -540,7 +538,7 @@
   border-right-color: #D3D3D3;
 }
 
-#hdroatshqv .gt_footnote {
+#nvkyddbanw .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding-top: 4px;
@@ -549,7 +547,7 @@
   padding-right: 5px;
 }
 
-#hdroatshqv .gt_sourcenotes {
+#nvkyddbanw .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -563,7 +561,7 @@
   border-right-color: #D3D3D3;
 }
 
-#hdroatshqv .gt_sourcenote {
+#nvkyddbanw .gt_sourcenote {
   font-size: 90%;
   padding-top: 4px;
   padding-bottom: 4px;
@@ -571,72 +569,72 @@
   padding-right: 5px;
 }
 
-#hdroatshqv .gt_left {
+#nvkyddbanw .gt_left {
   text-align: left;
 }
 
-#hdroatshqv .gt_center {
+#nvkyddbanw .gt_center {
   text-align: center;
 }
 
-#hdroatshqv .gt_right {
+#nvkyddbanw .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#hdroatshqv .gt_font_normal {
+#nvkyddbanw .gt_font_normal {
   font-weight: normal;
 }
 
-#hdroatshqv .gt_font_bold {
+#nvkyddbanw .gt_font_bold {
   font-weight: bold;
 }
 
-#hdroatshqv .gt_font_italic {
+#nvkyddbanw .gt_font_italic {
   font-style: italic;
 }
 
-#hdroatshqv .gt_super {
+#nvkyddbanw .gt_super {
   font-size: 65%;
 }
 
-#hdroatshqv .gt_footnote_marks {
+#nvkyddbanw .gt_footnote_marks {
   font-size: 75%;
   vertical-align: 0.4em;
   position: initial;
 }
 
-#hdroatshqv .gt_asterisk {
+#nvkyddbanw .gt_asterisk {
   font-size: 100%;
   vertical-align: 0;
 }
 
-#hdroatshqv .gt_indent_1 {
+#nvkyddbanw .gt_indent_1 {
   text-indent: 5px;
 }
 
-#hdroatshqv .gt_indent_2 {
+#nvkyddbanw .gt_indent_2 {
   text-indent: 10px;
 }
 
-#hdroatshqv .gt_indent_3 {
+#nvkyddbanw .gt_indent_3 {
   text-indent: 15px;
 }
 
-#hdroatshqv .gt_indent_4 {
+#nvkyddbanw .gt_indent_4 {
   text-indent: 20px;
 }
 
-#hdroatshqv .gt_indent_5 {
+#nvkyddbanw .gt_indent_5 {
   text-indent: 25px;
 }
 
-#hdroatshqv .katex-display {
+#nvkyddbanw .katex-display {
   display: inline-flex !important;
   margin-bottom: 0.75em !important;
 }
 
-#hdroatshqv div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
+#nvkyddbanw div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
   height: 0px !important;
 }
 </style>
@@ -660,7 +658,7 @@
 <tr class="odd">
 <td class="gt_row gt_left" headers="item">Recruitment rows</td>
 <td class="gt_row gt_left" headers="status">repair</td>
-<td class="gt_row gt_left" headers="detail">2 copies of a 47 value series across 4 lines; retain one complete series. A second copy would be read as SSB.</td>
+<td class="gt_row gt_left" headers="detail">2 copies of a 47 value series across 2 lines; retain one complete series. A second copy would be read as SSB.</td>
 </tr>
 <tr class="even">
 <td class="gt_row gt_left" headers="item">Recruitment basis</td>
@@ -684,8 +682,8 @@
 </tr>
 <tr class="even">
 <td class="gt_row gt_left" headers="item">SSB history</td>
-<td class="gt_row gt_left" headers="status">missing</td>
-<td class="gt_row gt_left" headers="detail">47 recruitment values but 45 SSB values. Supply matching source histories before staging; values are never padded or discarded.</td>
+<td class="gt_row gt_left" headers="status">review</td>
+<td class="gt_row gt_left" headers="detail">47 positions; source label: # SSB 1978-2026 . Calendar pairing remains unresolved; restrict to Tier 3, Rec_Gen=1. The final two SSB values repeat the preceding pair; confirm this with the source export.</td>
 </tr>
 <tr class="odd">
 <td class="gt_row gt_left" headers="item">Maturity fields</td>
@@ -707,29 +705,512 @@
 </div>
 </div>
 </div>
-<p>The next chunk displays the expected staging block and verifies that no attempt directory is created. <code>run = FALSE</code> leaves native execution disabled.</p>
+<p>The next table selects the current findings that require repair, declarations, or review. Reading these findings makes no diagnostic assumptions and creates no attempt directory. The runner can repair duplicate recruitment copies and zero spawning weights during staging; the source definitions and calendar alignment remain scientific review tasks.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">gt2026_attempt</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempfile</a></span><span class="op">(</span><span class="st">"spmr-gt2026-canonical-"</span><span class="op">)</span></span>
-<span><span class="va">gt2026_status</span> <span class="op">&lt;-</span> <span class="kw"><a href="https://rdrr.io/r/base/conditions.html" class="external-link">tryCatch</a></span><span class="op">(</span></span>
-<span>  <span class="fu">run_gt2026_projection</span><span class="op">(</span></span>
-<span>    source_dir <span class="op">=</span> <span class="va">gt2026_dir</span>,</span>
-<span>    run_dir <span class="op">=</span> <span class="va">gt2026_attempt</span>,</span>
-<span>    run <span class="op">=</span> <span class="cn">FALSE</span></span>
-<span>  <span class="op">)</span>,</span>
-<span>  error <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">condition</span><span class="op">)</span> <span class="op">{</span></span>
-<span>    <span class="va">detail</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/conditions.html" class="external-link">conditionMessage</a></span><span class="op">(</span><span class="va">condition</span><span class="op">)</span></span>
-<span>    <span class="kw">if</span> <span class="op">(</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/grep.html" class="external-link">grepl</a></span><span class="op">(</span><span class="st">"47 recruitment values but 45 SSB values"</span>, <span class="va">detail</span>, fixed <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
-<span>      <span class="kw"><a href="https://rdrr.io/r/base/stop.html" class="external-link">stop</a></span><span class="op">(</span><span class="va">condition</span><span class="op">)</span></span>
-<span>    <span class="op">}</span></span>
-<span>    <span class="va">detail</span></span>
-<span>  <span class="op">}</span></span>
-<span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/stopifnot.html" class="external-link">stopifnot</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/character.html" class="external-link">is.character</a></span><span class="op">(</span><span class="va">gt2026_status</span><span class="op">)</span>, <span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/files2.html" class="external-link">dir.exists</a></span><span class="op">(</span><span class="va">gt2026_attempt</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"Staging blocked:"</span>, <span class="va">gt2026_status</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Staging blocked: 47 recruitment values but 45 SSB values. Supply matching source histories before staging; values are never padded or discarded.</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">gt2026_readiness</span> <span class="op">&lt;-</span> <span class="va">gt2026_audit</span><span class="op">[</span></span>
+<span>  <span class="va">gt2026_audit</span><span class="op">$</span><span class="va">status</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"missing"</span>, <span class="st">"review"</span>, <span class="st">"repair"</span><span class="op">)</span>,</span>
+<span><span class="op">]</span></span>
+<span><span class="va">gt2026_readiness</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/rename.html" class="external-link">rename</a></span><span class="op">(</span></span>
+<span>    readiness_item <span class="op">=</span> <span class="va">item</span>,</span>
+<span>    readiness_status <span class="op">=</span> <span class="va">status</span>,</span>
+<span>    readiness_detail <span class="op">=</span> <span class="va">detail</span></span>
+<span>  <span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">gt</span><span class="fu">::</span><span class="fu"><a href="https://gt.rstudio.com/reference/gt.html" class="external-link">gt</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">gt</span><span class="fu">::</span><span class="fu"><a href="https://gt.rstudio.com/reference/cols_label.html" class="external-link">cols_label</a></span><span class="op">(</span></span>
+<span>    readiness_item <span class="op">=</span> <span class="st">"item"</span>,</span>
+<span>    readiness_status <span class="op">=</span> <span class="st">"status"</span>,</span>
+<span>    readiness_detail <span class="op">=</span> <span class="st">"detail"</span></span>
+<span>  <span class="op">)</span></span></code></pre></div>
+<div class="cell-output-display">
+<div id="yhvaztwdst" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#yhvaztwdst table {
+  font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+#yhvaztwdst thead, #yhvaztwdst tbody, #yhvaztwdst tfoot, #yhvaztwdst tr, #yhvaztwdst td, #yhvaztwdst th {
+  border-style: none;
+}
+
+#yhvaztwdst p {
+  margin: 0;
+  padding: 0;
+}
+
+#yhvaztwdst .gt_table {
+  display: table;
+  border-collapse: collapse;
+  line-height: normal;
+  margin-left: auto;
+  margin-right: auto;
+  color: #333333;
+  font-size: 16px;
+  font-weight: normal;
+  font-style: normal;
+  background-color: #FFFFFF;
+  width: auto;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #A8A8A8;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #A8A8A8;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+}
+
+#yhvaztwdst .gt_caption {
+  padding-top: 4px;
+  padding-bottom: 4px;
+}
+
+#yhvaztwdst .gt_title {
+  color: #333333;
+  font-size: 125%;
+  font-weight: initial;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-color: #FFFFFF;
+  border-bottom-width: 0;
+}
+
+#yhvaztwdst .gt_subtitle {
+  color: #333333;
+  font-size: 85%;
+  font-weight: initial;
+  padding-top: 3px;
+  padding-bottom: 5px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-color: #FFFFFF;
+  border-top-width: 0;
+}
+
+#yhvaztwdst .gt_heading {
+  background-color: #FFFFFF;
+  text-align: center;
+  border-bottom-color: #FFFFFF;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#yhvaztwdst .gt_bottom_border {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#yhvaztwdst .gt_col_headings {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#yhvaztwdst .gt_col_heading {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 6px;
+  padding-left: 5px;
+  padding-right: 5px;
+  overflow-x: hidden;
+}
+
+#yhvaztwdst .gt_column_spanner_outer {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  padding-top: 0;
+  padding-bottom: 0;
+  padding-left: 4px;
+  padding-right: 4px;
+}
+
+#yhvaztwdst .gt_column_spanner_outer:first-child {
+  padding-left: 0;
+}
+
+#yhvaztwdst .gt_column_spanner_outer:last-child {
+  padding-right: 0;
+}
+
+#yhvaztwdst .gt_column_spanner {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  overflow-x: hidden;
+  display: inline-block;
+  width: 100%;
+}
+
+#yhvaztwdst .gt_spanner_row {
+  border-bottom-style: hidden;
+}
+
+#yhvaztwdst .gt_group_heading {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  text-align: left;
+}
+
+#yhvaztwdst .gt_empty_group_heading {
+  padding: 0.5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: middle;
+}
+
+#yhvaztwdst .gt_from_md > :first-child {
+  margin-top: 0;
+}
+
+#yhvaztwdst .gt_from_md > :last-child {
+  margin-bottom: 0;
+}
+
+#yhvaztwdst .gt_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  margin: 10px;
+  border-top-style: solid;
+  border-top-width: 1px;
+  border-top-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  overflow-x: hidden;
+}
+
+#yhvaztwdst .gt_stub {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#yhvaztwdst .gt_stub_row_group {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+  vertical-align: top;
+}
+
+#yhvaztwdst .gt_row_group_first td {
+  border-top-width: 2px;
+}
+
+#yhvaztwdst .gt_row_group_first th {
+  border-top-width: 2px;
+}
+
+#yhvaztwdst .gt_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#yhvaztwdst .gt_first_summary_row {
+  border-top-style: solid;
+  border-top-color: #D3D3D3;
+}
+
+#yhvaztwdst .gt_first_summary_row.thick {
+  border-top-width: 2px;
+}
+
+#yhvaztwdst .gt_last_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#yhvaztwdst .gt_grand_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#yhvaztwdst .gt_first_grand_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-style: double;
+  border-top-width: 6px;
+  border-top-color: #D3D3D3;
+}
+
+#yhvaztwdst .gt_last_grand_summary_row_top {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-style: double;
+  border-bottom-width: 6px;
+  border-bottom-color: #D3D3D3;
+}
+
+#yhvaztwdst .gt_striped {
+  background-color: rgba(128, 128, 128, 0.05);
+}
+
+#yhvaztwdst .gt_table_body {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#yhvaztwdst .gt_footnotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#yhvaztwdst .gt_footnote {
+  margin: 0px;
+  font-size: 90%;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#yhvaztwdst .gt_sourcenotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#yhvaztwdst .gt_sourcenote {
+  font-size: 90%;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#yhvaztwdst .gt_left {
+  text-align: left;
+}
+
+#yhvaztwdst .gt_center {
+  text-align: center;
+}
+
+#yhvaztwdst .gt_right {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+#yhvaztwdst .gt_font_normal {
+  font-weight: normal;
+}
+
+#yhvaztwdst .gt_font_bold {
+  font-weight: bold;
+}
+
+#yhvaztwdst .gt_font_italic {
+  font-style: italic;
+}
+
+#yhvaztwdst .gt_super {
+  font-size: 65%;
+}
+
+#yhvaztwdst .gt_footnote_marks {
+  font-size: 75%;
+  vertical-align: 0.4em;
+  position: initial;
+}
+
+#yhvaztwdst .gt_asterisk {
+  font-size: 100%;
+  vertical-align: 0;
+}
+
+#yhvaztwdst .gt_indent_1 {
+  text-indent: 5px;
+}
+
+#yhvaztwdst .gt_indent_2 {
+  text-indent: 10px;
+}
+
+#yhvaztwdst .gt_indent_3 {
+  text-indent: 15px;
+}
+
+#yhvaztwdst .gt_indent_4 {
+  text-indent: 20px;
+}
+
+#yhvaztwdst .gt_indent_5 {
+  text-indent: 25px;
+}
+
+#yhvaztwdst .katex-display {
+  display: inline-flex !important;
+  margin-bottom: 0.75em !important;
+}
+
+#yhvaztwdst div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
+  height: 0px !important;
+}
+</style>
+<table class="table gt_table caption-top" data-quarto-bootstrap="false">
+<thead><tr class="gt_col_headings header">
+<th id="readiness_item" class="gt_col_heading gt_columns_bottom_border gt_left" data-quarto-table-cell-role="th" scope="col">item</th>
+<th id="readiness_status" class="gt_col_heading gt_columns_bottom_border gt_left" data-quarto-table-cell-role="th" scope="col">status</th>
+<th id="readiness_detail" class="gt_col_heading gt_columns_bottom_border gt_left" data-quarto-table-cell-role="th" scope="col">detail</th>
+</tr></thead>
+<tbody class="gt_table_body">
+<tr class="odd">
+<td class="gt_row gt_left" headers="readiness_item">Recruitment rows</td>
+<td class="gt_row gt_left" headers="readiness_status">repair</td>
+<td class="gt_row gt_left" headers="readiness_detail">2 copies of a 47 value series across 2 lines; retain one complete series. A second copy would be read as SSB.</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_left" headers="readiness_item">Spawning weights</td>
+<td class="gt_row gt_left" headers="readiness_status">repair</td>
+<td class="gt_row gt_left" headers="readiness_detail">4 zeros in effective spawning weights; stage them as 1e-12 for the current positive-weight contract.</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_left" headers="readiness_item">Population weights</td>
+<td class="gt_row gt_left" headers="readiness_status">missing</td>
+<td class="gt_row gt_left" headers="readiness_detail">Population body weights require explicit runner arguments and SS3 verification. Diagnostic defaults use Fratio-weighted catch-weight proxies, with fleet fractions 0.96, 0.04</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_left" headers="readiness_item">Units and ages</td>
+<td class="gt_row gt_left" headers="readiness_status">review</td>
+<td class="gt_row gt_left" headers="readiness_detail">Thousand fish, kg, tonnes and ages 1:30/30+ are working assumptions requiring SS3 export verification.</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_left" headers="readiness_item">SSB history</td>
+<td class="gt_row gt_left" headers="readiness_status">review</td>
+<td class="gt_row gt_left" headers="readiness_detail">47 positions; source label: # SSB 1978-2026 . Calendar pairing remains unresolved; restrict to Tier 3, Rec_Gen=1. The final two SSB values repeat the preceding pair; confirm this with the source export.</td>
+</tr>
+</tbody>
+</table>
 </div>
-<p>After supplying matching source histories, diagnostic mode explicitly selects fishery-weight proxies for population body weights, thousand fish, kg, tonnes, and ages 1–30 with a terminal plus group. These assumptions require review. The following future commands are displayed without execution:</p>
+</div>
+</div>
+<p>After confirming the source histories, diagnostic mode explicitly selects fishery-weight proxies for population body weights, thousand fish, kg, tonnes, and ages 1–30 with a terminal plus group. These assumptions require review. The following future commands are displayed without execution:</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/source.html" class="external-link">source</a></span><span class="op">(</span><span class="st">"examples/gt_2026/run.R"</span><span class="op">)</span></span>

@@ -1,5 +1,41 @@
 # Changelog
 
+## spmR (development version)
+
+- Multi-stock native status-determination alternatives retain each
+  stock’s own catch instead of assigning the last stock’s catch to every
+  stock.
+
+- Multi-stock Ricker projections keep each stock’s productivity
+  coefficient separate, so changing stock order preserves the
+  projections.
+
+- Multi-stock zero-catch initialization indexes the catch year and stock
+  separately, preventing an out-of-bounds matrix write.
+
+- The GT2026 adapter rejects spawning months other than January before
+  staging because its initial spawning-biomass verification assumes
+  beginning-of-year spawning.
+
+- [`tier3_scenario_table()`](https://afsc-assessments.github.io/spmR/reference/tier3_scenario_table.md)
+  summarizes each stock separately for multi-stock inputs and retains
+  the existing column layout for single-stock results.
+
+- The GT2026 report defaults to an audit-only render, so the plain
+  Quarto command works in a fresh source checkout without ignored local
+  run directories. Completed results are selected explicitly with
+  `saved_run`.
+
+- The GT2026 example preserves the author’s confirmed 47-value SSB
+  history and provides a portable handoff with the actual inputs,
+  editable R commands, verified saved results, figures and tables. Its
+  conditional results are published as a reference with the remaining
+  scientific assumptions stated explicitly.
+
+- The standalone GT2026 report reads saved controls through the
+  validated positional parser, so supported `spm.dat` comment labels no
+  longer cause completed runs to be rejected.
+
 ## spmR 0.4.3
 
 - [`write_spm_metadata()`](https://afsc-assessments.github.io/spmR/reference/write_spm_metadata.md)
@@ -16,10 +52,10 @@
   readable, and the R runner generates a sidecar for older format-2
   executables.
 - The GT2026 adapter accepts wrapped recruitment histories and an
-  explicit `per sex` declaration. The revised example has 47 recruitment
-  values and 45 SSB values; staging stops before creating an attempt
-  until matching source histories are supplied. The audit and articles
-  report this gap without padding or discarding values.
+  explicit `per sex` declaration. At the 0.4.3 release, the supplied
+  example had 47 recruitment values and 45 SSB values; the adapter
+  rejected that mismatch without padding or discarding values. Later
+  source revisions are evaluated by the live input audit.
 
 ## spmR 0.4.2
 

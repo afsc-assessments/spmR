@@ -1,13 +1,37 @@
 # Audit and stage the 2026 Greenland turbot inputs
 
+## Colleague handoff
+
+Download the [complete runnable
+handoff](https://afsc-assessments.github.io/spmR/gt2026-handoff.zip) to
+get the actual `ForProjections.dat`, `spm.dat` and `tacpar.dat` files, a
+plain-language field guide, installation requirements, and a short R
+script for checking or changing inputs, running a new attempt, plotting
+selected alternatives and exporting useful CSV tables. The bundle
+includes one completed conditional run and its provenance; new runs
+preserve it.
+
+Open the [rendered Greenland turbot
+results](https://afsc-assessments.github.io/spmR/greenland_turbot.html)
+for five figures and summary tables. This example uses Jim’s confirmed
+local 47-value SSB history and diagnostic population-weight assumptions;
+successful execution is separate from scientific input review. Figure
+downloads: [spawning
+biomass](https://afsc-assessments.github.io/spmR/gt2026-figures/SSB.png),
+[total
+biomass](https://afsc-assessments.github.io/spmR/gt2026-figures/Tot_biom.png),
+[catch](https://afsc-assessments.github.io/spmR/gt2026-figures/Catch.png),
+[ABC](https://afsc-assessments.github.io/spmR/gt2026-figures/ABC.png),
+and
+[OFL](https://afsc-assessments.github.io/spmR/gt2026-figures/OFL.png).
+
 The `examples/gt_2026` directory preserves the supplied Greenland turbot
-projection files. The revised species input contains 47 recruitment
-values and 45 SSB values. The helper audits this mismatch and stops
-staging before creating an attempt directory. Matching source histories,
-population body weights, units, age and plus-group alignment, and SS3
-export-field mapping require confirmation before assessment use. This
-article executes the audit and demonstrates the staging block; it
-generates no projection results.
+projection files. The current species input contains 47 recruitment
+values and 47 SSB values. The counts match; their calendar alignment
+still requires confirmation. Population body weights, units, age and
+plus-group alignment, and SS3 export-field mapping also require
+confirmation before assessment use. This article executes a read-only
+audit; it stages no files and generates no projection results.
 
 ## Simple commands
 
@@ -20,10 +44,11 @@ source("examples/gt_2026/run.R")
 check_gt2026_inputs()
 ```
 
-The audit reads the current source values. Supply matching recruitment
-and SSB histories before staging. `diagnostic = TRUE` selects working
-population weights, units and ages explicitly; it cannot supply missing
-history values. Once inputs are complete, each successful default
+The audit reads the current source values. Confirm the recruitment and
+SSB histories and their year alignment before staging.
+`diagnostic = TRUE` selects working population weights, units and ages
+explicitly; it cannot supply missing history values or establish their
+calendar alignment. Once inputs are reviewed, each successful default
 staging call creates `examples/gt_2026/spmR_runs/attempt-###`, retaining
 source snapshots, SHA-256 hashes, embedded declarations, and staging
 decisions. Existing attempt directories are protected against
@@ -31,9 +56,9 @@ overwriting.
 
 ## Audit the supplied files
 
-The following chunks locate and audit the example during an article
-build. They require the source checkout or source package, where the
-example files are available.
+The article locates and audits the example during its build. It requires
+the source checkout or source package, where the example files are
+available.
 
 ``` r
 
@@ -45,27 +70,37 @@ gt::gt(audit)
 |----|----|----|
 | Native metadata | info | A separate spm_input_v2.dat is optional; the runner embeds validated declarations in the staged species file. |
 | R metadata | info | A separate spm_metadata.json is optional. Existing files are archived; staged declarations come from explicit arguments or diagnostic defaults. |
-| Recruitment rows | repair | 2 copies of a 47 value series across 4 lines; retain one complete series. A second copy would be read as SSB. |
+| Recruitment rows | repair | 2 copies of a 47 value series across 2 lines; retain one complete series. A second copy would be read as SSB. |
 | Recruitment basis | ok | Source explicitly declares per_sex recruitment. |
 | Spawning weights | repair | 4 zeros in effective spawning weights; stage them as 1e-12 for the current positive-weight contract. |
 | Population weights | missing | Population body weights require explicit runner arguments and SS3 verification. Diagnostic defaults use Fratio-weighted catch-weight proxies, with fleet fractions 0.96, 0.04 |
 | Units and ages | review | Thousand fish, kg, tonnes and ages 1:30/30+ are working assumptions requiring SS3 export verification. |
-| SSB history | missing | 47 recruitment values but 45 SSB values. Supply matching source histories before staging; values are never padded or discarded. |
+| SSB history | review | 47 positions; source label: \# SSB 1978-2026 . Calendar pairing remains unresolved; restrict to Tier 3, Rec_Gen=1. The final two SSB values repeat the preceding pair; confirm this with the source export. |
 | Maturity fields | info | All-one maturity retains effective spawning weights. Ntot and SexRatio describe all fish and the all-fish female fraction. Confirm the SS3 spawning-weight definition. |
 | Controls | ok | 2026-2040; 7 alternatives; 1000 simulations. Adapter requires Tier 3, Rec_Gen=1, TAC_ABC=1, beginning year 2026 and ForProjections.dat. |
 | TAC parameters | info | tacpar.dat is archived when supplied and unused with TAC_ABC=1. |
 
-The input now explicitly declares `per sex`. Its two identical
-recruitment series contain 47 values each, wrapped across four lines and
-ending in `811.8, 460.5`. The SSB series has 45 values, ending in
-`28053.3, 27020.6, 25862.1`. The recruitment label still says 1978–2022
-and the SSB label says 1978–2026; confirm the numerical histories and
-their calendar alignment from the source export. The revised average
-five-year F is `0.05605452`, with new female and male abundance vectors
-over 30 ages.
+The input recruitment basis is per_sex. It contains 2 recruitment copies
+with 47 values each across 2 numeric lines, ending in 811.8, 460.5. The
+SSB series ends in 28053.3, 27020.6, 25862.1, 27020.6, 25862.1. The
+final two SSB values repeat the preceding pair. Confirm that these are
+the intended source values rather than placeholders.
 
-The helper accepts the wrapped recruitment series and explicit basis.
-Once matching source histories are available, it can stage one
+The source history labels are printed below. Counts alone establish
+neither the calendar years nor the recruitment/SSB year pairing. Confirm
+both against the SS3 export, including any labels that remain from an
+earlier revision.
+
+``` r
+
+cat(history_labels, sep = "\n")
+```
+
+    # Recruitment 1978 to 2022 for RecAge=1
+    # SSB 1978-2026
+
+The helper accepts wrapped recruitment series and an explicit basis.
+With matching source histories and declared inputs, it can stage one
 recruitment copy, move the basis declaration into the versioned comment
 block, and replace four zero spawning weights with `1e-12` for the
 positive-weight contract. It keeps Tier 3 historical-recruitment mode
@@ -79,34 +114,40 @@ validated declarations as comments in the staged species file. The
 current native engine reads those comments directly. `spm.tpl` is
 self-contained and requires no separate C++ header.
 
-## Confirm the staging block
+## Check staging readiness
 
-The current mismatch is reported as an expected input error, and no
-attempt directory is created. An unexpected error still stops the
-article build.
+The following table selects the current findings that need repair,
+declarations, or review. It reads the audit without choosing diagnostic
+assumptions or creating an attempt directory. The runner can repair
+duplicate recruitment copies and zero spawning weights during staging;
+population weights, units, and ages require explicit arguments or an
+explicit diagnostic choice. Calendar alignment and the SS3 field
+definitions require scientific review in either case.
 
 ``` r
 
-attempt_dir <- tempfile("spmr-gt2026-article-")
-staging_status <- tryCatch(
-  run_gt2026_projection(
-    source_dir = example_dir,
-    run_dir = attempt_dir,
-    run = FALSE
-  ),
-  error = function(condition) {
-    detail <- conditionMessage(condition)
-    if (!grepl("47 recruitment values but 45 SSB values", detail, fixed = TRUE)) {
-      stop(condition)
-    }
-    detail
-  }
-)
-stopifnot(is.character(staging_status), !dir.exists(attempt_dir))
-cat("Staging blocked:", staging_status)
+readiness <- audit[audit$status %in% c("missing", "review", "repair"), ]
+readiness |>
+  dplyr::rename(
+    readiness_item = item,
+    readiness_status = status,
+    readiness_detail = detail
+  ) |>
+  gt::gt() |>
+  gt::cols_label(
+    readiness_item = "item",
+    readiness_status = "status",
+    readiness_detail = "detail"
+  )
 ```
 
-    Staging blocked: 47 recruitment values but 45 SSB values. Supply matching source histories before staging; values are never padded or discarded.
+| item | status | detail |
+|----|----|----|
+| Recruitment rows | repair | 2 copies of a 47 value series across 2 lines; retain one complete series. A second copy would be read as SSB. |
+| Spawning weights | repair | 4 zeros in effective spawning weights; stage them as 1e-12 for the current positive-weight contract. |
+| Population weights | missing | Population body weights require explicit runner arguments and SS3 verification. Diagnostic defaults use Fratio-weighted catch-weight proxies, with fleet fractions 0.96, 0.04 |
+| Units and ages | review | Thousand fish, kg, tonnes and ages 1:30/30+ are working assumptions requiring SS3 export verification. |
+| SSB history | review | 47 positions; source label: \# SSB 1978-2026 . Calendar pairing remains unresolved; restrict to Tier 3, Rec_Gen=1. The final two SSB values repeat the preceding pair; confirm this with the source export. |
 
 ## Stage complete inputs after review
 
@@ -137,9 +178,9 @@ histories and an explicit decision to use the diagnostic assumptions.
 
 ## Run an explicitly chosen diagnostic projection
 
-After supplying matching histories and reviewing the assumptions, these
-commands enable native execution. They are displayed without execution
-in this article.
+After confirming the histories and explicitly choosing the diagnostic
+assumptions, these commands enable native execution. They are displayed
+without execution in this article.
 
 ``` r
 
@@ -185,3 +226,24 @@ beginning-of-2026 abundance state, plus group, and recruitment/SSB year
 pairing against the SS3 export code and source fields. Supplying
 population weights alone leaves those remaining checks open. The example
 README contains the complete input evaluation and terminal commands.
+
+## Standalone run-and-results report
+
+`examples/gt_2026/greenland_turbot.qmd` provides visible manual run
+controls, the current input audit, and saved-output tables and plots.
+Each projection panel displays 15 simulation trajectories, the median,
+and a 90% projection interval. Rendering performs no projection; select
+a reviewed saved attempt to populate the results. From the repository
+root:
+
+``` bash
+quarto render examples/gt_2026/greenland_turbot.qmd
+quarto render examples/gt_2026/greenland_turbot.qmd -P saved_run:spmR_runs/attempt-001
+```
+
+The first command produces the audit only, including in a fresh source
+checkout without saved output. The second selects results explicitly.
+
+Replace `attempt-001` with the intended saved attempt. Saved results
+from an older source revision are labelled separately from the current
+input audit.

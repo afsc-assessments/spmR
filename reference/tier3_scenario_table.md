@@ -1,9 +1,9 @@
 # Summarize the seven Tier 3 projection alternatives
 
-Converts simulation-level SPM output into one row per Tier 3
-alternative. Results for the requested projection years are placed in
-separate columns so the returned object can be printed directly as an
-assessment table.
+Converts simulation-level SPM output into one row per stock and Tier 3
+alternative. Stocks are summarized separately. Results for the requested
+projection years are placed in separate columns so the returned object
+can be printed directly as an assessment table.
 
 ## Usage
 
@@ -39,8 +39,10 @@ tier3_scenario_table(
 
 ## Value
 
-A tibble with one row per Tier 3 alternative and year-specific mean
-Catch, ABC, OFL, spawning biomass, fishing mortality, and B/B35 columns.
+A tibble with one row per stock and Tier 3 alternative and year-specific
+mean Catch, ABC, OFL, spawning biomass, fishing mortality, and B/B35
+columns. A \`Stock\` column is included for multi-stock inputs;
+single-stock inputs retain the original column layout.
 
 ## Examples
 

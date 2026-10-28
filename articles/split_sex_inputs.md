@@ -421,7 +421,7 @@ gt20 <- run_gt20_projection(
 
     Warning: GT20 uses declared mean_male_fishery population weights for males.
 
-    Completed GT20 projection in /tmp/Rtmp9u4t03/spmr-gt20-vignette-1a1a3855bfa5; starting biomass = 92104.6 t.
+    Completed GT20 projection in /tmp/Rtmp7XR2sm/spmr-gt20-vignette-1b4b3877a1df; starting biomass = 92104.6 t.
 
 ``` r
 
@@ -464,7 +464,7 @@ if (gt20_run_native) {
     15   1 2022 47196.8 6139.32 6139.32 7181.26
 
                                                      executable_sha256
-    1 3b3e126da558ca4ee12538ecf2e598e8ba64319c505c5a064cc5808a2be83fed
+    1 baa5a9e7b7a1fdab932b452efb28ac81a8794275ef45e20c51b2ff1d7b8cd46b
       recruitment_basis
     1             total
 
