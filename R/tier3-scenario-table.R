@@ -1,6 +1,7 @@
 #' Summarize the seven Tier 3 projection alternatives
 #'
-#' Converts simulation-level SPM output into one row per Tier 3 alternative.
+#' Converts simulation-level SPM output into one row per stock and Tier 3
+#' alternative. Stocks are summarized separately.
 #' Results for the requested projection years are placed in separate columns so
 #' the returned object can be printed directly as an assessment table.
 #'
@@ -10,8 +11,10 @@
 #' @param scenario_names Optional character vector of seven scenario names.
 #' @param digits Number of digits used to round summarized values.
 #'
-#' @return A tibble with one row per Tier 3 alternative and year-specific mean
-#'   Catch, ABC, OFL, spawning biomass, fishing mortality, and B/B35 columns.
+#' @return A tibble with one row per stock and Tier 3 alternative and
+#'   year-specific mean Catch, ABC, OFL, spawning biomass, fishing mortality,
+#'   and B/B35 columns. A `Stock` column is included for multi-stock inputs;
+#'   single-stock inputs retain the original column layout.
 #' @export
 #'
 #' @examples
@@ -75,7 +78,7 @@ tier3_scenario_table <- function(
 
   out <- x |>
     dplyr::filter(.data$Year %in% years) |>
-    dplyr::group_by(.data$Alt, .data$Year) |>
+    dplyr::group_by(.data$Stock, .data$Alt, .data$Year) |>
     dplyr::summarise(
       Catch = mean(.data$Catch, na.rm = TRUE),
       ABC = mean(.data$ABC, na.rm = TRUE),
@@ -94,7 +97,11 @@ tier3_scenario_table <- function(
       Scenario = scenario_names[.data$Alt],
       .after = "Alt"
     ) |>
-    dplyr::arrange(.data$Alt)
+    dplyr::arrange(.data$Stock, .data$Alt)
+
+  if (dplyr::n_distinct(x$Stock) == 1L) {
+    out <- dplyr::select(out, -"Stock")
+  }
 
   numeric_columns <- vapply(out, is.numeric, logical(1))
   numeric_columns[match("Alt", names(out))] <- FALSE

@@ -22,6 +22,41 @@ testthat::test_that("tier3_scenario_table returns seven scenario rows", {
     c("Catch_2027", "SSB_2028", "B_B35_2028") %in% names(out)
   ))
   testthat::expect_equal(out$Catch_2027, 101:107)
+  testthat::expect_identical("Stock" %in% names(out), FALSE)
+})
+
+testthat::test_that("tier3_scenario_table keeps stocks and their ratios separate", {
+  detail <- expand.grid(
+    Stock = c("pollock", "turbot"),
+    Alt = 1:7,
+    Sim = 1:2,
+    Year = 2027:2028,
+    KEEP.OUT.ATTRS = FALSE,
+    stringsAsFactors = FALSE
+  )
+  scale <- ifelse(detail$Stock == "pollock", 1, 10)
+  detail$Catch <- scale * (100 + detail$Alt + detail$Sim)
+  detail$ABC <- scale * 120
+  detail$OFL <- scale * 150
+  detail$SSB <- scale * 500
+  detail$F <- ifelse(detail$Stock == "pollock", 0.2, 0.4)
+  detail$B35 <- ifelse(detail$Stock == "pollock", 250, 1000)
+
+  out <- spmR::tier3_scenario_table(detail, years = 2027:2028)
+  pollock <- out[out$Stock == "pollock", ]
+  turbot <- out[out$Stock == "turbot", ]
+
+  testthat::expect_equal(nrow(out), 14L)
+  testthat::expect_equal(pollock$Alt, 1:7)
+  testthat::expect_equal(turbot$Alt, 1:7)
+  testthat::expect_equal(pollock$Catch_2027, 102.5:108.5)
+  testthat::expect_equal(turbot$Catch_2028, 10 * (102.5:108.5))
+  testthat::expect_equal(pollock$SSB_2028, rep(500, 7))
+  testthat::expect_equal(turbot$SSB_2028, rep(5000, 7))
+  testthat::expect_equal(pollock$B_B35_2027, rep(2, 7))
+  testthat::expect_equal(turbot$B_B35_2027, rep(5, 7))
+  testthat::expect_equal(pollock$F_2027, rep(0.2, 7))
+  testthat::expect_equal(turbot$F_2027, rep(0.4, 7))
 })
 
 testthat::test_that("tier3_scenario_table validates years and alternatives", {

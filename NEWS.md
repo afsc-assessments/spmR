@@ -1,5 +1,13 @@
 # spmR (development version)
 
+* Multi-stock native status-determination alternatives retain each stock's own catch instead of assigning the last stock's catch to every stock.
+
+* Multi-stock Ricker projections keep each stock's productivity coefficient separate, so changing stock order preserves the projections.
+
+* The GT2026 adapter rejects spawning months other than January before staging because its initial spawning-biomass verification assumes beginning-of-year spawning.
+
+* `tier3_scenario_table()` summarizes each stock separately for multi-stock inputs and retains the existing column layout for single-stock results.
+
 * The GT2026 report defaults to an audit-only render, so the plain Quarto command works in a fresh source checkout without ignored local run directories. Completed results are selected explicitly with `saved_run`.
 
 * The GT2026 example preserves the author's confirmed 47-value SSB history and provides a portable handoff with the actual inputs, editable R commands, verified saved results, figures and tables. Its conditional results are published as a reference with the remaining scientific assumptions stated explicitly.
