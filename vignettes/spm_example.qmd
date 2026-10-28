@@ -39,8 +39,8 @@ file's existing field order and store added population vectors in the versioned
 comment block. The current native engine reads that block directly; separate
 JSON and native sidecar files remain supported for existing workflows.
 
-The first two workflows read archived output. The third identifies missing
-scientific declarations and incomplete histories before a new projection.
+The first two workflows read archived output. The third audits scientific
+declarations and history alignment before a new projection.
 
 ## 1. Atka workflow (`examples/atka`)
 
@@ -84,42 +84,52 @@ plotSPM(bsre_summary, alt = c(1, 3, 5, 7), mytitle = "BSRE_AI summary plot")
 
 ## 3. Audit and stage Greenland turbot (`examples/gt_2026`)
 
-The revised 2026 export has 47 recruitment values and 45 SSB values. Its helper
-reports the mismatch and stops before staging until matching source histories
-are supplied. Population weights, units, ages, and SS3 export-field definitions
-also require review. The
+```{r}
+#| include: false
+gt2026_dir <- file.path(pkg_root, "examples", "gt_2026")
+source(file.path(gt2026_dir, "run.R"), local = TRUE)
+gt2026_inputs <- gt2026_read_source(gt2026_dir)
+gt2026_audit <- check_gt2026_inputs(gt2026_dir)
+gt2026_counts_match <- length(gt2026_inputs$recruitment) == length(gt2026_inputs$ssb)
+```
+
+The current 2026 export has `r length(gt2026_inputs$recruitment)` recruitment
+values and `r length(gt2026_inputs$ssb)` SSB values.
+`r if (gt2026_counts_match) "The counts match; confirm their source values and calendar alignment." else "The counts differ; the helper stops staging until matching source histories are supplied."`
+Population weights, units, ages, and SS3 export-field definitions also require
+review. This section reads the inputs without staging files or running a
+projection. The
 [GT2026 audit and staging guide](gt2026_inputs.html) explains each finding.
 
 ```{r}
-gt2026_dir <- file.path(pkg_root, "examples", "gt_2026")
-source(file.path(gt2026_dir, "run.R"), local = TRUE)
-gt::gt(check_gt2026_inputs(gt2026_dir))
+gt::gt(gt2026_audit)
 ```
 
-The next chunk displays the expected staging block and verifies that no attempt
-directory is created. `run = FALSE` leaves native execution disabled.
+The next table selects the current findings that require repair, declarations,
+or review. Reading these findings makes no diagnostic assumptions and creates
+no attempt directory. The runner can repair duplicate recruitment copies and
+zero spawning weights during staging; the source definitions and calendar
+alignment remain scientific review tasks.
 
 ```{r}
-gt2026_attempt <- tempfile("spmr-gt2026-canonical-")
-gt2026_status <- tryCatch(
-  run_gt2026_projection(
-    source_dir = gt2026_dir,
-    run_dir = gt2026_attempt,
-    run = FALSE
-  ),
-  error = function(condition) {
-    detail <- conditionMessage(condition)
-    if (!grepl("47 recruitment values but 45 SSB values", detail, fixed = TRUE)) {
-      stop(condition)
-    }
-    detail
-  }
-)
-stopifnot(is.character(gt2026_status), !dir.exists(gt2026_attempt))
-cat("Staging blocked:", gt2026_status)
+gt2026_readiness <- gt2026_audit[
+  gt2026_audit$status %in% c("missing", "review", "repair"),
+]
+gt2026_readiness |>
+  dplyr::rename(
+    readiness_item = item,
+    readiness_status = status,
+    readiness_detail = detail
+  ) |>
+  gt::gt() |>
+  gt::cols_label(
+    readiness_item = "item",
+    readiness_status = "status",
+    readiness_detail = "detail"
+  )
 ```
 
-After supplying matching source histories, diagnostic mode explicitly selects
+After confirming the source histories, diagnostic mode explicitly selects
 fishery-weight proxies for population body weights, thousand fish, kg, tonnes,
 and ages 1–30 with a terminal plus group. These assumptions require review.
 The following future commands are displayed without execution:

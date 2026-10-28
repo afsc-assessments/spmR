@@ -187,6 +187,8 @@ check_gt2026_inputs <- function(source_dir = .gt2026_source_dir) {
   ))
   sidecar_incomplete <- !length(sidecar) || any(grepl("SET_", sidecar))
   all_one_maturity <- all(c(raw$female_maturity, raw$male_maturity) == 1)
+  repeated_ssb_tail <- length(raw$ssb) >= 4L &&
+    identical(tail(raw$ssb, 2L), head(tail(raw$ssb, 4L), 2L))
   tibble::tibble(
     item = c(
       "Native metadata",
@@ -247,7 +249,12 @@ check_gt2026_inputs <- function(source_dir = .gt2026_source_dir) {
         paste(
           length(raw$ssb), "positions; source label:",
           trimws(raw$lines[raw$ssb_heading]),
-          ". Calendar pairing remains unresolved; restrict to Tier 3, Rec_Gen=1."
+          ". Calendar pairing remains unresolved; restrict to Tier 3, Rec_Gen=1.",
+          if (repeated_ssb_tail) {
+            "The final two SSB values repeat the preceding pair; confirm this with the source export."
+          } else {
+            ""
+          }
         )
       },
       if (all_one_maturity) {

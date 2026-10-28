@@ -32,3 +32,6 @@ examples/atka/scenario3_5yr_projection_table.csv
 /inst/admb/spm
 examples/gt20/spmR_run/
 examples/gt_2026/spmR_runs/
+examples/gt_2026/greenland_turbot.html
+examples/gt_2026/greenland_turbot_files/
+examples/gt_2026/.quarto/

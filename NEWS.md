@@ -1,8 +1,14 @@
+# spmR (development version)
+
+* The GT2026 example preserves the author's confirmed 47-value SSB history and provides a portable handoff with the actual inputs, editable R commands, verified saved results, figures and tables. Its conditional results are published as a reference with the remaining scientific assumptions stated explicitly.
+
+* The standalone GT2026 report reads saved controls through the validated positional parser, so supported `spm.dat` comment labels no longer cause completed runs to be rejected.
+
 # spmR 0.4.3
 
 * `write_spm_metadata()` embeds validated version-2 declarations as comments in each species file by default. `validate_spm_inputs()` and `runSPM()` read those declarations automatically; an explicit `metadata = "name.json"` retains the separate JSON workflow.
 * The self-contained native engine reads the embedded declarations directly and advertises `SPMR_INLINE_INPUT=1`. A standalone run needs `spm.dat` and its species files. Legacy native sidecars remain readable, and the R runner generates a sidecar for older format-2 executables.
-* The GT2026 adapter accepts wrapped recruitment histories and an explicit `per sex` declaration. The revised example has 47 recruitment values and 45 SSB values; staging stops before creating an attempt until matching source histories are supplied. The audit and articles report this gap without padding or discarding values.
+* The GT2026 adapter accepts wrapped recruitment histories and an explicit `per sex` declaration. At the 0.4.3 release, the supplied example had 47 recruitment values and 45 SSB values; the adapter rejected that mismatch without padding or discarding values. Later source revisions are evaluated by the live input audit.
 
 # spmR 0.4.2
 

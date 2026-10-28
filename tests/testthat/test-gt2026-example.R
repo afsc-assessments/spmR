@@ -1,18 +1,18 @@
 local_gt2026_example <- function(complete = TRUE, env = parent.frame()) {
   script <- testthat::test_path("..", "..", "examples", "gt_2026", "run.R")
+  fixture_dir <- normalizePath(
+    testthat::test_path("fixtures", "gt2026-incomplete"),
+    mustWork = TRUE
+  )
   testthat::skip_if_not(file.exists(script), "GT2026 example is unavailable")
   script <- normalizePath(script, mustWork = TRUE)
   withr::local_dir(dirname(dirname(dirname(script))), .local_envir = env)
   runner <- new.env(parent = globalenv())
   sys.source(script, envir = runner)
-  source_dir <- dirname(script)
+  source_dir <- withr::local_tempdir(.local_envir = env)
+  supplied <- c("ForProjections.dat", "spm.dat", "tacpar.dat")
+  stopifnot(all(file.copy(file.path(fixture_dir, supplied), source_dir)))
   if (complete) {
-    source_dir <- withr::local_tempdir(.local_envir = env)
-    supplied <- intersect(
-      c("ForProjections.dat", "spm.dat", "spm_input_v2.dat", "tacpar.dat"),
-      list.files(dirname(script))
-    )
-    stopifnot(all(file.copy(file.path(dirname(script), supplied), source_dir)))
     stock_path <- file.path(source_dir, "ForProjections.dat")
     stock_lines <- readLines(stock_path, warn = FALSE)
     stock_lines <- c(
@@ -54,7 +54,7 @@ testthat::test_that("GT2026 audit identifies incomplete and repairable inputs", 
   )
 })
 
-testthat::test_that("GT2026 preserves updated inputs and rejects incomplete histories", {
+testthat::test_that("GT2026 preserves historical inputs and rejects incomplete histories", {
   example <- local_gt2026_example(complete = FALSE)
   source_path <- file.path(example$source_dir, "ForProjections.dat")
   source_hash <- digest::digest(source_path, file = TRUE, algo = "sha256")
@@ -83,6 +83,38 @@ testthat::test_that("GT2026 preserves updated inputs and rejects incomplete hist
     digest::digest(source_path, file = TRUE, algo = "sha256"),
     source_hash
   )
+})
+
+testthat::test_that("GT2026 accepts matching 47-value histories with one row per sex", {
+  example <- local_gt2026_example()
+  raw <- example$runner$gt2026_read_source(example$source_dir)
+  source_lines <- raw$lines
+  source_lines[raw$recruitment_rows[c(1, 3)]] <- paste(
+    raw$recruitment,
+    collapse = " "
+  )
+  source_lines <- source_lines[-raw$recruitment_rows[c(2, 4)]]
+  writeLines(source_lines, file.path(example$source_dir, "ForProjections.dat"))
+
+  revised <- example$runner$gt2026_read_source(example$source_dir)
+  audit <- example$runner$check_gt2026_inputs(example$source_dir)
+
+  testthat::expect_length(revised$recruitment, 47)
+  testthat::expect_length(revised$ssb, 47)
+  testthat::expect_equal(revised$recruitment_copies, 2)
+  testthat::expect_length(revised$recruitment_rows, 2)
+  testthat::expect_identical(revised$recruitment_basis, "per_sex")
+  testthat::expect_equal(revised$recruitment, raw$recruitment)
+  testthat::expect_equal(revised$ssb, raw$ssb)
+  testthat::expect_identical(
+    audit$status[audit$item == "SSB history"],
+    "review"
+  )
+  testthat::expect_false(grepl(
+    "repeat the preceding pair",
+    audit$detail[audit$item == "SSB history"],
+    fixed = TRUE
+  ))
 })
 
 testthat::test_that("GT2026 requires scientific declarations before staging", {
@@ -120,6 +152,40 @@ testthat::test_that("GT2026 requires scientific declarations before staging", {
     ))
     testthat::expect_false(dir.exists(destination))
   }
+})
+
+testthat::test_that("GT2026 flags a repeated terminal SSB pair and permits diagnostic staging", {
+  example <- local_gt2026_example()
+  raw <- example$runner$gt2026_read_source(example$source_dir)
+  source_lines <- raw$lines
+  source_lines[tail(raw$ssb_rows, 1)] <- paste(
+    raw$ssb[length(raw$ssb) - c(3, 2)],
+    collapse = " "
+  )
+  writeLines(source_lines, file.path(example$source_dir, "ForProjections.dat"))
+
+  audit <- example$runner$check_gt2026_inputs(example$source_dir)
+  testthat::expect_identical(
+    audit$status[audit$item == "SSB history"],
+    "review"
+  )
+  testthat::expect_match(
+    audit$detail[audit$item == "SSB history"],
+    "The final two SSB values repeat the preceding pair",
+    fixed = TRUE
+  )
+
+  staged <- example$runner$run_gt2026_projection(
+    example$source_dir,
+    run_dir = file.path(withr::local_tempdir(), "repeated-ssb"),
+    diagnostic = TRUE,
+    run = FALSE
+  )
+  testthat::expect_s3_class(staged$inputs, "spm_inputs")
+  testthat::expect_equal(
+    tail(staged$inputs$species[[1]]$SSB, 4),
+    rep(raw$ssb[length(raw$ssb) - c(3, 2)], 2)
+  )
 })
 
 testthat::test_that("GT2026 diagnostic staging preserves supplied data and histories", {
