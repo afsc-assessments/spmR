@@ -222,6 +222,14 @@ if __name__=='__main__':
             assert math.isclose(float(row['Catch']),float(row[expected_field]),rel_tol=1e-5,abs_tol=.002),(name,expected_field,row)
         second_year={row['Stock']:float(row['Catch']) for row in rows if row['Year']=='2027'}
         assert second_year['audit']!=second_year['other'],(name,second_year)
+    # More stocks than fixed-catch years must permit a zero catch for stock 2.
+    directory=multi_stock_fixture('multi_zero_catch')
+    controls=directory/'spm.dat'
+    controls.write_text(controls.read_text().replace('# Catch\n2026 40 40\n','# Catch\n2026 40 0\n'))
+    results['multi_zero_catch']=run(directory,expected_stocks=2)
+    first_year={row['Stock']:row for row in csv.DictReader((directory/'spm_detail.csv').open()) if row['Sim']=='1' and row['Year']=='2026'}
+    assert float(first_year['audit']['Catch'])==40
+    assert float(first_year['other']['Catch'])==0 and float(first_year['other']['F'])==0
     directory=multi_stock_fixture('invalid_inline_mixed')
     inline_metadata(directory,keep_sidecar=True,selected_files=['audit.prj'])
     results['invalid_inline_mixed']=run(directory,False)

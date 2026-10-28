@@ -4,6 +4,8 @@
 
 * Multi-stock Ricker projections keep each stock's productivity coefficient separate, so changing stock order preserves the projections.
 
+* Multi-stock zero-catch initialization indexes the catch year and stock separately, preventing an out-of-bounds matrix write.
+
 * The GT2026 adapter rejects spawning months other than January before staging because its initial spawning-biomass verification assumes beginning-of-year spawning.
 
 * `tier3_scenario_table()` summarizes each stock separately for multi-stock inputs and retains the existing column layout for single-stock results.

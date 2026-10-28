@@ -701,7 +701,7 @@ PARAMETER_SECTION
       if (Obs_Catch(k,ispp) > 0 )
         F_begin_yr(k,ispp) = SolveF2(n0_F(ispp), n0_M(ispp), Obs_Catch(k,ispp),ispp); // F_yr_one(ispp) = SolveF2(n0_F(ispp), n0_M(ispp), yr_one_catch(ispp),ispp);
       else
-        F_begin_yr(ispp) = 0; // F_yr_one(ispp) = 0; // cout<<spname(ispp)<<" "<<F_yr_one(ispp)<<" "<<yr_one_catch(ispp)<<endl;
+        F_begin_yr(k,ispp) = 0;
     }
   } 
 
