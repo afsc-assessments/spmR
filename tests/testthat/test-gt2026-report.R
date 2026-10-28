@@ -237,6 +237,13 @@ testthat::test_that("GT2026 saved report rejects incomplete and altered evidence
     fixture$helper$gt2026_read_report_run("", fixture$source_dir),
     "explicitly"
   )
+  expect_gt2026_report_error(
+    fixture$helper$gt2026_read_report_run(
+      file.path(fixture$run_dir, "missing-attempt"),
+      fixture$source_dir
+    ),
+    "Select an existing saved attempt"
+  )
   for (location in c(
     "spm.dat",
     "spm_detail.csv",
@@ -418,4 +425,113 @@ testthat::test_that("GT2026 report summaries use every simulation and common det
     fixture$helper$gt2026_report_series(fixture$result, 1.5),
     "positive integer"
   )
+})
+
+testthat::test_that("GT2026 source report renders an audit by default and saved results explicitly", {
+  testthat::skip_if_not_installed("quarto")
+  testthat::skip_if_not_installed("gt")
+  testthat::skip_if_not(
+    !is.null(quarto::quarto_path()),
+    "Quarto CLI is unavailable"
+  )
+  package_examples <- normalizePath(
+    testthat::test_path("..", "..", "examples"),
+    mustWork = TRUE
+  )
+  root <- withr::local_tempdir()
+  example_dir <- file.path(root, "examples", "gt_2026")
+  helper_dir <- file.path(root, "examples", "gt20")
+  dir.create(example_dir, recursive = TRUE)
+  dir.create(helper_dir)
+  source_names <- c(
+    "greenland_turbot.qmd",
+    "run.R",
+    "report.R",
+    "spm.dat",
+    "ForProjections.dat",
+    "tacpar.dat"
+  )
+  stopifnot(all(file.copy(
+    file.path(package_examples, "gt_2026", source_names),
+    example_dir
+  )))
+  stopifnot(file.copy(
+    file.path(package_examples, "gt20", "run_spmR_split_sex.R"),
+    helper_dir
+  ))
+  source_paths <- c(
+    file.path(example_dir, source_names),
+    file.path(helper_dir, "run_spmR_split_sex.R")
+  )
+  hashes <- function(paths) {
+    vapply(paths, digest::digest, character(1), file = TRUE, algo = "sha256")
+  }
+  source_before <- hashes(source_paths)
+  fixture <- local_gt2026_report()
+  saved_paths <- list.files(
+    fixture$run_dir,
+    recursive = TRUE,
+    full.names = TRUE,
+    all.files = TRUE,
+    no.. = TRUE
+  )
+  saved_before <- hashes(saved_paths)
+  attempts <- file.path(example_dir, "spmR_runs")
+  testthat::expect_false(dir.exists(attempts))
+  qmd <- file.path(example_dir, "greenland_turbot.qmd")
+  rendered_body <- function(filename) {
+    html <- paste(readLines(file.path(example_dir, filename), warn = FALSE), collapse = "\n")
+    for (tag in c("script", "style", "pre", "code")) {
+      html <- gsub(
+        paste0("(?is)<", tag, "\\b[^>]*>.*?</", tag, ">"),
+        "",
+        html,
+        perl = TRUE
+      )
+    }
+    html
+  }
+  png_count <- function(html) {
+    matches <- gregexpr(
+      "<img\\b[^>]*\\bsrc=[\"']data:image/png[;,]",
+      html,
+      perl = TRUE
+    )
+    length(regmatches(html, matches)[[1]])
+  }
+
+  quarto::quarto_render(
+    input = qmd,
+    output_file = "audit.html",
+    execute_dir = example_dir,
+    quiet = TRUE
+  )
+  audit <- rendered_body("audit.html")
+  testthat::expect_match(
+    audit,
+    "<strong>Audit only: no saved attempt selected.</strong>",
+    fixed = TRUE
+  )
+  testthat::expect_identical(png_count(audit), 0L)
+  testthat::expect_false(dir.exists(attempts))
+  testthat::expect_identical(hashes(source_paths), source_before)
+  testthat::expect_identical(hashes(saved_paths), saved_before)
+
+  quarto::quarto_render(
+    input = qmd,
+    output_file = "saved.html",
+    execute_dir = example_dir,
+    execute_params = list(saved_run = fixture$run_dir),
+    quiet = TRUE
+  )
+  saved <- rendered_body("saved.html")
+  testthat::expect_match(
+    saved,
+    "<strong>Saved conditional projection loaded.</strong>",
+    fixed = TRUE
+  )
+  testthat::expect_identical(png_count(saved), 5L)
+  testthat::expect_false(dir.exists(attempts))
+  testthat::expect_identical(hashes(source_paths), source_before)
+  testthat::expect_identical(hashes(saved_paths), saved_before)
 })

@@ -1,5 +1,7 @@
 # spmR (development version)
 
+* The GT2026 report defaults to an audit-only render, so the plain Quarto command works in a fresh source checkout without ignored local run directories. Completed results are selected explicitly with `saved_run`.
+
 * The GT2026 example preserves the author's confirmed 47-value SSB history and provides a portable handoff with the actual inputs, editable R commands, verified saved results, figures and tables. Its conditional results are published as a reference with the remaining scientific assumptions stated explicitly.
 
 * The standalone GT2026 report reads saved controls through the validated positional parser, so supported `spm.dat` comment labels no longer cause completed runs to be rejected.

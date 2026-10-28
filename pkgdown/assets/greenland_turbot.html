@@ -2279,8 +2279,9 @@ font-family: inherit;
 <p>This working report audits the current input files and, when explicitly selected, reads a completed projection attempt. Rendering <strong>never compiles or runs ADMB</strong>. Conditional projections describe the supplied inputs and assumptions; they are not adopted catch recommendations.</p>
 <section id="run-controls" class="level2">
 <h2 class="anchored" data-anchor-id="run-controls">Run controls</h2>
-<p>From this directory, render the input audit with:</p>
+<p>From this directory, render the current input audit with:</p>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="ex">quarto</span> render greenland_turbot.qmd</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>The default selects no saved attempt, so this command works in a fresh source checkout and produces the audit without projection figures or tables.</p>
 <p>To include results, set <code>saved_run</code> in the YAML above or pass the actual attempt directory explicitly. This example path is illustrative; the report never selects the newest directory automatically:</p>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="ex">quarto</span> render greenland_turbot.qmd <span class="at">-P</span> saved_run:spmR_runs/attempt-001</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell">
@@ -2329,20 +2330,20 @@ Table 1: Current GT2026 input checks. Repair and review entries remain visible 
 </figcaption>
 <div aria-describedby="tbl-input-audit-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <div class="cell-output-display">
-<div id="sjlfiaxihs" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
-<style>#sjlfiaxihs table {
+<div id="fidkmctgoh" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#fidkmctgoh table {
 font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
 -webkit-font-smoothing: antialiased;
 -moz-osx-font-smoothing: grayscale;
 }
-#sjlfiaxihs thead, #sjlfiaxihs tbody, #sjlfiaxihs tfoot, #sjlfiaxihs tr, #sjlfiaxihs td, #sjlfiaxihs th {
+#fidkmctgoh thead, #fidkmctgoh tbody, #fidkmctgoh tfoot, #fidkmctgoh tr, #fidkmctgoh td, #fidkmctgoh th {
 border-style: none;
 }
-#sjlfiaxihs p {
+#fidkmctgoh p {
 margin: 0;
 padding: 0;
 }
-#sjlfiaxihs .gt_table {
+#fidkmctgoh .gt_table {
 display: table;
 border-collapse: collapse;
 line-height: normal;
@@ -2367,11 +2368,11 @@ border-left-style: none;
 border-left-width: 2px;
 border-left-color: #D3D3D3;
 }
-#sjlfiaxihs .gt_caption {
+#fidkmctgoh .gt_caption {
 padding-top: 4px;
 padding-bottom: 4px;
 }
-#sjlfiaxihs .gt_title {
+#fidkmctgoh .gt_title {
 color: #333333;
 font-size: 125%;
 font-weight: initial;
@@ -2382,7 +2383,7 @@ padding-right: 5px;
 border-bottom-color: #FFFFFF;
 border-bottom-width: 0;
 }
-#sjlfiaxihs .gt_subtitle {
+#fidkmctgoh .gt_subtitle {
 color: #333333;
 font-size: 85%;
 font-weight: initial;
@@ -2393,7 +2394,7 @@ padding-right: 5px;
 border-top-color: #FFFFFF;
 border-top-width: 0;
 }
-#sjlfiaxihs .gt_heading {
+#fidkmctgoh .gt_heading {
 background-color: #FFFFFF;
 text-align: center;
 border-bottom-color: #FFFFFF;
@@ -2404,12 +2405,12 @@ border-right-style: none;
 border-right-width: 1px;
 border-right-color: #D3D3D3;
 }
-#sjlfiaxihs .gt_bottom_border {
+#fidkmctgoh .gt_bottom_border {
 border-bottom-style: solid;
 border-bottom-width: 2px;
 border-bottom-color: #D3D3D3;
 }
-#sjlfiaxihs .gt_col_headings {
+#fidkmctgoh .gt_col_headings {
 border-top-style: solid;
 border-top-width: 2px;
 border-top-color: #D3D3D3;
@@ -2423,7 +2424,7 @@ border-right-style: none;
 border-right-width: 1px;
 border-right-color: #D3D3D3;
 }
-#sjlfiaxihs .gt_col_heading {
+#fidkmctgoh .gt_col_heading {
 color: #333333;
 background-color: #FFFFFF;
 font-size: 100%;
@@ -2442,7 +2443,7 @@ padding-left: 5px;
 padding-right: 5px;
 overflow-x: hidden;
 }
-#sjlfiaxihs .gt_column_spanner_outer {
+#fidkmctgoh .gt_column_spanner_outer {
 color: #333333;
 background-color: #FFFFFF;
 font-size: 100%;
@@ -2453,13 +2454,13 @@ padding-bottom: 0;
 padding-left: 4px;
 padding-right: 4px;
 }
-#sjlfiaxihs .gt_column_spanner_outer:first-child {
+#fidkmctgoh .gt_column_spanner_outer:first-child {
 padding-left: 0;
 }
-#sjlfiaxihs .gt_column_spanner_outer:last-child {
+#fidkmctgoh .gt_column_spanner_outer:last-child {
 padding-right: 0;
 }
-#sjlfiaxihs .gt_column_spanner {
+#fidkmctgoh .gt_column_spanner {
 border-bottom-style: solid;
 border-bottom-width: 2px;
 border-bottom-color: #D3D3D3;
@@ -2470,10 +2471,10 @@ overflow-x: hidden;
 display: inline-block;
 width: 100%;
 }
-#sjlfiaxihs .gt_spanner_row {
+#fidkmctgoh .gt_spanner_row {
 border-bottom-style: hidden;
 }
-#sjlfiaxihs .gt_group_heading {
+#fidkmctgoh .gt_group_heading {
 padding-top: 8px;
 padding-bottom: 8px;
 padding-left: 5px;
@@ -2498,7 +2499,7 @@ border-right-color: #D3D3D3;
 vertical-align: middle;
 text-align: left;
 }
-#sjlfiaxihs .gt_empty_group_heading {
+#fidkmctgoh .gt_empty_group_heading {
 padding: 0.5px;
 color: #333333;
 background-color: #FFFFFF;
@@ -2512,13 +2513,13 @@ border-bottom-width: 2px;
 border-bottom-color: #D3D3D3;
 vertical-align: middle;
 }
-#sjlfiaxihs .gt_from_md > :first-child {
+#fidkmctgoh .gt_from_md > :first-child {
 margin-top: 0;
 }
-#sjlfiaxihs .gt_from_md > :last-child {
+#fidkmctgoh .gt_from_md > :last-child {
 margin-bottom: 0;
 }
-#sjlfiaxihs .gt_row {
+#fidkmctgoh .gt_row {
 padding-top: 8px;
 padding-bottom: 8px;
 padding-left: 5px;
@@ -2536,7 +2537,7 @@ border-right-color: #D3D3D3;
 vertical-align: middle;
 overflow-x: hidden;
 }
-#sjlfiaxihs .gt_stub {
+#fidkmctgoh .gt_stub {
 color: #333333;
 background-color: #FFFFFF;
 font-size: 100%;
@@ -2548,7 +2549,7 @@ border-right-color: #D3D3D3;
 padding-left: 5px;
 padding-right: 5px;
 }
-#sjlfiaxihs .gt_stub_row_group {
+#fidkmctgoh .gt_stub_row_group {
 color: #333333;
 background-color: #FFFFFF;
 font-size: 100%;
@@ -2561,13 +2562,13 @@ padding-left: 5px;
 padding-right: 5px;
 vertical-align: top;
 }
-#sjlfiaxihs .gt_row_group_first td {
+#fidkmctgoh .gt_row_group_first td {
 border-top-width: 2px;
 }
-#sjlfiaxihs .gt_row_group_first th {
+#fidkmctgoh .gt_row_group_first th {
 border-top-width: 2px;
 }
-#sjlfiaxihs .gt_summary_row {
+#fidkmctgoh .gt_summary_row {
 color: #333333;
 background-color: #FFFFFF;
 text-transform: inherit;
@@ -2576,14 +2577,14 @@ padding-bottom: 8px;
 padding-left: 5px;
 padding-right: 5px;
 }
-#sjlfiaxihs .gt_first_summary_row {
+#fidkmctgoh .gt_first_summary_row {
 border-top-style: solid;
 border-top-color: #D3D3D3;
 }
-#sjlfiaxihs .gt_first_summary_row.thick {
+#fidkmctgoh .gt_first_summary_row.thick {
 border-top-width: 2px;
 }
-#sjlfiaxihs .gt_last_summary_row {
+#fidkmctgoh .gt_last_summary_row {
 padding-top: 8px;
 padding-bottom: 8px;
 padding-left: 5px;
@@ -2592,7 +2593,7 @@ border-bottom-style: solid;
 border-bottom-width: 2px;
 border-bottom-color: #D3D3D3;
 }
-#sjlfiaxihs .gt_grand_summary_row {
+#fidkmctgoh .gt_grand_summary_row {
 color: #333333;
 background-color: #FFFFFF;
 text-transform: inherit;
@@ -2601,7 +2602,7 @@ padding-bottom: 8px;
 padding-left: 5px;
 padding-right: 5px;
 }
-#sjlfiaxihs .gt_first_grand_summary_row {
+#fidkmctgoh .gt_first_grand_summary_row {
 padding-top: 8px;
 padding-bottom: 8px;
 padding-left: 5px;
@@ -2610,7 +2611,7 @@ border-top-style: double;
 border-top-width: 6px;
 border-top-color: #D3D3D3;
 }
-#sjlfiaxihs .gt_last_grand_summary_row_top {
+#fidkmctgoh .gt_last_grand_summary_row_top {
 padding-top: 8px;
 padding-bottom: 8px;
 padding-left: 5px;
@@ -2619,10 +2620,10 @@ border-bottom-style: double;
 border-bottom-width: 6px;
 border-bottom-color: #D3D3D3;
 }
-#sjlfiaxihs .gt_striped {
+#fidkmctgoh .gt_striped {
 background-color: rgba(128, 128, 128, 0.05);
 }
-#sjlfiaxihs .gt_table_body {
+#fidkmctgoh .gt_table_body {
 border-top-style: solid;
 border-top-width: 2px;
 border-top-color: #D3D3D3;
@@ -2630,7 +2631,7 @@ border-bottom-style: solid;
 border-bottom-width: 2px;
 border-bottom-color: #D3D3D3;
 }
-#sjlfiaxihs .gt_footnotes {
+#fidkmctgoh .gt_footnotes {
 color: #333333;
 background-color: #FFFFFF;
 border-bottom-style: none;
@@ -2643,7 +2644,7 @@ border-right-style: none;
 border-right-width: 2px;
 border-right-color: #D3D3D3;
 }
-#sjlfiaxihs .gt_footnote {
+#fidkmctgoh .gt_footnote {
 margin: 0px;
 font-size: 90%;
 padding-top: 4px;
@@ -2651,7 +2652,7 @@ padding-bottom: 4px;
 padding-left: 5px;
 padding-right: 5px;
 }
-#sjlfiaxihs .gt_sourcenotes {
+#fidkmctgoh .gt_sourcenotes {
 color: #333333;
 background-color: #FFFFFF;
 border-bottom-style: none;
@@ -2664,64 +2665,64 @@ border-right-style: none;
 border-right-width: 2px;
 border-right-color: #D3D3D3;
 }
-#sjlfiaxihs .gt_sourcenote {
+#fidkmctgoh .gt_sourcenote {
 font-size: 90%;
 padding-top: 4px;
 padding-bottom: 4px;
 padding-left: 5px;
 padding-right: 5px;
 }
-#sjlfiaxihs .gt_left {
+#fidkmctgoh .gt_left {
 text-align: left;
 }
-#sjlfiaxihs .gt_center {
+#fidkmctgoh .gt_center {
 text-align: center;
 }
-#sjlfiaxihs .gt_right {
+#fidkmctgoh .gt_right {
 text-align: right;
 font-variant-numeric: tabular-nums;
 }
-#sjlfiaxihs .gt_font_normal {
+#fidkmctgoh .gt_font_normal {
 font-weight: normal;
 }
-#sjlfiaxihs .gt_font_bold {
+#fidkmctgoh .gt_font_bold {
 font-weight: bold;
 }
-#sjlfiaxihs .gt_font_italic {
+#fidkmctgoh .gt_font_italic {
 font-style: italic;
 }
-#sjlfiaxihs .gt_super {
+#fidkmctgoh .gt_super {
 font-size: 65%;
 }
-#sjlfiaxihs .gt_footnote_marks {
+#fidkmctgoh .gt_footnote_marks {
 font-size: 75%;
 vertical-align: 0.4em;
 position: initial;
 }
-#sjlfiaxihs .gt_asterisk {
+#fidkmctgoh .gt_asterisk {
 font-size: 100%;
 vertical-align: 0;
 }
-#sjlfiaxihs .gt_indent_1 {
+#fidkmctgoh .gt_indent_1 {
 text-indent: 5px;
 }
-#sjlfiaxihs .gt_indent_2 {
+#fidkmctgoh .gt_indent_2 {
 text-indent: 10px;
 }
-#sjlfiaxihs .gt_indent_3 {
+#fidkmctgoh .gt_indent_3 {
 text-indent: 15px;
 }
-#sjlfiaxihs .gt_indent_4 {
+#fidkmctgoh .gt_indent_4 {
 text-indent: 20px;
 }
-#sjlfiaxihs .gt_indent_5 {
+#fidkmctgoh .gt_indent_5 {
 text-indent: 25px;
 }
-#sjlfiaxihs .katex-display {
+#fidkmctgoh .katex-display {
 display: inline-flex !important;
 margin-bottom: 0.75em !important;
 }
-#sjlfiaxihs div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
+#fidkmctgoh div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
 height: 0px !important;
 }
 </style>
@@ -2889,20 +2890,20 @@ Figure 5: Conditional model OFL trajectories; scientific input review remains s
 <p>Tables use all simulations, not only the 15 displayed paths. They are recomputed from the hash-verified detailed output rather than an independently edited summary file. The first table covers the first 3 projection years; the second reports terminal-year distributions.</p>
 <div class="cell">
 <div class="cell-output-display">
-<div id="zmpwlqyndc" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
-<style>#zmpwlqyndc table {
+<div id="uwabojmdzv" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#uwabojmdzv table {
 font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
 -webkit-font-smoothing: antialiased;
 -moz-osx-font-smoothing: grayscale;
 }
-#zmpwlqyndc thead, #zmpwlqyndc tbody, #zmpwlqyndc tfoot, #zmpwlqyndc tr, #zmpwlqyndc td, #zmpwlqyndc th {
+#uwabojmdzv thead, #uwabojmdzv tbody, #uwabojmdzv tfoot, #uwabojmdzv tr, #uwabojmdzv td, #uwabojmdzv th {
 border-style: none;
 }
-#zmpwlqyndc p {
+#uwabojmdzv p {
 margin: 0;
 padding: 0;
 }
-#zmpwlqyndc .gt_table {
+#uwabojmdzv .gt_table {
 display: table;
 border-collapse: collapse;
 line-height: normal;
@@ -2927,11 +2928,11 @@ border-left-style: none;
 border-left-width: 2px;
 border-left-color: #D3D3D3;
 }
-#zmpwlqyndc .gt_caption {
+#uwabojmdzv .gt_caption {
 padding-top: 4px;
 padding-bottom: 4px;
 }
-#zmpwlqyndc .gt_title {
+#uwabojmdzv .gt_title {
 color: #333333;
 font-size: 125%;
 font-weight: initial;
@@ -2942,7 +2943,7 @@ padding-right: 5px;
 border-bottom-color: #FFFFFF;
 border-bottom-width: 0;
 }
-#zmpwlqyndc .gt_subtitle {
+#uwabojmdzv .gt_subtitle {
 color: #333333;
 font-size: 85%;
 font-weight: initial;
@@ -2953,7 +2954,7 @@ padding-right: 5px;
 border-top-color: #FFFFFF;
 border-top-width: 0;
 }
-#zmpwlqyndc .gt_heading {
+#uwabojmdzv .gt_heading {
 background-color: #FFFFFF;
 text-align: center;
 border-bottom-color: #FFFFFF;
@@ -2964,12 +2965,12 @@ border-right-style: none;
 border-right-width: 1px;
 border-right-color: #D3D3D3;
 }
-#zmpwlqyndc .gt_bottom_border {
+#uwabojmdzv .gt_bottom_border {
 border-bottom-style: solid;
 border-bottom-width: 2px;
 border-bottom-color: #D3D3D3;
 }
-#zmpwlqyndc .gt_col_headings {
+#uwabojmdzv .gt_col_headings {
 border-top-style: solid;
 border-top-width: 2px;
 border-top-color: #D3D3D3;
@@ -2983,7 +2984,7 @@ border-right-style: none;
 border-right-width: 1px;
 border-right-color: #D3D3D3;
 }
-#zmpwlqyndc .gt_col_heading {
+#uwabojmdzv .gt_col_heading {
 color: #333333;
 background-color: #FFFFFF;
 font-size: 100%;
@@ -3002,7 +3003,7 @@ padding-left: 5px;
 padding-right: 5px;
 overflow-x: hidden;
 }
-#zmpwlqyndc .gt_column_spanner_outer {
+#uwabojmdzv .gt_column_spanner_outer {
 color: #333333;
 background-color: #FFFFFF;
 font-size: 100%;
@@ -3013,13 +3014,13 @@ padding-bottom: 0;
 padding-left: 4px;
 padding-right: 4px;
 }
-#zmpwlqyndc .gt_column_spanner_outer:first-child {
+#uwabojmdzv .gt_column_spanner_outer:first-child {
 padding-left: 0;
 }
-#zmpwlqyndc .gt_column_spanner_outer:last-child {
+#uwabojmdzv .gt_column_spanner_outer:last-child {
 padding-right: 0;
 }
-#zmpwlqyndc .gt_column_spanner {
+#uwabojmdzv .gt_column_spanner {
 border-bottom-style: solid;
 border-bottom-width: 2px;
 border-bottom-color: #D3D3D3;
@@ -3030,10 +3031,10 @@ overflow-x: hidden;
 display: inline-block;
 width: 100%;
 }
-#zmpwlqyndc .gt_spanner_row {
+#uwabojmdzv .gt_spanner_row {
 border-bottom-style: hidden;
 }
-#zmpwlqyndc .gt_group_heading {
+#uwabojmdzv .gt_group_heading {
 padding-top: 8px;
 padding-bottom: 8px;
 padding-left: 5px;
@@ -3058,7 +3059,7 @@ border-right-color: #D3D3D3;
 vertical-align: middle;
 text-align: left;
 }
-#zmpwlqyndc .gt_empty_group_heading {
+#uwabojmdzv .gt_empty_group_heading {
 padding: 0.5px;
 color: #333333;
 background-color: #FFFFFF;
@@ -3072,13 +3073,13 @@ border-bottom-width: 2px;
 border-bottom-color: #D3D3D3;
 vertical-align: middle;
 }
-#zmpwlqyndc .gt_from_md > :first-child {
+#uwabojmdzv .gt_from_md > :first-child {
 margin-top: 0;
 }
-#zmpwlqyndc .gt_from_md > :last-child {
+#uwabojmdzv .gt_from_md > :last-child {
 margin-bottom: 0;
 }
-#zmpwlqyndc .gt_row {
+#uwabojmdzv .gt_row {
 padding-top: 8px;
 padding-bottom: 8px;
 padding-left: 5px;
@@ -3096,7 +3097,7 @@ border-right-color: #D3D3D3;
 vertical-align: middle;
 overflow-x: hidden;
 }
-#zmpwlqyndc .gt_stub {
+#uwabojmdzv .gt_stub {
 color: #333333;
 background-color: #FFFFFF;
 font-size: 100%;
@@ -3108,7 +3109,7 @@ border-right-color: #D3D3D3;
 padding-left: 5px;
 padding-right: 5px;
 }
-#zmpwlqyndc .gt_stub_row_group {
+#uwabojmdzv .gt_stub_row_group {
 color: #333333;
 background-color: #FFFFFF;
 font-size: 100%;
@@ -3121,13 +3122,13 @@ padding-left: 5px;
 padding-right: 5px;
 vertical-align: top;
 }
-#zmpwlqyndc .gt_row_group_first td {
+#uwabojmdzv .gt_row_group_first td {
 border-top-width: 2px;
 }
-#zmpwlqyndc .gt_row_group_first th {
+#uwabojmdzv .gt_row_group_first th {
 border-top-width: 2px;
 }
-#zmpwlqyndc .gt_summary_row {
+#uwabojmdzv .gt_summary_row {
 color: #333333;
 background-color: #FFFFFF;
 text-transform: inherit;
@@ -3136,14 +3137,14 @@ padding-bottom: 8px;
 padding-left: 5px;
 padding-right: 5px;
 }
-#zmpwlqyndc .gt_first_summary_row {
+#uwabojmdzv .gt_first_summary_row {
 border-top-style: solid;
 border-top-color: #D3D3D3;
 }
-#zmpwlqyndc .gt_first_summary_row.thick {
+#uwabojmdzv .gt_first_summary_row.thick {
 border-top-width: 2px;
 }
-#zmpwlqyndc .gt_last_summary_row {
+#uwabojmdzv .gt_last_summary_row {
 padding-top: 8px;
 padding-bottom: 8px;
 padding-left: 5px;
@@ -3152,7 +3153,7 @@ border-bottom-style: solid;
 border-bottom-width: 2px;
 border-bottom-color: #D3D3D3;
 }
-#zmpwlqyndc .gt_grand_summary_row {
+#uwabojmdzv .gt_grand_summary_row {
 color: #333333;
 background-color: #FFFFFF;
 text-transform: inherit;
@@ -3161,7 +3162,7 @@ padding-bottom: 8px;
 padding-left: 5px;
 padding-right: 5px;
 }
-#zmpwlqyndc .gt_first_grand_summary_row {
+#uwabojmdzv .gt_first_grand_summary_row {
 padding-top: 8px;
 padding-bottom: 8px;
 padding-left: 5px;
@@ -3170,7 +3171,7 @@ border-top-style: double;
 border-top-width: 6px;
 border-top-color: #D3D3D3;
 }
-#zmpwlqyndc .gt_last_grand_summary_row_top {
+#uwabojmdzv .gt_last_grand_summary_row_top {
 padding-top: 8px;
 padding-bottom: 8px;
 padding-left: 5px;
@@ -3179,10 +3180,10 @@ border-bottom-style: double;
 border-bottom-width: 6px;
 border-bottom-color: #D3D3D3;
 }
-#zmpwlqyndc .gt_striped {
+#uwabojmdzv .gt_striped {
 background-color: rgba(128, 128, 128, 0.05);
 }
-#zmpwlqyndc .gt_table_body {
+#uwabojmdzv .gt_table_body {
 border-top-style: solid;
 border-top-width: 2px;
 border-top-color: #D3D3D3;
@@ -3190,7 +3191,7 @@ border-bottom-style: solid;
 border-bottom-width: 2px;
 border-bottom-color: #D3D3D3;
 }
-#zmpwlqyndc .gt_footnotes {
+#uwabojmdzv .gt_footnotes {
 color: #333333;
 background-color: #FFFFFF;
 border-bottom-style: none;
@@ -3203,7 +3204,7 @@ border-right-style: none;
 border-right-width: 2px;
 border-right-color: #D3D3D3;
 }
-#zmpwlqyndc .gt_footnote {
+#uwabojmdzv .gt_footnote {
 margin: 0px;
 font-size: 90%;
 padding-top: 4px;
@@ -3211,7 +3212,7 @@ padding-bottom: 4px;
 padding-left: 5px;
 padding-right: 5px;
 }
-#zmpwlqyndc .gt_sourcenotes {
+#uwabojmdzv .gt_sourcenotes {
 color: #333333;
 background-color: #FFFFFF;
 border-bottom-style: none;
@@ -3224,64 +3225,64 @@ border-right-style: none;
 border-right-width: 2px;
 border-right-color: #D3D3D3;
 }
-#zmpwlqyndc .gt_sourcenote {
+#uwabojmdzv .gt_sourcenote {
 font-size: 90%;
 padding-top: 4px;
 padding-bottom: 4px;
 padding-left: 5px;
 padding-right: 5px;
 }
-#zmpwlqyndc .gt_left {
+#uwabojmdzv .gt_left {
 text-align: left;
 }
-#zmpwlqyndc .gt_center {
+#uwabojmdzv .gt_center {
 text-align: center;
 }
-#zmpwlqyndc .gt_right {
+#uwabojmdzv .gt_right {
 text-align: right;
 font-variant-numeric: tabular-nums;
 }
-#zmpwlqyndc .gt_font_normal {
+#uwabojmdzv .gt_font_normal {
 font-weight: normal;
 }
-#zmpwlqyndc .gt_font_bold {
+#uwabojmdzv .gt_font_bold {
 font-weight: bold;
 }
-#zmpwlqyndc .gt_font_italic {
+#uwabojmdzv .gt_font_italic {
 font-style: italic;
 }
-#zmpwlqyndc .gt_super {
+#uwabojmdzv .gt_super {
 font-size: 65%;
 }
-#zmpwlqyndc .gt_footnote_marks {
+#uwabojmdzv .gt_footnote_marks {
 font-size: 75%;
 vertical-align: 0.4em;
 position: initial;
 }
-#zmpwlqyndc .gt_asterisk {
+#uwabojmdzv .gt_asterisk {
 font-size: 100%;
 vertical-align: 0;
 }
-#zmpwlqyndc .gt_indent_1 {
+#uwabojmdzv .gt_indent_1 {
 text-indent: 5px;
 }
-#zmpwlqyndc .gt_indent_2 {
+#uwabojmdzv .gt_indent_2 {
 text-indent: 10px;
 }
-#zmpwlqyndc .gt_indent_3 {
+#uwabojmdzv .gt_indent_3 {
 text-indent: 15px;
 }
-#zmpwlqyndc .gt_indent_4 {
+#uwabojmdzv .gt_indent_4 {
 text-indent: 20px;
 }
-#zmpwlqyndc .gt_indent_5 {
+#uwabojmdzv .gt_indent_5 {
 text-indent: 25px;
 }
-#zmpwlqyndc .katex-display {
+#uwabojmdzv .katex-display {
 display: inline-flex !important;
 margin-bottom: 0.75em !important;
 }
-#zmpwlqyndc div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
+#uwabojmdzv div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
 height: 0px !important;
 }
 </style>
@@ -3499,20 +3500,20 @@ height: 0px !important;
 </div>
 <div class="cell">
 <div class="cell-output-display">
-<div id="oecljypnku" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
-<style>#oecljypnku table {
+<div id="lyblucjasy" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#lyblucjasy table {
 font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
 -webkit-font-smoothing: antialiased;
 -moz-osx-font-smoothing: grayscale;
 }
-#oecljypnku thead, #oecljypnku tbody, #oecljypnku tfoot, #oecljypnku tr, #oecljypnku td, #oecljypnku th {
+#lyblucjasy thead, #lyblucjasy tbody, #lyblucjasy tfoot, #lyblucjasy tr, #lyblucjasy td, #lyblucjasy th {
 border-style: none;
 }
-#oecljypnku p {
+#lyblucjasy p {
 margin: 0;
 padding: 0;
 }
-#oecljypnku .gt_table {
+#lyblucjasy .gt_table {
 display: table;
 border-collapse: collapse;
 line-height: normal;
@@ -3537,11 +3538,11 @@ border-left-style: none;
 border-left-width: 2px;
 border-left-color: #D3D3D3;
 }
-#oecljypnku .gt_caption {
+#lyblucjasy .gt_caption {
 padding-top: 4px;
 padding-bottom: 4px;
 }
-#oecljypnku .gt_title {
+#lyblucjasy .gt_title {
 color: #333333;
 font-size: 125%;
 font-weight: initial;
@@ -3552,7 +3553,7 @@ padding-right: 5px;
 border-bottom-color: #FFFFFF;
 border-bottom-width: 0;
 }
-#oecljypnku .gt_subtitle {
+#lyblucjasy .gt_subtitle {
 color: #333333;
 font-size: 85%;
 font-weight: initial;
@@ -3563,7 +3564,7 @@ padding-right: 5px;
 border-top-color: #FFFFFF;
 border-top-width: 0;
 }
-#oecljypnku .gt_heading {
+#lyblucjasy .gt_heading {
 background-color: #FFFFFF;
 text-align: center;
 border-bottom-color: #FFFFFF;
@@ -3574,12 +3575,12 @@ border-right-style: none;
 border-right-width: 1px;
 border-right-color: #D3D3D3;
 }
-#oecljypnku .gt_bottom_border {
+#lyblucjasy .gt_bottom_border {
 border-bottom-style: solid;
 border-bottom-width: 2px;
 border-bottom-color: #D3D3D3;
 }
-#oecljypnku .gt_col_headings {
+#lyblucjasy .gt_col_headings {
 border-top-style: solid;
 border-top-width: 2px;
 border-top-color: #D3D3D3;
@@ -3593,7 +3594,7 @@ border-right-style: none;
 border-right-width: 1px;
 border-right-color: #D3D3D3;
 }
-#oecljypnku .gt_col_heading {
+#lyblucjasy .gt_col_heading {
 color: #333333;
 background-color: #FFFFFF;
 font-size: 100%;
@@ -3612,7 +3613,7 @@ padding-left: 5px;
 padding-right: 5px;
 overflow-x: hidden;
 }
-#oecljypnku .gt_column_spanner_outer {
+#lyblucjasy .gt_column_spanner_outer {
 color: #333333;
 background-color: #FFFFFF;
 font-size: 100%;
@@ -3623,13 +3624,13 @@ padding-bottom: 0;
 padding-left: 4px;
 padding-right: 4px;
 }
-#oecljypnku .gt_column_spanner_outer:first-child {
+#lyblucjasy .gt_column_spanner_outer:first-child {
 padding-left: 0;
 }
-#oecljypnku .gt_column_spanner_outer:last-child {
+#lyblucjasy .gt_column_spanner_outer:last-child {
 padding-right: 0;
 }
-#oecljypnku .gt_column_spanner {
+#lyblucjasy .gt_column_spanner {
 border-bottom-style: solid;
 border-bottom-width: 2px;
 border-bottom-color: #D3D3D3;
@@ -3640,10 +3641,10 @@ overflow-x: hidden;
 display: inline-block;
 width: 100%;
 }
-#oecljypnku .gt_spanner_row {
+#lyblucjasy .gt_spanner_row {
 border-bottom-style: hidden;
 }
-#oecljypnku .gt_group_heading {
+#lyblucjasy .gt_group_heading {
 padding-top: 8px;
 padding-bottom: 8px;
 padding-left: 5px;
@@ -3668,7 +3669,7 @@ border-right-color: #D3D3D3;
 vertical-align: middle;
 text-align: left;
 }
-#oecljypnku .gt_empty_group_heading {
+#lyblucjasy .gt_empty_group_heading {
 padding: 0.5px;
 color: #333333;
 background-color: #FFFFFF;
@@ -3682,13 +3683,13 @@ border-bottom-width: 2px;
 border-bottom-color: #D3D3D3;
 vertical-align: middle;
 }
-#oecljypnku .gt_from_md > :first-child {
+#lyblucjasy .gt_from_md > :first-child {
 margin-top: 0;
 }
-#oecljypnku .gt_from_md > :last-child {
+#lyblucjasy .gt_from_md > :last-child {
 margin-bottom: 0;
 }
-#oecljypnku .gt_row {
+#lyblucjasy .gt_row {
 padding-top: 8px;
 padding-bottom: 8px;
 padding-left: 5px;
@@ -3706,7 +3707,7 @@ border-right-color: #D3D3D3;
 vertical-align: middle;
 overflow-x: hidden;
 }
-#oecljypnku .gt_stub {
+#lyblucjasy .gt_stub {
 color: #333333;
 background-color: #FFFFFF;
 font-size: 100%;
@@ -3718,7 +3719,7 @@ border-right-color: #D3D3D3;
 padding-left: 5px;
 padding-right: 5px;
 }
-#oecljypnku .gt_stub_row_group {
+#lyblucjasy .gt_stub_row_group {
 color: #333333;
 background-color: #FFFFFF;
 font-size: 100%;
@@ -3731,13 +3732,13 @@ padding-left: 5px;
 padding-right: 5px;
 vertical-align: top;
 }
-#oecljypnku .gt_row_group_first td {
+#lyblucjasy .gt_row_group_first td {
 border-top-width: 2px;
 }
-#oecljypnku .gt_row_group_first th {
+#lyblucjasy .gt_row_group_first th {
 border-top-width: 2px;
 }
-#oecljypnku .gt_summary_row {
+#lyblucjasy .gt_summary_row {
 color: #333333;
 background-color: #FFFFFF;
 text-transform: inherit;
@@ -3746,14 +3747,14 @@ padding-bottom: 8px;
 padding-left: 5px;
 padding-right: 5px;
 }
-#oecljypnku .gt_first_summary_row {
+#lyblucjasy .gt_first_summary_row {
 border-top-style: solid;
 border-top-color: #D3D3D3;
 }
-#oecljypnku .gt_first_summary_row.thick {
+#lyblucjasy .gt_first_summary_row.thick {
 border-top-width: 2px;
 }
-#oecljypnku .gt_last_summary_row {
+#lyblucjasy .gt_last_summary_row {
 padding-top: 8px;
 padding-bottom: 8px;
 padding-left: 5px;
@@ -3762,7 +3763,7 @@ border-bottom-style: solid;
 border-bottom-width: 2px;
 border-bottom-color: #D3D3D3;
 }
-#oecljypnku .gt_grand_summary_row {
+#lyblucjasy .gt_grand_summary_row {
 color: #333333;
 background-color: #FFFFFF;
 text-transform: inherit;
@@ -3771,7 +3772,7 @@ padding-bottom: 8px;
 padding-left: 5px;
 padding-right: 5px;
 }
-#oecljypnku .gt_first_grand_summary_row {
+#lyblucjasy .gt_first_grand_summary_row {
 padding-top: 8px;
 padding-bottom: 8px;
 padding-left: 5px;
@@ -3780,7 +3781,7 @@ border-top-style: double;
 border-top-width: 6px;
 border-top-color: #D3D3D3;
 }
-#oecljypnku .gt_last_grand_summary_row_top {
+#lyblucjasy .gt_last_grand_summary_row_top {
 padding-top: 8px;
 padding-bottom: 8px;
 padding-left: 5px;
@@ -3789,10 +3790,10 @@ border-bottom-style: double;
 border-bottom-width: 6px;
 border-bottom-color: #D3D3D3;
 }
-#oecljypnku .gt_striped {
+#lyblucjasy .gt_striped {
 background-color: rgba(128, 128, 128, 0.05);
 }
-#oecljypnku .gt_table_body {
+#lyblucjasy .gt_table_body {
 border-top-style: solid;
 border-top-width: 2px;
 border-top-color: #D3D3D3;
@@ -3800,7 +3801,7 @@ border-bottom-style: solid;
 border-bottom-width: 2px;
 border-bottom-color: #D3D3D3;
 }
-#oecljypnku .gt_footnotes {
+#lyblucjasy .gt_footnotes {
 color: #333333;
 background-color: #FFFFFF;
 border-bottom-style: none;
@@ -3813,7 +3814,7 @@ border-right-style: none;
 border-right-width: 2px;
 border-right-color: #D3D3D3;
 }
-#oecljypnku .gt_footnote {
+#lyblucjasy .gt_footnote {
 margin: 0px;
 font-size: 90%;
 padding-top: 4px;
@@ -3821,7 +3822,7 @@ padding-bottom: 4px;
 padding-left: 5px;
 padding-right: 5px;
 }
-#oecljypnku .gt_sourcenotes {
+#lyblucjasy .gt_sourcenotes {
 color: #333333;
 background-color: #FFFFFF;
 border-bottom-style: none;
@@ -3834,64 +3835,64 @@ border-right-style: none;
 border-right-width: 2px;
 border-right-color: #D3D3D3;
 }
-#oecljypnku .gt_sourcenote {
+#lyblucjasy .gt_sourcenote {
 font-size: 90%;
 padding-top: 4px;
 padding-bottom: 4px;
 padding-left: 5px;
 padding-right: 5px;
 }
-#oecljypnku .gt_left {
+#lyblucjasy .gt_left {
 text-align: left;
 }
-#oecljypnku .gt_center {
+#lyblucjasy .gt_center {
 text-align: center;
 }
-#oecljypnku .gt_right {
+#lyblucjasy .gt_right {
 text-align: right;
 font-variant-numeric: tabular-nums;
 }
-#oecljypnku .gt_font_normal {
+#lyblucjasy .gt_font_normal {
 font-weight: normal;
 }
-#oecljypnku .gt_font_bold {
+#lyblucjasy .gt_font_bold {
 font-weight: bold;
 }
-#oecljypnku .gt_font_italic {
+#lyblucjasy .gt_font_italic {
 font-style: italic;
 }
-#oecljypnku .gt_super {
+#lyblucjasy .gt_super {
 font-size: 65%;
 }
-#oecljypnku .gt_footnote_marks {
+#lyblucjasy .gt_footnote_marks {
 font-size: 75%;
 vertical-align: 0.4em;
 position: initial;
 }
-#oecljypnku .gt_asterisk {
+#lyblucjasy .gt_asterisk {
 font-size: 100%;
 vertical-align: 0;
 }
-#oecljypnku .gt_indent_1 {
+#lyblucjasy .gt_indent_1 {
 text-indent: 5px;
 }
-#oecljypnku .gt_indent_2 {
+#lyblucjasy .gt_indent_2 {
 text-indent: 10px;
 }
-#oecljypnku .gt_indent_3 {
+#lyblucjasy .gt_indent_3 {
 text-indent: 15px;
 }
-#oecljypnku .gt_indent_4 {
+#lyblucjasy .gt_indent_4 {
 text-indent: 20px;
 }
-#oecljypnku .gt_indent_5 {
+#lyblucjasy .gt_indent_5 {
 text-indent: 25px;
 }
-#oecljypnku .katex-display {
+#lyblucjasy .katex-display {
 display: inline-flex !important;
 margin-bottom: 0.75em !important;
 }
-#oecljypnku div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
+#lyblucjasy div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
 height: 0px !important;
 }
 </style>
@@ -4183,20 +4184,20 @@ height: 0px !important;
 <p>The report requires a successful native exit and verifies recorded input, output and archived-source hashes before displaying a saved run. It checks result dimensions, alternative/year/simulation keys and finite nonnegative quantities. Current-source differences are labelled rather than overwritten. Historical-recruitment simulation fits no parameters: maximum-gradient and positive-definite-Hessian diagnostics are <strong>not applicable</strong> in this mode.</p>
 <div class="cell">
 <div class="cell-output-display">
-<div id="yygeyuwijy" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
-<style>#yygeyuwijy table {
+<div id="enstxvajeg" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#enstxvajeg table {
 font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
 -webkit-font-smoothing: antialiased;
 -moz-osx-font-smoothing: grayscale;
 }
-#yygeyuwijy thead, #yygeyuwijy tbody, #yygeyuwijy tfoot, #yygeyuwijy tr, #yygeyuwijy td, #yygeyuwijy th {
+#enstxvajeg thead, #enstxvajeg tbody, #enstxvajeg tfoot, #enstxvajeg tr, #enstxvajeg td, #enstxvajeg th {
 border-style: none;
 }
-#yygeyuwijy p {
+#enstxvajeg p {
 margin: 0;
 padding: 0;
 }
-#yygeyuwijy .gt_table {
+#enstxvajeg .gt_table {
 display: table;
 border-collapse: collapse;
 line-height: normal;
@@ -4221,11 +4222,11 @@ border-left-style: none;
 border-left-width: 2px;
 border-left-color: #D3D3D3;
 }
-#yygeyuwijy .gt_caption {
+#enstxvajeg .gt_caption {
 padding-top: 4px;
 padding-bottom: 4px;
 }
-#yygeyuwijy .gt_title {
+#enstxvajeg .gt_title {
 color: #333333;
 font-size: 125%;
 font-weight: initial;
@@ -4236,7 +4237,7 @@ padding-right: 5px;
 border-bottom-color: #FFFFFF;
 border-bottom-width: 0;
 }
-#yygeyuwijy .gt_subtitle {
+#enstxvajeg .gt_subtitle {
 color: #333333;
 font-size: 85%;
 font-weight: initial;
@@ -4247,7 +4248,7 @@ padding-right: 5px;
 border-top-color: #FFFFFF;
 border-top-width: 0;
 }
-#yygeyuwijy .gt_heading {
+#enstxvajeg .gt_heading {
 background-color: #FFFFFF;
 text-align: center;
 border-bottom-color: #FFFFFF;
@@ -4258,12 +4259,12 @@ border-right-style: none;
 border-right-width: 1px;
 border-right-color: #D3D3D3;
 }
-#yygeyuwijy .gt_bottom_border {
+#enstxvajeg .gt_bottom_border {
 border-bottom-style: solid;
 border-bottom-width: 2px;
 border-bottom-color: #D3D3D3;
 }
-#yygeyuwijy .gt_col_headings {
+#enstxvajeg .gt_col_headings {
 border-top-style: solid;
 border-top-width: 2px;
 border-top-color: #D3D3D3;
@@ -4277,7 +4278,7 @@ border-right-style: none;
 border-right-width: 1px;
 border-right-color: #D3D3D3;
 }
-#yygeyuwijy .gt_col_heading {
+#enstxvajeg .gt_col_heading {
 color: #333333;
 background-color: #FFFFFF;
 font-size: 100%;
@@ -4296,7 +4297,7 @@ padding-left: 5px;
 padding-right: 5px;
 overflow-x: hidden;
 }
-#yygeyuwijy .gt_column_spanner_outer {
+#enstxvajeg .gt_column_spanner_outer {
 color: #333333;
 background-color: #FFFFFF;
 font-size: 100%;
@@ -4307,13 +4308,13 @@ padding-bottom: 0;
 padding-left: 4px;
 padding-right: 4px;
 }
-#yygeyuwijy .gt_column_spanner_outer:first-child {
+#enstxvajeg .gt_column_spanner_outer:first-child {
 padding-left: 0;
 }
-#yygeyuwijy .gt_column_spanner_outer:last-child {
+#enstxvajeg .gt_column_spanner_outer:last-child {
 padding-right: 0;
 }
-#yygeyuwijy .gt_column_spanner {
+#enstxvajeg .gt_column_spanner {
 border-bottom-style: solid;
 border-bottom-width: 2px;
 border-bottom-color: #D3D3D3;
@@ -4324,10 +4325,10 @@ overflow-x: hidden;
 display: inline-block;
 width: 100%;
 }
-#yygeyuwijy .gt_spanner_row {
+#enstxvajeg .gt_spanner_row {
 border-bottom-style: hidden;
 }
-#yygeyuwijy .gt_group_heading {
+#enstxvajeg .gt_group_heading {
 padding-top: 8px;
 padding-bottom: 8px;
 padding-left: 5px;
@@ -4352,7 +4353,7 @@ border-right-color: #D3D3D3;
 vertical-align: middle;
 text-align: left;
 }
-#yygeyuwijy .gt_empty_group_heading {
+#enstxvajeg .gt_empty_group_heading {
 padding: 0.5px;
 color: #333333;
 background-color: #FFFFFF;
@@ -4366,13 +4367,13 @@ border-bottom-width: 2px;
 border-bottom-color: #D3D3D3;
 vertical-align: middle;
 }
-#yygeyuwijy .gt_from_md > :first-child {
+#enstxvajeg .gt_from_md > :first-child {
 margin-top: 0;
 }
-#yygeyuwijy .gt_from_md > :last-child {
+#enstxvajeg .gt_from_md > :last-child {
 margin-bottom: 0;
 }
-#yygeyuwijy .gt_row {
+#enstxvajeg .gt_row {
 padding-top: 8px;
 padding-bottom: 8px;
 padding-left: 5px;
@@ -4390,7 +4391,7 @@ border-right-color: #D3D3D3;
 vertical-align: middle;
 overflow-x: hidden;
 }
-#yygeyuwijy .gt_stub {
+#enstxvajeg .gt_stub {
 color: #333333;
 background-color: #FFFFFF;
 font-size: 100%;
@@ -4402,7 +4403,7 @@ border-right-color: #D3D3D3;
 padding-left: 5px;
 padding-right: 5px;
 }
-#yygeyuwijy .gt_stub_row_group {
+#enstxvajeg .gt_stub_row_group {
 color: #333333;
 background-color: #FFFFFF;
 font-size: 100%;
@@ -4415,13 +4416,13 @@ padding-left: 5px;
 padding-right: 5px;
 vertical-align: top;
 }
-#yygeyuwijy .gt_row_group_first td {
+#enstxvajeg .gt_row_group_first td {
 border-top-width: 2px;
 }
-#yygeyuwijy .gt_row_group_first th {
+#enstxvajeg .gt_row_group_first th {
 border-top-width: 2px;
 }
-#yygeyuwijy .gt_summary_row {
+#enstxvajeg .gt_summary_row {
 color: #333333;
 background-color: #FFFFFF;
 text-transform: inherit;
@@ -4430,14 +4431,14 @@ padding-bottom: 8px;
 padding-left: 5px;
 padding-right: 5px;
 }
-#yygeyuwijy .gt_first_summary_row {
+#enstxvajeg .gt_first_summary_row {
 border-top-style: solid;
 border-top-color: #D3D3D3;
 }
-#yygeyuwijy .gt_first_summary_row.thick {
+#enstxvajeg .gt_first_summary_row.thick {
 border-top-width: 2px;
 }
-#yygeyuwijy .gt_last_summary_row {
+#enstxvajeg .gt_last_summary_row {
 padding-top: 8px;
 padding-bottom: 8px;
 padding-left: 5px;
@@ -4446,7 +4447,7 @@ border-bottom-style: solid;
 border-bottom-width: 2px;
 border-bottom-color: #D3D3D3;
 }
-#yygeyuwijy .gt_grand_summary_row {
+#enstxvajeg .gt_grand_summary_row {
 color: #333333;
 background-color: #FFFFFF;
 text-transform: inherit;
@@ -4455,7 +4456,7 @@ padding-bottom: 8px;
 padding-left: 5px;
 padding-right: 5px;
 }
-#yygeyuwijy .gt_first_grand_summary_row {
+#enstxvajeg .gt_first_grand_summary_row {
 padding-top: 8px;
 padding-bottom: 8px;
 padding-left: 5px;
@@ -4464,7 +4465,7 @@ border-top-style: double;
 border-top-width: 6px;
 border-top-color: #D3D3D3;
 }
-#yygeyuwijy .gt_last_grand_summary_row_top {
+#enstxvajeg .gt_last_grand_summary_row_top {
 padding-top: 8px;
 padding-bottom: 8px;
 padding-left: 5px;
@@ -4473,10 +4474,10 @@ border-bottom-style: double;
 border-bottom-width: 6px;
 border-bottom-color: #D3D3D3;
 }
-#yygeyuwijy .gt_striped {
+#enstxvajeg .gt_striped {
 background-color: rgba(128, 128, 128, 0.05);
 }
-#yygeyuwijy .gt_table_body {
+#enstxvajeg .gt_table_body {
 border-top-style: solid;
 border-top-width: 2px;
 border-top-color: #D3D3D3;
@@ -4484,7 +4485,7 @@ border-bottom-style: solid;
 border-bottom-width: 2px;
 border-bottom-color: #D3D3D3;
 }
-#yygeyuwijy .gt_footnotes {
+#enstxvajeg .gt_footnotes {
 color: #333333;
 background-color: #FFFFFF;
 border-bottom-style: none;
@@ -4497,7 +4498,7 @@ border-right-style: none;
 border-right-width: 2px;
 border-right-color: #D3D3D3;
 }
-#yygeyuwijy .gt_footnote {
+#enstxvajeg .gt_footnote {
 margin: 0px;
 font-size: 90%;
 padding-top: 4px;
@@ -4505,7 +4506,7 @@ padding-bottom: 4px;
 padding-left: 5px;
 padding-right: 5px;
 }
-#yygeyuwijy .gt_sourcenotes {
+#enstxvajeg .gt_sourcenotes {
 color: #333333;
 background-color: #FFFFFF;
 border-bottom-style: none;
@@ -4518,64 +4519,64 @@ border-right-style: none;
 border-right-width: 2px;
 border-right-color: #D3D3D3;
 }
-#yygeyuwijy .gt_sourcenote {
+#enstxvajeg .gt_sourcenote {
 font-size: 90%;
 padding-top: 4px;
 padding-bottom: 4px;
 padding-left: 5px;
 padding-right: 5px;
 }
-#yygeyuwijy .gt_left {
+#enstxvajeg .gt_left {
 text-align: left;
 }
-#yygeyuwijy .gt_center {
+#enstxvajeg .gt_center {
 text-align: center;
 }
-#yygeyuwijy .gt_right {
+#enstxvajeg .gt_right {
 text-align: right;
 font-variant-numeric: tabular-nums;
 }
-#yygeyuwijy .gt_font_normal {
+#enstxvajeg .gt_font_normal {
 font-weight: normal;
 }
-#yygeyuwijy .gt_font_bold {
+#enstxvajeg .gt_font_bold {
 font-weight: bold;
 }
-#yygeyuwijy .gt_font_italic {
+#enstxvajeg .gt_font_italic {
 font-style: italic;
 }
-#yygeyuwijy .gt_super {
+#enstxvajeg .gt_super {
 font-size: 65%;
 }
-#yygeyuwijy .gt_footnote_marks {
+#enstxvajeg .gt_footnote_marks {
 font-size: 75%;
 vertical-align: 0.4em;
 position: initial;
 }
-#yygeyuwijy .gt_asterisk {
+#enstxvajeg .gt_asterisk {
 font-size: 100%;
 vertical-align: 0;
 }
-#yygeyuwijy .gt_indent_1 {
+#enstxvajeg .gt_indent_1 {
 text-indent: 5px;
 }
-#yygeyuwijy .gt_indent_2 {
+#enstxvajeg .gt_indent_2 {
 text-indent: 10px;
 }
-#yygeyuwijy .gt_indent_3 {
+#enstxvajeg .gt_indent_3 {
 text-indent: 15px;
 }
-#yygeyuwijy .gt_indent_4 {
+#enstxvajeg .gt_indent_4 {
 text-indent: 20px;
 }
-#yygeyuwijy .gt_indent_5 {
+#enstxvajeg .gt_indent_5 {
 text-indent: 25px;
 }
-#yygeyuwijy .katex-display {
+#enstxvajeg .katex-display {
 display: inline-flex !important;
 margin-bottom: 0.75em !important;
 }
-#yygeyuwijy div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
+#enstxvajeg div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
 height: 0px !important;
 }
 </style>
@@ -4624,20 +4625,20 @@ height: 0px !important;
 </div>
 <div class="cell">
 <div class="cell-output-display">
-<div id="emyvkekcyb" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
-<style>#emyvkekcyb table {
+<div id="tynhxttwjh" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#tynhxttwjh table {
 font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
 -webkit-font-smoothing: antialiased;
 -moz-osx-font-smoothing: grayscale;
 }
-#emyvkekcyb thead, #emyvkekcyb tbody, #emyvkekcyb tfoot, #emyvkekcyb tr, #emyvkekcyb td, #emyvkekcyb th {
+#tynhxttwjh thead, #tynhxttwjh tbody, #tynhxttwjh tfoot, #tynhxttwjh tr, #tynhxttwjh td, #tynhxttwjh th {
 border-style: none;
 }
-#emyvkekcyb p {
+#tynhxttwjh p {
 margin: 0;
 padding: 0;
 }
-#emyvkekcyb .gt_table {
+#tynhxttwjh .gt_table {
 display: table;
 border-collapse: collapse;
 line-height: normal;
@@ -4662,11 +4663,11 @@ border-left-style: none;
 border-left-width: 2px;
 border-left-color: #D3D3D3;
 }
-#emyvkekcyb .gt_caption {
+#tynhxttwjh .gt_caption {
 padding-top: 4px;
 padding-bottom: 4px;
 }
-#emyvkekcyb .gt_title {
+#tynhxttwjh .gt_title {
 color: #333333;
 font-size: 125%;
 font-weight: initial;
@@ -4677,7 +4678,7 @@ padding-right: 5px;
 border-bottom-color: #FFFFFF;
 border-bottom-width: 0;
 }
-#emyvkekcyb .gt_subtitle {
+#tynhxttwjh .gt_subtitle {
 color: #333333;
 font-size: 85%;
 font-weight: initial;
@@ -4688,7 +4689,7 @@ padding-right: 5px;
 border-top-color: #FFFFFF;
 border-top-width: 0;
 }
-#emyvkekcyb .gt_heading {
+#tynhxttwjh .gt_heading {
 background-color: #FFFFFF;
 text-align: center;
 border-bottom-color: #FFFFFF;
@@ -4699,12 +4700,12 @@ border-right-style: none;
 border-right-width: 1px;
 border-right-color: #D3D3D3;
 }
-#emyvkekcyb .gt_bottom_border {
+#tynhxttwjh .gt_bottom_border {
 border-bottom-style: solid;
 border-bottom-width: 2px;
 border-bottom-color: #D3D3D3;
 }
-#emyvkekcyb .gt_col_headings {
+#tynhxttwjh .gt_col_headings {
 border-top-style: solid;
 border-top-width: 2px;
 border-top-color: #D3D3D3;
@@ -4718,7 +4719,7 @@ border-right-style: none;
 border-right-width: 1px;
 border-right-color: #D3D3D3;
 }
-#emyvkekcyb .gt_col_heading {
+#tynhxttwjh .gt_col_heading {
 color: #333333;
 background-color: #FFFFFF;
 font-size: 100%;
@@ -4737,7 +4738,7 @@ padding-left: 5px;
 padding-right: 5px;
 overflow-x: hidden;
 }
-#emyvkekcyb .gt_column_spanner_outer {
+#tynhxttwjh .gt_column_spanner_outer {
 color: #333333;
 background-color: #FFFFFF;
 font-size: 100%;
@@ -4748,13 +4749,13 @@ padding-bottom: 0;
 padding-left: 4px;
 padding-right: 4px;
 }
-#emyvkekcyb .gt_column_spanner_outer:first-child {
+#tynhxttwjh .gt_column_spanner_outer:first-child {
 padding-left: 0;
 }
-#emyvkekcyb .gt_column_spanner_outer:last-child {
+#tynhxttwjh .gt_column_spanner_outer:last-child {
 padding-right: 0;
 }
-#emyvkekcyb .gt_column_spanner {
+#tynhxttwjh .gt_column_spanner {
 border-bottom-style: solid;
 border-bottom-width: 2px;
 border-bottom-color: #D3D3D3;
@@ -4765,10 +4766,10 @@ overflow-x: hidden;
 display: inline-block;
 width: 100%;
 }
-#emyvkekcyb .gt_spanner_row {
+#tynhxttwjh .gt_spanner_row {
 border-bottom-style: hidden;
 }
-#emyvkekcyb .gt_group_heading {
+#tynhxttwjh .gt_group_heading {
 padding-top: 8px;
 padding-bottom: 8px;
 padding-left: 5px;
@@ -4793,7 +4794,7 @@ border-right-color: #D3D3D3;
 vertical-align: middle;
 text-align: left;
 }
-#emyvkekcyb .gt_empty_group_heading {
+#tynhxttwjh .gt_empty_group_heading {
 padding: 0.5px;
 color: #333333;
 background-color: #FFFFFF;
@@ -4807,13 +4808,13 @@ border-bottom-width: 2px;
 border-bottom-color: #D3D3D3;
 vertical-align: middle;
 }
-#emyvkekcyb .gt_from_md > :first-child {
+#tynhxttwjh .gt_from_md > :first-child {
 margin-top: 0;
 }
-#emyvkekcyb .gt_from_md > :last-child {
+#tynhxttwjh .gt_from_md > :last-child {
 margin-bottom: 0;
 }
-#emyvkekcyb .gt_row {
+#tynhxttwjh .gt_row {
 padding-top: 8px;
 padding-bottom: 8px;
 padding-left: 5px;
@@ -4831,7 +4832,7 @@ border-right-color: #D3D3D3;
 vertical-align: middle;
 overflow-x: hidden;
 }
-#emyvkekcyb .gt_stub {
+#tynhxttwjh .gt_stub {
 color: #333333;
 background-color: #FFFFFF;
 font-size: 100%;
@@ -4843,7 +4844,7 @@ border-right-color: #D3D3D3;
 padding-left: 5px;
 padding-right: 5px;
 }
-#emyvkekcyb .gt_stub_row_group {
+#tynhxttwjh .gt_stub_row_group {
 color: #333333;
 background-color: #FFFFFF;
 font-size: 100%;
@@ -4856,13 +4857,13 @@ padding-left: 5px;
 padding-right: 5px;
 vertical-align: top;
 }
-#emyvkekcyb .gt_row_group_first td {
+#tynhxttwjh .gt_row_group_first td {
 border-top-width: 2px;
 }
-#emyvkekcyb .gt_row_group_first th {
+#tynhxttwjh .gt_row_group_first th {
 border-top-width: 2px;
 }
-#emyvkekcyb .gt_summary_row {
+#tynhxttwjh .gt_summary_row {
 color: #333333;
 background-color: #FFFFFF;
 text-transform: inherit;
@@ -4871,14 +4872,14 @@ padding-bottom: 8px;
 padding-left: 5px;
 padding-right: 5px;
 }
-#emyvkekcyb .gt_first_summary_row {
+#tynhxttwjh .gt_first_summary_row {
 border-top-style: solid;
 border-top-color: #D3D3D3;
 }
-#emyvkekcyb .gt_first_summary_row.thick {
+#tynhxttwjh .gt_first_summary_row.thick {
 border-top-width: 2px;
 }
-#emyvkekcyb .gt_last_summary_row {
+#tynhxttwjh .gt_last_summary_row {
 padding-top: 8px;
 padding-bottom: 8px;
 padding-left: 5px;
@@ -4887,7 +4888,7 @@ border-bottom-style: solid;
 border-bottom-width: 2px;
 border-bottom-color: #D3D3D3;
 }
-#emyvkekcyb .gt_grand_summary_row {
+#tynhxttwjh .gt_grand_summary_row {
 color: #333333;
 background-color: #FFFFFF;
 text-transform: inherit;
@@ -4896,7 +4897,7 @@ padding-bottom: 8px;
 padding-left: 5px;
 padding-right: 5px;
 }
-#emyvkekcyb .gt_first_grand_summary_row {
+#tynhxttwjh .gt_first_grand_summary_row {
 padding-top: 8px;
 padding-bottom: 8px;
 padding-left: 5px;
@@ -4905,7 +4906,7 @@ border-top-style: double;
 border-top-width: 6px;
 border-top-color: #D3D3D3;
 }
-#emyvkekcyb .gt_last_grand_summary_row_top {
+#tynhxttwjh .gt_last_grand_summary_row_top {
 padding-top: 8px;
 padding-bottom: 8px;
 padding-left: 5px;
@@ -4914,10 +4915,10 @@ border-bottom-style: double;
 border-bottom-width: 6px;
 border-bottom-color: #D3D3D3;
 }
-#emyvkekcyb .gt_striped {
+#tynhxttwjh .gt_striped {
 background-color: rgba(128, 128, 128, 0.05);
 }
-#emyvkekcyb .gt_table_body {
+#tynhxttwjh .gt_table_body {
 border-top-style: solid;
 border-top-width: 2px;
 border-top-color: #D3D3D3;
@@ -4925,7 +4926,7 @@ border-bottom-style: solid;
 border-bottom-width: 2px;
 border-bottom-color: #D3D3D3;
 }
-#emyvkekcyb .gt_footnotes {
+#tynhxttwjh .gt_footnotes {
 color: #333333;
 background-color: #FFFFFF;
 border-bottom-style: none;
@@ -4938,7 +4939,7 @@ border-right-style: none;
 border-right-width: 2px;
 border-right-color: #D3D3D3;
 }
-#emyvkekcyb .gt_footnote {
+#tynhxttwjh .gt_footnote {
 margin: 0px;
 font-size: 90%;
 padding-top: 4px;
@@ -4946,7 +4947,7 @@ padding-bottom: 4px;
 padding-left: 5px;
 padding-right: 5px;
 }
-#emyvkekcyb .gt_sourcenotes {
+#tynhxttwjh .gt_sourcenotes {
 color: #333333;
 background-color: #FFFFFF;
 border-bottom-style: none;
@@ -4959,64 +4960,64 @@ border-right-style: none;
 border-right-width: 2px;
 border-right-color: #D3D3D3;
 }
-#emyvkekcyb .gt_sourcenote {
+#tynhxttwjh .gt_sourcenote {
 font-size: 90%;
 padding-top: 4px;
 padding-bottom: 4px;
 padding-left: 5px;
 padding-right: 5px;
 }
-#emyvkekcyb .gt_left {
+#tynhxttwjh .gt_left {
 text-align: left;
 }
-#emyvkekcyb .gt_center {
+#tynhxttwjh .gt_center {
 text-align: center;
 }
-#emyvkekcyb .gt_right {
+#tynhxttwjh .gt_right {
 text-align: right;
 font-variant-numeric: tabular-nums;
 }
-#emyvkekcyb .gt_font_normal {
+#tynhxttwjh .gt_font_normal {
 font-weight: normal;
 }
-#emyvkekcyb .gt_font_bold {
+#tynhxttwjh .gt_font_bold {
 font-weight: bold;
 }
-#emyvkekcyb .gt_font_italic {
+#tynhxttwjh .gt_font_italic {
 font-style: italic;
 }
-#emyvkekcyb .gt_super {
+#tynhxttwjh .gt_super {
 font-size: 65%;
 }
-#emyvkekcyb .gt_footnote_marks {
+#tynhxttwjh .gt_footnote_marks {
 font-size: 75%;
 vertical-align: 0.4em;
 position: initial;
 }
-#emyvkekcyb .gt_asterisk {
+#tynhxttwjh .gt_asterisk {
 font-size: 100%;
 vertical-align: 0;
 }
-#emyvkekcyb .gt_indent_1 {
+#tynhxttwjh .gt_indent_1 {
 text-indent: 5px;
 }
-#emyvkekcyb .gt_indent_2 {
+#tynhxttwjh .gt_indent_2 {
 text-indent: 10px;
 }
-#emyvkekcyb .gt_indent_3 {
+#tynhxttwjh .gt_indent_3 {
 text-indent: 15px;
 }
-#emyvkekcyb .gt_indent_4 {
+#tynhxttwjh .gt_indent_4 {
 text-indent: 20px;
 }
-#emyvkekcyb .gt_indent_5 {
+#tynhxttwjh .gt_indent_5 {
 text-indent: 25px;
 }
-#emyvkekcyb .katex-display {
+#tynhxttwjh .katex-display {
 display: inline-flex !important;
 margin-bottom: 0.75em !important;
 }
-#emyvkekcyb div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
+#tynhxttwjh div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
 height: 0px !important;
 }
 </style>
@@ -5566,7 +5567,7 @@ loaded via a namespace (and not attached):
 <span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a><span class="co">    code-fold: true</span></span>
 <span id="cb8-14"><a href="#cb8-14" aria-hidden="true" tabindex="-1"></a><span class="co">    code-tools: true</span></span>
 <span id="cb8-15"><a href="#cb8-15" aria-hidden="true" tabindex="-1"></a><span class="an">params:</span></span>
-<span id="cb8-16"><a href="#cb8-16" aria-hidden="true" tabindex="-1"></a><span class="co">  saved_run: &quot;spmR_runs/attempt-001&quot;</span></span>
+<span id="cb8-16"><a href="#cb8-16" aria-hidden="true" tabindex="-1"></a><span class="co">  saved_run: &quot;&quot;</span></span>
 <span id="cb8-17"><a href="#cb8-17" aria-hidden="true" tabindex="-1"></a><span class="an">execute:</span></span>
 <span id="cb8-18"><a href="#cb8-18" aria-hidden="true" tabindex="-1"></a><span class="co">  cache: false</span></span>
 <span id="cb8-19"><a href="#cb8-19" aria-hidden="true" tabindex="-1"></a><span class="co">  freeze: false</span></span>
@@ -5580,339 +5581,342 @@ loaded via a namespace (and not attached):
 <span id="cb8-27"><a href="#cb8-27" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb8-28"><a href="#cb8-28" aria-hidden="true" tabindex="-1"></a><span class="fu">## Run controls</span></span>
 <span id="cb8-29"><a href="#cb8-29" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-30"><a href="#cb8-30" aria-hidden="true" tabindex="-1"></a>From this directory, render the input audit with:</span>
+<span id="cb8-30"><a href="#cb8-30" aria-hidden="true" tabindex="-1"></a>From this directory, render the current input audit with:</span>
 <span id="cb8-31"><a href="#cb8-31" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb8-32"><a href="#cb8-32" aria-hidden="true" tabindex="-1"></a><span class="in">```bash</span></span>
 <span id="cb8-33"><a href="#cb8-33" aria-hidden="true" tabindex="-1"></a><span class="ex">quarto</span> render greenland_turbot.qmd</span>
 <span id="cb8-34"><a href="#cb8-34" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb8-35"><a href="#cb8-35" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-36"><a href="#cb8-36" aria-hidden="true" tabindex="-1"></a>To include results, set <span class="in">`saved_run`</span> in the YAML above or pass the actual attempt</span>
-<span id="cb8-37"><a href="#cb8-37" aria-hidden="true" tabindex="-1"></a>directory explicitly. This example path is illustrative; the report never selects</span>
-<span id="cb8-38"><a href="#cb8-38" aria-hidden="true" tabindex="-1"></a>the newest directory automatically:</span>
-<span id="cb8-39"><a href="#cb8-39" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-40"><a href="#cb8-40" aria-hidden="true" tabindex="-1"></a><span class="in">```bash</span></span>
-<span id="cb8-41"><a href="#cb8-41" aria-hidden="true" tabindex="-1"></a><span class="ex">quarto</span> render greenland_turbot.qmd <span class="at">-P</span> saved_run:spmR_runs/attempt-001</span>
-<span id="cb8-42"><a href="#cb8-42" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb8-43"><a href="#cb8-43" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-46"><a href="#cb8-46" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb8-47"><a href="#cb8-47" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: report_controls</span></span>
-<span id="cb8-48"><a href="#cb8-48" aria-hidden="true" tabindex="-1"></a><span class="co">#| code-fold: false</span></span>
-<span id="cb8-49"><a href="#cb8-49" aria-hidden="true" tabindex="-1"></a>saved_run <span class="ot">&lt;-</span> params<span class="sc">$</span>saved_run</span>
-<span id="cb8-50"><a href="#cb8-50" aria-hidden="true" tabindex="-1"></a>worms_per_plot <span class="ot">&lt;-</span> <span class="dv">15</span>L</span>
-<span id="cb8-51"><a href="#cb8-51" aria-hidden="true" tabindex="-1"></a>table_years <span class="ot">&lt;-</span> <span class="dv">3</span>L</span>
-<span id="cb8-52"><a href="#cb8-52" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb8-53"><a href="#cb8-53" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-54"><a href="#cb8-54" aria-hidden="true" tabindex="-1"></a><span class="fu">### Start a new projection manually</span></span>
-<span id="cb8-55"><a href="#cb8-55" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-56"><a href="#cb8-56" aria-hidden="true" tabindex="-1"></a>Run this chunk yourself in R **after reviewing the input audit**. It is excluded</span>
-<span id="cb8-57"><a href="#cb8-57" aria-hidden="true" tabindex="-1"></a>from rendering. Keep <span class="in">`run_new_projections = FALSE`</span> until the histories are complete.</span>
-<span id="cb8-58"><a href="#cb8-58" aria-hidden="true" tabindex="-1"></a>Supply verified population weights, units and ages, or explicitly choose the</span>
-<span id="cb8-59"><a href="#cb8-59" aria-hidden="true" tabindex="-1"></a>diagnostic assumptions with <span class="in">`use_diagnostic_weights = TRUE`</span>. Diagnostic mode</span>
-<span id="cb8-60"><a href="#cb8-60" aria-hidden="true" tabindex="-1"></a>cannot repair missing history values. Work from <span class="in">`examples/gt_2026`</span> in R.</span>
-<span id="cb8-61"><a href="#cb8-61" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-64"><a href="#cb8-64" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb8-65"><a href="#cb8-65" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: manual_projection</span></span>
-<span id="cb8-66"><a href="#cb8-66" aria-hidden="true" tabindex="-1"></a><span class="co">#| eval: false</span></span>
-<span id="cb8-67"><a href="#cb8-67" aria-hidden="true" tabindex="-1"></a><span class="co">#| code-fold: false</span></span>
-<span id="cb8-68"><a href="#cb8-68" aria-hidden="true" tabindex="-1"></a><span class="fu">source</span>(<span class="st">&quot;run.R&quot;</span>)</span>
-<span id="cb8-69"><a href="#cb8-69" aria-hidden="true" tabindex="-1"></a>run_new_projections <span class="ot">&lt;-</span> <span class="cn">FALSE</span></span>
-<span id="cb8-70"><a href="#cb8-70" aria-hidden="true" tabindex="-1"></a>use_diagnostic_weights <span class="ot">&lt;-</span> <span class="cn">FALSE</span></span>
-<span id="cb8-71"><a href="#cb8-71" aria-hidden="true" tabindex="-1"></a>population_weights <span class="ot">&lt;-</span> <span class="cn">NULL</span></span>
-<span id="cb8-72"><a href="#cb8-72" aria-hidden="true" tabindex="-1"></a>units <span class="ot">&lt;-</span> <span class="cn">NULL</span></span>
-<span id="cb8-73"><a href="#cb8-73" aria-hidden="true" tabindex="-1"></a>ages <span class="ot">&lt;-</span> <span class="cn">NULL</span></span>
-<span id="cb8-74"><a href="#cb8-74" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-75"><a href="#cb8-75" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (run_new_projections) {</span>
-<span id="cb8-76"><a href="#cb8-76" aria-hidden="true" tabindex="-1"></a>  projection <span class="ot">&lt;-</span> <span class="fu">run_gt2026_projection</span>(</span>
-<span id="cb8-77"><a href="#cb8-77" aria-hidden="true" tabindex="-1"></a>    <span class="at">diagnostic =</span> use_diagnostic_weights,</span>
-<span id="cb8-78"><a href="#cb8-78" aria-hidden="true" tabindex="-1"></a>    <span class="at">population_weights =</span> population_weights,</span>
-<span id="cb8-79"><a href="#cb8-79" aria-hidden="true" tabindex="-1"></a>    <span class="at">units =</span> units,</span>
-<span id="cb8-80"><a href="#cb8-80" aria-hidden="true" tabindex="-1"></a>    <span class="at">ages =</span> ages</span>
-<span id="cb8-81"><a href="#cb8-81" aria-hidden="true" tabindex="-1"></a>  )</span>
-<span id="cb8-82"><a href="#cb8-82" aria-hidden="true" tabindex="-1"></a>  projection<span class="sc">$</span>run_dir</span>
-<span id="cb8-83"><a href="#cb8-83" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb8-84"><a href="#cb8-84" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb8-85"><a href="#cb8-85" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-86"><a href="#cb8-86" aria-hidden="true" tabindex="-1"></a>After a successful run, use the returned directory as <span class="in">`saved_run`</span> and render again.</span>
-<span id="cb8-87"><a href="#cb8-87" aria-hidden="true" tabindex="-1"></a>Each new run receives a separate attempt directory. Re-rendering reads saved</span>
-<span id="cb8-88"><a href="#cb8-88" aria-hidden="true" tabindex="-1"></a>outputs and preserves the attempt contents.</span>
-<span id="cb8-89"><a href="#cb8-89" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-92"><a href="#cb8-92" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb8-93"><a href="#cb8-93" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: setup</span></span>
-<span id="cb8-94"><a href="#cb8-94" aria-hidden="true" tabindex="-1"></a><span class="co">#| include: false</span></span>
-<span id="cb8-95"><a href="#cb8-95" aria-hidden="true" tabindex="-1"></a>required_packages <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;spmR&quot;</span>, <span class="st">&quot;gt&quot;</span>, <span class="st">&quot;ggplot2&quot;</span>, <span class="st">&quot;ggthemes&quot;</span>, <span class="st">&quot;dplyr&quot;</span>, <span class="st">&quot;tidyr&quot;</span>)</span>
-<span id="cb8-96"><a href="#cb8-96" aria-hidden="true" tabindex="-1"></a>missing_packages <span class="ot">&lt;-</span> required_packages[</span>
-<span id="cb8-97"><a href="#cb8-97" aria-hidden="true" tabindex="-1"></a>  <span class="sc">!</span><span class="fu">vapply</span>(required_packages, requireNamespace, <span class="fu">logical</span>(<span class="dv">1</span>), <span class="at">quietly =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb8-98"><a href="#cb8-98" aria-hidden="true" tabindex="-1"></a>]</span>
-<span id="cb8-99"><a href="#cb8-99" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (<span class="fu">length</span>(missing_packages)) {</span>
-<span id="cb8-100"><a href="#cb8-100" aria-hidden="true" tabindex="-1"></a>  <span class="fu">stop</span>(<span class="st">&quot;Install required packages: &quot;</span>, <span class="fu">paste</span>(missing_packages, <span class="at">collapse =</span> <span class="st">&quot;, &quot;</span>))</span>
-<span id="cb8-101"><a href="#cb8-101" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb8-102"><a href="#cb8-102" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (utils<span class="sc">::</span><span class="fu">packageVersion</span>(<span class="st">&quot;spmR&quot;</span>) <span class="sc">&lt;</span> <span class="st">&quot;0.4.3&quot;</span>) {</span>
-<span id="cb8-103"><a href="#cb8-103" aria-hidden="true" tabindex="-1"></a>  <span class="fu">stop</span>(<span class="st">&quot;Install spmR 0.4.3 or later and restart R.&quot;</span>)</span>
+<span id="cb8-36"><a href="#cb8-36" aria-hidden="true" tabindex="-1"></a>The default selects no saved attempt, so this command works in a fresh source</span>
+<span id="cb8-37"><a href="#cb8-37" aria-hidden="true" tabindex="-1"></a>checkout and produces the audit without projection figures or tables.</span>
+<span id="cb8-38"><a href="#cb8-38" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-39"><a href="#cb8-39" aria-hidden="true" tabindex="-1"></a>To include results, set <span class="in">`saved_run`</span> in the YAML above or pass the actual attempt</span>
+<span id="cb8-40"><a href="#cb8-40" aria-hidden="true" tabindex="-1"></a>directory explicitly. This example path is illustrative; the report never selects</span>
+<span id="cb8-41"><a href="#cb8-41" aria-hidden="true" tabindex="-1"></a>the newest directory automatically:</span>
+<span id="cb8-42"><a href="#cb8-42" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-43"><a href="#cb8-43" aria-hidden="true" tabindex="-1"></a><span class="in">```bash</span></span>
+<span id="cb8-44"><a href="#cb8-44" aria-hidden="true" tabindex="-1"></a><span class="ex">quarto</span> render greenland_turbot.qmd <span class="at">-P</span> saved_run:spmR_runs/attempt-001</span>
+<span id="cb8-45"><a href="#cb8-45" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb8-46"><a href="#cb8-46" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-49"><a href="#cb8-49" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb8-50"><a href="#cb8-50" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: report_controls</span></span>
+<span id="cb8-51"><a href="#cb8-51" aria-hidden="true" tabindex="-1"></a><span class="co">#| code-fold: false</span></span>
+<span id="cb8-52"><a href="#cb8-52" aria-hidden="true" tabindex="-1"></a>saved_run <span class="ot">&lt;-</span> params<span class="sc">$</span>saved_run</span>
+<span id="cb8-53"><a href="#cb8-53" aria-hidden="true" tabindex="-1"></a>worms_per_plot <span class="ot">&lt;-</span> <span class="dv">15</span>L</span>
+<span id="cb8-54"><a href="#cb8-54" aria-hidden="true" tabindex="-1"></a>table_years <span class="ot">&lt;-</span> <span class="dv">3</span>L</span>
+<span id="cb8-55"><a href="#cb8-55" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb8-56"><a href="#cb8-56" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-57"><a href="#cb8-57" aria-hidden="true" tabindex="-1"></a><span class="fu">### Start a new projection manually</span></span>
+<span id="cb8-58"><a href="#cb8-58" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-59"><a href="#cb8-59" aria-hidden="true" tabindex="-1"></a>Run this chunk yourself in R **after reviewing the input audit**. It is excluded</span>
+<span id="cb8-60"><a href="#cb8-60" aria-hidden="true" tabindex="-1"></a>from rendering. Keep <span class="in">`run_new_projections = FALSE`</span> until the histories are complete.</span>
+<span id="cb8-61"><a href="#cb8-61" aria-hidden="true" tabindex="-1"></a>Supply verified population weights, units and ages, or explicitly choose the</span>
+<span id="cb8-62"><a href="#cb8-62" aria-hidden="true" tabindex="-1"></a>diagnostic assumptions with <span class="in">`use_diagnostic_weights = TRUE`</span>. Diagnostic mode</span>
+<span id="cb8-63"><a href="#cb8-63" aria-hidden="true" tabindex="-1"></a>cannot repair missing history values. Work from <span class="in">`examples/gt_2026`</span> in R.</span>
+<span id="cb8-64"><a href="#cb8-64" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-67"><a href="#cb8-67" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb8-68"><a href="#cb8-68" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: manual_projection</span></span>
+<span id="cb8-69"><a href="#cb8-69" aria-hidden="true" tabindex="-1"></a><span class="co">#| eval: false</span></span>
+<span id="cb8-70"><a href="#cb8-70" aria-hidden="true" tabindex="-1"></a><span class="co">#| code-fold: false</span></span>
+<span id="cb8-71"><a href="#cb8-71" aria-hidden="true" tabindex="-1"></a><span class="fu">source</span>(<span class="st">&quot;run.R&quot;</span>)</span>
+<span id="cb8-72"><a href="#cb8-72" aria-hidden="true" tabindex="-1"></a>run_new_projections <span class="ot">&lt;-</span> <span class="cn">FALSE</span></span>
+<span id="cb8-73"><a href="#cb8-73" aria-hidden="true" tabindex="-1"></a>use_diagnostic_weights <span class="ot">&lt;-</span> <span class="cn">FALSE</span></span>
+<span id="cb8-74"><a href="#cb8-74" aria-hidden="true" tabindex="-1"></a>population_weights <span class="ot">&lt;-</span> <span class="cn">NULL</span></span>
+<span id="cb8-75"><a href="#cb8-75" aria-hidden="true" tabindex="-1"></a>units <span class="ot">&lt;-</span> <span class="cn">NULL</span></span>
+<span id="cb8-76"><a href="#cb8-76" aria-hidden="true" tabindex="-1"></a>ages <span class="ot">&lt;-</span> <span class="cn">NULL</span></span>
+<span id="cb8-77"><a href="#cb8-77" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-78"><a href="#cb8-78" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (run_new_projections) {</span>
+<span id="cb8-79"><a href="#cb8-79" aria-hidden="true" tabindex="-1"></a>  projection <span class="ot">&lt;-</span> <span class="fu">run_gt2026_projection</span>(</span>
+<span id="cb8-80"><a href="#cb8-80" aria-hidden="true" tabindex="-1"></a>    <span class="at">diagnostic =</span> use_diagnostic_weights,</span>
+<span id="cb8-81"><a href="#cb8-81" aria-hidden="true" tabindex="-1"></a>    <span class="at">population_weights =</span> population_weights,</span>
+<span id="cb8-82"><a href="#cb8-82" aria-hidden="true" tabindex="-1"></a>    <span class="at">units =</span> units,</span>
+<span id="cb8-83"><a href="#cb8-83" aria-hidden="true" tabindex="-1"></a>    <span class="at">ages =</span> ages</span>
+<span id="cb8-84"><a href="#cb8-84" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb8-85"><a href="#cb8-85" aria-hidden="true" tabindex="-1"></a>  projection<span class="sc">$</span>run_dir</span>
+<span id="cb8-86"><a href="#cb8-86" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb8-87"><a href="#cb8-87" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb8-88"><a href="#cb8-88" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-89"><a href="#cb8-89" aria-hidden="true" tabindex="-1"></a>After a successful run, use the returned directory as <span class="in">`saved_run`</span> and render again.</span>
+<span id="cb8-90"><a href="#cb8-90" aria-hidden="true" tabindex="-1"></a>Each new run receives a separate attempt directory. Re-rendering reads saved</span>
+<span id="cb8-91"><a href="#cb8-91" aria-hidden="true" tabindex="-1"></a>outputs and preserves the attempt contents.</span>
+<span id="cb8-92"><a href="#cb8-92" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-95"><a href="#cb8-95" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb8-96"><a href="#cb8-96" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: setup</span></span>
+<span id="cb8-97"><a href="#cb8-97" aria-hidden="true" tabindex="-1"></a><span class="co">#| include: false</span></span>
+<span id="cb8-98"><a href="#cb8-98" aria-hidden="true" tabindex="-1"></a>required_packages <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;spmR&quot;</span>, <span class="st">&quot;gt&quot;</span>, <span class="st">&quot;ggplot2&quot;</span>, <span class="st">&quot;ggthemes&quot;</span>, <span class="st">&quot;dplyr&quot;</span>, <span class="st">&quot;tidyr&quot;</span>)</span>
+<span id="cb8-99"><a href="#cb8-99" aria-hidden="true" tabindex="-1"></a>missing_packages <span class="ot">&lt;-</span> required_packages[</span>
+<span id="cb8-100"><a href="#cb8-100" aria-hidden="true" tabindex="-1"></a>  <span class="sc">!</span><span class="fu">vapply</span>(required_packages, requireNamespace, <span class="fu">logical</span>(<span class="dv">1</span>), <span class="at">quietly =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb8-101"><a href="#cb8-101" aria-hidden="true" tabindex="-1"></a>]</span>
+<span id="cb8-102"><a href="#cb8-102" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (<span class="fu">length</span>(missing_packages)) {</span>
+<span id="cb8-103"><a href="#cb8-103" aria-hidden="true" tabindex="-1"></a>  <span class="fu">stop</span>(<span class="st">&quot;Install required packages: &quot;</span>, <span class="fu">paste</span>(missing_packages, <span class="at">collapse =</span> <span class="st">&quot;, &quot;</span>))</span>
 <span id="cb8-104"><a href="#cb8-104" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb8-105"><a href="#cb8-105" aria-hidden="true" tabindex="-1"></a>example_candidates <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;.&quot;</span>, <span class="fu">file.path</span>(<span class="st">&quot;examples&quot;</span>, <span class="st">&quot;gt_2026&quot;</span>))</span>
-<span id="cb8-106"><a href="#cb8-106" aria-hidden="true" tabindex="-1"></a>example_dir <span class="ot">&lt;-</span> example_candidates[</span>
-<span id="cb8-107"><a href="#cb8-107" aria-hidden="true" tabindex="-1"></a>  <span class="fu">file.exists</span>(<span class="fu">file.path</span>(example_candidates, <span class="st">&quot;ForProjections.dat&quot;</span>)) <span class="sc">&amp;</span></span>
-<span id="cb8-108"><a href="#cb8-108" aria-hidden="true" tabindex="-1"></a>    <span class="fu">file.exists</span>(<span class="fu">file.path</span>(example_candidates, <span class="st">&quot;report.R&quot;</span>))</span>
-<span id="cb8-109"><a href="#cb8-109" aria-hidden="true" tabindex="-1"></a>][<span class="dv">1</span>]</span>
-<span id="cb8-110"><a href="#cb8-110" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (<span class="fu">is.na</span>(example_dir)) <span class="fu">stop</span>(<span class="st">&quot;Render from the source checkout or example directory.&quot;</span>)</span>
-<span id="cb8-111"><a href="#cb8-111" aria-hidden="true" tabindex="-1"></a>example_dir <span class="ot">&lt;-</span> <span class="fu">normalizePath</span>(example_dir, <span class="at">winslash =</span> <span class="st">&quot;/&quot;</span>, <span class="at">mustWork =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb8-112"><a href="#cb8-112" aria-hidden="true" tabindex="-1"></a><span class="fu">source</span>(<span class="fu">file.path</span>(example_dir, <span class="st">&quot;run.R&quot;</span>), <span class="at">local =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb8-113"><a href="#cb8-113" aria-hidden="true" tabindex="-1"></a><span class="fu">source</span>(<span class="fu">file.path</span>(example_dir, <span class="st">&quot;report.R&quot;</span>), <span class="at">local =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb8-114"><a href="#cb8-114" aria-hidden="true" tabindex="-1"></a>audit <span class="ot">&lt;-</span> <span class="fu">check_gt2026_inputs</span>(example_dir)</span>
-<span id="cb8-115"><a href="#cb8-115" aria-hidden="true" tabindex="-1"></a>raw_inputs <span class="ot">&lt;-</span> <span class="fu">gt2026_read_source</span>(example_dir)</span>
-<span id="cb8-116"><a href="#cb8-116" aria-hidden="true" tabindex="-1"></a>current_control <span class="ot">&lt;-</span> spmR<span class="sc">::</span><span class="fu">dat2list</span>(<span class="fu">file.path</span>(example_dir, <span class="st">&quot;spm.dat&quot;</span>))</span>
-<span id="cb8-117"><a href="#cb8-117" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (<span class="sc">!</span><span class="fu">is.character</span>(saved_run) <span class="sc">||</span> <span class="fu">length</span>(saved_run) <span class="sc">!=</span> <span class="dv">1</span>L <span class="sc">||</span> <span class="fu">is.na</span>(saved_run)) {</span>
-<span id="cb8-118"><a href="#cb8-118" aria-hidden="true" tabindex="-1"></a>  <span class="fu">stop</span>(<span class="st">&quot;saved_run must be one directory name, or an empty string for audit only.&quot;</span>)</span>
-<span id="cb8-119"><a href="#cb8-119" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb8-120"><a href="#cb8-120" aria-hidden="true" tabindex="-1"></a>saved <span class="ot">&lt;-</span> <span class="cn">NULL</span></span>
-<span id="cb8-121"><a href="#cb8-121" aria-hidden="true" tabindex="-1"></a>series <span class="ot">&lt;-</span> <span class="cn">NULL</span></span>
-<span id="cb8-122"><a href="#cb8-122" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (<span class="fu">nzchar</span>(saved_run)) {</span>
-<span id="cb8-123"><a href="#cb8-123" aria-hidden="true" tabindex="-1"></a>  selected_path <span class="ot">&lt;-</span> <span class="cf">if</span> (<span class="fu">grepl</span>(<span class="st">&quot;^(~|/|[A-Za-z]:[/</span><span class="sc">\\\\</span><span class="st">])&quot;</span>, saved_run)) {</span>
-<span id="cb8-124"><a href="#cb8-124" aria-hidden="true" tabindex="-1"></a>    <span class="fu">path.expand</span>(saved_run)</span>
-<span id="cb8-125"><a href="#cb8-125" aria-hidden="true" tabindex="-1"></a>  } <span class="cf">else</span> {</span>
-<span id="cb8-126"><a href="#cb8-126" aria-hidden="true" tabindex="-1"></a>    <span class="fu">file.path</span>(example_dir, saved_run)</span>
-<span id="cb8-127"><a href="#cb8-127" aria-hidden="true" tabindex="-1"></a>  }</span>
-<span id="cb8-128"><a href="#cb8-128" aria-hidden="true" tabindex="-1"></a>  saved <span class="ot">&lt;-</span> <span class="fu">gt2026_read_report_run</span>(selected_path, example_dir)</span>
-<span id="cb8-129"><a href="#cb8-129" aria-hidden="true" tabindex="-1"></a>  series <span class="ot">&lt;-</span> <span class="fu">gt2026_report_series</span>(saved<span class="sc">$</span>result, <span class="at">n_worms =</span> worms_per_plot)</span>
-<span id="cb8-130"><a href="#cb8-130" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb8-131"><a href="#cb8-131" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb8-132"><a href="#cb8-132" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-133"><a href="#cb8-133" aria-hidden="true" tabindex="-1"></a><span class="fu">## Current status</span></span>
-<span id="cb8-134"><a href="#cb8-134" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-137"><a href="#cb8-137" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb8-138"><a href="#cb8-138" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: current_status</span></span>
-<span id="cb8-139"><a href="#cb8-139" aria-hidden="true" tabindex="-1"></a><span class="co">#| echo: false</span></span>
-<span id="cb8-140"><a href="#cb8-140" aria-hidden="true" tabindex="-1"></a><span class="co">#| results: asis</span></span>
-<span id="cb8-141"><a href="#cb8-141" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (<span class="fu">is.null</span>(saved)) {</span>
-<span id="cb8-142"><a href="#cb8-142" aria-hidden="true" tabindex="-1"></a>  <span class="fu">cat</span>(<span class="st">&quot;**Audit only: no saved attempt selected.** No new projection was run.</span><span class="sc">\n\n</span><span class="st">&quot;</span>)</span>
-<span id="cb8-143"><a href="#cb8-143" aria-hidden="true" tabindex="-1"></a>} <span class="cf">else</span> {</span>
-<span id="cb8-144"><a href="#cb8-144" aria-hidden="true" tabindex="-1"></a>  <span class="fu">cat</span>(<span class="st">&quot;**Saved conditional projection loaded.** No new projection was run.</span><span class="sc">\n\n</span><span class="st">&quot;</span>)</span>
-<span id="cb8-145"><a href="#cb8-145" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (<span class="sc">!</span><span class="fu">all</span>(saved<span class="sc">$</span>source_comparison<span class="sc">$</span>matches_current)) {</span>
-<span id="cb8-146"><a href="#cb8-146" aria-hidden="true" tabindex="-1"></a>    <span class="fu">cat</span>(<span class="st">&quot;**Different source inputs:** these saved results belong to an earlier or different input revision, not the current files.</span><span class="sc">\n\n</span><span class="st">&quot;</span>)</span>
-<span id="cb8-147"><a href="#cb8-147" aria-hidden="true" tabindex="-1"></a>  }</span>
-<span id="cb8-148"><a href="#cb8-148" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb8-149"><a href="#cb8-149" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (<span class="fu">length</span>(raw_inputs<span class="sc">$</span>recruitment) <span class="sc">!=</span> <span class="fu">length</span>(raw_inputs<span class="sc">$</span>ssb)) {</span>
-<span id="cb8-150"><a href="#cb8-150" aria-hidden="true" tabindex="-1"></a>  <span class="fu">cat</span>(<span class="fu">sprintf</span>(</span>
-<span id="cb8-151"><a href="#cb8-151" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;**New runs blocked:** the current file contains %d recruitment values and %d SSB values. Supply matching histories and confirm their calendar alignment; values are never padded or discarded.</span><span class="sc">\n\n</span><span class="st">&quot;</span>,</span>
-<span id="cb8-152"><a href="#cb8-152" aria-hidden="true" tabindex="-1"></a>    <span class="fu">length</span>(raw_inputs<span class="sc">$</span>recruitment), <span class="fu">length</span>(raw_inputs<span class="sc">$</span>ssb)</span>
-<span id="cb8-153"><a href="#cb8-153" aria-hidden="true" tabindex="-1"></a>  ))</span>
-<span id="cb8-154"><a href="#cb8-154" aria-hidden="true" tabindex="-1"></a>} <span class="cf">else</span> {</span>
-<span id="cb8-155"><a href="#cb8-155" aria-hidden="true" tabindex="-1"></a>  <span class="fu">cat</span>(<span class="st">&quot;Current recruitment and SSB lengths agree. Their calendar pairing and scientific declarations still require review.</span><span class="sc">\n\n</span><span class="st">&quot;</span>)</span>
-<span id="cb8-156"><a href="#cb8-156" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb8-157"><a href="#cb8-157" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb8-158"><a href="#cb8-158" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-159"><a href="#cb8-159" aria-hidden="true" tabindex="-1"></a>Diagnostic population weights are fleet-weighted catch-weight proxies, not</span>
-<span id="cb8-160"><a href="#cb8-160" aria-hidden="true" tabindex="-1"></a>verified population body weights. SS3 export definitions, units, age order,</span>
-<span id="cb8-161"><a href="#cb8-161" aria-hidden="true" tabindex="-1"></a>plus group, initial abundance timing and spawning-weight/maturity definitions</span>
-<span id="cb8-162"><a href="#cb8-162" aria-hidden="true" tabindex="-1"></a>remain scientific review items. The audit below refers to **current files**;</span>
-<span id="cb8-163"><a href="#cb8-163" aria-hidden="true" tabindex="-1"></a>saved-run assumptions are displayed separately in the provenance section.</span>
-<span id="cb8-164"><a href="#cb8-164" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-165"><a href="#cb8-165" aria-hidden="true" tabindex="-1"></a><span class="fu">## Input audit</span></span>
-<span id="cb8-166"><a href="#cb8-166" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-167"><a href="#cb8-167" aria-hidden="true" tabindex="-1"></a>The current controls request <span class="in">`r current_control$nsims`</span> simulations across</span>
-<span id="cb8-168"><a href="#cb8-168" aria-hidden="true" tabindex="-1"></a><span class="in">`r current_control$nalts`</span> alternatives for <span class="in">`r current_control$nprj_yrs`</span> years,</span>
-<span id="cb8-169"><a href="#cb8-169" aria-hidden="true" tabindex="-1"></a>beginning in <span class="in">`r current_control$beg_yr`</span>.</span>
-<span id="cb8-170"><a href="#cb8-170" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-173"><a href="#cb8-173" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb8-174"><a href="#cb8-174" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: tbl-input-audit</span></span>
-<span id="cb8-175"><a href="#cb8-175" aria-hidden="true" tabindex="-1"></a><span class="co">#| tbl-cap: &quot;Current GT2026 input checks. Repair and review entries remain visible even when a saved run is selected.&quot;</span></span>
-<span id="cb8-176"><a href="#cb8-176" aria-hidden="true" tabindex="-1"></a><span class="co">#| echo: false</span></span>
-<span id="cb8-177"><a href="#cb8-177" aria-hidden="true" tabindex="-1"></a>audit <span class="sc">|&gt;</span></span>
-<span id="cb8-178"><a href="#cb8-178" aria-hidden="true" tabindex="-1"></a>  gt<span class="sc">::</span><span class="fu">gt</span>() <span class="sc">|&gt;</span></span>
-<span id="cb8-179"><a href="#cb8-179" aria-hidden="true" tabindex="-1"></a>  gt<span class="sc">::</span><span class="fu">cols_label</span>(<span class="at">item =</span> <span class="st">&quot;Input&quot;</span>, <span class="at">status =</span> <span class="st">&quot;Status&quot;</span>, <span class="at">detail =</span> <span class="st">&quot;Finding&quot;</span>) <span class="sc">|&gt;</span></span>
-<span id="cb8-180"><a href="#cb8-180" aria-hidden="true" tabindex="-1"></a>  gt<span class="sc">::</span><span class="fu">cols_width</span>(item <span class="sc">~</span> gt<span class="sc">::</span><span class="fu">pct</span>(<span class="dv">18</span>), status <span class="sc">~</span> gt<span class="sc">::</span><span class="fu">pct</span>(<span class="dv">12</span>), detail <span class="sc">~</span> gt<span class="sc">::</span><span class="fu">pct</span>(<span class="dv">70</span>))</span>
-<span id="cb8-181"><a href="#cb8-181" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb8-182"><a href="#cb8-182" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-183"><a href="#cb8-183" aria-hidden="true" tabindex="-1"></a><span class="fu">## Projection plots</span></span>
-<span id="cb8-184"><a href="#cb8-184" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-185"><a href="#cb8-185" aria-hidden="true" tabindex="-1"></a>Each panel represents one alternative. The **same 15 simulations**, selected</span>
-<span id="cb8-186"><a href="#cb8-186" aria-hidden="true" tabindex="-1"></a>deterministically by their sorted simulation IDs, appear as thin blue lines</span>
-<span id="cb8-187"><a href="#cb8-187" aria-hidden="true" tabindex="-1"></a>(&quot;worms&quot;) in every plot. The black line is the median across **all** simulations;</span>
-<span id="cb8-188"><a href="#cb8-188" aria-hidden="true" tabindex="-1"></a>the grey band spans their 5th–95th percentiles, a **90% projection interval**.</span>
-<span id="cb8-189"><a href="#cb8-189" aria-hidden="true" tabindex="-1"></a>The 15 paths illustrate simulations rather than estimating the full uncertainty</span>
-<span id="cb8-190"><a href="#cb8-190" aria-hidden="true" tabindex="-1"></a>by themselves. Fixed catches can cause several paths to overlap exactly.</span>
-<span id="cb8-191"><a href="#cb8-191" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-194"><a href="#cb8-194" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb8-195"><a href="#cb8-195" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: plot_setup</span></span>
-<span id="cb8-196"><a href="#cb8-196" aria-hidden="true" tabindex="-1"></a><span class="co">#| echo: false</span></span>
-<span id="cb8-197"><a href="#cb8-197" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (<span class="fu">is.null</span>(series)) {</span>
-<span id="cb8-198"><a href="#cb8-198" aria-hidden="true" tabindex="-1"></a>  <span class="fu">cat</span>(<span class="st">&quot;Plots will appear after selecting a verified completed attempt with at least 15 simulations. No placeholder projection data are plotted.&quot;</span>)</span>
-<span id="cb8-199"><a href="#cb8-199" aria-hidden="true" tabindex="-1"></a>} <span class="cf">else</span> {</span>
-<span id="cb8-200"><a href="#cb8-200" aria-hidden="true" tabindex="-1"></a>  <span class="fu">cat</span>(<span class="st">&quot;Simulation IDs shown:&quot;</span>, <span class="fu">paste</span>(series<span class="sc">$</span>worm_ids, <span class="at">collapse =</span> <span class="st">&quot;, &quot;</span>))</span>
-<span id="cb8-201"><a href="#cb8-201" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb8-202"><a href="#cb8-202" aria-hidden="true" tabindex="-1"></a>projection_plot <span class="ot">&lt;-</span> <span class="cf">function</span>(metric_name, axis_label) {</span>
-<span id="cb8-203"><a href="#cb8-203" aria-hidden="true" tabindex="-1"></a>  summary_data <span class="ot">&lt;-</span> dplyr<span class="sc">::</span><span class="fu">filter</span>(series<span class="sc">$</span>summary, .data<span class="sc">$</span>metric <span class="sc">==</span> metric_name)</span>
-<span id="cb8-204"><a href="#cb8-204" aria-hidden="true" tabindex="-1"></a>  worm_data <span class="ot">&lt;-</span> dplyr<span class="sc">::</span><span class="fu">filter</span>(series<span class="sc">$</span>worms, .data<span class="sc">$</span>metric <span class="sc">==</span> metric_name)</span>
-<span id="cb8-205"><a href="#cb8-205" aria-hidden="true" tabindex="-1"></a>  ggplot2<span class="sc">::</span><span class="fu">ggplot</span>(summary_data, ggplot2<span class="sc">::</span><span class="fu">aes</span>(<span class="at">x =</span> .data<span class="sc">$</span>Year)) <span class="sc">+</span></span>
-<span id="cb8-206"><a href="#cb8-206" aria-hidden="true" tabindex="-1"></a>    ggplot2<span class="sc">::</span><span class="fu">geom_ribbon</span>(</span>
-<span id="cb8-207"><a href="#cb8-207" aria-hidden="true" tabindex="-1"></a>      ggplot2<span class="sc">::</span><span class="fu">aes</span>(<span class="at">ymin =</span> .data<span class="sc">$</span>lower, <span class="at">ymax =</span> .data<span class="sc">$</span>upper),</span>
-<span id="cb8-208"><a href="#cb8-208" aria-hidden="true" tabindex="-1"></a>      <span class="at">fill =</span> <span class="st">&quot;grey85&quot;</span></span>
-<span id="cb8-209"><a href="#cb8-209" aria-hidden="true" tabindex="-1"></a>    ) <span class="sc">+</span></span>
-<span id="cb8-210"><a href="#cb8-210" aria-hidden="true" tabindex="-1"></a>    ggplot2<span class="sc">::</span><span class="fu">geom_line</span>(</span>
-<span id="cb8-211"><a href="#cb8-211" aria-hidden="true" tabindex="-1"></a>      <span class="at">data =</span> worm_data,</span>
-<span id="cb8-212"><a href="#cb8-212" aria-hidden="true" tabindex="-1"></a>      ggplot2<span class="sc">::</span><span class="fu">aes</span>(<span class="at">y =</span> .data<span class="sc">$</span>value, <span class="at">group =</span> .data<span class="sc">$</span>Sim),</span>
-<span id="cb8-213"><a href="#cb8-213" aria-hidden="true" tabindex="-1"></a>      <span class="at">colour =</span> <span class="st">&quot;#336A99&quot;</span>, <span class="at">alpha =</span> <span class="fl">0.35</span>, <span class="at">linewidth =</span> <span class="fl">0.35</span></span>
-<span id="cb8-214"><a href="#cb8-214" aria-hidden="true" tabindex="-1"></a>    ) <span class="sc">+</span></span>
-<span id="cb8-215"><a href="#cb8-215" aria-hidden="true" tabindex="-1"></a>    ggplot2<span class="sc">::</span><span class="fu">geom_line</span>(ggplot2<span class="sc">::</span><span class="fu">aes</span>(<span class="at">y =</span> .data<span class="sc">$</span>median), <span class="at">linewidth =</span> <span class="fl">0.65</span>) <span class="sc">+</span></span>
-<span id="cb8-216"><a href="#cb8-216" aria-hidden="true" tabindex="-1"></a>    ggplot2<span class="sc">::</span><span class="fu">facet_wrap</span>(ggplot2<span class="sc">::</span><span class="fu">vars</span>(Alt), <span class="at">ncol =</span> <span class="dv">2</span>, <span class="at">labeller =</span> <span class="st">&quot;label_both&quot;</span>) <span class="sc">+</span></span>
-<span id="cb8-217"><a href="#cb8-217" aria-hidden="true" tabindex="-1"></a>    ggplot2<span class="sc">::</span><span class="fu">labs</span>(</span>
-<span id="cb8-218"><a href="#cb8-218" aria-hidden="true" tabindex="-1"></a>      <span class="at">x =</span> <span class="st">&quot;Projection year&quot;</span>,</span>
-<span id="cb8-219"><a href="#cb8-219" aria-hidden="true" tabindex="-1"></a>      <span class="at">y =</span> <span class="fu">paste0</span>(axis_label, <span class="st">&quot; (&quot;</span>, saved<span class="sc">$</span>biomass_units, <span class="st">&quot;)&quot;</span>)</span>
-<span id="cb8-220"><a href="#cb8-220" aria-hidden="true" tabindex="-1"></a>    ) <span class="sc">+</span></span>
-<span id="cb8-221"><a href="#cb8-221" aria-hidden="true" tabindex="-1"></a>    ggthemes<span class="sc">::</span><span class="fu">theme_few</span>(<span class="at">base_size =</span> <span class="dv">11</span>)</span>
-<span id="cb8-222"><a href="#cb8-222" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb8-223"><a href="#cb8-223" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb8-224"><a href="#cb8-224" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-227"><a href="#cb8-227" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb8-228"><a href="#cb8-228" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: fig-ssb-worms</span></span>
-<span id="cb8-229"><a href="#cb8-229" aria-hidden="true" tabindex="-1"></a><span class="co">#| echo: false</span></span>
-<span id="cb8-230"><a href="#cb8-230" aria-hidden="true" tabindex="-1"></a><span class="co">#| fig-width: 9</span></span>
-<span id="cb8-231"><a href="#cb8-231" aria-hidden="true" tabindex="-1"></a><span class="co">#| fig-height: 9</span></span>
-<span id="cb8-232"><a href="#cb8-232" aria-hidden="true" tabindex="-1"></a><span class="co">#| fig-cap: &quot;Conditional spawning biomass: 15 simulation paths per alternative, all-simulation median and 90% projection interval.&quot;</span></span>
-<span id="cb8-233"><a href="#cb8-233" aria-hidden="true" tabindex="-1"></a><span class="co">#| fig-alt: &quot;Faceted spawning-biomass trajectories with one panel per alternative. Thin lines show fifteen selected simulations, a black line the median, and a grey band the projection interval. Numerical summaries follow the plots.&quot;</span></span>
-<span id="cb8-234"><a href="#cb8-234" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (<span class="sc">!</span><span class="fu">is.null</span>(series)) <span class="fu">projection_plot</span>(<span class="st">&quot;SSB&quot;</span>, <span class="st">&quot;Spawning biomass&quot;</span>)</span>
-<span id="cb8-235"><a href="#cb8-235" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb8-236"><a href="#cb8-236" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-239"><a href="#cb8-239" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb8-240"><a href="#cb8-240" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: fig-biomass-worms</span></span>
-<span id="cb8-241"><a href="#cb8-241" aria-hidden="true" tabindex="-1"></a><span class="co">#| echo: false</span></span>
-<span id="cb8-242"><a href="#cb8-242" aria-hidden="true" tabindex="-1"></a><span class="co">#| fig-width: 9</span></span>
-<span id="cb8-243"><a href="#cb8-243" aria-hidden="true" tabindex="-1"></a><span class="co">#| fig-height: 9</span></span>
-<span id="cb8-244"><a href="#cb8-244" aria-hidden="true" tabindex="-1"></a><span class="co">#| fig-cap: &quot;Conditional total population biomass under the saved run&#39;s population-weight declarations.&quot;</span></span>
-<span id="cb8-245"><a href="#cb8-245" aria-hidden="true" tabindex="-1"></a><span class="co">#| fig-alt: &quot;Faceted total-biomass trajectories by alternative, with fifteen simulation paths, the all-simulation median and the 90 percent projection interval.&quot;</span></span>
-<span id="cb8-246"><a href="#cb8-246" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (<span class="sc">!</span><span class="fu">is.null</span>(series)) <span class="fu">projection_plot</span>(<span class="st">&quot;Tot_biom&quot;</span>, <span class="st">&quot;Total biomass&quot;</span>)</span>
-<span id="cb8-247"><a href="#cb8-247" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb8-248"><a href="#cb8-248" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-251"><a href="#cb8-251" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb8-252"><a href="#cb8-252" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: fig-catch-worms</span></span>
-<span id="cb8-253"><a href="#cb8-253" aria-hidden="true" tabindex="-1"></a><span class="co">#| echo: false</span></span>
-<span id="cb8-254"><a href="#cb8-254" aria-hidden="true" tabindex="-1"></a><span class="co">#| fig-width: 9</span></span>
-<span id="cb8-255"><a href="#cb8-255" aria-hidden="true" tabindex="-1"></a><span class="co">#| fig-height: 9</span></span>
-<span id="cb8-256"><a href="#cb8-256" aria-hidden="true" tabindex="-1"></a><span class="co">#| fig-cap: &quot;Conditional catch trajectories. Prescribed catches can make the 15 simulation paths overlap.&quot;</span></span>
-<span id="cb8-257"><a href="#cb8-257" aria-hidden="true" tabindex="-1"></a><span class="co">#| fig-alt: &quot;Faceted catch trajectories by alternative. Fifteen selected paths overlap where catches are prescribed; the median and projection interval use every simulation.&quot;</span></span>
-<span id="cb8-258"><a href="#cb8-258" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (<span class="sc">!</span><span class="fu">is.null</span>(series)) <span class="fu">projection_plot</span>(<span class="st">&quot;Catch&quot;</span>, <span class="st">&quot;Catch&quot;</span>)</span>
-<span id="cb8-259"><a href="#cb8-259" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb8-260"><a href="#cb8-260" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-263"><a href="#cb8-263" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb8-264"><a href="#cb8-264" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: fig-abc-worms</span></span>
-<span id="cb8-265"><a href="#cb8-265" aria-hidden="true" tabindex="-1"></a><span class="co">#| echo: false</span></span>
-<span id="cb8-266"><a href="#cb8-266" aria-hidden="true" tabindex="-1"></a><span class="co">#| fig-width: 9</span></span>
-<span id="cb8-267"><a href="#cb8-267" aria-hidden="true" tabindex="-1"></a><span class="co">#| fig-height: 9</span></span>
-<span id="cb8-268"><a href="#cb8-268" aria-hidden="true" tabindex="-1"></a><span class="co">#| fig-cap: &quot;Conditional model ABC trajectories; these calculations are not adopted catch recommendations.&quot;</span></span>
-<span id="cb8-269"><a href="#cb8-269" aria-hidden="true" tabindex="-1"></a><span class="co">#| fig-alt: &quot;Faceted conditional ABC trajectories by alternative with fifteen simulation paths, the median and the 90 percent projection interval.&quot;</span></span>
-<span id="cb8-270"><a href="#cb8-270" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (<span class="sc">!</span><span class="fu">is.null</span>(series)) <span class="fu">projection_plot</span>(<span class="st">&quot;ABC&quot;</span>, <span class="st">&quot;ABC&quot;</span>)</span>
-<span id="cb8-271"><a href="#cb8-271" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb8-272"><a href="#cb8-272" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-275"><a href="#cb8-275" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb8-276"><a href="#cb8-276" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: fig-ofl-worms</span></span>
-<span id="cb8-277"><a href="#cb8-277" aria-hidden="true" tabindex="-1"></a><span class="co">#| echo: false</span></span>
-<span id="cb8-278"><a href="#cb8-278" aria-hidden="true" tabindex="-1"></a><span class="co">#| fig-width: 9</span></span>
-<span id="cb8-279"><a href="#cb8-279" aria-hidden="true" tabindex="-1"></a><span class="co">#| fig-height: 9</span></span>
-<span id="cb8-280"><a href="#cb8-280" aria-hidden="true" tabindex="-1"></a><span class="co">#| fig-cap: &quot;Conditional model OFL trajectories; scientific input review remains separate from successful execution.&quot;</span></span>
-<span id="cb8-281"><a href="#cb8-281" aria-hidden="true" tabindex="-1"></a><span class="co">#| fig-alt: &quot;Faceted conditional OFL trajectories by alternative with fifteen simulation paths, the median and the 90 percent projection interval.&quot;</span></span>
-<span id="cb8-282"><a href="#cb8-282" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (<span class="sc">!</span><span class="fu">is.null</span>(series)) <span class="fu">projection_plot</span>(<span class="st">&quot;OFL&quot;</span>, <span class="st">&quot;OFL&quot;</span>)</span>
-<span id="cb8-283"><a href="#cb8-283" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb8-284"><a href="#cb8-284" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-285"><a href="#cb8-285" aria-hidden="true" tabindex="-1"></a><span class="fu">## Summary tables</span></span>
-<span id="cb8-286"><a href="#cb8-286" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-287"><a href="#cb8-287" aria-hidden="true" tabindex="-1"></a>Tables use all simulations, not only the 15 displayed paths. They are recomputed</span>
-<span id="cb8-288"><a href="#cb8-288" aria-hidden="true" tabindex="-1"></a>from the hash-verified detailed output rather than an independently edited</span>
-<span id="cb8-289"><a href="#cb8-289" aria-hidden="true" tabindex="-1"></a>summary file. The first table covers the first <span class="in">`r table_years`</span> projection years;</span>
-<span id="cb8-290"><a href="#cb8-290" aria-hidden="true" tabindex="-1"></a>the second reports terminal-year distributions.</span>
-<span id="cb8-291"><a href="#cb8-291" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-294"><a href="#cb8-294" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb8-295"><a href="#cb8-295" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: annual_means_table</span></span>
-<span id="cb8-296"><a href="#cb8-296" aria-hidden="true" tabindex="-1"></a><span class="co">#| echo: false</span></span>
-<span id="cb8-297"><a href="#cb8-297" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (<span class="fu">is.null</span>(series)) {</span>
-<span id="cb8-298"><a href="#cb8-298" aria-hidden="true" tabindex="-1"></a>  <span class="fu">cat</span>(<span class="st">&quot;No projection tables are available until a completed attempt is selected.&quot;</span>)</span>
-<span id="cb8-299"><a href="#cb8-299" aria-hidden="true" tabindex="-1"></a>} <span class="cf">else</span> {</span>
-<span id="cb8-300"><a href="#cb8-300" aria-hidden="true" tabindex="-1"></a>  annual_means <span class="ot">&lt;-</span> series<span class="sc">$</span>summary <span class="sc">|&gt;</span></span>
-<span id="cb8-301"><a href="#cb8-301" aria-hidden="true" tabindex="-1"></a>    dplyr<span class="sc">::</span><span class="fu">select</span>(dplyr<span class="sc">::</span><span class="fu">all_of</span>(<span class="fu">c</span>(<span class="st">&quot;Alt&quot;</span>, <span class="st">&quot;Year&quot;</span>, <span class="st">&quot;metric&quot;</span>, <span class="st">&quot;mean&quot;</span>))) <span class="sc">|&gt;</span></span>
-<span id="cb8-302"><a href="#cb8-302" aria-hidden="true" tabindex="-1"></a>    tidyr<span class="sc">::</span><span class="fu">pivot_wider</span>(<span class="at">names_from =</span> <span class="st">&quot;metric&quot;</span>, <span class="at">values_from =</span> <span class="st">&quot;mean&quot;</span>)</span>
-<span id="cb8-303"><a href="#cb8-303" aria-hidden="true" tabindex="-1"></a>  annual_means <span class="sc">|&gt;</span></span>
-<span id="cb8-304"><a href="#cb8-304" aria-hidden="true" tabindex="-1"></a>    dplyr<span class="sc">::</span><span class="fu">filter</span>(.data<span class="sc">$</span>Year <span class="sc">&lt;</span> <span class="fu">min</span>(.data<span class="sc">$</span>Year) <span class="sc">+</span> table_years) <span class="sc">|&gt;</span></span>
-<span id="cb8-305"><a href="#cb8-305" aria-hidden="true" tabindex="-1"></a>    dplyr<span class="sc">::</span><span class="fu">mutate</span>(<span class="at">Alt =</span> <span class="fu">paste</span>(<span class="st">&quot;Alternative&quot;</span>, .data<span class="sc">$</span>Alt)) <span class="sc">|&gt;</span></span>
-<span id="cb8-306"><a href="#cb8-306" aria-hidden="true" tabindex="-1"></a>    dplyr<span class="sc">::</span><span class="fu">rename_with</span>(<span class="sc">~</span> <span class="fu">paste0</span>(<span class="st">&quot;annual_&quot;</span>, .x)) <span class="sc">|&gt;</span></span>
-<span id="cb8-307"><a href="#cb8-307" aria-hidden="true" tabindex="-1"></a>    gt<span class="sc">::</span><span class="fu">gt</span>(<span class="at">groupname_col =</span> <span class="st">&quot;annual_Alt&quot;</span>) <span class="sc">|&gt;</span></span>
-<span id="cb8-308"><a href="#cb8-308" aria-hidden="true" tabindex="-1"></a>    gt<span class="sc">::</span><span class="fu">tab_caption</span>(<span class="st">&quot;Conditional annual means by alternative for the first projection years. Units follow the saved run.&quot;</span>) <span class="sc">|&gt;</span></span>
-<span id="cb8-309"><a href="#cb8-309" aria-hidden="true" tabindex="-1"></a>    gt<span class="sc">::</span><span class="fu">tab_header</span>(<span class="at">title =</span> <span class="fu">paste</span>(<span class="st">&quot;Conditional annual means —&quot;</span>, saved<span class="sc">$</span>biomass_units)) <span class="sc">|&gt;</span></span>
-<span id="cb8-310"><a href="#cb8-310" aria-hidden="true" tabindex="-1"></a>    gt<span class="sc">::</span><span class="fu">cols_label</span>(<span class="at">annual_Year =</span> <span class="st">&quot;Year&quot;</span>, <span class="at">annual_Tot_biom =</span> <span class="st">&quot;Total biomass&quot;</span>, <span class="at">annual_SSB =</span> <span class="st">&quot;Spawning biomass&quot;</span>, <span class="at">annual_Catch =</span> <span class="st">&quot;Catch&quot;</span>, <span class="at">annual_ABC =</span> <span class="st">&quot;ABC&quot;</span>, <span class="at">annual_OFL =</span> <span class="st">&quot;OFL&quot;</span>) <span class="sc">|&gt;</span></span>
-<span id="cb8-311"><a href="#cb8-311" aria-hidden="true" tabindex="-1"></a>    gt<span class="sc">::</span><span class="fu">fmt_number</span>(<span class="at">columns =</span> <span class="fu">paste0</span>(<span class="st">&quot;annual_&quot;</span>, <span class="fu">c</span>(<span class="st">&quot;SSB&quot;</span>, <span class="st">&quot;Tot_biom&quot;</span>, <span class="st">&quot;Catch&quot;</span>, <span class="st">&quot;ABC&quot;</span>, <span class="st">&quot;OFL&quot;</span>)), <span class="at">decimals =</span> <span class="dv">1</span>)</span>
-<span id="cb8-312"><a href="#cb8-312" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb8-313"><a href="#cb8-313" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb8-314"><a href="#cb8-314" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-317"><a href="#cb8-317" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb8-318"><a href="#cb8-318" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: terminal_distribution_table</span></span>
-<span id="cb8-319"><a href="#cb8-319" aria-hidden="true" tabindex="-1"></a><span class="co">#| echo: false</span></span>
-<span id="cb8-320"><a href="#cb8-320" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (<span class="sc">!</span><span class="fu">is.null</span>(series)) {</span>
-<span id="cb8-321"><a href="#cb8-321" aria-hidden="true" tabindex="-1"></a>  series<span class="sc">$</span>summary <span class="sc">|&gt;</span></span>
-<span id="cb8-322"><a href="#cb8-322" aria-hidden="true" tabindex="-1"></a>    dplyr<span class="sc">::</span><span class="fu">filter</span>(.data<span class="sc">$</span>Year <span class="sc">==</span> <span class="fu">max</span>(.data<span class="sc">$</span>Year)) <span class="sc">|&gt;</span></span>
-<span id="cb8-323"><a href="#cb8-323" aria-hidden="true" tabindex="-1"></a>    dplyr<span class="sc">::</span><span class="fu">select</span>(dplyr<span class="sc">::</span><span class="fu">all_of</span>(<span class="fu">c</span>(<span class="st">&quot;metric&quot;</span>, <span class="st">&quot;Alt&quot;</span>, <span class="st">&quot;Year&quot;</span>, <span class="st">&quot;median&quot;</span>, <span class="st">&quot;lower&quot;</span>, <span class="st">&quot;upper&quot;</span>))) <span class="sc">|&gt;</span></span>
-<span id="cb8-324"><a href="#cb8-324" aria-hidden="true" tabindex="-1"></a>    dplyr<span class="sc">::</span><span class="fu">rename_with</span>(<span class="sc">~</span> <span class="fu">paste0</span>(<span class="st">&quot;terminal_&quot;</span>, .x)) <span class="sc">|&gt;</span></span>
-<span id="cb8-325"><a href="#cb8-325" aria-hidden="true" tabindex="-1"></a>    gt<span class="sc">::</span><span class="fu">gt</span>(<span class="at">groupname_col =</span> <span class="st">&quot;terminal_metric&quot;</span>) <span class="sc">|&gt;</span></span>
-<span id="cb8-326"><a href="#cb8-326" aria-hidden="true" tabindex="-1"></a>    gt<span class="sc">::</span><span class="fu">tab_caption</span>(<span class="st">&quot;Terminal-year median and 5th–95th percentile projection range, using all simulations.&quot;</span>) <span class="sc">|&gt;</span></span>
-<span id="cb8-327"><a href="#cb8-327" aria-hidden="true" tabindex="-1"></a>    gt<span class="sc">::</span><span class="fu">tab_header</span>(<span class="at">title =</span> <span class="fu">paste</span>(<span class="st">&quot;Terminal projection distributions —&quot;</span>, saved<span class="sc">$</span>biomass_units)) <span class="sc">|&gt;</span></span>
-<span id="cb8-328"><a href="#cb8-328" aria-hidden="true" tabindex="-1"></a>    gt<span class="sc">::</span><span class="fu">cols_label</span>(<span class="at">terminal_Alt =</span> <span class="st">&quot;Alternative&quot;</span>, <span class="at">terminal_Year =</span> <span class="st">&quot;Year&quot;</span>, <span class="at">terminal_median =</span> <span class="st">&quot;Median&quot;</span>, <span class="at">terminal_lower =</span> <span class="st">&quot;5th percentile&quot;</span>, <span class="at">terminal_upper =</span> <span class="st">&quot;95th percentile&quot;</span>) <span class="sc">|&gt;</span></span>
-<span id="cb8-329"><a href="#cb8-329" aria-hidden="true" tabindex="-1"></a>    gt<span class="sc">::</span><span class="fu">fmt_number</span>(<span class="at">columns =</span> <span class="fu">c</span>(<span class="st">&quot;terminal_median&quot;</span>, <span class="st">&quot;terminal_lower&quot;</span>, <span class="st">&quot;terminal_upper&quot;</span>), <span class="at">decimals =</span> <span class="dv">1</span>)</span>
-<span id="cb8-330"><a href="#cb8-330" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb8-331"><a href="#cb8-331" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb8-332"><a href="#cb8-332" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-333"><a href="#cb8-333" aria-hidden="true" tabindex="-1"></a><span class="fu">## Provenance and checks</span></span>
-<span id="cb8-334"><a href="#cb8-334" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-335"><a href="#cb8-335" aria-hidden="true" tabindex="-1"></a>The report requires a successful native exit and verifies recorded input,</span>
-<span id="cb8-336"><a href="#cb8-336" aria-hidden="true" tabindex="-1"></a>output and archived-source hashes before displaying a saved run. It checks</span>
-<span id="cb8-337"><a href="#cb8-337" aria-hidden="true" tabindex="-1"></a>result dimensions, alternative/year/simulation keys and finite nonnegative</span>
-<span id="cb8-338"><a href="#cb8-338" aria-hidden="true" tabindex="-1"></a>quantities. Current-source differences are labelled rather than overwritten.</span>
-<span id="cb8-339"><a href="#cb8-339" aria-hidden="true" tabindex="-1"></a>Historical-recruitment simulation fits no parameters: maximum-gradient and</span>
-<span id="cb8-340"><a href="#cb8-340" aria-hidden="true" tabindex="-1"></a>positive-definite-Hessian diagnostics are **not applicable** in this mode.</span>
-<span id="cb8-341"><a href="#cb8-341" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-344"><a href="#cb8-344" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb8-345"><a href="#cb8-345" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: saved_provenance</span></span>
-<span id="cb8-346"><a href="#cb8-346" aria-hidden="true" tabindex="-1"></a><span class="co">#| echo: false</span></span>
-<span id="cb8-347"><a href="#cb8-347" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (<span class="sc">!</span><span class="fu">is.null</span>(saved)) {</span>
-<span id="cb8-348"><a href="#cb8-348" aria-hidden="true" tabindex="-1"></a>  tibble<span class="sc">::</span><span class="fu">tibble</span>(</span>
-<span id="cb8-349"><a href="#cb8-349" aria-hidden="true" tabindex="-1"></a>    <span class="at">provenance_field =</span> <span class="fu">c</span>(<span class="st">&quot;Selected directory&quot;</span>, <span class="st">&quot;Run ID&quot;</span>, <span class="st">&quot;Completed UTC&quot;</span>, <span class="st">&quot;spmR version at execution&quot;</span>, <span class="st">&quot;Executable SHA-256&quot;</span>, <span class="st">&quot;Population weights&quot;</span>, <span class="st">&quot;Scientific status&quot;</span>),</span>
-<span id="cb8-350"><a href="#cb8-350" aria-hidden="true" tabindex="-1"></a>    <span class="at">recorded_value =</span> <span class="fu">c</span>(</span>
-<span id="cb8-351"><a href="#cb8-351" aria-hidden="true" tabindex="-1"></a>      saved_run, saved<span class="sc">$</span>provenance<span class="sc">$</span>run_id, saved<span class="sc">$</span>provenance<span class="sc">$</span>completed_utc,</span>
-<span id="cb8-352"><a href="#cb8-352" aria-hidden="true" tabindex="-1"></a>      saved<span class="sc">$</span>provenance<span class="sc">$</span>package_version, saved<span class="sc">$</span>provenance<span class="sc">$</span>executable_sha256,</span>
-<span id="cb8-353"><a href="#cb8-353" aria-hidden="true" tabindex="-1"></a>      saved<span class="sc">$</span>decisions<span class="sc">$</span>population_weights, saved<span class="sc">$</span>decisions<span class="sc">$</span>status</span>
-<span id="cb8-354"><a href="#cb8-354" aria-hidden="true" tabindex="-1"></a>    )</span>
-<span id="cb8-355"><a href="#cb8-355" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">|&gt;</span></span>
-<span id="cb8-356"><a href="#cb8-356" aria-hidden="true" tabindex="-1"></a>    gt<span class="sc">::</span><span class="fu">gt</span>() <span class="sc">|&gt;</span></span>
-<span id="cb8-357"><a href="#cb8-357" aria-hidden="true" tabindex="-1"></a>    gt<span class="sc">::</span><span class="fu">cols_label</span>(<span class="at">provenance_field =</span> <span class="st">&quot;Provenance&quot;</span>, <span class="at">recorded_value =</span> <span class="st">&quot;Recorded value&quot;</span>) <span class="sc">|&gt;</span></span>
-<span id="cb8-358"><a href="#cb8-358" aria-hidden="true" tabindex="-1"></a>    gt<span class="sc">::</span><span class="fu">tab_options</span>(<span class="at">table.font.size =</span> gt<span class="sc">::</span><span class="fu">px</span>(<span class="dv">13</span>))</span>
-<span id="cb8-359"><a href="#cb8-359" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb8-360"><a href="#cb8-360" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb8-361"><a href="#cb8-361" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-364"><a href="#cb8-364" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb8-365"><a href="#cb8-365" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: source_comparison</span></span>
-<span id="cb8-366"><a href="#cb8-366" aria-hidden="true" tabindex="-1"></a><span class="co">#| echo: false</span></span>
-<span id="cb8-367"><a href="#cb8-367" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (<span class="sc">!</span><span class="fu">is.null</span>(saved)) {</span>
-<span id="cb8-368"><a href="#cb8-368" aria-hidden="true" tabindex="-1"></a>  saved<span class="sc">$</span>source_comparison <span class="sc">|&gt;</span></span>
-<span id="cb8-369"><a href="#cb8-369" aria-hidden="true" tabindex="-1"></a>    gt<span class="sc">::</span><span class="fu">gt</span>() <span class="sc">|&gt;</span></span>
-<span id="cb8-370"><a href="#cb8-370" aria-hidden="true" tabindex="-1"></a>    gt<span class="sc">::</span><span class="fu">cols_label</span>(<span class="at">file =</span> <span class="st">&quot;Archived source&quot;</span>, <span class="at">matches_current =</span> <span class="st">&quot;Matches current source&quot;</span>)</span>
-<span id="cb8-371"><a href="#cb8-371" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb8-372"><a href="#cb8-372" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb8-373"><a href="#cb8-373" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-374"><a href="#cb8-374" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;</span><span class="kw">details</span><span class="dt">&gt;</span></span>
-<span id="cb8-375"><a href="#cb8-375" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;</span><span class="kw">summary</span><span class="dt">&gt;</span>Current input fingerprints and rendering environment<span class="dt">&lt;/</span><span class="kw">summary</span><span class="dt">&gt;</span></span>
+<span id="cb8-105"><a href="#cb8-105" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (utils<span class="sc">::</span><span class="fu">packageVersion</span>(<span class="st">&quot;spmR&quot;</span>) <span class="sc">&lt;</span> <span class="st">&quot;0.4.3&quot;</span>) {</span>
+<span id="cb8-106"><a href="#cb8-106" aria-hidden="true" tabindex="-1"></a>  <span class="fu">stop</span>(<span class="st">&quot;Install spmR 0.4.3 or later and restart R.&quot;</span>)</span>
+<span id="cb8-107"><a href="#cb8-107" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb8-108"><a href="#cb8-108" aria-hidden="true" tabindex="-1"></a>example_candidates <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;.&quot;</span>, <span class="fu">file.path</span>(<span class="st">&quot;examples&quot;</span>, <span class="st">&quot;gt_2026&quot;</span>))</span>
+<span id="cb8-109"><a href="#cb8-109" aria-hidden="true" tabindex="-1"></a>example_dir <span class="ot">&lt;-</span> example_candidates[</span>
+<span id="cb8-110"><a href="#cb8-110" aria-hidden="true" tabindex="-1"></a>  <span class="fu">file.exists</span>(<span class="fu">file.path</span>(example_candidates, <span class="st">&quot;ForProjections.dat&quot;</span>)) <span class="sc">&amp;</span></span>
+<span id="cb8-111"><a href="#cb8-111" aria-hidden="true" tabindex="-1"></a>    <span class="fu">file.exists</span>(<span class="fu">file.path</span>(example_candidates, <span class="st">&quot;report.R&quot;</span>))</span>
+<span id="cb8-112"><a href="#cb8-112" aria-hidden="true" tabindex="-1"></a>][<span class="dv">1</span>]</span>
+<span id="cb8-113"><a href="#cb8-113" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (<span class="fu">is.na</span>(example_dir)) <span class="fu">stop</span>(<span class="st">&quot;Render from the source checkout or example directory.&quot;</span>)</span>
+<span id="cb8-114"><a href="#cb8-114" aria-hidden="true" tabindex="-1"></a>example_dir <span class="ot">&lt;-</span> <span class="fu">normalizePath</span>(example_dir, <span class="at">winslash =</span> <span class="st">&quot;/&quot;</span>, <span class="at">mustWork =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb8-115"><a href="#cb8-115" aria-hidden="true" tabindex="-1"></a><span class="fu">source</span>(<span class="fu">file.path</span>(example_dir, <span class="st">&quot;run.R&quot;</span>), <span class="at">local =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb8-116"><a href="#cb8-116" aria-hidden="true" tabindex="-1"></a><span class="fu">source</span>(<span class="fu">file.path</span>(example_dir, <span class="st">&quot;report.R&quot;</span>), <span class="at">local =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb8-117"><a href="#cb8-117" aria-hidden="true" tabindex="-1"></a>audit <span class="ot">&lt;-</span> <span class="fu">check_gt2026_inputs</span>(example_dir)</span>
+<span id="cb8-118"><a href="#cb8-118" aria-hidden="true" tabindex="-1"></a>raw_inputs <span class="ot">&lt;-</span> <span class="fu">gt2026_read_source</span>(example_dir)</span>
+<span id="cb8-119"><a href="#cb8-119" aria-hidden="true" tabindex="-1"></a>current_control <span class="ot">&lt;-</span> spmR<span class="sc">::</span><span class="fu">dat2list</span>(<span class="fu">file.path</span>(example_dir, <span class="st">&quot;spm.dat&quot;</span>))</span>
+<span id="cb8-120"><a href="#cb8-120" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (<span class="sc">!</span><span class="fu">is.character</span>(saved_run) <span class="sc">||</span> <span class="fu">length</span>(saved_run) <span class="sc">!=</span> <span class="dv">1</span>L <span class="sc">||</span> <span class="fu">is.na</span>(saved_run)) {</span>
+<span id="cb8-121"><a href="#cb8-121" aria-hidden="true" tabindex="-1"></a>  <span class="fu">stop</span>(<span class="st">&quot;saved_run must be one directory name, or an empty string for audit only.&quot;</span>)</span>
+<span id="cb8-122"><a href="#cb8-122" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb8-123"><a href="#cb8-123" aria-hidden="true" tabindex="-1"></a>saved <span class="ot">&lt;-</span> <span class="cn">NULL</span></span>
+<span id="cb8-124"><a href="#cb8-124" aria-hidden="true" tabindex="-1"></a>series <span class="ot">&lt;-</span> <span class="cn">NULL</span></span>
+<span id="cb8-125"><a href="#cb8-125" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (<span class="fu">nzchar</span>(saved_run)) {</span>
+<span id="cb8-126"><a href="#cb8-126" aria-hidden="true" tabindex="-1"></a>  selected_path <span class="ot">&lt;-</span> <span class="cf">if</span> (<span class="fu">grepl</span>(<span class="st">&quot;^(~|/|[A-Za-z]:[/</span><span class="sc">\\\\</span><span class="st">])&quot;</span>, saved_run)) {</span>
+<span id="cb8-127"><a href="#cb8-127" aria-hidden="true" tabindex="-1"></a>    <span class="fu">path.expand</span>(saved_run)</span>
+<span id="cb8-128"><a href="#cb8-128" aria-hidden="true" tabindex="-1"></a>  } <span class="cf">else</span> {</span>
+<span id="cb8-129"><a href="#cb8-129" aria-hidden="true" tabindex="-1"></a>    <span class="fu">file.path</span>(example_dir, saved_run)</span>
+<span id="cb8-130"><a href="#cb8-130" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb8-131"><a href="#cb8-131" aria-hidden="true" tabindex="-1"></a>  saved <span class="ot">&lt;-</span> <span class="fu">gt2026_read_report_run</span>(selected_path, example_dir)</span>
+<span id="cb8-132"><a href="#cb8-132" aria-hidden="true" tabindex="-1"></a>  series <span class="ot">&lt;-</span> <span class="fu">gt2026_report_series</span>(saved<span class="sc">$</span>result, <span class="at">n_worms =</span> worms_per_plot)</span>
+<span id="cb8-133"><a href="#cb8-133" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb8-134"><a href="#cb8-134" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb8-135"><a href="#cb8-135" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-136"><a href="#cb8-136" aria-hidden="true" tabindex="-1"></a><span class="fu">## Current status</span></span>
+<span id="cb8-137"><a href="#cb8-137" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-140"><a href="#cb8-140" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb8-141"><a href="#cb8-141" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: current_status</span></span>
+<span id="cb8-142"><a href="#cb8-142" aria-hidden="true" tabindex="-1"></a><span class="co">#| echo: false</span></span>
+<span id="cb8-143"><a href="#cb8-143" aria-hidden="true" tabindex="-1"></a><span class="co">#| results: asis</span></span>
+<span id="cb8-144"><a href="#cb8-144" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (<span class="fu">is.null</span>(saved)) {</span>
+<span id="cb8-145"><a href="#cb8-145" aria-hidden="true" tabindex="-1"></a>  <span class="fu">cat</span>(<span class="st">&quot;**Audit only: no saved attempt selected.** No new projection was run.</span><span class="sc">\n\n</span><span class="st">&quot;</span>)</span>
+<span id="cb8-146"><a href="#cb8-146" aria-hidden="true" tabindex="-1"></a>} <span class="cf">else</span> {</span>
+<span id="cb8-147"><a href="#cb8-147" aria-hidden="true" tabindex="-1"></a>  <span class="fu">cat</span>(<span class="st">&quot;**Saved conditional projection loaded.** No new projection was run.</span><span class="sc">\n\n</span><span class="st">&quot;</span>)</span>
+<span id="cb8-148"><a href="#cb8-148" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (<span class="sc">!</span><span class="fu">all</span>(saved<span class="sc">$</span>source_comparison<span class="sc">$</span>matches_current)) {</span>
+<span id="cb8-149"><a href="#cb8-149" aria-hidden="true" tabindex="-1"></a>    <span class="fu">cat</span>(<span class="st">&quot;**Different source inputs:** these saved results belong to an earlier or different input revision, not the current files.</span><span class="sc">\n\n</span><span class="st">&quot;</span>)</span>
+<span id="cb8-150"><a href="#cb8-150" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb8-151"><a href="#cb8-151" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb8-152"><a href="#cb8-152" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (<span class="fu">length</span>(raw_inputs<span class="sc">$</span>recruitment) <span class="sc">!=</span> <span class="fu">length</span>(raw_inputs<span class="sc">$</span>ssb)) {</span>
+<span id="cb8-153"><a href="#cb8-153" aria-hidden="true" tabindex="-1"></a>  <span class="fu">cat</span>(<span class="fu">sprintf</span>(</span>
+<span id="cb8-154"><a href="#cb8-154" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;**New runs blocked:** the current file contains %d recruitment values and %d SSB values. Supply matching histories and confirm their calendar alignment; values are never padded or discarded.</span><span class="sc">\n\n</span><span class="st">&quot;</span>,</span>
+<span id="cb8-155"><a href="#cb8-155" aria-hidden="true" tabindex="-1"></a>    <span class="fu">length</span>(raw_inputs<span class="sc">$</span>recruitment), <span class="fu">length</span>(raw_inputs<span class="sc">$</span>ssb)</span>
+<span id="cb8-156"><a href="#cb8-156" aria-hidden="true" tabindex="-1"></a>  ))</span>
+<span id="cb8-157"><a href="#cb8-157" aria-hidden="true" tabindex="-1"></a>} <span class="cf">else</span> {</span>
+<span id="cb8-158"><a href="#cb8-158" aria-hidden="true" tabindex="-1"></a>  <span class="fu">cat</span>(<span class="st">&quot;Current recruitment and SSB lengths agree. Their calendar pairing and scientific declarations still require review.</span><span class="sc">\n\n</span><span class="st">&quot;</span>)</span>
+<span id="cb8-159"><a href="#cb8-159" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb8-160"><a href="#cb8-160" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb8-161"><a href="#cb8-161" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-162"><a href="#cb8-162" aria-hidden="true" tabindex="-1"></a>Diagnostic population weights are fleet-weighted catch-weight proxies, not</span>
+<span id="cb8-163"><a href="#cb8-163" aria-hidden="true" tabindex="-1"></a>verified population body weights. SS3 export definitions, units, age order,</span>
+<span id="cb8-164"><a href="#cb8-164" aria-hidden="true" tabindex="-1"></a>plus group, initial abundance timing and spawning-weight/maturity definitions</span>
+<span id="cb8-165"><a href="#cb8-165" aria-hidden="true" tabindex="-1"></a>remain scientific review items. The audit below refers to **current files**;</span>
+<span id="cb8-166"><a href="#cb8-166" aria-hidden="true" tabindex="-1"></a>saved-run assumptions are displayed separately in the provenance section.</span>
+<span id="cb8-167"><a href="#cb8-167" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-168"><a href="#cb8-168" aria-hidden="true" tabindex="-1"></a><span class="fu">## Input audit</span></span>
+<span id="cb8-169"><a href="#cb8-169" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-170"><a href="#cb8-170" aria-hidden="true" tabindex="-1"></a>The current controls request <span class="in">`r current_control$nsims`</span> simulations across</span>
+<span id="cb8-171"><a href="#cb8-171" aria-hidden="true" tabindex="-1"></a><span class="in">`r current_control$nalts`</span> alternatives for <span class="in">`r current_control$nprj_yrs`</span> years,</span>
+<span id="cb8-172"><a href="#cb8-172" aria-hidden="true" tabindex="-1"></a>beginning in <span class="in">`r current_control$beg_yr`</span>.</span>
+<span id="cb8-173"><a href="#cb8-173" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-176"><a href="#cb8-176" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb8-177"><a href="#cb8-177" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: tbl-input-audit</span></span>
+<span id="cb8-178"><a href="#cb8-178" aria-hidden="true" tabindex="-1"></a><span class="co">#| tbl-cap: &quot;Current GT2026 input checks. Repair and review entries remain visible even when a saved run is selected.&quot;</span></span>
+<span id="cb8-179"><a href="#cb8-179" aria-hidden="true" tabindex="-1"></a><span class="co">#| echo: false</span></span>
+<span id="cb8-180"><a href="#cb8-180" aria-hidden="true" tabindex="-1"></a>audit <span class="sc">|&gt;</span></span>
+<span id="cb8-181"><a href="#cb8-181" aria-hidden="true" tabindex="-1"></a>  gt<span class="sc">::</span><span class="fu">gt</span>() <span class="sc">|&gt;</span></span>
+<span id="cb8-182"><a href="#cb8-182" aria-hidden="true" tabindex="-1"></a>  gt<span class="sc">::</span><span class="fu">cols_label</span>(<span class="at">item =</span> <span class="st">&quot;Input&quot;</span>, <span class="at">status =</span> <span class="st">&quot;Status&quot;</span>, <span class="at">detail =</span> <span class="st">&quot;Finding&quot;</span>) <span class="sc">|&gt;</span></span>
+<span id="cb8-183"><a href="#cb8-183" aria-hidden="true" tabindex="-1"></a>  gt<span class="sc">::</span><span class="fu">cols_width</span>(item <span class="sc">~</span> gt<span class="sc">::</span><span class="fu">pct</span>(<span class="dv">18</span>), status <span class="sc">~</span> gt<span class="sc">::</span><span class="fu">pct</span>(<span class="dv">12</span>), detail <span class="sc">~</span> gt<span class="sc">::</span><span class="fu">pct</span>(<span class="dv">70</span>))</span>
+<span id="cb8-184"><a href="#cb8-184" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb8-185"><a href="#cb8-185" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-186"><a href="#cb8-186" aria-hidden="true" tabindex="-1"></a><span class="fu">## Projection plots</span></span>
+<span id="cb8-187"><a href="#cb8-187" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-188"><a href="#cb8-188" aria-hidden="true" tabindex="-1"></a>Each panel represents one alternative. The **same 15 simulations**, selected</span>
+<span id="cb8-189"><a href="#cb8-189" aria-hidden="true" tabindex="-1"></a>deterministically by their sorted simulation IDs, appear as thin blue lines</span>
+<span id="cb8-190"><a href="#cb8-190" aria-hidden="true" tabindex="-1"></a>(&quot;worms&quot;) in every plot. The black line is the median across **all** simulations;</span>
+<span id="cb8-191"><a href="#cb8-191" aria-hidden="true" tabindex="-1"></a>the grey band spans their 5th–95th percentiles, a **90% projection interval**.</span>
+<span id="cb8-192"><a href="#cb8-192" aria-hidden="true" tabindex="-1"></a>The 15 paths illustrate simulations rather than estimating the full uncertainty</span>
+<span id="cb8-193"><a href="#cb8-193" aria-hidden="true" tabindex="-1"></a>by themselves. Fixed catches can cause several paths to overlap exactly.</span>
+<span id="cb8-194"><a href="#cb8-194" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-197"><a href="#cb8-197" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb8-198"><a href="#cb8-198" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: plot_setup</span></span>
+<span id="cb8-199"><a href="#cb8-199" aria-hidden="true" tabindex="-1"></a><span class="co">#| echo: false</span></span>
+<span id="cb8-200"><a href="#cb8-200" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (<span class="fu">is.null</span>(series)) {</span>
+<span id="cb8-201"><a href="#cb8-201" aria-hidden="true" tabindex="-1"></a>  <span class="fu">cat</span>(<span class="st">&quot;Plots will appear after selecting a verified completed attempt with at least 15 simulations. No placeholder projection data are plotted.&quot;</span>)</span>
+<span id="cb8-202"><a href="#cb8-202" aria-hidden="true" tabindex="-1"></a>} <span class="cf">else</span> {</span>
+<span id="cb8-203"><a href="#cb8-203" aria-hidden="true" tabindex="-1"></a>  <span class="fu">cat</span>(<span class="st">&quot;Simulation IDs shown:&quot;</span>, <span class="fu">paste</span>(series<span class="sc">$</span>worm_ids, <span class="at">collapse =</span> <span class="st">&quot;, &quot;</span>))</span>
+<span id="cb8-204"><a href="#cb8-204" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb8-205"><a href="#cb8-205" aria-hidden="true" tabindex="-1"></a>projection_plot <span class="ot">&lt;-</span> <span class="cf">function</span>(metric_name, axis_label) {</span>
+<span id="cb8-206"><a href="#cb8-206" aria-hidden="true" tabindex="-1"></a>  summary_data <span class="ot">&lt;-</span> dplyr<span class="sc">::</span><span class="fu">filter</span>(series<span class="sc">$</span>summary, .data<span class="sc">$</span>metric <span class="sc">==</span> metric_name)</span>
+<span id="cb8-207"><a href="#cb8-207" aria-hidden="true" tabindex="-1"></a>  worm_data <span class="ot">&lt;-</span> dplyr<span class="sc">::</span><span class="fu">filter</span>(series<span class="sc">$</span>worms, .data<span class="sc">$</span>metric <span class="sc">==</span> metric_name)</span>
+<span id="cb8-208"><a href="#cb8-208" aria-hidden="true" tabindex="-1"></a>  ggplot2<span class="sc">::</span><span class="fu">ggplot</span>(summary_data, ggplot2<span class="sc">::</span><span class="fu">aes</span>(<span class="at">x =</span> .data<span class="sc">$</span>Year)) <span class="sc">+</span></span>
+<span id="cb8-209"><a href="#cb8-209" aria-hidden="true" tabindex="-1"></a>    ggplot2<span class="sc">::</span><span class="fu">geom_ribbon</span>(</span>
+<span id="cb8-210"><a href="#cb8-210" aria-hidden="true" tabindex="-1"></a>      ggplot2<span class="sc">::</span><span class="fu">aes</span>(<span class="at">ymin =</span> .data<span class="sc">$</span>lower, <span class="at">ymax =</span> .data<span class="sc">$</span>upper),</span>
+<span id="cb8-211"><a href="#cb8-211" aria-hidden="true" tabindex="-1"></a>      <span class="at">fill =</span> <span class="st">&quot;grey85&quot;</span></span>
+<span id="cb8-212"><a href="#cb8-212" aria-hidden="true" tabindex="-1"></a>    ) <span class="sc">+</span></span>
+<span id="cb8-213"><a href="#cb8-213" aria-hidden="true" tabindex="-1"></a>    ggplot2<span class="sc">::</span><span class="fu">geom_line</span>(</span>
+<span id="cb8-214"><a href="#cb8-214" aria-hidden="true" tabindex="-1"></a>      <span class="at">data =</span> worm_data,</span>
+<span id="cb8-215"><a href="#cb8-215" aria-hidden="true" tabindex="-1"></a>      ggplot2<span class="sc">::</span><span class="fu">aes</span>(<span class="at">y =</span> .data<span class="sc">$</span>value, <span class="at">group =</span> .data<span class="sc">$</span>Sim),</span>
+<span id="cb8-216"><a href="#cb8-216" aria-hidden="true" tabindex="-1"></a>      <span class="at">colour =</span> <span class="st">&quot;#336A99&quot;</span>, <span class="at">alpha =</span> <span class="fl">0.35</span>, <span class="at">linewidth =</span> <span class="fl">0.35</span></span>
+<span id="cb8-217"><a href="#cb8-217" aria-hidden="true" tabindex="-1"></a>    ) <span class="sc">+</span></span>
+<span id="cb8-218"><a href="#cb8-218" aria-hidden="true" tabindex="-1"></a>    ggplot2<span class="sc">::</span><span class="fu">geom_line</span>(ggplot2<span class="sc">::</span><span class="fu">aes</span>(<span class="at">y =</span> .data<span class="sc">$</span>median), <span class="at">linewidth =</span> <span class="fl">0.65</span>) <span class="sc">+</span></span>
+<span id="cb8-219"><a href="#cb8-219" aria-hidden="true" tabindex="-1"></a>    ggplot2<span class="sc">::</span><span class="fu">facet_wrap</span>(ggplot2<span class="sc">::</span><span class="fu">vars</span>(Alt), <span class="at">ncol =</span> <span class="dv">2</span>, <span class="at">labeller =</span> <span class="st">&quot;label_both&quot;</span>) <span class="sc">+</span></span>
+<span id="cb8-220"><a href="#cb8-220" aria-hidden="true" tabindex="-1"></a>    ggplot2<span class="sc">::</span><span class="fu">labs</span>(</span>
+<span id="cb8-221"><a href="#cb8-221" aria-hidden="true" tabindex="-1"></a>      <span class="at">x =</span> <span class="st">&quot;Projection year&quot;</span>,</span>
+<span id="cb8-222"><a href="#cb8-222" aria-hidden="true" tabindex="-1"></a>      <span class="at">y =</span> <span class="fu">paste0</span>(axis_label, <span class="st">&quot; (&quot;</span>, saved<span class="sc">$</span>biomass_units, <span class="st">&quot;)&quot;</span>)</span>
+<span id="cb8-223"><a href="#cb8-223" aria-hidden="true" tabindex="-1"></a>    ) <span class="sc">+</span></span>
+<span id="cb8-224"><a href="#cb8-224" aria-hidden="true" tabindex="-1"></a>    ggthemes<span class="sc">::</span><span class="fu">theme_few</span>(<span class="at">base_size =</span> <span class="dv">11</span>)</span>
+<span id="cb8-225"><a href="#cb8-225" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb8-226"><a href="#cb8-226" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb8-227"><a href="#cb8-227" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-230"><a href="#cb8-230" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb8-231"><a href="#cb8-231" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: fig-ssb-worms</span></span>
+<span id="cb8-232"><a href="#cb8-232" aria-hidden="true" tabindex="-1"></a><span class="co">#| echo: false</span></span>
+<span id="cb8-233"><a href="#cb8-233" aria-hidden="true" tabindex="-1"></a><span class="co">#| fig-width: 9</span></span>
+<span id="cb8-234"><a href="#cb8-234" aria-hidden="true" tabindex="-1"></a><span class="co">#| fig-height: 9</span></span>
+<span id="cb8-235"><a href="#cb8-235" aria-hidden="true" tabindex="-1"></a><span class="co">#| fig-cap: &quot;Conditional spawning biomass: 15 simulation paths per alternative, all-simulation median and 90% projection interval.&quot;</span></span>
+<span id="cb8-236"><a href="#cb8-236" aria-hidden="true" tabindex="-1"></a><span class="co">#| fig-alt: &quot;Faceted spawning-biomass trajectories with one panel per alternative. Thin lines show fifteen selected simulations, a black line the median, and a grey band the projection interval. Numerical summaries follow the plots.&quot;</span></span>
+<span id="cb8-237"><a href="#cb8-237" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (<span class="sc">!</span><span class="fu">is.null</span>(series)) <span class="fu">projection_plot</span>(<span class="st">&quot;SSB&quot;</span>, <span class="st">&quot;Spawning biomass&quot;</span>)</span>
+<span id="cb8-238"><a href="#cb8-238" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb8-239"><a href="#cb8-239" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-242"><a href="#cb8-242" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb8-243"><a href="#cb8-243" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: fig-biomass-worms</span></span>
+<span id="cb8-244"><a href="#cb8-244" aria-hidden="true" tabindex="-1"></a><span class="co">#| echo: false</span></span>
+<span id="cb8-245"><a href="#cb8-245" aria-hidden="true" tabindex="-1"></a><span class="co">#| fig-width: 9</span></span>
+<span id="cb8-246"><a href="#cb8-246" aria-hidden="true" tabindex="-1"></a><span class="co">#| fig-height: 9</span></span>
+<span id="cb8-247"><a href="#cb8-247" aria-hidden="true" tabindex="-1"></a><span class="co">#| fig-cap: &quot;Conditional total population biomass under the saved run&#39;s population-weight declarations.&quot;</span></span>
+<span id="cb8-248"><a href="#cb8-248" aria-hidden="true" tabindex="-1"></a><span class="co">#| fig-alt: &quot;Faceted total-biomass trajectories by alternative, with fifteen simulation paths, the all-simulation median and the 90 percent projection interval.&quot;</span></span>
+<span id="cb8-249"><a href="#cb8-249" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (<span class="sc">!</span><span class="fu">is.null</span>(series)) <span class="fu">projection_plot</span>(<span class="st">&quot;Tot_biom&quot;</span>, <span class="st">&quot;Total biomass&quot;</span>)</span>
+<span id="cb8-250"><a href="#cb8-250" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb8-251"><a href="#cb8-251" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-254"><a href="#cb8-254" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb8-255"><a href="#cb8-255" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: fig-catch-worms</span></span>
+<span id="cb8-256"><a href="#cb8-256" aria-hidden="true" tabindex="-1"></a><span class="co">#| echo: false</span></span>
+<span id="cb8-257"><a href="#cb8-257" aria-hidden="true" tabindex="-1"></a><span class="co">#| fig-width: 9</span></span>
+<span id="cb8-258"><a href="#cb8-258" aria-hidden="true" tabindex="-1"></a><span class="co">#| fig-height: 9</span></span>
+<span id="cb8-259"><a href="#cb8-259" aria-hidden="true" tabindex="-1"></a><span class="co">#| fig-cap: &quot;Conditional catch trajectories. Prescribed catches can make the 15 simulation paths overlap.&quot;</span></span>
+<span id="cb8-260"><a href="#cb8-260" aria-hidden="true" tabindex="-1"></a><span class="co">#| fig-alt: &quot;Faceted catch trajectories by alternative. Fifteen selected paths overlap where catches are prescribed; the median and projection interval use every simulation.&quot;</span></span>
+<span id="cb8-261"><a href="#cb8-261" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (<span class="sc">!</span><span class="fu">is.null</span>(series)) <span class="fu">projection_plot</span>(<span class="st">&quot;Catch&quot;</span>, <span class="st">&quot;Catch&quot;</span>)</span>
+<span id="cb8-262"><a href="#cb8-262" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb8-263"><a href="#cb8-263" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-266"><a href="#cb8-266" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb8-267"><a href="#cb8-267" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: fig-abc-worms</span></span>
+<span id="cb8-268"><a href="#cb8-268" aria-hidden="true" tabindex="-1"></a><span class="co">#| echo: false</span></span>
+<span id="cb8-269"><a href="#cb8-269" aria-hidden="true" tabindex="-1"></a><span class="co">#| fig-width: 9</span></span>
+<span id="cb8-270"><a href="#cb8-270" aria-hidden="true" tabindex="-1"></a><span class="co">#| fig-height: 9</span></span>
+<span id="cb8-271"><a href="#cb8-271" aria-hidden="true" tabindex="-1"></a><span class="co">#| fig-cap: &quot;Conditional model ABC trajectories; these calculations are not adopted catch recommendations.&quot;</span></span>
+<span id="cb8-272"><a href="#cb8-272" aria-hidden="true" tabindex="-1"></a><span class="co">#| fig-alt: &quot;Faceted conditional ABC trajectories by alternative with fifteen simulation paths, the median and the 90 percent projection interval.&quot;</span></span>
+<span id="cb8-273"><a href="#cb8-273" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (<span class="sc">!</span><span class="fu">is.null</span>(series)) <span class="fu">projection_plot</span>(<span class="st">&quot;ABC&quot;</span>, <span class="st">&quot;ABC&quot;</span>)</span>
+<span id="cb8-274"><a href="#cb8-274" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb8-275"><a href="#cb8-275" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-278"><a href="#cb8-278" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb8-279"><a href="#cb8-279" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: fig-ofl-worms</span></span>
+<span id="cb8-280"><a href="#cb8-280" aria-hidden="true" tabindex="-1"></a><span class="co">#| echo: false</span></span>
+<span id="cb8-281"><a href="#cb8-281" aria-hidden="true" tabindex="-1"></a><span class="co">#| fig-width: 9</span></span>
+<span id="cb8-282"><a href="#cb8-282" aria-hidden="true" tabindex="-1"></a><span class="co">#| fig-height: 9</span></span>
+<span id="cb8-283"><a href="#cb8-283" aria-hidden="true" tabindex="-1"></a><span class="co">#| fig-cap: &quot;Conditional model OFL trajectories; scientific input review remains separate from successful execution.&quot;</span></span>
+<span id="cb8-284"><a href="#cb8-284" aria-hidden="true" tabindex="-1"></a><span class="co">#| fig-alt: &quot;Faceted conditional OFL trajectories by alternative with fifteen simulation paths, the median and the 90 percent projection interval.&quot;</span></span>
+<span id="cb8-285"><a href="#cb8-285" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (<span class="sc">!</span><span class="fu">is.null</span>(series)) <span class="fu">projection_plot</span>(<span class="st">&quot;OFL&quot;</span>, <span class="st">&quot;OFL&quot;</span>)</span>
+<span id="cb8-286"><a href="#cb8-286" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb8-287"><a href="#cb8-287" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-288"><a href="#cb8-288" aria-hidden="true" tabindex="-1"></a><span class="fu">## Summary tables</span></span>
+<span id="cb8-289"><a href="#cb8-289" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-290"><a href="#cb8-290" aria-hidden="true" tabindex="-1"></a>Tables use all simulations, not only the 15 displayed paths. They are recomputed</span>
+<span id="cb8-291"><a href="#cb8-291" aria-hidden="true" tabindex="-1"></a>from the hash-verified detailed output rather than an independently edited</span>
+<span id="cb8-292"><a href="#cb8-292" aria-hidden="true" tabindex="-1"></a>summary file. The first table covers the first <span class="in">`r table_years`</span> projection years;</span>
+<span id="cb8-293"><a href="#cb8-293" aria-hidden="true" tabindex="-1"></a>the second reports terminal-year distributions.</span>
+<span id="cb8-294"><a href="#cb8-294" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-297"><a href="#cb8-297" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb8-298"><a href="#cb8-298" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: annual_means_table</span></span>
+<span id="cb8-299"><a href="#cb8-299" aria-hidden="true" tabindex="-1"></a><span class="co">#| echo: false</span></span>
+<span id="cb8-300"><a href="#cb8-300" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (<span class="fu">is.null</span>(series)) {</span>
+<span id="cb8-301"><a href="#cb8-301" aria-hidden="true" tabindex="-1"></a>  <span class="fu">cat</span>(<span class="st">&quot;No projection tables are available until a completed attempt is selected.&quot;</span>)</span>
+<span id="cb8-302"><a href="#cb8-302" aria-hidden="true" tabindex="-1"></a>} <span class="cf">else</span> {</span>
+<span id="cb8-303"><a href="#cb8-303" aria-hidden="true" tabindex="-1"></a>  annual_means <span class="ot">&lt;-</span> series<span class="sc">$</span>summary <span class="sc">|&gt;</span></span>
+<span id="cb8-304"><a href="#cb8-304" aria-hidden="true" tabindex="-1"></a>    dplyr<span class="sc">::</span><span class="fu">select</span>(dplyr<span class="sc">::</span><span class="fu">all_of</span>(<span class="fu">c</span>(<span class="st">&quot;Alt&quot;</span>, <span class="st">&quot;Year&quot;</span>, <span class="st">&quot;metric&quot;</span>, <span class="st">&quot;mean&quot;</span>))) <span class="sc">|&gt;</span></span>
+<span id="cb8-305"><a href="#cb8-305" aria-hidden="true" tabindex="-1"></a>    tidyr<span class="sc">::</span><span class="fu">pivot_wider</span>(<span class="at">names_from =</span> <span class="st">&quot;metric&quot;</span>, <span class="at">values_from =</span> <span class="st">&quot;mean&quot;</span>)</span>
+<span id="cb8-306"><a href="#cb8-306" aria-hidden="true" tabindex="-1"></a>  annual_means <span class="sc">|&gt;</span></span>
+<span id="cb8-307"><a href="#cb8-307" aria-hidden="true" tabindex="-1"></a>    dplyr<span class="sc">::</span><span class="fu">filter</span>(.data<span class="sc">$</span>Year <span class="sc">&lt;</span> <span class="fu">min</span>(.data<span class="sc">$</span>Year) <span class="sc">+</span> table_years) <span class="sc">|&gt;</span></span>
+<span id="cb8-308"><a href="#cb8-308" aria-hidden="true" tabindex="-1"></a>    dplyr<span class="sc">::</span><span class="fu">mutate</span>(<span class="at">Alt =</span> <span class="fu">paste</span>(<span class="st">&quot;Alternative&quot;</span>, .data<span class="sc">$</span>Alt)) <span class="sc">|&gt;</span></span>
+<span id="cb8-309"><a href="#cb8-309" aria-hidden="true" tabindex="-1"></a>    dplyr<span class="sc">::</span><span class="fu">rename_with</span>(<span class="sc">~</span> <span class="fu">paste0</span>(<span class="st">&quot;annual_&quot;</span>, .x)) <span class="sc">|&gt;</span></span>
+<span id="cb8-310"><a href="#cb8-310" aria-hidden="true" tabindex="-1"></a>    gt<span class="sc">::</span><span class="fu">gt</span>(<span class="at">groupname_col =</span> <span class="st">&quot;annual_Alt&quot;</span>) <span class="sc">|&gt;</span></span>
+<span id="cb8-311"><a href="#cb8-311" aria-hidden="true" tabindex="-1"></a>    gt<span class="sc">::</span><span class="fu">tab_caption</span>(<span class="st">&quot;Conditional annual means by alternative for the first projection years. Units follow the saved run.&quot;</span>) <span class="sc">|&gt;</span></span>
+<span id="cb8-312"><a href="#cb8-312" aria-hidden="true" tabindex="-1"></a>    gt<span class="sc">::</span><span class="fu">tab_header</span>(<span class="at">title =</span> <span class="fu">paste</span>(<span class="st">&quot;Conditional annual means —&quot;</span>, saved<span class="sc">$</span>biomass_units)) <span class="sc">|&gt;</span></span>
+<span id="cb8-313"><a href="#cb8-313" aria-hidden="true" tabindex="-1"></a>    gt<span class="sc">::</span><span class="fu">cols_label</span>(<span class="at">annual_Year =</span> <span class="st">&quot;Year&quot;</span>, <span class="at">annual_Tot_biom =</span> <span class="st">&quot;Total biomass&quot;</span>, <span class="at">annual_SSB =</span> <span class="st">&quot;Spawning biomass&quot;</span>, <span class="at">annual_Catch =</span> <span class="st">&quot;Catch&quot;</span>, <span class="at">annual_ABC =</span> <span class="st">&quot;ABC&quot;</span>, <span class="at">annual_OFL =</span> <span class="st">&quot;OFL&quot;</span>) <span class="sc">|&gt;</span></span>
+<span id="cb8-314"><a href="#cb8-314" aria-hidden="true" tabindex="-1"></a>    gt<span class="sc">::</span><span class="fu">fmt_number</span>(<span class="at">columns =</span> <span class="fu">paste0</span>(<span class="st">&quot;annual_&quot;</span>, <span class="fu">c</span>(<span class="st">&quot;SSB&quot;</span>, <span class="st">&quot;Tot_biom&quot;</span>, <span class="st">&quot;Catch&quot;</span>, <span class="st">&quot;ABC&quot;</span>, <span class="st">&quot;OFL&quot;</span>)), <span class="at">decimals =</span> <span class="dv">1</span>)</span>
+<span id="cb8-315"><a href="#cb8-315" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb8-316"><a href="#cb8-316" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb8-317"><a href="#cb8-317" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-320"><a href="#cb8-320" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb8-321"><a href="#cb8-321" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: terminal_distribution_table</span></span>
+<span id="cb8-322"><a href="#cb8-322" aria-hidden="true" tabindex="-1"></a><span class="co">#| echo: false</span></span>
+<span id="cb8-323"><a href="#cb8-323" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (<span class="sc">!</span><span class="fu">is.null</span>(series)) {</span>
+<span id="cb8-324"><a href="#cb8-324" aria-hidden="true" tabindex="-1"></a>  series<span class="sc">$</span>summary <span class="sc">|&gt;</span></span>
+<span id="cb8-325"><a href="#cb8-325" aria-hidden="true" tabindex="-1"></a>    dplyr<span class="sc">::</span><span class="fu">filter</span>(.data<span class="sc">$</span>Year <span class="sc">==</span> <span class="fu">max</span>(.data<span class="sc">$</span>Year)) <span class="sc">|&gt;</span></span>
+<span id="cb8-326"><a href="#cb8-326" aria-hidden="true" tabindex="-1"></a>    dplyr<span class="sc">::</span><span class="fu">select</span>(dplyr<span class="sc">::</span><span class="fu">all_of</span>(<span class="fu">c</span>(<span class="st">&quot;metric&quot;</span>, <span class="st">&quot;Alt&quot;</span>, <span class="st">&quot;Year&quot;</span>, <span class="st">&quot;median&quot;</span>, <span class="st">&quot;lower&quot;</span>, <span class="st">&quot;upper&quot;</span>))) <span class="sc">|&gt;</span></span>
+<span id="cb8-327"><a href="#cb8-327" aria-hidden="true" tabindex="-1"></a>    dplyr<span class="sc">::</span><span class="fu">rename_with</span>(<span class="sc">~</span> <span class="fu">paste0</span>(<span class="st">&quot;terminal_&quot;</span>, .x)) <span class="sc">|&gt;</span></span>
+<span id="cb8-328"><a href="#cb8-328" aria-hidden="true" tabindex="-1"></a>    gt<span class="sc">::</span><span class="fu">gt</span>(<span class="at">groupname_col =</span> <span class="st">&quot;terminal_metric&quot;</span>) <span class="sc">|&gt;</span></span>
+<span id="cb8-329"><a href="#cb8-329" aria-hidden="true" tabindex="-1"></a>    gt<span class="sc">::</span><span class="fu">tab_caption</span>(<span class="st">&quot;Terminal-year median and 5th–95th percentile projection range, using all simulations.&quot;</span>) <span class="sc">|&gt;</span></span>
+<span id="cb8-330"><a href="#cb8-330" aria-hidden="true" tabindex="-1"></a>    gt<span class="sc">::</span><span class="fu">tab_header</span>(<span class="at">title =</span> <span class="fu">paste</span>(<span class="st">&quot;Terminal projection distributions —&quot;</span>, saved<span class="sc">$</span>biomass_units)) <span class="sc">|&gt;</span></span>
+<span id="cb8-331"><a href="#cb8-331" aria-hidden="true" tabindex="-1"></a>    gt<span class="sc">::</span><span class="fu">cols_label</span>(<span class="at">terminal_Alt =</span> <span class="st">&quot;Alternative&quot;</span>, <span class="at">terminal_Year =</span> <span class="st">&quot;Year&quot;</span>, <span class="at">terminal_median =</span> <span class="st">&quot;Median&quot;</span>, <span class="at">terminal_lower =</span> <span class="st">&quot;5th percentile&quot;</span>, <span class="at">terminal_upper =</span> <span class="st">&quot;95th percentile&quot;</span>) <span class="sc">|&gt;</span></span>
+<span id="cb8-332"><a href="#cb8-332" aria-hidden="true" tabindex="-1"></a>    gt<span class="sc">::</span><span class="fu">fmt_number</span>(<span class="at">columns =</span> <span class="fu">c</span>(<span class="st">&quot;terminal_median&quot;</span>, <span class="st">&quot;terminal_lower&quot;</span>, <span class="st">&quot;terminal_upper&quot;</span>), <span class="at">decimals =</span> <span class="dv">1</span>)</span>
+<span id="cb8-333"><a href="#cb8-333" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb8-334"><a href="#cb8-334" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb8-335"><a href="#cb8-335" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-336"><a href="#cb8-336" aria-hidden="true" tabindex="-1"></a><span class="fu">## Provenance and checks</span></span>
+<span id="cb8-337"><a href="#cb8-337" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-338"><a href="#cb8-338" aria-hidden="true" tabindex="-1"></a>The report requires a successful native exit and verifies recorded input,</span>
+<span id="cb8-339"><a href="#cb8-339" aria-hidden="true" tabindex="-1"></a>output and archived-source hashes before displaying a saved run. It checks</span>
+<span id="cb8-340"><a href="#cb8-340" aria-hidden="true" tabindex="-1"></a>result dimensions, alternative/year/simulation keys and finite nonnegative</span>
+<span id="cb8-341"><a href="#cb8-341" aria-hidden="true" tabindex="-1"></a>quantities. Current-source differences are labelled rather than overwritten.</span>
+<span id="cb8-342"><a href="#cb8-342" aria-hidden="true" tabindex="-1"></a>Historical-recruitment simulation fits no parameters: maximum-gradient and</span>
+<span id="cb8-343"><a href="#cb8-343" aria-hidden="true" tabindex="-1"></a>positive-definite-Hessian diagnostics are **not applicable** in this mode.</span>
+<span id="cb8-344"><a href="#cb8-344" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-347"><a href="#cb8-347" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb8-348"><a href="#cb8-348" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: saved_provenance</span></span>
+<span id="cb8-349"><a href="#cb8-349" aria-hidden="true" tabindex="-1"></a><span class="co">#| echo: false</span></span>
+<span id="cb8-350"><a href="#cb8-350" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (<span class="sc">!</span><span class="fu">is.null</span>(saved)) {</span>
+<span id="cb8-351"><a href="#cb8-351" aria-hidden="true" tabindex="-1"></a>  tibble<span class="sc">::</span><span class="fu">tibble</span>(</span>
+<span id="cb8-352"><a href="#cb8-352" aria-hidden="true" tabindex="-1"></a>    <span class="at">provenance_field =</span> <span class="fu">c</span>(<span class="st">&quot;Selected directory&quot;</span>, <span class="st">&quot;Run ID&quot;</span>, <span class="st">&quot;Completed UTC&quot;</span>, <span class="st">&quot;spmR version at execution&quot;</span>, <span class="st">&quot;Executable SHA-256&quot;</span>, <span class="st">&quot;Population weights&quot;</span>, <span class="st">&quot;Scientific status&quot;</span>),</span>
+<span id="cb8-353"><a href="#cb8-353" aria-hidden="true" tabindex="-1"></a>    <span class="at">recorded_value =</span> <span class="fu">c</span>(</span>
+<span id="cb8-354"><a href="#cb8-354" aria-hidden="true" tabindex="-1"></a>      saved_run, saved<span class="sc">$</span>provenance<span class="sc">$</span>run_id, saved<span class="sc">$</span>provenance<span class="sc">$</span>completed_utc,</span>
+<span id="cb8-355"><a href="#cb8-355" aria-hidden="true" tabindex="-1"></a>      saved<span class="sc">$</span>provenance<span class="sc">$</span>package_version, saved<span class="sc">$</span>provenance<span class="sc">$</span>executable_sha256,</span>
+<span id="cb8-356"><a href="#cb8-356" aria-hidden="true" tabindex="-1"></a>      saved<span class="sc">$</span>decisions<span class="sc">$</span>population_weights, saved<span class="sc">$</span>decisions<span class="sc">$</span>status</span>
+<span id="cb8-357"><a href="#cb8-357" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb8-358"><a href="#cb8-358" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">|&gt;</span></span>
+<span id="cb8-359"><a href="#cb8-359" aria-hidden="true" tabindex="-1"></a>    gt<span class="sc">::</span><span class="fu">gt</span>() <span class="sc">|&gt;</span></span>
+<span id="cb8-360"><a href="#cb8-360" aria-hidden="true" tabindex="-1"></a>    gt<span class="sc">::</span><span class="fu">cols_label</span>(<span class="at">provenance_field =</span> <span class="st">&quot;Provenance&quot;</span>, <span class="at">recorded_value =</span> <span class="st">&quot;Recorded value&quot;</span>) <span class="sc">|&gt;</span></span>
+<span id="cb8-361"><a href="#cb8-361" aria-hidden="true" tabindex="-1"></a>    gt<span class="sc">::</span><span class="fu">tab_options</span>(<span class="at">table.font.size =</span> gt<span class="sc">::</span><span class="fu">px</span>(<span class="dv">13</span>))</span>
+<span id="cb8-362"><a href="#cb8-362" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb8-363"><a href="#cb8-363" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb8-364"><a href="#cb8-364" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-367"><a href="#cb8-367" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb8-368"><a href="#cb8-368" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: source_comparison</span></span>
+<span id="cb8-369"><a href="#cb8-369" aria-hidden="true" tabindex="-1"></a><span class="co">#| echo: false</span></span>
+<span id="cb8-370"><a href="#cb8-370" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (<span class="sc">!</span><span class="fu">is.null</span>(saved)) {</span>
+<span id="cb8-371"><a href="#cb8-371" aria-hidden="true" tabindex="-1"></a>  saved<span class="sc">$</span>source_comparison <span class="sc">|&gt;</span></span>
+<span id="cb8-372"><a href="#cb8-372" aria-hidden="true" tabindex="-1"></a>    gt<span class="sc">::</span><span class="fu">gt</span>() <span class="sc">|&gt;</span></span>
+<span id="cb8-373"><a href="#cb8-373" aria-hidden="true" tabindex="-1"></a>    gt<span class="sc">::</span><span class="fu">cols_label</span>(<span class="at">file =</span> <span class="st">&quot;Archived source&quot;</span>, <span class="at">matches_current =</span> <span class="st">&quot;Matches current source&quot;</span>)</span>
+<span id="cb8-374"><a href="#cb8-374" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb8-375"><a href="#cb8-375" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb8-376"><a href="#cb8-376" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-379"><a href="#cb8-379" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb8-380"><a href="#cb8-380" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: current_fingerprints</span></span>
-<span id="cb8-381"><a href="#cb8-381" aria-hidden="true" tabindex="-1"></a><span class="co">#| echo: false</span></span>
-<span id="cb8-382"><a href="#cb8-382" aria-hidden="true" tabindex="-1"></a>current_files <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;spm.dat&quot;</span>, <span class="st">&quot;ForProjections.dat&quot;</span>)</span>
-<span id="cb8-383"><a href="#cb8-383" aria-hidden="true" tabindex="-1"></a>current_hashes <span class="ot">&lt;-</span> <span class="fu">vapply</span>(</span>
-<span id="cb8-384"><a href="#cb8-384" aria-hidden="true" tabindex="-1"></a>  <span class="fu">file.path</span>(example_dir, current_files),</span>
-<span id="cb8-385"><a href="#cb8-385" aria-hidden="true" tabindex="-1"></a>  digest<span class="sc">::</span>digest,</span>
-<span id="cb8-386"><a href="#cb8-386" aria-hidden="true" tabindex="-1"></a>  <span class="fu">character</span>(<span class="dv">1</span>),</span>
-<span id="cb8-387"><a href="#cb8-387" aria-hidden="true" tabindex="-1"></a>  <span class="at">algo =</span> <span class="st">&quot;sha256&quot;</span>,</span>
-<span id="cb8-388"><a href="#cb8-388" aria-hidden="true" tabindex="-1"></a>  <span class="at">file =</span> <span class="cn">TRUE</span></span>
-<span id="cb8-389"><a href="#cb8-389" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb8-390"><a href="#cb8-390" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(stats<span class="sc">::</span><span class="fu">setNames</span>(current_hashes, current_files))</span>
-<span id="cb8-391"><a href="#cb8-391" aria-hidden="true" tabindex="-1"></a><span class="fu">sessionInfo</span>()</span>
-<span id="cb8-392"><a href="#cb8-392" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb8-393"><a href="#cb8-393" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-394"><a href="#cb8-394" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;/</span><span class="kw">details</span><span class="dt">&gt;</span></span>
+<span id="cb8-377"><a href="#cb8-377" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;</span><span class="kw">details</span><span class="dt">&gt;</span></span>
+<span id="cb8-378"><a href="#cb8-378" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;</span><span class="kw">summary</span><span class="dt">&gt;</span>Current input fingerprints and rendering environment<span class="dt">&lt;/</span><span class="kw">summary</span><span class="dt">&gt;</span></span>
+<span id="cb8-379"><a href="#cb8-379" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-382"><a href="#cb8-382" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb8-383"><a href="#cb8-383" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: current_fingerprints</span></span>
+<span id="cb8-384"><a href="#cb8-384" aria-hidden="true" tabindex="-1"></a><span class="co">#| echo: false</span></span>
+<span id="cb8-385"><a href="#cb8-385" aria-hidden="true" tabindex="-1"></a>current_files <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;spm.dat&quot;</span>, <span class="st">&quot;ForProjections.dat&quot;</span>)</span>
+<span id="cb8-386"><a href="#cb8-386" aria-hidden="true" tabindex="-1"></a>current_hashes <span class="ot">&lt;-</span> <span class="fu">vapply</span>(</span>
+<span id="cb8-387"><a href="#cb8-387" aria-hidden="true" tabindex="-1"></a>  <span class="fu">file.path</span>(example_dir, current_files),</span>
+<span id="cb8-388"><a href="#cb8-388" aria-hidden="true" tabindex="-1"></a>  digest<span class="sc">::</span>digest,</span>
+<span id="cb8-389"><a href="#cb8-389" aria-hidden="true" tabindex="-1"></a>  <span class="fu">character</span>(<span class="dv">1</span>),</span>
+<span id="cb8-390"><a href="#cb8-390" aria-hidden="true" tabindex="-1"></a>  <span class="at">algo =</span> <span class="st">&quot;sha256&quot;</span>,</span>
+<span id="cb8-391"><a href="#cb8-391" aria-hidden="true" tabindex="-1"></a>  <span class="at">file =</span> <span class="cn">TRUE</span></span>
+<span id="cb8-392"><a href="#cb8-392" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb8-393"><a href="#cb8-393" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(stats<span class="sc">::</span><span class="fu">setNames</span>(current_hashes, current_files))</span>
+<span id="cb8-394"><a href="#cb8-394" aria-hidden="true" tabindex="-1"></a><span class="fu">sessionInfo</span>()</span>
+<span id="cb8-395"><a href="#cb8-395" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb8-396"><a href="#cb8-396" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-397"><a href="#cb8-397" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;/</span><span class="kw">details</span><span class="dt">&gt;</span></span>
 </code></pre></div><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal><i class="bi"></i></button></div>
 </div></div></div></div></div>
 </div> <!-- /content -->

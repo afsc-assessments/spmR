@@ -26,6 +26,10 @@ root, render the current input audit without compiling or running ADMB:
 quarto render examples/gt_2026/greenland_turbot.qmd
 ```
 
+The default `saved_run: ""` works without any local attempt directory. It
+shows the audit only; projection figures and tables require an explicit
+completed attempt.
+
 Open the resulting `examples/gt_2026/greenland_turbot.html`. The report has visible
 manual run controls, input checks, provenance, and result sections for spawning
 biomass, total biomass, catch, ABC and OFL. Each projection panel shows the same

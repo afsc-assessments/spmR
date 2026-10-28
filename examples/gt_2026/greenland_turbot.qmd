@@ -27,11 +27,14 @@ not adopted catch recommendations.
 
 ## Run controls
 
-From this directory, render the current audit and included saved results with:
+From this directory, render the current input audit with:
 
 ```bash
 quarto render greenland_turbot.qmd
 ```
+
+The default selects no saved attempt, so this command works in a fresh source
+checkout and produces the audit without projection figures or tables.
 
 To include results, set `saved_run` in the YAML above or pass the actual attempt
 directory explicitly. This example path is illustrative; the report never selects

@@ -243,5 +243,8 @@ quarto render examples/gt_2026/greenland_turbot.qmd
 quarto render examples/gt_2026/greenland_turbot.qmd -P saved_run:spmR_runs/attempt-001
 ```
 
+The first command produces the audit only, including in a fresh source
+checkout without saved output. The second selects results explicitly.
+
 Replace `attempt-001` with the intended saved attempt. Saved results from an
 older source revision are labelled separately from the current input audit.
