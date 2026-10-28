@@ -4,6 +4,7 @@
 ^docs$
 ^pkgdown$
 ^\.github$
+^\.git$
 ^\.vscode$
 ^app1\.gaRbage$
 ^Notes\.R$

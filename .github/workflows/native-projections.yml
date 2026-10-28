@@ -33,6 +33,8 @@ jobs:
           if grep -Ei 'warning:|error:' compile.log; then exit 1; fi
           ./spm -spmr-capabilities | grep -Fx 'SPMR_INPUT_FORMAT=2'
           echo "SPMR_TEST_EXE=$RUNNER_TEMP/spm-build/spm" >> "$GITHUB_ENV"
+      - name: Install package for report subprocesses
+        run: R CMD INSTALL .
       - name: Require R and native regression tests
         shell: Rscript {0}
         run: |
