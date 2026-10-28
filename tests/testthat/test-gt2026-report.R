@@ -120,6 +120,14 @@ local_gt2026_report <- function(
       B35 = 35
     )
   readr::write_csv(result, file.path(run_dir, "spm_detail.csv"))
+  reference_summary <- tibble::tibble(
+    spp_file = "synthetic",
+    Alt = NA_real_,
+    Year = NA_real_,
+    variable = c("F_abc", "F_ofl"),
+    value = c(0.1, 0.15)
+  )
+  readr::write_csv(reference_summary, file.path(run_dir, "spm_summary.csv"))
   writeLines(
     "Finished simulations using standard (avg, var) stochastic approach",
     file.path(run_dir, "spm_stdout.log")
@@ -152,6 +160,7 @@ local_gt2026_report <- function(
     input_hashes = hashes(files),
     output_hashes = hashes(c(
       "spm_detail.csv",
+      "spm_summary.csv",
       "spm_stdout.log",
       "spm_stderr.log",
       "spm_input_receipt.tsv"
@@ -208,6 +217,7 @@ testthat::test_that("GT2026 saved report verifies an explicitly selected synthet
   testthat::expect_identical(report$provenance$species[[1]]$stock, "synthetic")
   testthat::expect_identical(report$decisions$diagnostic, TRUE)
   testthat::expect_equal(report$controls$nsims, 20)
+  testthat::expect_equal(report$f_reference_points, c(F40 = 0.1, F35 = 0.15))
   testthat::expect_identical(
     report$source_comparison$matches_current,
     c(TRUE, TRUE)
@@ -247,6 +257,7 @@ testthat::test_that("GT2026 saved report rejects incomplete and altered evidence
   for (location in c(
     "spm.dat",
     "spm_detail.csv",
+    "spm_summary.csv",
     "source/ForProjections.dat"
   )) {
     path <- file.path(fixture$run_dir, location)
@@ -273,6 +284,55 @@ testthat::test_that("GT2026 saved report rejects incomplete and altered evidence
   expect_gt2026_report_error(reader(), "successful ADMB provenance")
   unlink(provenance_path)
   expect_gt2026_report_error(reader(), "requires staging decisions")
+})
+
+testthat::test_that("GT2026 F references require a complete hash-verified summary", {
+  fixture <- local_gt2026_report()
+  reader <- function() {
+    fixture$helper$gt2026_read_report_run(fixture$run_dir, fixture$source_dir)
+  }
+  summary_path <- file.path(fixture$run_dir, "spm_summary.csv")
+  summary <- readr::read_csv(summary_path, show_col_types = FALSE)
+  unlink(summary_path)
+  expect_gt2026_report_error(reader(), "Missing outputs file: spm_summary.csv")
+  readr::write_csv(summary, summary_path)
+  provenance_path <- file.path(fixture$run_dir, "spm_last_success_provenance.json")
+  incomplete <- fixture$provenance
+  incomplete$output_hashes$spm_summary.csv <- NULL
+  jsonlite::write_json(incomplete, provenance_path, auto_unbox = TRUE)
+  expect_gt2026_report_error(reader(), "invalid outputs hash map")
+  for (invalid_summary in list(
+    summary[1, ],
+    dplyr::mutate(summary, value = c(0, 0.15))
+  )) {
+    readr::write_csv(invalid_summary, summary_path)
+    provenance <- fixture$provenance
+    provenance$output_hashes <- fixture$hashes(names(provenance$output_hashes))
+    jsonlite::write_json(provenance, provenance_path, auto_unbox = TRUE)
+    expect_gt2026_report_error(reader(), "one positive F_abc and F_ofl value")
+  }
+})
+
+testthat::test_that("GT2026 F40 and F35 labels require their saved SPR targets", {
+  fixture <- local_gt2026_report()
+  species_path <- file.path(fixture$run_dir, "ForProjections.dat")
+  original <- readLines(species_path)
+  for (field in c("SPR_abc", "SPR_ofl")) {
+    changed <- original
+    changed[which(changed == paste("#", field)) + 1L] <- "0.45"
+    writeLines(changed, species_path)
+    provenance <- fixture$provenance
+    provenance$input_hashes <- fixture$hashes(names(provenance$input_hashes))
+    jsonlite::write_json(
+      provenance,
+      file.path(fixture$run_dir, "spm_last_success_provenance.json"),
+      auto_unbox = TRUE
+    )
+    expect_gt2026_report_error(
+      fixture$helper$gt2026_read_report_run(fixture$run_dir, fixture$source_dir),
+      "F40/F35 labels require saved SPR targets"
+    )
+  }
 })
 
 testthat::test_that("GT2026 saved report accepts the staged control labels", {
@@ -535,7 +595,7 @@ testthat::test_that("GT2026 source report renders an audit by default and saved 
     "<strong>Saved conditional projection loaded.</strong>",
     fixed = TRUE
   )
-  testthat::expect_identical(png_count(saved), 2L)
+  testthat::expect_identical(png_count(saved), 3L)
   testthat::expect_false(dir.exists(attempts))
   testthat::expect_identical(hashes(source_paths), source_before)
   testthat::expect_identical(hashes(saved_paths), saved_before)

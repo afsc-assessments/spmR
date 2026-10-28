@@ -2,7 +2,7 @@
 
 Download the [fully worked example ZIP](https://afsc-assessments.github.io/spmR/gt2026-handoff.zip).
 It contains the actual inputs, a field guide, installation requirements, a short
-R script, one verified saved run, CSV exports and two figures. Open the
+R script, one verified saved run, CSV exports and three figures. Open the
 [rendered results](https://afsc-assessments.github.io/spmR/greenland_turbot.html)
 for a quick reference. Jim confirmed this local 47-value SSB revision is the
 intended example; the scientific qualifications below still apply.
@@ -31,10 +31,11 @@ shows the audit only; projection figures require an explicit
 completed attempt.
 
 Open the resulting `examples/gt_2026/greenland_turbot.html`. The report has visible
-manual run controls, input checks, provenance, and two Alternative 2 figures:
-spawning biomass and catch. The spawning-biomass figure uses a logarithmic
-y-axis and dashed B40 and B35 reference lines. Both figures show the
-all-simulation median and a salmon 90% projection interval. Without an
+manual run controls, input checks, provenance, and three Alternative 2 figures:
+spawning biomass and catch with logarithmic y-axes, and fishing mortality with
+a linear y-axis. Dashed reference lines show B40 and B35 on the spawning-biomass
+figure and F35 and F40 on the fishing-mortality figure. All three figures show
+the all-simulation median and a salmon 90% projection interval. Without an
 explicitly selected saved attempt, rendering shows the current audit.
 
 After completing and reviewing a run, select its directory explicitly:

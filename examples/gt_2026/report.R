@@ -101,6 +101,7 @@ gt2026_read_report_run <- function(run_dir, source_dir) {
     "outputs",
     c(
       "spm_detail.csv",
+      "spm_summary.csv",
       "spm_stdout.log",
       "spm_stderr.log",
       "spm_input_receipt.tsv"
@@ -112,7 +113,8 @@ gt2026_read_report_run <- function(run_dir, source_dir) {
     "archived source",
     c("spm.dat", "ForProjections.dat")
   )
-  controls <- spmR::validate_spm_inputs(run_dir)$spm
+  validated <- spmR::validate_spm_inputs(run_dir)
+  controls <- validated$spm
   dimensions <- unlist(controls[c(
     "nspp",
     "nalts",
@@ -201,6 +203,34 @@ gt2026_read_report_run <- function(run_dir, source_dir) {
       call. = FALSE
     )
   }
+  species <- validated$species[[1]]
+  if (!isTRUE(all.equal(species$SPR_abc, 0.40)) ||
+      !isTRUE(all.equal(species$SPR_ofl, 0.35))) {
+    stop("F40/F35 labels require saved SPR targets of 0.40 and 0.35.", call. = FALSE)
+  }
+  reference_summary <- readr::read_csv(
+    file.path(run_dir, "spm_summary.csv"), show_col_types = FALSE
+  )
+  if (!all(c("spp_file", "Alt", "Year", "variable", "value") %in%
+           names(reference_summary))) {
+    stop("Saved summary lacks fishing-mortality reference fields.", call. = FALSE)
+  }
+  f_references <- reference_summary |>
+    dplyr::filter(
+      .data$spp_file == provenance$species[[1]]$stock,
+      is.na(.data$Alt), is.na(.data$Year),
+      .data$variable %in% c("F_abc", "F_ofl")
+    )
+  if (nrow(f_references) != 2L ||
+      !setequal(f_references$variable, c("F_abc", "F_ofl")) ||
+      !is.numeric(f_references$value) ||
+      any(!is.finite(f_references$value) | f_references$value <= 0)) {
+    stop("Saved summary requires one positive F_abc and F_ofl value.", call. = FALSE)
+  }
+  f_reference_points <- c(
+    F40 = f_references$value[match("F_abc", f_references$variable)],
+    F35 = f_references$value[match("F_ofl", f_references$variable)]
+  )
   source_comparison <- tibble::tibble(
     file = names(decisions$source_sha256),
     matches_current = vapply(
@@ -224,13 +254,14 @@ gt2026_read_report_run <- function(run_dir, source_dir) {
     decisions = decisions,
     controls = controls,
     source_comparison = source_comparison,
-    biomass_units = biomass_units
+    biomass_units = biomass_units,
+    f_reference_points = f_reference_points
   )
 }
 
-gt2026_report_series <- function(result, n_worms = 15L) {
+gt2026_report_series <- function(result, n_worms = 15L,
+                                 metrics = c("SSB", "Tot_biom", "Catch", "ABC", "OFL")) {
   result <- spmR::as_spm_result(result)
-  metrics <- c("SSB", "Tot_biom", "Catch", "ABC", "OFL")
   if (
     length(n_worms) != 1L ||
       !is.numeric(n_worms) ||
@@ -301,17 +332,19 @@ gt2026_report_series <- function(result, n_worms = 15L) {
 }
 
 gt2026_projection_plot <- function(result, metric = "SSB", alts = 2,
-                                   biomass_units = "t", n_worms = 15L) {
-  metric <- match.arg(metric, c("SSB", "Tot_biom", "Catch", "ABC", "OFL"))
+                                   biomass_units = "t", n_worms = 15L,
+                                   f_reference_points = NULL) {
+  metric <- match.arg(metric, c("SSB", "Tot_biom", "Catch", "ABC", "OFL", "F"))
   if (!length(alts) || !all(alts %in% result$Alt)) {
     stop("Select alternatives present in the saved result.", call. = FALSE)
   }
   selected <- dplyr::filter(result, .data$Alt %in% .env$alts)
-  series <- gt2026_report_series(selected, n_worms = n_worms)
+  series <- gt2026_report_series(selected, n_worms = n_worms, metrics = metric)
   bands <- dplyr::filter(series$summary, .data$metric == .env$metric)
   paths <- dplyr::filter(series$worms, .data$metric == .env$metric)
   axis_label <- c(SSB = "Spawning biomass", Tot_biom = "Total biomass",
-                  Catch = "Catch", ABC = "ABC", OFL = "OFL")[[metric]]
+                  Catch = "Catch", ABC = "ABC", OFL = "OFL",
+                  F = "Fishing mortality")[[metric]]
   plot <- ggplot2::ggplot(bands, ggplot2::aes(x = .data$Year)) +
     ggplot2::geom_ribbon(
       ggplot2::aes(ymin = .data$lower, ymax = .data$upper),
@@ -324,7 +357,9 @@ gt2026_projection_plot <- function(result, metric = "SSB", alts = 2,
     ) +
     ggplot2::geom_line(ggplot2::aes(y = .data$median), linewidth = 0.7) +
     ggplot2::labs(
-      x = "Projection year", y = paste0(axis_label, " (", biomass_units, ")"),
+      x = "Projection year",
+      y = if (metric == "F") expression("Fishing mortality" ~ (year^{-1})) else
+        paste0(axis_label, " (", biomass_units, ")"),
       title = paste("Greenland turbot —", axis_label),
       subtitle = if (length(alts) == 1L) paste("Alternative", alts) else NULL
     ) +
@@ -334,20 +369,30 @@ gt2026_projection_plot <- function(result, metric = "SSB", alts = 2,
       ggplot2::vars(Alt), ncol = 2, labeller = "label_both"
     )
   }
-  if (metric == "SSB") {
-    if (any(selected$SSB <= 0)) {
-      stop("Log-scale SSB plots require positive spawning biomass.", call. = FALSE)
-    }
-    references <- selected |>
+  if (metric %in% c("SSB", "F")) {
+    if (metric == "SSB") {
+      references <- selected |>
       dplyr::select(dplyr::all_of(c("Alt", "B40", "B35"))) |>
       dplyr::distinct() |>
       tidyr::pivot_longer(
         dplyr::all_of(c("B40", "B35")), names_to = "reference", values_to = "value"
       )
-    if (nrow(references) != 2L * length(unique(selected$Alt)) ||
-        any(!is.finite(references$value) | references$value <= 0)) {
-      stop("SSB plots require constant positive B40 and B35 values per alternative.",
-           call. = FALSE)
+      if (nrow(references) != 2L * length(unique(selected$Alt)) ||
+          any(!is.finite(references$value) | references$value <= 0)) {
+        stop("SSB plots require constant positive B40 and B35 values per alternative.",
+             call. = FALSE)
+      }
+    } else {
+      if (!is.numeric(f_reference_points) || length(f_reference_points) != 2L ||
+          !setequal(names(f_reference_points), c("F40", "F35")) ||
+          any(!is.finite(f_reference_points) | f_reference_points <= 0)) {
+        stop("F plots require verified positive F40 and F35 reference points.",
+             call. = FALSE)
+      }
+      references <- tidyr::expand_grid(
+        Alt = sort(unique(selected$Alt)), reference = names(f_reference_points)
+      ) |>
+        dplyr::mutate(value = unname(f_reference_points[.data$reference]))
     }
     references$label_year <- max(selected$Year) + 0.25
     plot <- plot +
@@ -360,8 +405,13 @@ gt2026_projection_plot <- function(result, metric = "SSB", alts = 2,
         ggplot2::aes(x = .data$label_year, y = .data$value, label = .data$reference),
         inherit.aes = FALSE, hjust = 0, vjust = -0.35, size = 3.3
       ) +
-      ggplot2::scale_y_log10(labels = scales::label_comma()) +
       ggplot2::scale_x_continuous(expand = ggplot2::expansion(mult = c(0.02, 0.12)))
+  }
+  if (metric %in% c("SSB", "Catch")) {
+    if (any(selected[[metric]] <= 0)) {
+      stop("Log-scale ", metric, " plots require positive values.", call. = FALSE)
+    }
+    plot <- plot + ggplot2::scale_y_log10(labels = scales::label_comma())
   }
   plot
 }

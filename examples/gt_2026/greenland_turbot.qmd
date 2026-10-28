@@ -175,7 +175,8 @@ audit |>
 
 ## Projection figures
 
-The two figures show **Alternative 2**. Thin blue lines trace the same 15
+The three figures show **Alternative 2**: spawning biomass, catch and fishing
+mortality. Thin blue lines trace the same 15
 simulations, selected by their sorted simulation IDs. The black line is the
 median across all simulations; the **salmon ribbon** spans their 5th–95th
 percentiles, a **90% projection interval**. These are conditional results under
@@ -195,13 +196,17 @@ if (is.null(series)) {
     stop("Expected constant B40 and B35 values for the selected alternative.")
   }
   cat(sprintf(
-    "Spawning biomass uses a logarithmic y-axis. Dashed lines mark B40 (%s %s) and B35 (%s %s), read directly from the saved output.\n\n",
+    "Spawning biomass and catch use logarithmic y-axes. Dashed lines on the spawning-biomass figure mark B40 (%s %s) and B35 (%s %s), read directly from the saved output.\n\n",
     format(round(reference_values$B40, 1), big.mark = ",", trim = TRUE),
     saved$biomass_units,
     format(round(reference_values$B35, 1), big.mark = ",", trim = TRUE),
     saved$biomass_units
   ))
   cat("Simulation IDs shown:", paste(series$worm_ids, collapse = ", "), "\n\n")
+  cat(sprintf(
+    "Fishing mortality uses a linear y-axis. Its dashed lines mark F40 (%.6f per year) and F35 (%.6f per year). These values come from the saved summary, whose SPR targets are verified as 0.40 and 0.35.\n\n",
+    saved$f_reference_points[["F40"]], saved$f_reference_points[["F35"]]
+  ))
 }
 ```
 
@@ -224,12 +229,26 @@ if (!is.null(series)) {
 #| echo: false
 #| fig-width: 9
 #| fig-height: 5
-#| fig-cap: "Alternative 2 conditional catch. The salmon ribbon is the 90% projection interval and the black line is the median across all simulations. Prescribed catches make paths overlap in the first three years."
-#| fig-alt: "Alternative 2 catch from 2026 to 2040, with fifteen blue simulation paths, a black median and a salmon 90 percent interval. The first three years use fixed catches; later years show simulation dispersion."
+#| fig-cap: "Alternative 2 conditional catch on a logarithmic y-axis. The salmon ribbon is the 90% projection interval and the black line is the median across all simulations. Prescribed catches make paths overlap in the first three years."
+#| fig-alt: "Alternative 2 catch from 2026 to 2040 on a log scale, with fifteen blue simulation paths, a black median and a salmon 90 percent interval. The first three years use fixed catches; later years show simulation dispersion."
 if (!is.null(series)) {
   gt2026_projection_plot(saved$result, "Catch", alts = plot_alternative,
                          biomass_units = saved$biomass_units,
                          n_worms = worms_per_plot)
+}
+```
+
+```{r}
+#| label: fig-alt2-f
+#| echo: false
+#| fig-width: 9
+#| fig-height: 5
+#| fig-cap: "Alternative 2 projected fishing mortality. Dashed lines show F40 and F35 from the saved run; the salmon ribbon is the 90% projection interval and the black line is the median across all simulations."
+#| fig-alt: "Alternative 2 annual fishing mortality from 2026 to 2040 on a linear scale, with fifteen blue simulation paths, a black median and a salmon 90 percent interval. Labelled dashed horizontal lines mark F40 and F35; values are given above."
+if (!is.null(series)) {
+  gt2026_projection_plot(saved$result, "F", alts = plot_alternative,
+                         n_worms = worms_per_plot,
+                         f_reference_points = saved$f_reference_points)
 }
 ```
 

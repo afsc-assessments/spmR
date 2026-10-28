@@ -12,7 +12,7 @@
 
 * The GT2026 report defaults to an audit-only render, so the plain Quarto command works in a fresh source checkout without ignored local run directories. Completed results are selected explicitly with `saved_run`.
 
-* The GT2026 example preserves the author's confirmed 47-value SSB history and provides a portable fully worked example with the actual inputs, editable R commands, verified saved results, two Alternative 2 figures and CSV tables. Its conditional results are published as a reference with the remaining scientific assumptions stated explicitly.
+* The GT2026 example preserves the author's confirmed 47-value SSB history and provides a portable fully worked example with the actual inputs, editable R commands, verified saved results, three Alternative 2 figures and CSV tables. Spawning biomass and catch use logarithmic y-axes; fishing mortality shows dashed F40 and F35 reference lines from the saved run. Its conditional results are published as a reference with the remaining scientific assumptions stated explicitly.
 
 * The standalone GT2026 report reads saved controls through the validated positional parser, so supported `spm.dat` comment labels no longer cause completed runs to be rejected.
 
