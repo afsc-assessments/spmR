@@ -299,3 +299,69 @@ gt2026_report_series <- function(result, n_worms = 15L) {
     dplyr::arrange(.data$Alt, .data$Sim, .data$Year, .data$metric)
   list(summary = summary, worms = worms, worm_ids = worm_ids)
 }
+
+gt2026_projection_plot <- function(result, metric = "SSB", alts = 2,
+                                   biomass_units = "t", n_worms = 15L) {
+  metric <- match.arg(metric, c("SSB", "Tot_biom", "Catch", "ABC", "OFL"))
+  if (!length(alts) || !all(alts %in% result$Alt)) {
+    stop("Select alternatives present in the saved result.", call. = FALSE)
+  }
+  selected <- dplyr::filter(result, .data$Alt %in% .env$alts)
+  series <- gt2026_report_series(selected, n_worms = n_worms)
+  bands <- dplyr::filter(series$summary, .data$metric == .env$metric)
+  paths <- dplyr::filter(series$worms, .data$metric == .env$metric)
+  axis_label <- c(SSB = "Spawning biomass", Tot_biom = "Total biomass",
+                  Catch = "Catch", ABC = "ABC", OFL = "OFL")[[metric]]
+  plot <- ggplot2::ggplot(bands, ggplot2::aes(x = .data$Year)) +
+    ggplot2::geom_ribbon(
+      ggplot2::aes(ymin = .data$lower, ymax = .data$upper),
+      fill = "salmon", alpha = 0.5
+    ) +
+    ggplot2::geom_line(
+      data = paths,
+      ggplot2::aes(y = .data$value, group = .data$Sim),
+      colour = "#336A99", alpha = 0.35, linewidth = 0.35
+    ) +
+    ggplot2::geom_line(ggplot2::aes(y = .data$median), linewidth = 0.7) +
+    ggplot2::labs(
+      x = "Projection year", y = paste0(axis_label, " (", biomass_units, ")"),
+      title = paste("Greenland turbot —", axis_label),
+      subtitle = if (length(alts) == 1L) paste("Alternative", alts) else NULL
+    ) +
+    ggthemes::theme_few(base_size = 11)
+  if (length(alts) > 1L) {
+    plot <- plot + ggplot2::facet_wrap(
+      ggplot2::vars(Alt), ncol = 2, labeller = "label_both"
+    )
+  }
+  if (metric == "SSB") {
+    if (any(selected$SSB <= 0)) {
+      stop("Log-scale SSB plots require positive spawning biomass.", call. = FALSE)
+    }
+    references <- selected |>
+      dplyr::select(dplyr::all_of(c("Alt", "B40", "B35"))) |>
+      dplyr::distinct() |>
+      tidyr::pivot_longer(
+        dplyr::all_of(c("B40", "B35")), names_to = "reference", values_to = "value"
+      )
+    if (nrow(references) != 2L * length(unique(selected$Alt)) ||
+        any(!is.finite(references$value) | references$value <= 0)) {
+      stop("SSB plots require constant positive B40 and B35 values per alternative.",
+           call. = FALSE)
+    }
+    references$label_year <- max(selected$Year) + 0.25
+    plot <- plot +
+      ggplot2::geom_hline(
+        data = references, ggplot2::aes(yintercept = .data$value),
+        linetype = "dashed", colour = "grey25", linewidth = 0.55
+      ) +
+      ggplot2::geom_text(
+        data = references,
+        ggplot2::aes(x = .data$label_year, y = .data$value, label = .data$reference),
+        inherit.aes = FALSE, hjust = 0, vjust = -0.35, size = 3.3
+      ) +
+      ggplot2::scale_y_log10(labels = scales::label_comma()) +
+      ggplot2::scale_x_continuous(expand = ggplot2::expansion(mult = c(0.02, 0.12)))
+  }
+  plot
+}

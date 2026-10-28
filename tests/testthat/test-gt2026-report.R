@@ -535,7 +535,7 @@ testthat::test_that("GT2026 source report renders an audit by default and saved 
     "<strong>Saved conditional projection loaded.</strong>",
     fixed = TRUE
   )
-  testthat::expect_identical(png_count(saved), 5L)
+  testthat::expect_identical(png_count(saved), 2L)
   testthat::expect_false(dir.exists(attempts))
   testthat::expect_identical(hashes(source_paths), source_before)
   testthat::expect_identical(hashes(saved_paths), saved_before)

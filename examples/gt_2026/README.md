@@ -1,8 +1,8 @@
-# Greenland turbot 2026 projection
+# Greenland turbot 2026: fully worked example
 
-For a colleague, download the [complete handoff ZIP](https://afsc-assessments.github.io/spmR/gt2026-handoff.zip).
+Download the [fully worked example ZIP](https://afsc-assessments.github.io/spmR/gt2026-handoff.zip).
 It contains the actual inputs, a field guide, installation requirements, a short
-R script, one verified saved run, tables and figures. Open the
+R script, one verified saved run, CSV exports and two figures. Open the
 [rendered results](https://afsc-assessments.github.io/spmR/greenland_turbot.html)
 for a quick reference. Jim confirmed this local 47-value SSB revision is the
 intended example; the scientific qualifications below still apply.
@@ -27,15 +27,15 @@ quarto render examples/gt_2026/greenland_turbot.qmd
 ```
 
 The default `saved_run: ""` works without any local attempt directory. It
-shows the audit only; projection figures and tables require an explicit
+shows the audit only; projection figures require an explicit
 completed attempt.
 
 Open the resulting `examples/gt_2026/greenland_turbot.html`. The report has visible
-manual run controls, input checks, provenance, and result sections for spawning
-biomass, total biomass, catch, ABC and OFL. Each projection panel shows the same
-15 simulation trajectories, plus the all-simulation median and 90% projection
-interval. Tables use all simulations. Without an explicitly selected saved
-attempt, rendering shows the current audit without fabricated results.
+manual run controls, input checks, provenance, and two Alternative 2 figures:
+spawning biomass and catch. The spawning-biomass figure uses a logarithmic
+y-axis and dashed B40 and B35 reference lines. Both figures show the
+all-simulation median and a salmon 90% projection interval. Without an
+explicitly selected saved attempt, rendering shows the current audit.
 
 After completing and reviewing a run, select its directory explicitly:
 

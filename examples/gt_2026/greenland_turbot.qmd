@@ -1,6 +1,6 @@
 ---
 title: "Greenland turbot 2026 projections"
-subtitle: "Input audit and conditional projection results"
+subtitle: "A fully worked example"
 lang: en
 language:
   title-block-published: "Rendered"
@@ -20,7 +20,7 @@ execute:
   message: false
 ---
 
-This working report audits the current input files and, when explicitly selected,
+This fully worked example audits the current input files and, when explicitly selected,
 reads a completed projection attempt. Rendering **never compiles or runs ADMB**.
 Conditional projections describe the supplied inputs and assumptions; they are
 not adopted catch recommendations.
@@ -34,7 +34,7 @@ quarto render greenland_turbot.qmd
 ```
 
 The default selects no saved attempt, so this command works in a fresh source
-checkout and produces the audit without projection figures or tables.
+checkout and produces the audit without projection figures.
 
 To include results, set `saved_run` in the YAML above or pass the actual attempt
 directory explicitly. This example path is illustrative; the report never selects
@@ -48,8 +48,8 @@ quarto render greenland_turbot.qmd -P saved_run:spmR_runs/attempt-001
 #| label: report_controls
 #| code-fold: false
 saved_run <- params$saved_run
+plot_alternative <- 2L
 worms_per_plot <- 15L
-table_years <- 3L
 ```
 
 ### Start a new projection manually
@@ -173,137 +173,63 @@ audit |>
   gt::cols_width(item ~ gt::pct(18), status ~ gt::pct(12), detail ~ gt::pct(70))
 ```
 
-## Projection plots
+## Projection figures
 
-Each panel represents one alternative. The **same 15 simulations**, selected
-deterministically by their sorted simulation IDs, appear as thin blue lines
-("worms") in every plot. The black line is the median across **all** simulations;
-the grey band spans their 5th–95th percentiles, a **90% projection interval**.
-The 15 paths illustrate simulations rather than estimating the full uncertainty
-by themselves. Fixed catches can cause several paths to overlap exactly.
+The two figures show **Alternative 2**. Thin blue lines trace the same 15
+simulations, selected by their sorted simulation IDs. The black line is the
+median across all simulations; the **salmon ribbon** spans their 5th–95th
+percentiles, a **90% projection interval**. These are conditional results under
+the saved run's assumptions.
 
 ```{r}
 #| label: plot_setup
 #| echo: false
+#| results: asis
 if (is.null(series)) {
-  cat("Plots will appear after selecting a verified completed attempt with at least 15 simulations. No placeholder projection data are plotted.")
+  cat("Figures will appear after selecting a verified completed attempt with at least 15 simulations.")
 } else {
-  cat("Simulation IDs shown:", paste(series$worm_ids, collapse = ", "))
-}
-projection_plot <- function(metric_name, axis_label) {
-  summary_data <- dplyr::filter(series$summary, .data$metric == metric_name)
-  worm_data <- dplyr::filter(series$worms, .data$metric == metric_name)
-  ggplot2::ggplot(summary_data, ggplot2::aes(x = .data$Year)) +
-    ggplot2::geom_ribbon(
-      ggplot2::aes(ymin = .data$lower, ymax = .data$upper),
-      fill = "grey85"
-    ) +
-    ggplot2::geom_line(
-      data = worm_data,
-      ggplot2::aes(y = .data$value, group = .data$Sim),
-      colour = "#336A99", alpha = 0.35, linewidth = 0.35
-    ) +
-    ggplot2::geom_line(ggplot2::aes(y = .data$median), linewidth = 0.65) +
-    ggplot2::facet_wrap(ggplot2::vars(Alt), ncol = 2, labeller = "label_both") +
-    ggplot2::labs(
-      x = "Projection year",
-      y = paste0(axis_label, " (", saved$biomass_units, ")")
-    ) +
-    ggthemes::theme_few(base_size = 11)
+  reference_values <- saved$result |>
+    dplyr::filter(.data$Alt == plot_alternative) |>
+    dplyr::distinct(.data$B40, .data$B35)
+  if (nrow(reference_values) != 1L) {
+    stop("Expected constant B40 and B35 values for the selected alternative.")
+  }
+  cat(sprintf(
+    "Spawning biomass uses a logarithmic y-axis. Dashed lines mark B40 (%s %s) and B35 (%s %s), read directly from the saved output.\n\n",
+    format(round(reference_values$B40, 1), big.mark = ",", trim = TRUE),
+    saved$biomass_units,
+    format(round(reference_values$B35, 1), big.mark = ",", trim = TRUE),
+    saved$biomass_units
+  ))
+  cat("Simulation IDs shown:", paste(series$worm_ids, collapse = ", "), "\n\n")
 }
 ```
 
 ```{r}
-#| label: fig-ssb-worms
+#| label: fig-alt2-ssb
 #| echo: false
 #| fig-width: 9
-#| fig-height: 9
-#| fig-cap: "Conditional spawning biomass: 15 simulation paths per alternative, all-simulation median and 90% projection interval."
-#| fig-alt: "Faceted spawning-biomass trajectories with one panel per alternative. Thin lines show fifteen selected simulations, a black line the median, and a grey band the projection interval. Numerical summaries follow the plots."
-if (!is.null(series)) projection_plot("SSB", "Spawning biomass")
-```
-
-```{r}
-#| label: fig-biomass-worms
-#| echo: false
-#| fig-width: 9
-#| fig-height: 9
-#| fig-cap: "Conditional total population biomass under the saved run's population-weight declarations."
-#| fig-alt: "Faceted total-biomass trajectories by alternative, with fifteen simulation paths, the all-simulation median and the 90 percent projection interval."
-if (!is.null(series)) projection_plot("Tot_biom", "Total biomass")
-```
-
-```{r}
-#| label: fig-catch-worms
-#| echo: false
-#| fig-width: 9
-#| fig-height: 9
-#| fig-cap: "Conditional catch trajectories. Prescribed catches can make the 15 simulation paths overlap."
-#| fig-alt: "Faceted catch trajectories by alternative. Fifteen selected paths overlap where catches are prescribed; the median and projection interval use every simulation."
-if (!is.null(series)) projection_plot("Catch", "Catch")
-```
-
-```{r}
-#| label: fig-abc-worms
-#| echo: false
-#| fig-width: 9
-#| fig-height: 9
-#| fig-cap: "Conditional model ABC trajectories; these calculations are not adopted catch recommendations."
-#| fig-alt: "Faceted conditional ABC trajectories by alternative with fifteen simulation paths, the median and the 90 percent projection interval."
-if (!is.null(series)) projection_plot("ABC", "ABC")
-```
-
-```{r}
-#| label: fig-ofl-worms
-#| echo: false
-#| fig-width: 9
-#| fig-height: 9
-#| fig-cap: "Conditional model OFL trajectories; scientific input review remains separate from successful execution."
-#| fig-alt: "Faceted conditional OFL trajectories by alternative with fifteen simulation paths, the median and the 90 percent projection interval."
-if (!is.null(series)) projection_plot("OFL", "OFL")
-```
-
-## Summary tables
-
-Tables use all simulations, not only the 15 displayed paths. They are recomputed
-from the hash-verified detailed output rather than an independently edited
-summary file. The first table covers the first `r table_years` projection years;
-the second reports terminal-year distributions.
-
-```{r}
-#| label: annual_means_table
-#| echo: false
-if (is.null(series)) {
-  cat("No projection tables are available until a completed attempt is selected.")
-} else {
-  annual_means <- series$summary |>
-    dplyr::select(dplyr::all_of(c("Alt", "Year", "metric", "mean"))) |>
-    tidyr::pivot_wider(names_from = "metric", values_from = "mean")
-  annual_means |>
-    dplyr::filter(.data$Year < min(.data$Year) + table_years) |>
-    dplyr::mutate(Alt = paste("Alternative", .data$Alt)) |>
-    dplyr::rename_with(~ paste0("annual_", .x)) |>
-    gt::gt(groupname_col = "annual_Alt") |>
-    gt::tab_caption("Conditional annual means by alternative for the first projection years. Units follow the saved run.") |>
-    gt::tab_header(title = paste("Conditional annual means —", saved$biomass_units)) |>
-    gt::cols_label(annual_Year = "Year", annual_Tot_biom = "Total biomass", annual_SSB = "Spawning biomass", annual_Catch = "Catch", annual_ABC = "ABC", annual_OFL = "OFL") |>
-    gt::fmt_number(columns = paste0("annual_", c("SSB", "Tot_biom", "Catch", "ABC", "OFL")), decimals = 1)
-}
-```
-
-```{r}
-#| label: terminal_distribution_table
-#| echo: false
+#| fig-height: 5
+#| fig-cap: "Alternative 2 conditional spawning biomass on a logarithmic y-axis. Dashed lines show B40 and B35; the salmon ribbon is the 90% projection interval and the black line is the median across all simulations."
+#| fig-alt: "Alternative 2 spawning biomass from 2026 to 2040 on a log scale, with fifteen blue simulation paths, a median line, a salmon interval and labelled dashed B40 and B35 reference lines. Reference values are given above."
 if (!is.null(series)) {
-  series$summary |>
-    dplyr::filter(.data$Year == max(.data$Year)) |>
-    dplyr::select(dplyr::all_of(c("metric", "Alt", "Year", "median", "lower", "upper"))) |>
-    dplyr::rename_with(~ paste0("terminal_", .x)) |>
-    gt::gt(groupname_col = "terminal_metric") |>
-    gt::tab_caption("Terminal-year median and 5th–95th percentile projection range, using all simulations.") |>
-    gt::tab_header(title = paste("Terminal projection distributions —", saved$biomass_units)) |>
-    gt::cols_label(terminal_Alt = "Alternative", terminal_Year = "Year", terminal_median = "Median", terminal_lower = "5th percentile", terminal_upper = "95th percentile") |>
-    gt::fmt_number(columns = c("terminal_median", "terminal_lower", "terminal_upper"), decimals = 1)
+  gt2026_projection_plot(saved$result, "SSB", alts = plot_alternative,
+                         biomass_units = saved$biomass_units,
+                         n_worms = worms_per_plot)
+}
+```
+
+```{r}
+#| label: fig-alt2-catch
+#| echo: false
+#| fig-width: 9
+#| fig-height: 5
+#| fig-cap: "Alternative 2 conditional catch. The salmon ribbon is the 90% projection interval and the black line is the median across all simulations. Prescribed catches make paths overlap in the first three years."
+#| fig-alt: "Alternative 2 catch from 2026 to 2040, with fifteen blue simulation paths, a black median and a salmon 90 percent interval. The first three years use fixed catches; later years show simulation dispersion."
+if (!is.null(series)) {
+  gt2026_projection_plot(saved$result, "Catch", alts = plot_alternative,
+                         biomass_units = saved$biomass_units,
+                         n_worms = worms_per_plot)
 }
 ```
 
