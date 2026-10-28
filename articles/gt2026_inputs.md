@@ -1,9 +1,9 @@
-# Audit and stage the 2026 Greenland turbot inputs
+# Greenland turbot: a fully worked example
 
-## Colleague handoff
+## Fully worked example
 
-Download the [complete runnable
-handoff](https://afsc-assessments.github.io/spmR/gt2026-handoff.zip) to
+Download the [fully worked
+example](https://afsc-assessments.github.io/spmR/gt2026-handoff.zip) to
 get the actual `ForProjections.dat`, `spm.dat` and `tacpar.dat` files, a
 plain-language field guide, installation requirements, and a short R
 script for checking or changing inputs, running a new attempt, plotting
@@ -13,17 +13,15 @@ preserve it.
 
 Open the [rendered Greenland turbot
 results](https://afsc-assessments.github.io/spmR/greenland_turbot.html)
-for five figures and summary tables. This example uses Jim’s confirmed
-local 47-value SSB history and diagnostic population-weight assumptions;
+for two Alternative 2 figures: spawning biomass on a logarithmic y-axis
+with dashed B40 and B35 reference lines, and catch. Salmon ribbons show
+the 90% projection intervals. This example uses Jim’s confirmed local
+47-value SSB history and diagnostic population-weight assumptions;
 successful execution is separate from scientific input review. Figure
 downloads: [spawning
-biomass](https://afsc-assessments.github.io/spmR/gt2026-figures/SSB.png),
-[total
-biomass](https://afsc-assessments.github.io/spmR/gt2026-figures/Tot_biom.png),
-[catch](https://afsc-assessments.github.io/spmR/gt2026-figures/Catch.png),
-[ABC](https://afsc-assessments.github.io/spmR/gt2026-figures/ABC.png),
+biomass](https://afsc-assessments.github.io/spmR/gt2026-figures/SSB.png)
 and
-[OFL](https://afsc-assessments.github.io/spmR/gt2026-figures/OFL.png).
+[catch](https://afsc-assessments.github.io/spmR/gt2026-figures/Catch.png).
 
 The `examples/gt_2026` directory preserves the supplied Greenland turbot
 projection files. The current species input contains 47 recruitment
@@ -230,9 +228,10 @@ README contains the complete input evaluation and terminal commands.
 ## Standalone run-and-results report
 
 `examples/gt_2026/greenland_turbot.qmd` provides visible manual run
-controls, the current input audit, and saved-output tables and plots.
-Each projection panel displays 15 simulation trajectories, the median,
-and a 90% projection interval. Rendering performs no projection; select
+controls, the current input audit, and two Alternative 2 figures. The
+spawning-biomass figure uses a logarithmic y-axis and dashed B40 and B35
+reference lines. Both figures show the all-simulation median and a
+salmon 90% projection interval. Rendering performs no projection; select
 a reviewed saved attempt to populate the results. From the repository
 root:
 

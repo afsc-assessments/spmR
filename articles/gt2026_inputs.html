@@ -5,7 +5,7 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<title>Audit and stage the 2026 Greenland turbot inputs • spmR</title>
+<title>Greenland turbot: a fully worked example • spmR</title>
 <script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link href="../deps/bootstrap-5.3.8/bootstrap.min.css" rel="stylesheet">
 <script src="../deps/bootstrap-5.3.8/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
@@ -13,7 +13,7 @@
 <script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><script src="gt2026_inputs_files/libs/quarto-html/popper.min.js"></script><script src="gt2026_inputs_files/libs/quarto-html/tippy.umd.min.js"></script><link href="gt2026_inputs_files/libs/quarto-html/tippy.css" rel="stylesheet">
 <link href="gt2026_inputs_files/libs/quarto-html/light-border.css" rel="stylesheet">
 <!-- pkgdown --><script src="../pkgdown.js"></script><link href="../extra.css" rel="stylesheet">
-<meta property="og:title" content="Audit and stage the 2026 Greenland turbot inputs">
+<meta property="og:title" content="Greenland turbot: a fully worked example">
 </head>
 <body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
@@ -49,7 +49,7 @@
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
 
-      <h1>Audit and stage the 2026 Greenland turbot inputs</h1>
+      <h1>Greenland turbot: a fully worked example</h1>
 
 
 
@@ -63,10 +63,10 @@
 
 
 
-    <section class="level2"><h2 id="colleague-handoff">Colleague handoff<a class="anchor" aria-label="anchor" href="#colleague-handoff"></a>
+    <section class="level2"><h2 id="fully-worked-example">Fully worked example<a class="anchor" aria-label="anchor" href="#fully-worked-example"></a>
 </h2>
-<p>Download the <a href="https://afsc-assessments.github.io/spmR/gt2026-handoff.zip">complete runnable handoff</a> to get the actual <code>ForProjections.dat</code>, <code>spm.dat</code> and <code>tacpar.dat</code> files, a plain-language field guide, installation requirements, and a short R script for checking or changing inputs, running a new attempt, plotting selected alternatives and exporting useful CSV tables. The bundle includes one completed conditional run and its provenance; new runs preserve it.</p>
-<p>Open the <a href="https://afsc-assessments.github.io/spmR/greenland_turbot.html">rendered Greenland turbot results</a> for five figures and summary tables. This example uses Jim’s confirmed local 47-value SSB history and diagnostic population-weight assumptions; successful execution is separate from scientific input review. Figure downloads: <a href="https://afsc-assessments.github.io/spmR/gt2026-figures/SSB.png">spawning biomass</a>, <a href="https://afsc-assessments.github.io/spmR/gt2026-figures/Tot_biom.png">total biomass</a>, <a href="https://afsc-assessments.github.io/spmR/gt2026-figures/Catch.png">catch</a>, <a href="https://afsc-assessments.github.io/spmR/gt2026-figures/ABC.png">ABC</a>, and <a href="https://afsc-assessments.github.io/spmR/gt2026-figures/OFL.png">OFL</a>.</p>
+<p>Download the <a href="https://afsc-assessments.github.io/spmR/gt2026-handoff.zip">fully worked example</a> to get the actual <code>ForProjections.dat</code>, <code>spm.dat</code> and <code>tacpar.dat</code> files, a plain-language field guide, installation requirements, and a short R script for checking or changing inputs, running a new attempt, plotting selected alternatives and exporting useful CSV tables. The bundle includes one completed conditional run and its provenance; new runs preserve it.</p>
+<p>Open the <a href="https://afsc-assessments.github.io/spmR/greenland_turbot.html">rendered Greenland turbot results</a> for two Alternative 2 figures: spawning biomass on a logarithmic y-axis with dashed B40 and B35 reference lines, and catch. Salmon ribbons show the 90% projection intervals. This example uses Jim’s confirmed local 47-value SSB history and diagnostic population-weight assumptions; successful execution is separate from scientific input review. Figure downloads: <a href="https://afsc-assessments.github.io/spmR/gt2026-figures/SSB.png">spawning biomass</a> and <a href="https://afsc-assessments.github.io/spmR/gt2026-figures/Catch.png">catch</a>.</p>
 <p>The <code>examples/gt_2026</code> directory preserves the supplied Greenland turbot projection files. The current species input contains 47 recruitment values and 47 SSB values. The counts match; their calendar alignment still requires confirmation. Population body weights, units, age and plus-group alignment, and SS3 export-field mapping also require confirmation before assessment use. This article executes a read-only audit; it stages no files and generates no projection results.</p>
 </section><section class="level2"><h2 id="simple-commands">Simple commands<a class="anchor" aria-label="anchor" href="#simple-commands"></a>
 </h2>
@@ -85,23 +85,23 @@
 <code class="sourceCode R"><span><span class="va">audit</span> <span class="op">&lt;-</span> <span class="fu">check_gt2026_inputs</span><span class="op">(</span><span class="va">example_dir</span><span class="op">)</span></span>
 <span><span class="fu">gt</span><span class="fu">::</span><span class="fu"><a href="https://gt.rstudio.com/reference/gt.html" class="external-link">gt</a></span><span class="op">(</span><span class="va">audit</span><span class="op">)</span></span></code></pre></div>
 <div class="cell-output-display">
-<div id="mrniglayuo" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
-<style>#mrniglayuo table {
+<div id="ckqwsueyoq" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#ckqwsueyoq table {
   font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-#mrniglayuo thead, #mrniglayuo tbody, #mrniglayuo tfoot, #mrniglayuo tr, #mrniglayuo td, #mrniglayuo th {
+#ckqwsueyoq thead, #ckqwsueyoq tbody, #ckqwsueyoq tfoot, #ckqwsueyoq tr, #ckqwsueyoq td, #ckqwsueyoq th {
   border-style: none;
 }
 
-#mrniglayuo p {
+#ckqwsueyoq p {
   margin: 0;
   padding: 0;
 }
 
-#mrniglayuo .gt_table {
+#ckqwsueyoq .gt_table {
   display: table;
   border-collapse: collapse;
   line-height: normal;
@@ -127,12 +127,12 @@
   border-left-color: #D3D3D3;
 }
 
-#mrniglayuo .gt_caption {
+#ckqwsueyoq .gt_caption {
   padding-top: 4px;
   padding-bottom: 4px;
 }
 
-#mrniglayuo .gt_title {
+#ckqwsueyoq .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -144,7 +144,7 @@
   border-bottom-width: 0;
 }
 
-#mrniglayuo .gt_subtitle {
+#ckqwsueyoq .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -156,7 +156,7 @@
   border-top-width: 0;
 }
 
-#mrniglayuo .gt_heading {
+#ckqwsueyoq .gt_heading {
   background-color: #FFFFFF;
   text-align: center;
   border-bottom-color: #FFFFFF;
@@ -168,13 +168,13 @@
   border-right-color: #D3D3D3;
 }
 
-#mrniglayuo .gt_bottom_border {
+#ckqwsueyoq .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#mrniglayuo .gt_col_headings {
+#ckqwsueyoq .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -189,7 +189,7 @@
   border-right-color: #D3D3D3;
 }
 
-#mrniglayuo .gt_col_heading {
+#ckqwsueyoq .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -209,7 +209,7 @@
   overflow-x: hidden;
 }
 
-#mrniglayuo .gt_column_spanner_outer {
+#ckqwsueyoq .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -221,15 +221,15 @@
   padding-right: 4px;
 }
 
-#mrniglayuo .gt_column_spanner_outer:first-child {
+#ckqwsueyoq .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#mrniglayuo .gt_column_spanner_outer:last-child {
+#ckqwsueyoq .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#mrniglayuo .gt_column_spanner {
+#ckqwsueyoq .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -241,11 +241,11 @@
   width: 100%;
 }
 
-#mrniglayuo .gt_spanner_row {
+#ckqwsueyoq .gt_spanner_row {
   border-bottom-style: hidden;
 }
 
-#mrniglayuo .gt_group_heading {
+#ckqwsueyoq .gt_group_heading {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -271,7 +271,7 @@
   text-align: left;
 }
 
-#mrniglayuo .gt_empty_group_heading {
+#ckqwsueyoq .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -286,15 +286,15 @@
   vertical-align: middle;
 }
 
-#mrniglayuo .gt_from_md > :first-child {
+#ckqwsueyoq .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#mrniglayuo .gt_from_md > :last-child {
+#ckqwsueyoq .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#mrniglayuo .gt_row {
+#ckqwsueyoq .gt_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -313,7 +313,7 @@
   overflow-x: hidden;
 }
 
-#mrniglayuo .gt_stub {
+#ckqwsueyoq .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -326,7 +326,7 @@
   padding-right: 5px;
 }
 
-#mrniglayuo .gt_stub_row_group {
+#ckqwsueyoq .gt_stub_row_group {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -340,15 +340,15 @@
   vertical-align: top;
 }
 
-#mrniglayuo .gt_row_group_first td {
+#ckqwsueyoq .gt_row_group_first td {
   border-top-width: 2px;
 }
 
-#mrniglayuo .gt_row_group_first th {
+#ckqwsueyoq .gt_row_group_first th {
   border-top-width: 2px;
 }
 
-#mrniglayuo .gt_summary_row {
+#ckqwsueyoq .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -358,16 +358,16 @@
   padding-right: 5px;
 }
 
-#mrniglayuo .gt_first_summary_row {
+#ckqwsueyoq .gt_first_summary_row {
   border-top-style: solid;
   border-top-color: #D3D3D3;
 }
 
-#mrniglayuo .gt_first_summary_row.thick {
+#ckqwsueyoq .gt_first_summary_row.thick {
   border-top-width: 2px;
 }
 
-#mrniglayuo .gt_last_summary_row {
+#ckqwsueyoq .gt_last_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -377,7 +377,7 @@
   border-bottom-color: #D3D3D3;
 }
 
-#mrniglayuo .gt_grand_summary_row {
+#ckqwsueyoq .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -387,7 +387,7 @@
   padding-right: 5px;
 }
 
-#mrniglayuo .gt_first_grand_summary_row {
+#ckqwsueyoq .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -397,7 +397,7 @@
   border-top-color: #D3D3D3;
 }
 
-#mrniglayuo .gt_last_grand_summary_row_top {
+#ckqwsueyoq .gt_last_grand_summary_row_top {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -407,11 +407,11 @@
   border-bottom-color: #D3D3D3;
 }
 
-#mrniglayuo .gt_striped {
+#ckqwsueyoq .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-#mrniglayuo .gt_table_body {
+#ckqwsueyoq .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -420,7 +420,7 @@
   border-bottom-color: #D3D3D3;
 }
 
-#mrniglayuo .gt_footnotes {
+#ckqwsueyoq .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -434,7 +434,7 @@
   border-right-color: #D3D3D3;
 }
 
-#mrniglayuo .gt_footnote {
+#ckqwsueyoq .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding-top: 4px;
@@ -443,7 +443,7 @@
   padding-right: 5px;
 }
 
-#mrniglayuo .gt_sourcenotes {
+#ckqwsueyoq .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -457,7 +457,7 @@
   border-right-color: #D3D3D3;
 }
 
-#mrniglayuo .gt_sourcenote {
+#ckqwsueyoq .gt_sourcenote {
   font-size: 90%;
   padding-top: 4px;
   padding-bottom: 4px;
@@ -465,72 +465,72 @@
   padding-right: 5px;
 }
 
-#mrniglayuo .gt_left {
+#ckqwsueyoq .gt_left {
   text-align: left;
 }
 
-#mrniglayuo .gt_center {
+#ckqwsueyoq .gt_center {
   text-align: center;
 }
 
-#mrniglayuo .gt_right {
+#ckqwsueyoq .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#mrniglayuo .gt_font_normal {
+#ckqwsueyoq .gt_font_normal {
   font-weight: normal;
 }
 
-#mrniglayuo .gt_font_bold {
+#ckqwsueyoq .gt_font_bold {
   font-weight: bold;
 }
 
-#mrniglayuo .gt_font_italic {
+#ckqwsueyoq .gt_font_italic {
   font-style: italic;
 }
 
-#mrniglayuo .gt_super {
+#ckqwsueyoq .gt_super {
   font-size: 65%;
 }
 
-#mrniglayuo .gt_footnote_marks {
+#ckqwsueyoq .gt_footnote_marks {
   font-size: 75%;
   vertical-align: 0.4em;
   position: initial;
 }
 
-#mrniglayuo .gt_asterisk {
+#ckqwsueyoq .gt_asterisk {
   font-size: 100%;
   vertical-align: 0;
 }
 
-#mrniglayuo .gt_indent_1 {
+#ckqwsueyoq .gt_indent_1 {
   text-indent: 5px;
 }
 
-#mrniglayuo .gt_indent_2 {
+#ckqwsueyoq .gt_indent_2 {
   text-indent: 10px;
 }
 
-#mrniglayuo .gt_indent_3 {
+#ckqwsueyoq .gt_indent_3 {
   text-indent: 15px;
 }
 
-#mrniglayuo .gt_indent_4 {
+#ckqwsueyoq .gt_indent_4 {
   text-indent: 20px;
 }
 
-#mrniglayuo .gt_indent_5 {
+#ckqwsueyoq .gt_indent_5 {
   text-indent: 25px;
 }
 
-#mrniglayuo .katex-display {
+#ckqwsueyoq .katex-display {
   display: inline-flex !important;
   margin-bottom: 0.75em !important;
 }
 
-#mrniglayuo div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
+#ckqwsueyoq div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
   height: 0px !important;
 }
 </style>
@@ -632,23 +632,23 @@
 <span>    readiness_detail <span class="op">=</span> <span class="st">"detail"</span></span>
 <span>  <span class="op">)</span></span></code></pre></div>
 <div class="cell-output-display">
-<div id="wcwwujzplg" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
-<style>#wcwwujzplg table {
+<div id="weeodqfrjm" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#weeodqfrjm table {
   font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-#wcwwujzplg thead, #wcwwujzplg tbody, #wcwwujzplg tfoot, #wcwwujzplg tr, #wcwwujzplg td, #wcwwujzplg th {
+#weeodqfrjm thead, #weeodqfrjm tbody, #weeodqfrjm tfoot, #weeodqfrjm tr, #weeodqfrjm td, #weeodqfrjm th {
   border-style: none;
 }
 
-#wcwwujzplg p {
+#weeodqfrjm p {
   margin: 0;
   padding: 0;
 }
 
-#wcwwujzplg .gt_table {
+#weeodqfrjm .gt_table {
   display: table;
   border-collapse: collapse;
   line-height: normal;
@@ -674,12 +674,12 @@
   border-left-color: #D3D3D3;
 }
 
-#wcwwujzplg .gt_caption {
+#weeodqfrjm .gt_caption {
   padding-top: 4px;
   padding-bottom: 4px;
 }
 
-#wcwwujzplg .gt_title {
+#weeodqfrjm .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -691,7 +691,7 @@
   border-bottom-width: 0;
 }
 
-#wcwwujzplg .gt_subtitle {
+#weeodqfrjm .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -703,7 +703,7 @@
   border-top-width: 0;
 }
 
-#wcwwujzplg .gt_heading {
+#weeodqfrjm .gt_heading {
   background-color: #FFFFFF;
   text-align: center;
   border-bottom-color: #FFFFFF;
@@ -715,13 +715,13 @@
   border-right-color: #D3D3D3;
 }
 
-#wcwwujzplg .gt_bottom_border {
+#weeodqfrjm .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#wcwwujzplg .gt_col_headings {
+#weeodqfrjm .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -736,7 +736,7 @@
   border-right-color: #D3D3D3;
 }
 
-#wcwwujzplg .gt_col_heading {
+#weeodqfrjm .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -756,7 +756,7 @@
   overflow-x: hidden;
 }
 
-#wcwwujzplg .gt_column_spanner_outer {
+#weeodqfrjm .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -768,15 +768,15 @@
   padding-right: 4px;
 }
 
-#wcwwujzplg .gt_column_spanner_outer:first-child {
+#weeodqfrjm .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#wcwwujzplg .gt_column_spanner_outer:last-child {
+#weeodqfrjm .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#wcwwujzplg .gt_column_spanner {
+#weeodqfrjm .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -788,11 +788,11 @@
   width: 100%;
 }
 
-#wcwwujzplg .gt_spanner_row {
+#weeodqfrjm .gt_spanner_row {
   border-bottom-style: hidden;
 }
 
-#wcwwujzplg .gt_group_heading {
+#weeodqfrjm .gt_group_heading {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -818,7 +818,7 @@
   text-align: left;
 }
 
-#wcwwujzplg .gt_empty_group_heading {
+#weeodqfrjm .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -833,15 +833,15 @@
   vertical-align: middle;
 }
 
-#wcwwujzplg .gt_from_md > :first-child {
+#weeodqfrjm .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#wcwwujzplg .gt_from_md > :last-child {
+#weeodqfrjm .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#wcwwujzplg .gt_row {
+#weeodqfrjm .gt_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -860,7 +860,7 @@
   overflow-x: hidden;
 }
 
-#wcwwujzplg .gt_stub {
+#weeodqfrjm .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -873,7 +873,7 @@
   padding-right: 5px;
 }
 
-#wcwwujzplg .gt_stub_row_group {
+#weeodqfrjm .gt_stub_row_group {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -887,15 +887,15 @@
   vertical-align: top;
 }
 
-#wcwwujzplg .gt_row_group_first td {
+#weeodqfrjm .gt_row_group_first td {
   border-top-width: 2px;
 }
 
-#wcwwujzplg .gt_row_group_first th {
+#weeodqfrjm .gt_row_group_first th {
   border-top-width: 2px;
 }
 
-#wcwwujzplg .gt_summary_row {
+#weeodqfrjm .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -905,16 +905,16 @@
   padding-right: 5px;
 }
 
-#wcwwujzplg .gt_first_summary_row {
+#weeodqfrjm .gt_first_summary_row {
   border-top-style: solid;
   border-top-color: #D3D3D3;
 }
 
-#wcwwujzplg .gt_first_summary_row.thick {
+#weeodqfrjm .gt_first_summary_row.thick {
   border-top-width: 2px;
 }
 
-#wcwwujzplg .gt_last_summary_row {
+#weeodqfrjm .gt_last_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -924,7 +924,7 @@
   border-bottom-color: #D3D3D3;
 }
 
-#wcwwujzplg .gt_grand_summary_row {
+#weeodqfrjm .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -934,7 +934,7 @@
   padding-right: 5px;
 }
 
-#wcwwujzplg .gt_first_grand_summary_row {
+#weeodqfrjm .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -944,7 +944,7 @@
   border-top-color: #D3D3D3;
 }
 
-#wcwwujzplg .gt_last_grand_summary_row_top {
+#weeodqfrjm .gt_last_grand_summary_row_top {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -954,11 +954,11 @@
   border-bottom-color: #D3D3D3;
 }
 
-#wcwwujzplg .gt_striped {
+#weeodqfrjm .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-#wcwwujzplg .gt_table_body {
+#weeodqfrjm .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -967,7 +967,7 @@
   border-bottom-color: #D3D3D3;
 }
 
-#wcwwujzplg .gt_footnotes {
+#weeodqfrjm .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -981,7 +981,7 @@
   border-right-color: #D3D3D3;
 }
 
-#wcwwujzplg .gt_footnote {
+#weeodqfrjm .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding-top: 4px;
@@ -990,7 +990,7 @@
   padding-right: 5px;
 }
 
-#wcwwujzplg .gt_sourcenotes {
+#weeodqfrjm .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -1004,7 +1004,7 @@
   border-right-color: #D3D3D3;
 }
 
-#wcwwujzplg .gt_sourcenote {
+#weeodqfrjm .gt_sourcenote {
   font-size: 90%;
   padding-top: 4px;
   padding-bottom: 4px;
@@ -1012,72 +1012,72 @@
   padding-right: 5px;
 }
 
-#wcwwujzplg .gt_left {
+#weeodqfrjm .gt_left {
   text-align: left;
 }
 
-#wcwwujzplg .gt_center {
+#weeodqfrjm .gt_center {
   text-align: center;
 }
 
-#wcwwujzplg .gt_right {
+#weeodqfrjm .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#wcwwujzplg .gt_font_normal {
+#weeodqfrjm .gt_font_normal {
   font-weight: normal;
 }
 
-#wcwwujzplg .gt_font_bold {
+#weeodqfrjm .gt_font_bold {
   font-weight: bold;
 }
 
-#wcwwujzplg .gt_font_italic {
+#weeodqfrjm .gt_font_italic {
   font-style: italic;
 }
 
-#wcwwujzplg .gt_super {
+#weeodqfrjm .gt_super {
   font-size: 65%;
 }
 
-#wcwwujzplg .gt_footnote_marks {
+#weeodqfrjm .gt_footnote_marks {
   font-size: 75%;
   vertical-align: 0.4em;
   position: initial;
 }
 
-#wcwwujzplg .gt_asterisk {
+#weeodqfrjm .gt_asterisk {
   font-size: 100%;
   vertical-align: 0;
 }
 
-#wcwwujzplg .gt_indent_1 {
+#weeodqfrjm .gt_indent_1 {
   text-indent: 5px;
 }
 
-#wcwwujzplg .gt_indent_2 {
+#weeodqfrjm .gt_indent_2 {
   text-indent: 10px;
 }
 
-#wcwwujzplg .gt_indent_3 {
+#weeodqfrjm .gt_indent_3 {
   text-indent: 15px;
 }
 
-#wcwwujzplg .gt_indent_4 {
+#weeodqfrjm .gt_indent_4 {
   text-indent: 20px;
 }
 
-#wcwwujzplg .gt_indent_5 {
+#weeodqfrjm .gt_indent_5 {
   text-indent: 25px;
 }
 
-#wcwwujzplg .katex-display {
+#weeodqfrjm .katex-display {
   display: inline-flex !important;
   margin-bottom: 0.75em !important;
 }
 
-#wcwwujzplg div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
+#weeodqfrjm div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
   height: 0px !important;
 }
 </style>
@@ -1160,7 +1160,7 @@
 <p>Each vector must align with the 30 supplied age positions. Confirm the beginning-of-2026 abundance state, plus group, and recruitment/SSB year pairing against the SS3 export code and source fields. Supplying population weights alone leaves those remaining checks open. The example README contains the complete input evaluation and terminal commands.</p>
 </section><section class="level2"><h2 id="standalone-run-and-results-report">Standalone run-and-results report<a class="anchor" aria-label="anchor" href="#standalone-run-and-results-report"></a>
 </h2>
-<p><code>examples/gt_2026/greenland_turbot.qmd</code> provides visible manual run controls, the current input audit, and saved-output tables and plots. Each projection panel displays 15 simulation trajectories, the median, and a 90% projection interval. Rendering performs no projection; select a reviewed saved attempt to populate the results. From the repository root:</p>
+<p><code>examples/gt_2026/greenland_turbot.qmd</code> provides visible manual run controls, the current input audit, and two Alternative 2 figures. The spawning-biomass figure uses a logarithmic y-axis and dashed B40 and B35 reference lines. Both figures show the all-simulation median and a salmon 90% projection interval. Rendering performs no projection; select a reviewed saved attempt to populate the results. From the repository root:</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb9"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="ex">quarto</span> render examples/gt_2026/greenland_turbot.qmd</span>
 <span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="ex">quarto</span> render examples/gt_2026/greenland_turbot.qmd <span class="at">-P</span> saved_run:spmR_runs/attempt-001</span></code></pre></div>

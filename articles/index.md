@@ -6,8 +6,8 @@
   examples](https://afsc-assessments.github.io/spmR/articles/spm_example.md):
 - [Migrating split-sex projection
   inputs](https://afsc-assessments.github.io/spmR/articles/split_sex_inputs.md):
-- [Audit and stage the 2026 Greenland turbot
-  inputs](https://afsc-assessments.github.io/spmR/articles/gt2026_inputs.md):
+- [Greenland turbot: a fully worked
+  example](https://afsc-assessments.github.io/spmR/articles/gt2026_inputs.md):
 
 ### Methods and historical context
 
