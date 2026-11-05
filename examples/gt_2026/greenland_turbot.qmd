@@ -218,9 +218,11 @@ if (is.null(series)) {
 #| fig-cap: "Alternative 2 conditional spawning biomass on a logarithmic y-axis. Dashed lines show B40 and B35; the salmon ribbon is the 90% projection interval and the black line is the median across all simulations."
 #| fig-alt: "Alternative 2 spawning biomass from 2026 to 2040 on a log scale, with fifteen blue simulation paths, a median line, a salmon interval and labelled dashed B40 and B35 reference lines. Reference values are given above."
 if (!is.null(series)) {
-  gt2026_projection_plot(saved$result, "SSB", alts = plot_alternative,
-                         biomass_units = saved$biomass_units,
-                         n_worms = worms_per_plot)
+  gt2026_projection_plot(saved$result, "SSB",
+    alts = plot_alternative,
+    biomass_units = saved$biomass_units,
+    n_worms = worms_per_plot
+  )
 }
 ```
 
@@ -232,9 +234,11 @@ if (!is.null(series)) {
 #| fig-cap: "Alternative 2 conditional catch on a logarithmic y-axis. The salmon ribbon is the 90% projection interval and the black line is the median across all simulations. Prescribed catches make paths overlap in the first three years."
 #| fig-alt: "Alternative 2 catch from 2026 to 2040 on a log scale, with fifteen blue simulation paths, a black median and a salmon 90 percent interval. The first three years use fixed catches; later years show simulation dispersion."
 if (!is.null(series)) {
-  gt2026_projection_plot(saved$result, "Catch", alts = plot_alternative,
-                         biomass_units = saved$biomass_units,
-                         n_worms = worms_per_plot)
+  gt2026_projection_plot(saved$result, "Catch",
+    alts = plot_alternative,
+    biomass_units = saved$biomass_units,
+    n_worms = worms_per_plot
+  )
 }
 ```
 
@@ -246,9 +250,11 @@ if (!is.null(series)) {
 #| fig-cap: "Alternative 2 projected fishing mortality. Dashed lines show F40 and F35 from the saved run; the salmon ribbon is the 90% projection interval and the black line is the median across all simulations."
 #| fig-alt: "Alternative 2 annual fishing mortality from 2026 to 2040 on a linear scale, with fifteen blue simulation paths, a black median and a salmon 90 percent interval. Labelled dashed horizontal lines mark F40 and F35; values are given above."
 if (!is.null(series)) {
-  gt2026_projection_plot(saved$result, "F", alts = plot_alternative,
-                         n_worms = worms_per_plot,
-                         f_reference_points = saved$f_reference_points)
+  gt2026_projection_plot(saved$result, "F",
+    alts = plot_alternative,
+    n_worms = worms_per_plot,
+    f_reference_points = saved$f_reference_points
+  )
 }
 ```
 
